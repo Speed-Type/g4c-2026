@@ -220,9 +220,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 46501361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14ff74f7c3a4d48d4a0c8dfd15386a37, type: 3}
+  m_Script: {fileID: 11500000, guid: 471366bda90e94bce9b675d1be35c345, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UnderwaterPlayerMovementController
+  m_EditorClassIdentifier: Assembly-CSharp::UnderwaterMovementScript
+  movementSpeed: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

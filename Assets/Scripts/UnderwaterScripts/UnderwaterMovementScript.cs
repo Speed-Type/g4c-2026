@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class UnderwaterMovementScript : PlayerMovementController
 {
-    
+    public float movementSpeed;
     public override void Start()
     {
         base.Start();
@@ -15,8 +15,11 @@ public class UnderwaterMovementScript : PlayerMovementController
         
     }
 
-    public override void Move(Vector2 inputValue)
+    //TODO: override other necessary methods
+    public override void ContinueMove(Vector2 inputValue)
     {
-        
+        transform.Translate(inputValue * Time.deltaTime * movementSpeed);
     }
+
+
 }
