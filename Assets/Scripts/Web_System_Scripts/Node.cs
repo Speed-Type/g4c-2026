@@ -1,16 +1,38 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Node : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    //Static variables
+    private static NodeManager nodeManager;
+
+    //Instance variables
+    [SerializeField] private List<Node> nodeList;
+
+    //Accessor methods
+    public bool HasNode(Node other)
     {
-        
+        return nodeList.Contains(other);
     }
 
-    // Update is called once per frame
-    void Update()
+    //Mutator methods
+    public void AddNode(Node other)
     {
-        
+        nodeList.Add(other);
+    }
+
+    public static void SetNodeManager(NodeManager other)
+    {
+        nodeManager = other;
+    }
+
+    //TODO: This method is called using super in subclasses
+    public void VisitNode()
+    {
+        //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
+        if(!nodeManager.TryVisitNode(this))
+        {
+            return;
+        }
     }
 }
