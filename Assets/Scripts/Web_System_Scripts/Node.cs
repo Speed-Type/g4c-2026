@@ -26,6 +26,8 @@ public class Node : MonoBehaviour
         nodeManager = other;
     }
 
+    //Node traversal methods
+
     //TODO: This method is called using super in subclasses
     public void VisitNode()
     {
