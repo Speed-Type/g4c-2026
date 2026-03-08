@@ -96,15 +96,7 @@ public class NodeManager : MonoBehaviour
         
         //rotates thread as necessary
         UnityEngine.Vector3 differenceVector = rectTransform2.localPosition - rectTransform1.localPosition;
-        float angle;
-        if(differenceVector.x == 0)
-        {
-            angle = 0;
-        }
-        else
-        {
-            angle = (float)Math.Atan2(differenceVector.y, differenceVector.x) * 180 / (float)Math.PI;
-        }
+        float angle = (float)Math.Atan2(differenceVector.y, differenceVector.x) * 180 / (float)Math.PI;
         threadRectTransform.localEulerAngles = new UnityEngine.Vector3(0, 0, angle + 90);
 
         //scales thread as necessary
@@ -125,6 +117,7 @@ public class NodeManager : MonoBehaviour
     private void UpdatePlayerMarker()
     {
         playerMarkerGO.GetComponent<RectTransform>().localPosition = currentNode.GetComponent<RectTransform>().localPosition;
+        playerMarkerGO.transform.SetAsLastSibling();
     }
 
     void Start()
