@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 using System;
 
 public class NodeManager : MonoBehaviour
@@ -17,6 +16,7 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private int webNumCircleWebs;
     [Tooltip("The radius of the whole web")]
     [SerializeField] private float webSize;
+    [SerializeField] private GameObject startNode;
     [SerializeField] private GameObject[] nodeTypes;
     [SerializeField] private float[] nodeWeights;
 
@@ -32,7 +32,7 @@ public class NodeManager : MonoBehaviour
         GameObject centerNodeGO = Instantiate(generatedNodeTypes[0], UIParentGO.transform);
         Node centerNode = centerNodeGO.GetComponent<Node>();
         centerNode.GetComponent<RectTransform>().localPosition = Vector3.zero;
-        centerNodeGO.name = "Center"; //rename
+        centerNodeGO.name += "@Center"; //rename
 
         //Setup array for circling node generation logic
         Node[] previousCircle = new Node[webNumRadii];
@@ -49,7 +49,7 @@ public class NodeManager : MonoBehaviour
                 //Create new node
                 GameObject newNodeGO = Instantiate(generatedNodeTypes[i * webNumRadii + j], UIParentGO.transform);
                 Node newNode = newNodeGO.GetComponent<Node>();
-                newNodeGO.name = "Radius " + j + ", Circle " + i; //rename
+                newNodeGO.name += "@Radius " + j + ", Circle " + i; //rename
 
                 //Connect pointers, add to list
                 newNode.AddNode(previousCircle[j]);
@@ -68,6 +68,12 @@ public class NodeManager : MonoBehaviour
 
                 //Add web thread between graphically
                 AddThread(previousNodeRectTransform, newNodeRectTransform);
+
+                //In the case that this is the start node, update currentNode
+                if(generatedNodeTypes[i * webNumRadii + j] == startNode)
+                {
+                    currentNode = newNode;
+                }
             }
 
             //Connect all the nodes in the previousCircle array
@@ -84,10 +90,11 @@ public class NodeManager : MonoBehaviour
             AddThread(previousCircle[0].GetComponent<RectTransform>(), previousCircle[previousCircle.Length - 1].GetComponent<RectTransform>());
         }
 
-        //Set current node to the start node
-        //TODO
-        currentNode = previousCircle[UnityEngine.Random.Range(0,previousCircle.Length)];
+        //Put the player marker in the right place
         UpdatePlayerMarker();
+
+        //Visit the current node
+        currentNode.VisitNode();
     }
     
     private GameObject[] GenerateRandomNodes()
@@ -98,7 +105,7 @@ public class NodeManager : MonoBehaviour
         //First node type is guaranteed [TODO]
         generatedNodeTypes[0] = nodeTypes[0];
 
-        //Fill in rest randomly [TODO]
+        //Fill in rest randomly
         float totalRandomPool = 0;
         foreach(float f in nodeWeights)
         {
@@ -124,7 +131,8 @@ public class NodeManager : MonoBehaviour
         }
 
         //Select a starting node
-        //TODO
+        int randomNum = UnityEngine.Random.Range(1 + webNumRadii * (webNumCircleWebs - 1), generatedNodeTypes.Length - 1);
+        generatedNodeTypes[randomNum] = startNode;
 
         return generatedNodeTypes;
     }
@@ -139,18 +147,21 @@ public class NodeManager : MonoBehaviour
         threadRectTransform.localPosition = (rectTransform1.localPosition + rectTransform2.localPosition) / 2;
         
         //rotates thread as necessary
-        UnityEngine.Vector3 differenceVector = rectTransform2.localPosition - rectTransform1.localPosition;
+        Vector3 differenceVector = rectTransform2.localPosition - rectTransform1.localPosition;
         float angle = (float)Math.Atan2(differenceVector.y, differenceVector.x) * 180 / (float)Math.PI;
-        threadRectTransform.localEulerAngles = new UnityEngine.Vector3(0, 0, angle + 90);
+        threadRectTransform.localEulerAngles = new Vector3(0, 0, angle + 90);
 
         //scales thread as necessary
-        threadRectTransform.sizeDelta *= new UnityEngine.Vector2(1, (float)Math.Sqrt(Math.Pow(rectTransform2.localPosition.x - rectTransform1.localPosition.x, 2) + Math.Pow(rectTransform2.localPosition.y - rectTransform1.localPosition.y, 2)));
+        threadRectTransform.sizeDelta *= new Vector2(1, (float)Math.Sqrt(Math.Pow(rectTransform2.localPosition.x - rectTransform1.localPosition.x, 2) + Math.Pow(rectTransform2.localPosition.y - rectTransform1.localPosition.y, 2)));
     }
 
+    //Function to check if this node is reachable from the current node; note that the first node is auto allowed
+    private bool isFirstNode = true;
     public bool TryVisitNode(Node nodeToVisit)
     {
-        if(currentNode.HasNode(nodeToVisit))
+        if(isFirstNode || currentNode.HasNode(nodeToVisit))
         {
+            isFirstNode = false;
             currentNode = nodeToVisit; //update the current node
             UpdatePlayerMarker();
             return true;

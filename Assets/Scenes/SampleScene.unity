@@ -1626,13 +1626,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NodeManager
   rgController: {fileID: 1880359810}
   UIParentGO: {fileID: 194874353}
-  nodeGO: {fileID: 9004841355734308276, guid: 930e5570ca7b0426a8f848d2fd19570c, type: 3}
   playerMarkerGO: {fileID: 601333586}
   threadGO: {fileID: 6518552601917041705, guid: 792bad63b7d1c467b9617914b78fb285, type: 3}
   currentNode: {fileID: 0}
   webNumRadii: 9
   webNumCircleWebs: 4
   webSize: 500
+  startNode: {fileID: 3369285449052209603, guid: 790fffc899b5f486cb10a5601f0a7aaf, type: 3}
   nodeTypes:
   - {fileID: 3369285449052209603, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
   nodeWeights:

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5209433731299825907}
   - component: {fileID: 933511517984092521}
   - component: {fileID: 175793547148954673}
-  - component: {fileID: 1494023831875050245}
+  - component: {fileID: 5967581704977082970}
   m_Layer: 5
   m_Name: StartNode
   m_TagString: Untagged
@@ -121,8 +121,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1494023831875050245}
-        m_TargetAssemblyTypeName: Node_Empty, Assembly-CSharp
+      - m_Target: {fileID: 5967581704977082970}
+        m_TargetAssemblyTypeName: Node_Start, Assembly-CSharp
         m_MethodName: VisitNode
         m_Mode: 1
         m_Arguments:
@@ -133,7 +133,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1494023831875050245
+--- !u!114 &5967581704977082970
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3369285449052209603}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e553a597d98844c73943eba8b7bf3b56, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ee562225cb87417da774a013fb78917, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Node_Empty
+  m_EditorClassIdentifier: Assembly-CSharp::Node_Start
   nodeList: []
