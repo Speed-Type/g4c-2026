@@ -1,23 +1,23 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
-using System.Numerics;
-using Unity.VisualScripting;
 
 public class NodeManager : MonoBehaviour
 {
     //Variables in Inspector
-    public GameObject UIParentGO;
-    public GameObject nodeGO;
-    public GameObject playerMarkerGO;
-    public GameObject threadGO;
+    public RoguelikeGameplayController rgController;
+    [SerializeField] private GameObject UIParentGO;
+    [SerializeField] private GameObject nodeGO;
+    [SerializeField] private GameObject playerMarkerGO;
+    [SerializeField] private GameObject threadGO;
     [SerializeField] private Node currentNode;
+
     [Header("Web Generation Parameters")]
     [Tooltip("Number of Web Radii must be >= 3")]
-    public int webNumRadii;
-    public int webNumCircleWebs;
+    [SerializeField] private int webNumRadii;
+    [SerializeField] private int webNumCircleWebs;
     [Tooltip("The radius of the whole web")]
-    public float webSize;
+    [SerializeField] private float webSize;
 
     public void GenerateWeb()
     {
@@ -122,6 +122,6 @@ public class NodeManager : MonoBehaviour
 
     void Start()
     {
-        GenerateWeb(); //Temporary
+        GenerateWeb();
     }
 }

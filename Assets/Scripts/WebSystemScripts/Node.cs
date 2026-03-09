@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public class Node : MonoBehaviour
 {
     //Static variables
-    private static NodeManager nodeManager;
+    protected static NodeManager nodeManager;
 
     //Instance variables
     [SerializeField] private List<Node> nodeList;
@@ -29,7 +29,7 @@ public class Node : MonoBehaviour
     //Node traversal methods
 
     //TODO: This method is called using super in subclasses
-    public void VisitNode()
+    public virtual void VisitNode()
     {
         //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
         if(!nodeManager.TryVisitNode(this))
