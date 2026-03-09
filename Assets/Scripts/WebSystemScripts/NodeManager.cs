@@ -7,7 +7,6 @@ public class NodeManager : MonoBehaviour
     //Variables in Inspector
     public RoguelikeGameplayController rgController;
     [SerializeField] private GameObject UIParentGO;
-    [SerializeField] private GameObject nodeGO;
     [SerializeField] private GameObject playerMarkerGO;
     [SerializeField] private GameObject threadGO;
     [SerializeField] private Node currentNode;
@@ -18,16 +17,21 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private int webNumCircleWebs;
     [Tooltip("The radius of the whole web")]
     [SerializeField] private float webSize;
+    [SerializeField] private GameObject[] nodeTypes;
+    [SerializeField] private float[] nodeWeights;
 
     public void GenerateWeb()
     {
         //Set Node's NodeManager
         Node.SetNodeManager(this);
 
+        //Generate the node types
+        GameObject[] generatedNodeTypes = GenerateRandomNodes();
+
         //Create center
-        GameObject centerNodeGO = Instantiate(nodeGO, UIParentGO.transform);
+        GameObject centerNodeGO = Instantiate(generatedNodeTypes[0], UIParentGO.transform);
         Node centerNode = centerNodeGO.GetComponent<Node>();
-        centerNode.GetComponent<RectTransform>().localPosition = UnityEngine.Vector3.zero;
+        centerNode.GetComponent<RectTransform>().localPosition = Vector3.zero;
         centerNodeGO.name = "Center"; //rename
 
         //Setup array for circling node generation logic
@@ -43,7 +47,7 @@ public class NodeManager : MonoBehaviour
             for(int j = 0; j < webNumRadii; j++)
             {
                 //Create new node
-                GameObject newNodeGO = Instantiate(nodeGO, UIParentGO.transform);
+                GameObject newNodeGO = Instantiate(generatedNodeTypes[i * webNumRadii + j], UIParentGO.transform);
                 Node newNode = newNodeGO.GetComponent<Node>();
                 newNodeGO.name = "Radius " + j + ", Circle " + i; //rename
 
@@ -59,7 +63,7 @@ public class NodeManager : MonoBehaviour
                 previousCircle[j] = newNode;
 
                 //Reposition the new node graphically
-                UnityEngine.Vector3 newPosition = new UnityEngine.Vector3(webSize / webNumCircleWebs * (i+1) * (float)Math.Cos(2 * Math.PI * ((float)j / webNumRadii)), webSize / webNumCircleWebs * (i+1) * (float)Math.Sin(2 * Math.PI * ((float)j / webNumRadii)), 0);
+                Vector3 newPosition = new Vector3(webSize / webNumCircleWebs * (i+1) * (float)Math.Cos(2 * Math.PI * ((float)j / webNumRadii)), webSize / webNumCircleWebs * (i+1) * (float)Math.Sin(2 * Math.PI * ((float)j / webNumRadii)), 0);
                 newNodeRectTransform.localPosition = newPosition;    
 
                 //Add web thread between graphically
@@ -80,9 +84,49 @@ public class NodeManager : MonoBehaviour
             AddThread(previousCircle[0].GetComponent<RectTransform>(), previousCircle[previousCircle.Length - 1].GetComponent<RectTransform>());
         }
 
-        //Set current node to a random outermost-loop node
+        //Set current node to the start node
+        //TODO
         currentNode = previousCircle[UnityEngine.Random.Range(0,previousCircle.Length)];
         UpdatePlayerMarker();
+    }
+    
+    private GameObject[] GenerateRandomNodes()
+    {
+        //Create array
+        GameObject[] generatedNodeTypes = new GameObject[1 + webNumRadii * webNumCircleWebs];
+
+        //First node type is guaranteed [TODO]
+        generatedNodeTypes[0] = nodeTypes[0];
+
+        //Fill in rest randomly [TODO]
+        float totalRandomPool = 0;
+        foreach(float f in nodeWeights)
+        {
+            totalRandomPool += f; //sum the total weights for each node
+        }
+
+        for(int i = 1; i < generatedNodeTypes.Length; i++)
+        {
+            //Generate random number from [0, totalWeights]
+            float rand = UnityEngine.Random.Range(0f, totalRandomPool);
+            float current = 0;
+
+            for(int j = 0; j < nodeTypes.Length; j++)
+            {
+                current += nodeWeights[j];
+                if(current >= rand)
+                {
+                    //This is the correct gameobject
+                    generatedNodeTypes[i] = nodeTypes[j];
+                    break;
+                }
+            }
+        }
+
+        //Select a starting node
+        //TODO
+
+        return generatedNodeTypes;
     }
 
     private void AddThread(RectTransform rectTransform1, RectTransform rectTransform2)

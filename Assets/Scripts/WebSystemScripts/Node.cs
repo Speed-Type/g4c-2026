@@ -28,13 +28,9 @@ public class Node : MonoBehaviour
 
     //Node traversal methods
 
-    //TODO: This method is called using super in subclasses
+    
     public virtual void VisitNode()
     {
-        //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
-        if(!nodeManager.TryVisitNode(this))
-        {
-            return;
-        }
+        //This method is called using super in subclasses
     }
 }
