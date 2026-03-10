@@ -1743,6 +1743,7 @@ MonoBehaviour:
   - 20
   - 20
   - 30
+  playerTravelAnimTime: 1
 --- !u!1 &1880359809
 GameObject:
   m_ObjectHideFlags: 0

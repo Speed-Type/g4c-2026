@@ -10,7 +10,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public GameObject hideMapButton;
     public GameObject nodeMap;
     [Header("Camera Stuff")]
-    public RoguelikeCameraController cameraController;
+    [SerializeField] private RoguelikeCameraController cameraController;
 
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
@@ -39,23 +39,26 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Method to show map (and by extension, hide open buttons)
     public void ShowMap()
     {
-        //Show map
-        nodeMap.SetActive(true);
-
-        //Show "hide map" button
-        hideMapButton.SetActive(true);
-
         //Update game state
         gameState = GameState.Map;
-
-        //Update camera
-        cameraController.StopFreeCam();
 
         //Hide other open buttons
         foreach(PlayerOptionButtons button in openButtons)
         {
             playerOptionButtonsEnumToGameObject(button).SetActive(false);
         }
+
+        //Update camera
+        cameraController.StopFreeCam();
+
+        //Show "hide map" button after moved to freecam position
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
+        {
+            hideMapButton.SetActive(true);
+            
+            //Show map
+            nodeMap.SetActive(true);
+        });
     }
 
     //Method to hide map (and by extension, show open buttons)
@@ -73,11 +76,14 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Update camera
         cameraController.StartFreeCam();
 
-        //Show other open buttons
-        foreach(PlayerOptionButtons button in openButtons)
+        //Show other open buttons after moved to freecam position
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
         {
-            playerOptionButtonsEnumToGameObject(button).SetActive(true);
-        }
+            foreach(PlayerOptionButtons button in openButtons)
+            {
+                playerOptionButtonsEnumToGameObject(button).SetActive(true);
+            }
+        });
     }
 
     void Awake()

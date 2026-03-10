@@ -23,6 +23,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
     //[Header("Zoom Parameters")]
 
+    [Header("Camera Transitions Timing")]
+    public static float freeCamTransitionTiming = 1f;
+
     void Awake()
     {
         //Setup input actions
@@ -37,12 +40,12 @@ public class RoguelikeCameraController : MonoBehaviour
     public void StartFreeCam()
     {
         //Smooth transition to freecam view
-        LeanTween.move(this.gameObject, savedFreeCamTransform, 1f).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
+        LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
             rotationVelocity = freeCamIdleRotationDirection * freeCamIdleRotationDirection;
             input.Enable();
             isFreeCam = true;
         });
-        LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, 1f).setEase(LeanTweenType.easeInExpo);
+        LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo);
     }
 
     public void StopFreeCam()
@@ -54,8 +57,8 @@ public class RoguelikeCameraController : MonoBehaviour
         isFreeCam = false;
 
         //Smooth transition to overhead map view
-        LeanTween.move(this.gameObject, savedMapCamPosition, 1f).setEase(LeanTweenType.easeOutExpo);
-        LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), 1f).setEase(LeanTweenType.easeOutExpo);
+        LeanTween.move(this.gameObject, savedMapCamPosition, freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
+        LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
     }
 
     public void OnLook(InputAction.CallbackContext ctx)

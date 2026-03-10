@@ -12,7 +12,10 @@ public class Node_Start : Node
             return;
         }
 
-        //Update open buttons
-        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+        //Update open buttons after player has finished moving on map
+        LeanTween.delayedCall(NodeManager.playerTravelAnimTime, () =>
+        {
+            nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+        });
     }
 }
