@@ -10,9 +10,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public GameObject hideMapButton;
     public GameObject nodeMap;
     [Header("Camera Stuff")]
-    public GameObject cameraGO;
-    [SerializeField] private Transform cameraIdlePosition;
-    [SerializeField] private Transform cameraMapPosition;
+    public RoguelikeCameraController cameraController;
 
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
@@ -51,9 +49,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Map;
 
         //Update camera
-        cameraGO.GetComponent<IdleCameraController>().StopFreeCam();
-        LeanTween.cancel(cameraGO);
-        LeanTween.move(cameraGO, cameraMapPosition, 1f).setEase(LeanTweenType.easeInQuad);
+        cameraController.StopFreeCam();
 
         //Hide other open buttons
         foreach(PlayerOptionButtons button in openButtons)
@@ -75,10 +71,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Idle;
 
         //Update camera
-        LeanTween.cancel(cameraGO);
-        LeanTween.move(cameraGO, cameraIdlePosition, 1f).setEase(LeanTweenType.easeInQuad).setOnComplete(() => {
-            cameraGO.GetComponent<IdleCameraController>().StartFreeCam();
-        });
+        cameraController.StartFreeCam();
 
         //Show other open buttons
         foreach(PlayerOptionButtons button in openButtons)
