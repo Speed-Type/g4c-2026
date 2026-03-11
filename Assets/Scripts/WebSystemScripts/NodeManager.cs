@@ -180,7 +180,7 @@ public class NodeManager : MonoBehaviour
     private void UpdatePlayerMarker()
     {
         playerMarkerGO.transform.SetAsLastSibling();
-        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime);
+        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime).setEase(LeanTweenType.easeInOutQuad);
     }
 
     void Start()

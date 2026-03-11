@@ -4,6 +4,7 @@ using System.Collections.Generic;
 public class Node_Start : Node
 {
     //Start node is where the player starts
+    bool hasVisited = false;
     public override void VisitNode()
     {
         //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
@@ -12,10 +13,19 @@ public class Node_Start : Node
             return;
         }
 
-        //Update open buttons after player has finished moving on map
         LeanTween.delayedCall(NodeManager.playerTravelAnimTime, () =>
         {
+            //The following code is run AFTER player has finished moving on map
             nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+            if(hasVisited == false)
+            {
+                hasVisited = true;
+                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
+            }
+            else
+            {
+                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"This is where you started."});
+            }
         });
     }
 }

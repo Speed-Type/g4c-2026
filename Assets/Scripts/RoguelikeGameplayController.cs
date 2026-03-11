@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class RoguelikeGameplayController : MonoBehaviour
 {
+    public DialogueBoxController dialogueBoxController;
+
     //Variables in Inspector
     public GameState gameState;
     [Header("Player Option GameObjects")]
