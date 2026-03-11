@@ -27,7 +27,7 @@ public class Node_Empty : Node
         "You hear the rustling of some mammal. Otherwise, there's nothing here.",
         "The atmosphere is calm. At least for now, you're safe.",
         "The air is quiet. There's nothing else alive here but you. Nothing worth eating anyway.",
-        "You don't feel quite fat enough yet.",
+        "You don't feel quite fat enough yet. You won't, until you're ready to metamorphose.",
         "You take care to crawl quietly, so as not to alert the spider with vibrations.",
         "There aren't enough bones here to appease a bone collector.",
         "You could go for a snack.",
@@ -44,7 +44,10 @@ public class Node_Empty : Node
         "...",
         "...",
         "...",
-        "..."
+        "...",
+        "You can't wait to become a pupa and grow your wings. You just have to find more food.",
+        "You wonder what the world will be like, even just a generation into the future.",
+        "The Hawaiian weather is just wonderful. It almost distracts you from the fact that you're stealing food from under a spider's nose."
     };
 
     void Awake()
