@@ -17,15 +17,22 @@ public class Node_Start : Node
         {
             //The following code is run AFTER player has finished moving on map
             nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
-            if(hasVisited == false)
+
+            LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
             {
-                hasVisited = true;
-                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
-            }
-            else
-            {
-                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"This is where you started."});
-            }
+                //The following code is run AFTER camera has returned to free cam view
+
+                //Display flavor text, depending on whether the player has returned to this node or this is the first time they've been here
+                if(hasVisited == false)
+                {
+                    hasVisited = true;
+                    nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
+                }
+                else
+                {
+                    nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"This is where you started."});
+                }
+            });
         });
     }
 }

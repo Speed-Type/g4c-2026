@@ -109,7 +109,7 @@ public class NodeManager : MonoBehaviour
         //Create array
         GameObject[] generatedNodeTypes = new GameObject[1 + webNumRadii * webNumCircleWebs];
 
-        //First node type is guaranteed [TODO]
+        //Center node is guaranteed [TODO]
         generatedNodeTypes[0] = nodeTypes[0];
 
         //Fill in rest randomly
