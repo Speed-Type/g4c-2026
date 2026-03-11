@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Fragment currentFragment;
+    public bool isOnEdge = false;
+
+    //Mutator methods
+    public void SetFragment(Fragment newFragment)
     {
-        
+        currentFragment = newFragment;
     }
 
-    // Update is called once per frame
-    void Update()
+    //Accessor methods
+    public Fragment GetFragment()
     {
-        
+        return currentFragment;
     }
 }
