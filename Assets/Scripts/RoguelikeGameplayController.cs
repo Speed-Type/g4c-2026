@@ -11,8 +11,13 @@ public class RoguelikeGameplayController : MonoBehaviour
     public GameObject showMapButton;
     public GameObject hideMapButton;
     public GameObject nodeMap;
+
     [Header("Camera Stuff")]
     [SerializeField] private RoguelikeCameraController cameraController;
+
+    [Header("Player data")]
+    public int playerHealth;
+    
 
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();

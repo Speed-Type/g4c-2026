@@ -162,6 +162,32 @@ public class NodeManager : MonoBehaviour
         threadRectTransform.sizeDelta *= new Vector2(1, (float)Math.Sqrt(Math.Pow(rectTransform2.localPosition.x - rectTransform1.localPosition.x, 2) + Math.Pow(rectTransform2.localPosition.y - rectTransform1.localPosition.y, 2)));
     }
 
+    //Function to replace a node with another
+    public void ReplaceNode(GameObject nodeToReplace, NodeTypes newNodeType)
+    {
+        //Instantiate the new node, move it to the right position
+        GameObject newNodeGO = Instantiate(nodeTypes[(int)newNodeType], UIParentGO.transform);
+        newNodeGO.GetComponent<RectTransform>().localPosition = nodeToReplace.GetComponent<RectTransform>().localPosition;
+        newNodeGO.GetComponent<RectTransform>().SetSiblingIndex(newNodeGO.transform.parent.childCount - 2);
+
+        //Set the pointer values in the new node to the pointer values of the old node
+        foreach(Node node in nodeToReplace.GetComponent<Node>().GetNodeList())
+        {
+            newNodeGO.GetComponent<Node>().AddNode(node); //Sets this node's own pointers
+            node.GetComponent<Node>().RemoveNode(nodeToReplace.GetComponent<Node>());
+            node.GetComponent<Node>().AddNode(newNodeGO.GetComponent<Node>());
+        }
+
+        //If the node to replace is also the current node, update current node pointer
+        if(nodeToReplace.GetComponent<Node>() == currentNode)
+        {
+            currentNode = newNodeGO.GetComponent<Node>();
+        }
+
+        //Delete the node to replace
+        Destroy(nodeToReplace);
+    }
+
     //Function to check if this node is reachable from the current node; note that the first node is auto allowed
     private bool isFirstNode = true;
     public bool TryVisitNode(Node nodeToVisit)
@@ -187,4 +213,10 @@ public class NodeManager : MonoBehaviour
     {
         GenerateWeb();
     }
+}
+
+//NOTE: The values in this enum must line up with the order of entries in nodeTypes array
+public enum NodeTypes
+{
+    Empty
 }

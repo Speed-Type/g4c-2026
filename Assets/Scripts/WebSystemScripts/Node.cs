@@ -15,10 +15,20 @@ public class Node : MonoBehaviour
         return nodeList.Contains(other);
     }
 
+    public List<Node> GetNodeList()
+    {
+        return nodeList;
+    }
+
     //Mutator methods
     public void AddNode(Node other)
     {
         nodeList.Add(other);
+    }
+
+    public void RemoveNode(Node other)
+    {
+        nodeList.Remove(other);
     }
 
     public static void SetNodeManager(NodeManager other)
