@@ -120,8 +120,7 @@ public class InventoryManager : MonoBehaviour
         relativeFragmentPosition.y *= -1f;
 
         //Adjust to top left corner
-        Rect rect = inventoryLayoutGroupGO.GetComponent<RectTransform>().rect;
-        relativeFragmentPosition -= new Vector2(rect.xMin, 0);
+        relativeFragmentPosition.x -= inventoryLayoutGroupGO.GetComponent<RectTransform>().rect.xMin;
 
         //Calculate decimal grid position, then adjust for ease of snapping
         relativeFragmentPosition.x = relativeFragmentPosition.x / inventorySlotSize;
