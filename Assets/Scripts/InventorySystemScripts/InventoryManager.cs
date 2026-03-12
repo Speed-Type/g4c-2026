@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -10,27 +11,29 @@ public class InventoryManager : MonoBehaviour
     [Header("Inventory Settings")]
     public int inventoryWidth;
     public int inventoryHeight;
+    public float inventorySlotSize;
 
     //Inventory logic
     private InventorySlot[,] inventorySlotArray;
 
-    void Start()
+    void Awake()
     {
         //Initialize inventory array
         inventorySlotArray = new InventorySlot[inventoryWidth, inventoryHeight];
 
         //Generate inventory game objects and assign inventory array with the corresponding scripts of those game objects
-        for(int i = 0; i < inventoryWidth; i++)
+        for(int y = 0; y < inventoryHeight; y++)
         {
-            for(int j = 0; j < inventoryHeight; j++)
+            for(int x = 0; x < inventoryWidth; x++)
             {
                 GameObject newInventorySlotGO = Instantiate(inventorySlotGO, inventoryLayoutGroupGO.transform);
-                inventorySlotArray[i,j] = newInventorySlotGO.GetComponent<InventorySlot>();
+                newInventorySlotGO.name = "Inventory slot " + x + ", " + y;
+                inventorySlotArray[x, y] = newInventorySlotGO.GetComponent<InventorySlot>();
 
                 //Set edges
-                if(i == 0 || j == 0 || i == inventoryWidth - 1 || j == inventoryHeight - 1)
+                if(y == 0 || x == 0 || y == inventoryHeight - 1 || x == inventoryWidth - 1)
                 {
-                    inventorySlotArray[i,j].isOnEdge = true;
+                    inventorySlotArray[x, y].isOnEdge = true;
                 }
             }
         }
@@ -39,6 +42,12 @@ public class InventoryManager : MonoBehaviour
     //Method to check if the fragment can be placed at these coordinates
     private bool CanPlaceFragment(Fragment fragment, int x, int y)
     {
+        //Check that x and y are within bounds
+        if(x < 0 || y < 0)
+        {
+            return false;
+        }
+
         for(int i = 0; i < fragment.shape.GetLength(0); i++)
         {
             for(int j = 0; j < fragment.shape.GetLength(1); j++)
@@ -69,20 +78,84 @@ public class InventoryManager : MonoBehaviour
     //Method to update the array with a new fragment
     public void PlaceFragment(Fragment fragment, int x, int y)
     {
-        for (int i = 0; i < fragment.shape.GetLength(0); i++)
+        //Loop through necessary spots, relative to x and y, and assign fragments
+        for(int i = 0; i < fragment.shape.GetLength(0); i++)
         {
-            for (int j = 0; j < fragment.shape.GetLength(1); j++)
+            for(int j = 0; j < fragment.shape.GetLength(1); j++)
             {
                 if(fragment.shape[i,j] == true)
                 {
                     inventorySlotArray[x + i, y + j].SetFragment(fragment);
+
+                    //Set edge-ness
+                    if(inventorySlotArray[x + i, y + j].isOnEdge == true)
+                    {
+                        fragment.isOnEdge = true;
+                    }
                 }
             }
         }
+
+        //Activate fragment's effects
+        fragment.ActivateEffects();
+
+        //Determine placement of actual graphic for the fragment
+        Vector2 placePosition = inventorySlotArray[x, y].gameObject.GetComponent<RectTransform>().position;
+        placePosition += new Vector2(-inventorySlotSize / 2f, inventorySlotSize / 2f);
+        fragment.gameObject.GetComponent<RectTransform>().position = placePosition;
+    }
+
+    //Method to convert mouse position into grid position, to help with snapping item to array
+    Vector2Int GetGridPosition(Fragment fragment)
+    {
+        //Calculate relative position
+        Vector2 fragmentPosition = fragment.gameObject.transform.position;
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            inventoryLayoutGroupGO.GetComponent<RectTransform>(),
+            fragmentPosition,
+            null,
+            out Vector2 relativeMousePosition
+        );
+
+        Rect rect = inventoryLayoutGroupGO.GetComponent<RectTransform>().rect;
+        relativeMousePosition -= new Vector2(rect.xMin, rect.yMin);
+
+        //Snap to a grid spot
+        int x = Mathf.FloorToInt(relativeMousePosition.x / inventorySlotSize);
+        int y = inventoryHeight - Mathf.FloorToInt(relativeMousePosition.y / inventorySlotSize);
+        return new Vector2Int(x, y);
+    }
+
+    //Method to put all of the snapping together
+    public void SnapToGrid(Fragment fragment)
+    {
+        Vector2Int gridPosition = GetGridPosition(fragment);
+        if(CanPlaceFragment(fragment, gridPosition.x, gridPosition.y))
+        {
+            PlaceFragment(fragment, gridPosition.x, gridPosition.y);
+        }
     }
     
-    void Update()
+    //Method to remove (more like "unstick") a fragment
+    public void RemoveFragment(Fragment fragment)
     {
-        
+        //Reset positional states
+        fragment.isOnEdge = false;
+
+        //Deactivate fragment's effects
+        fragment.DeactivateEffects();
+
+        //Remove all instances of this fragment from the grid
+        for(int i = 0; i < inventoryWidth; i++)
+        {
+            for(int j = 0; j < inventoryHeight; j++)
+            {
+                if(inventorySlotArray[i,j].GetFragment() == fragment)
+                {
+                    inventorySlotArray[i,j].SetFragment(null);
+                }
+            }
+        }
     }
 }

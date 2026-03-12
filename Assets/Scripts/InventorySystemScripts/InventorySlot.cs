@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class InventorySlot : MonoBehaviour
 {
+    [SerializeField]
     private Fragment currentFragment;
     public bool isOnEdge = false;
 
