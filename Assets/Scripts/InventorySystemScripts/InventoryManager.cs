@@ -115,15 +115,24 @@ public class InventoryManager : MonoBehaviour
             inventoryLayoutGroupGO.GetComponent<RectTransform>(),
             fragmentPosition,
             null,
-            out Vector2 relativeMousePosition
+            out Vector2 relativeFragmentPosition
         );
+        relativeFragmentPosition.y *= -1f;
 
+        //Adjust to top left corner
         Rect rect = inventoryLayoutGroupGO.GetComponent<RectTransform>().rect;
-        relativeMousePosition -= new Vector2(rect.xMin, rect.yMin);
+        relativeFragmentPosition -= new Vector2(rect.xMin, 0);
 
-        //Snap to a grid spot
-        int x = Mathf.FloorToInt(relativeMousePosition.x / inventorySlotSize);
-        int y = inventoryHeight - Mathf.FloorToInt(relativeMousePosition.y / inventorySlotSize);
+        //Calculate decimal grid position, then adjust for ease of snapping
+        relativeFragmentPosition.x = relativeFragmentPosition.x / inventorySlotSize;
+        relativeFragmentPosition.y = relativeFragmentPosition.y / inventorySlotSize;
+
+        relativeFragmentPosition.x += 0.5f;
+        relativeFragmentPosition.y += 0.5f;
+
+        //Snap to a grid spot (floor to int)
+        int x = Mathf.FloorToInt(relativeFragmentPosition.x);
+        int y = Mathf.FloorToInt(relativeFragmentPosition.y);
         return new Vector2Int(x, y);
     }
 

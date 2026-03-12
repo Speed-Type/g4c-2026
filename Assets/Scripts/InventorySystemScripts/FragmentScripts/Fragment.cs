@@ -25,7 +25,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         //When drag begins, make it the topmost item
         transform.SetAsLastSibling();
-        Debug.Log("Dragging");
 
         //Remove from inventory manager
         inventoryManager.RemoveFragment(this);

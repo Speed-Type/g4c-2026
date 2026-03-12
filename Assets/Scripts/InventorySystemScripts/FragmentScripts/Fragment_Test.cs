@@ -6,8 +6,7 @@ public class Fragment_Test : Fragment
     {
         shape = new bool[,]
         {
-            {true, true},
-            {true, true}
+            {true}
         };
     }
 
