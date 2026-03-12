@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -14,16 +15,32 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private RectTransform rectTransform;
     private Canvas canvas;
     private InventoryManager inventoryManager;
+    private PlayerInputActions input; //input action controlelr
     private static int totalEquippedFragments = 0;
     private static int totalExistingFragments = 0;
     private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
+    private bool isBeingDragged = false;
 
     void Awake()
     {
+        //Setup input
+        input = new PlayerInputActions();
+        input.UI.Rotate.performed += Rotate;
+
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         inventoryManager = FindFirstObjectByType<InventoryManager>();
         totalExistingFragments++;
+    }
+
+    void OnEnable()
+    {
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.Disable();
     }
 
     void OnDestroy()
@@ -33,6 +50,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        isBeingDragged = true;
+
         //When drag begins, make it the topmost item
         transform.SetAsLastSibling();
 
@@ -47,11 +66,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
-        Debug.Log("Total equipped frags: " + totalEquippedFragments);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        isBeingDragged = false;
+
         //Snap to grid
         if(inventoryManager.SnapToGrid(this))
         {
@@ -61,8 +81,13 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Method to rotate 90 degrees clockwise
-    public void Rotate()
+    public void Rotate(InputAction.CallbackContext ctx)
     {
+        if(!isBeingDragged)
+        {
+            return;
+        }
+
         //Need to transpose matrix and then reverse each column
         int width = shape.GetLength(0);
         int height = shape.GetLength(1);
@@ -89,7 +114,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //The effects of a fragment should be here, as this is called when a fragment is equipped
     public virtual void ActivateEffects()
     {
-        Debug.Log("Activating effects");
         isEquipped = true;
         totalEquippedFragments++;
     }
@@ -98,7 +122,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Should deactivate the effects of a fragment, as this is called when a fragment is unequipped
     public virtual void DeactivateEffects()
     {
-        Debug.Log("Deactivating effects");
         isEquipped = false;
         totalEquippedFragments--;
     }
