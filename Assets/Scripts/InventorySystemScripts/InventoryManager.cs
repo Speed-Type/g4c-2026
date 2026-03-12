@@ -136,23 +136,27 @@ public class InventoryManager : MonoBehaviour
     }
 
     //Method to put all of the snapping together
-    public void SnapToGrid(Fragment fragment)
+    //Returns true if successful; false if not
+    public bool SnapToGrid(Fragment fragment)
     {
         Vector2Int gridPosition = GetGridPosition(fragment);
         if(CanPlaceFragment(fragment, gridPosition.x, gridPosition.y))
         {
             PlaceFragment(fragment, gridPosition.x, gridPosition.y);
+            return true;
         }
+
+        return false;
     }
     
     //Method to remove (more like "unstick") a fragment
     public void RemoveFragment(Fragment fragment)
     {
+        //Tracker to keep account of whether there was anything to actually remove
+        bool hasRemovedAnything = false;
+
         //Reset positional states
         fragment.isOnEdge = false;
-
-        //Deactivate fragment's effects
-        fragment.DeactivateEffects();
 
         //Remove all instances of this fragment from the grid
         for(int i = 0; i < inventoryWidth; i++)
@@ -162,8 +166,15 @@ public class InventoryManager : MonoBehaviour
                 if(inventorySlotArray[i,j].GetFragment() == fragment)
                 {
                     inventorySlotArray[i,j].SetFragment(null);
+                    hasRemovedAnything = true;
                 }
             }
+        }
+
+        if(hasRemovedAnything)
+        {
+            //Deactivate fragment's effects
+            fragment.DeactivateEffects();
         }
     }
 }

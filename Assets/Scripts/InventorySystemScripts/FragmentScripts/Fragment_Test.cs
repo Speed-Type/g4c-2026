@@ -12,11 +12,11 @@ public class Fragment_Test : Fragment
 
     public override void ActivateEffects()
     {
-        
+        base.ActivateEffects();
     }
 
     public override void DeactivateEffects()
     {
-        
+        base.DeactivateEffects();
     }
 }

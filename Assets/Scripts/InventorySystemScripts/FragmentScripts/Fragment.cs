@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,12 +14,21 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private RectTransform rectTransform;
     private Canvas canvas;
     private InventoryManager inventoryManager;
+    private static int totalEquippedFragments = 0;
+    private static int totalExistingFragments = 0;
+    private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
 
     void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         inventoryManager = FindFirstObjectByType<InventoryManager>();
+        totalExistingFragments++;
+    }
+
+    void OnDestroy()
+    {
+        totalExistingFragments--;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -28,18 +38,26 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Remove from inventory manager
         inventoryManager.RemoveFragment(this);
+
+        //Do small graphic shake
+        Shake(15f, 0.3f);
     }
 
     //Actual dragging functionality
     public void OnDrag(PointerEventData eventData)
     {
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        Debug.Log("Total equipped frags: " + totalEquippedFragments);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         //Snap to grid
-        inventoryManager.SnapToGrid(this);
+        if(inventoryManager.SnapToGrid(this))
+        {
+            //Set layer order
+            transform.SetSiblingIndex(1);
+        }
     }
 
     //Method to rotate 90 degrees clockwise
@@ -71,13 +89,40 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //The effects of a fragment should be here, as this is called when a fragment is equipped
     public virtual void ActivateEffects()
     {
-        
+        Debug.Log("Activating effects");
+        isEquipped = true;
+        totalEquippedFragments++;
     }
 
     //Method to be overridden in children
     //Should deactivate the effects of a fragment, as this is called when a fragment is unequipped
     public virtual void DeactivateEffects()
     {
-        
+        Debug.Log("Deactivating effects");
+        isEquipped = false;
+        totalEquippedFragments--;
+    }
+
+    //Note that the current number of Shake calls is 10; can be adjusted by changing this variable
+    private int totalCalls = 10;
+    private void Shake(float intensity, float duration, int callsSoFar = 0, float previousRotation = 0f)
+    {
+        if(callsSoFar < totalCalls)
+        {
+            float rotationAmount = UnityEngine.Random.Range(0, intensity * (1 - (callsSoFar / 10f)));
+            if(callsSoFar % 2 == 1)
+            {
+                rotationAmount *= -1;
+            }
+            
+            LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
+            {
+                Shake(intensity, duration, callsSoFar + 1, rotationAmount);
+            });
+        }
+        else
+        {
+            LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, -previousRotation, duration / totalCalls);
+        }
     }
 }
