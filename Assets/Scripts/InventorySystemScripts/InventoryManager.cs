@@ -177,4 +177,52 @@ public class InventoryManager : MonoBehaviour
             fragment.DeactivateEffects();
         }
     }
+
+    //Method to highlight valid positions
+    public void Highlight(Fragment fragment)
+    {
+        Vector2Int gridPosition = GetGridPosition(fragment);
+        bool canPlaceFragment = CanPlaceFragment(fragment, gridPosition.x, gridPosition.y);
+
+        //De-highlight all positions
+        ClearHighlight();
+
+        //Loop through necessary highlighted positions and highlight as needed
+        for(int row = 0; row < fragment.shape.GetLength(0); row++)
+        {
+            for(int col = 0; col < fragment.shape.GetLength(1); col++)
+            {
+                //Check that this part of the fragment's shape does actually need space and is in bounds
+                int actualRow = gridPosition.x + row;
+                int actualCol = gridPosition.y + col;
+
+                if(actualRow >= 0 && actualCol >= 0 && actualRow < inventoryNumRows && actualCol < inventoryNumCols && fragment.shape[row,col] == true)
+                {
+                    //Highlight the correct color
+                    if(canPlaceFragment)
+                    {
+                        //Green
+                        inventorySlotArray[actualRow, actualCol].HighlightValid();
+                    }
+                    else
+                    {
+                        //Red
+                        inventorySlotArray[actualRow, actualCol].HighlightInvalid();
+                    }
+                }
+            }
+        }
+    }
+
+    //Method to de-highlight all inventory slots
+    public void ClearHighlight()
+    {
+        for(int row = 0; row < inventoryNumRows; row++)
+        {
+            for(int col = 0; col < inventoryNumCols; col++)
+            {
+                inventorySlotArray[row, col].ResetHighlight();
+            }
+        }
+    }
 }

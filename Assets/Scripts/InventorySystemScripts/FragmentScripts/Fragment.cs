@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -62,6 +63,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Do small graphic shake
         Shake(15f, 0.3f);
+
+        //Start highlight coroutine
+        StartCoroutine(TimedHighlightCoroutine());
     }
 
     //Actual dragging functionality
@@ -80,6 +84,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             //Set layer order
             transform.SetSiblingIndex(1);
         }
+
+        //Clear inventory highlight
+        inventoryManager.ClearHighlight();
     }
 
     //Method to rotate 90 degrees clockwise
@@ -109,6 +116,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         shape = newShape;
 
         //GRAPHICALLY
+
+        //Stop current tween for shake effect
+        LeanTween.cancel(this.gameObject);
+        transform.localRotation = Quaternion.Euler(0,0,0);
 
         //Change current rotation positioning
         currentRotation = (currentRotation + 1) % 4;
@@ -144,6 +155,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Apply offset
         graphicGO.transform.localPosition = new Vector3(offset.x, offset.y, 0);
+
+        //Do small graphic shake
+        Shake(15f, 0.3f);
     }
 
     //Method to be overridden in children
@@ -174,6 +188,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 rotationAmount *= -1;
             }
             
+            //Vector3 dir = transform.position - rectTransform.anchoredPosition;
+
             LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
             {
                 Shake(intensity, duration, callsSoFar + 1, rotationAmount);
@@ -182,6 +198,18 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         else
         {
             LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, -previousRotation, duration / totalCalls);
+        }
+    }
+
+    IEnumerator TimedHighlightCoroutine()
+    {
+        inventoryManager.Highlight(this); //call highlight
+
+        yield return new WaitForSeconds(.15f); //wait; Can adjust this timing as necessary
+
+        if(isBeingDragged)
+        {
+            StartCoroutine(TimedHighlightCoroutine());
         }
     }
 }

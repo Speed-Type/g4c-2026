@@ -8,17 +8,18 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Variables in Inspector
     public GameState gameState;
     [Header("Player Option GameObjects")]
-    public GameObject showMapButton;
-    public GameObject hideMapButton;
-    public GameObject nodeMap;
+    [SerializeField] private GameObject showMapButton;
+    [SerializeField] private GameObject hideMapButton;
+    [SerializeField] private GameObject nodeMap;
+    [SerializeField] private GameObject dialogueSystemGO;
+    [SerializeField] private GameObject inventorySystemGO;
 
     [Header("Camera Stuff")]
     [SerializeField] private RoguelikeCameraController cameraController;
 
-    [Header("Player data")]
+    [Header("Player Data")]
     public int playerHealth;
     
-
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
 
@@ -55,12 +56,16 @@ public class RoguelikeGameplayController : MonoBehaviour
             playerOptionButtonsEnumToGameObject(button).SetActive(false);
         }
 
+        //Hide dialogue box
+        dialogueSystemGO.SetActive(false);
+
         //Update camera
         cameraController.StopFreeCam();
 
-        //Show "hide map" button after moved to freecam position
+        //The following code runs after free cam has transitioned to map state
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
         {
+            //Show "hide map" button
             hideMapButton.SetActive(true);
             
             //Show map
@@ -83,13 +88,17 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Update camera
         cameraController.StartFreeCam();
 
-        //Show other open buttons after moved to freecam position
+        //The following code runs after camera has transitioned back to free cam
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
         {
+            //Show other open buttons
             foreach(PlayerOptionButtons button in openButtons)
             {
                 playerOptionButtonsEnumToGameObject(button).SetActive(true);
             }
+            
+            //Show dialogue box
+            dialogueSystemGO.SetActive(true);
         });
     }
 
