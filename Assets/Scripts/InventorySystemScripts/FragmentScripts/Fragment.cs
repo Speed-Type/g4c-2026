@@ -1,14 +1,15 @@
 using System;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public string fragmentName;
-    public Sprite icon;
+    public GameObject graphicGO;
     public bool[,] shape; //will be initialized in subclasses
-
     public bool isOnEdge;
 
     //Internal logic
@@ -20,6 +21,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private static int totalExistingFragments = 0;
     private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
     private bool isBeingDragged = false;
+    private int currentRotation = 0;
 
     void Awake()
     {
@@ -89,25 +91,59 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
 
         //Need to transpose matrix and then reverse each column
-        int width = shape.GetLength(0);
-        int height = shape.GetLength(1);
+        int numRows = shape.GetLength(0);
+        int numCols = shape.GetLength(1);
 
-        bool[,] newShape = new bool[height, width]; //reversed dimensions
+        bool[,] newShape = new bool[numCols, numRows]; //reversed dimensions
 
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < numRows; i++)
         {
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < numCols; j++)
             {
-                int newRow = width - 1 - j;
-                int newCol = height - 1 - i;
-                newShape[newRow, newCol] = shape[j, i];
+                // int newRow = width - 1 - j;
+                // int newCol = height - 1 - i;
+                newShape[numCols - 1 - j, i] = shape[i, j];
             }
         }
 
         shape = newShape;
 
-        //Rotate visually
-        transform.Rotate(0,0,90);
+        //GRAPHICALLY
+
+        //Change current rotation positioning
+        currentRotation = (currentRotation + 1) % 4;
+
+        //Rotate
+        graphicGO.transform.localRotation *= Quaternion.Euler(0,0,90);
+        
+        //Calculate offset
+        Vector2 offset;
+        numRows = shape.GetLength(0);
+        numCols = shape.GetLength(1);
+
+        switch(currentRotation)
+        {
+            case 0:
+                offset = new Vector2(0,0);
+                break;
+            case 1:
+                offset = new Vector2(0, -numRows);
+                break;
+            case 2:
+                offset = new Vector2(numCols, -numRows);
+                break;
+            case 3:
+                offset = new Vector2(numCols, 0);
+                break;
+            default:
+                offset = new Vector2(0,0);
+                break;
+        }
+
+        offset *= inventoryManager.inventorySlotSize;
+
+        //Apply offset
+        graphicGO.transform.localPosition = new Vector3(offset.x, offset.y, 0);
     }
 
     //Method to be overridden in children

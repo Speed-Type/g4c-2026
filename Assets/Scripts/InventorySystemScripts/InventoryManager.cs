@@ -9,8 +9,8 @@ public class InventoryManager : MonoBehaviour
     public GameObject inventorySlotGO;
 
     [Header("Inventory Settings")]
-    public int inventoryWidth;
-    public int inventoryHeight;
+    public int inventoryNumCols;
+    public int inventoryNumRows;
     public float inventorySlotSize;
 
     //Inventory logic
@@ -19,52 +19,52 @@ public class InventoryManager : MonoBehaviour
     void Awake()
     {
         //Initialize inventory array
-        inventorySlotArray = new InventorySlot[inventoryWidth, inventoryHeight];
+        inventorySlotArray = new InventorySlot[inventoryNumRows, inventoryNumCols];
 
         //Generate inventory game objects and assign inventory array with the corresponding scripts of those game objects
-        for(int y = 0; y < inventoryHeight; y++)
+        for(int row = 0; row < inventoryNumRows; row++)
         {
-            for(int x = 0; x < inventoryWidth; x++)
+            for(int col = 0; col < inventoryNumCols; col++)
             {
                 GameObject newInventorySlotGO = Instantiate(inventorySlotGO, inventoryLayoutGroupGO.transform);
-                newInventorySlotGO.name = "Inventory slot " + x + ", " + y;
-                inventorySlotArray[x, y] = newInventorySlotGO.GetComponent<InventorySlot>();
+                newInventorySlotGO.name = "Inventory slot at row " + row + ", col " + col;
+                inventorySlotArray[row, col] = newInventorySlotGO.GetComponent<InventorySlot>();
 
                 //Set edges
-                if(y == 0 || x == 0 || y == inventoryHeight - 1 || x == inventoryWidth - 1)
+                if(row == 0 || col == 0 || row == inventoryNumRows - 1 || col == inventoryNumCols - 1)
                 {
-                    inventorySlotArray[x, y].isOnEdge = true;
+                    inventorySlotArray[row, col].isOnEdge = true;
                 }
             }
         }
     }
 
     //Method to check if the fragment can be placed at these coordinates
-    private bool CanPlaceFragment(Fragment fragment, int x, int y)
+    private bool CanPlaceFragment(Fragment fragment, int originRow, int originCol)
     {
         //Check that x and y are within bounds
-        if(x < 0 || y < 0)
+        if(originRow < 0 || originCol < 0)
         {
             return false;
         }
 
-        for(int i = 0; i < fragment.shape.GetLength(0); i++)
+        for(int row = 0; row < fragment.shape.GetLength(0); row++)
         {
-            for(int j = 0; j < fragment.shape.GetLength(1); j++)
+            for(int col = 0; col < fragment.shape.GetLength(1); col++)
             {
                 //Check that this part of the fragment's shape does actually need space
-                if(fragment.shape[i,j] == true)
+                if(fragment.shape[row,col] == true)
                 {
                     //Calculate whether this specific spot at (x+i), (y+j) is (1) in bounds and (2) empty
-                    int posX = x + i;
-                    int posY = y + j;
+                    int actualRow = originRow + row;
+                    int actualCol = originCol + col;
 
-                    if(posX >= inventoryWidth || posY >= inventoryHeight)
+                    if(actualRow >= inventoryNumRows || actualCol >= inventoryNumCols)
                     {
                         return false;
                     }
 
-                    if(inventorySlotArray[posX, posY].GetFragment() != null)
+                    if(inventorySlotArray[actualRow, actualCol].GetFragment() != null)
                     {
                         return false;
                     }
@@ -132,7 +132,7 @@ public class InventoryManager : MonoBehaviour
         //Snap to a grid spot (floor to int)
         int x = Mathf.FloorToInt(relativeFragmentPosition.x);
         int y = Mathf.FloorToInt(relativeFragmentPosition.y);
-        return new Vector2Int(x, y);
+        return new Vector2Int(y, x);
     }
 
     //Method to put all of the snapping together
@@ -159,13 +159,13 @@ public class InventoryManager : MonoBehaviour
         fragment.isOnEdge = false;
 
         //Remove all instances of this fragment from the grid
-        for(int i = 0; i < inventoryWidth; i++)
+        for(int row = 0; row < inventoryNumRows; row++)
         {
-            for(int j = 0; j < inventoryHeight; j++)
+            for(int col = 0; col < inventoryNumCols; col++)
             {
-                if(inventorySlotArray[i,j].GetFragment() == fragment)
+                if(inventorySlotArray[row, col].GetFragment() == fragment)
                 {
-                    inventorySlotArray[i,j].SetFragment(null);
+                    inventorySlotArray[row, col].SetFragment(null);
                     hasRemovedAnything = true;
                 }
             }
