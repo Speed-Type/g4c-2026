@@ -13,26 +13,22 @@ public class Node_Start : Node
             return;
         }
 
-        LeanTween.delayedCall(NodeManager.playerTravelAnimTime, () =>
+        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime + .1f, () =>
         {
-            //The following code is run AFTER player has finished moving on map
-            nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+            //The following code is run AFTER camera has returned to free cam view and dialogue box is just about to open
 
-            LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
+            //Display flavor text, depending on whether the player has returned to this node or this is the first time they've been here
+            if(hasVisited == false)
             {
-                //The following code is run AFTER camera has returned to free cam view
-
-                //Display flavor text, depending on whether the player has returned to this node or this is the first time they've been here
-                if(hasVisited == false)
-                {
-                    hasVisited = true;
-                    nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
-                }
-                else
-                {
-                    nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"This is where you started."});
-                }
-            });
+                hasVisited = true;
+                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
+            }
+            else
+            {
+                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"This is where you started."});
+            }
         });
     }
 }

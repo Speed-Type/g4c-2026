@@ -29,7 +29,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         openButtons = newList;
 
         //Immediately show player's options
-        HideMap();
+        HideMap(true);
     }
 
     //Method to convert enum PlayerOptionButtons to actual GameObjects
@@ -59,46 +59,68 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Hide dialogue box
         dialogueSystemGO.SetActive(false);
 
-        //Update camera
-        cameraController.StopFreeCam();
-
-        //The following code runs after free cam has transitioned to map state
-        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
+        //The following code runs after general delay is met
+        LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
         {
-            //Show "hide map" button
-            hideMapButton.SetActive(true);
-            
-            //Show map
-            nodeMap.SetActive(true);
+            //Camera transition
+            cameraController.StopFreeCam();
+
+            //The following code runs after free cam has transitioned to map state
+            LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
+            {
+                //Show "hide map" button
+                hideMapButton.SetActive(true);
+                
+                //Show map
+                nodeMap.SetActive(true);
+            });
         });
     }
 
     //Method to hide map (and by extension, show open buttons)
-    public void HideMap()
+    public void HideMap(bool isNewNode = false)
     {
-        //Hide map
-        nodeMap.SetActive(false);
-
         //Hide "hide map" button
         hideMapButton.SetActive(false);
 
-        //Update game state
-        gameState = GameState.Idle;
-
-        //Update camera
-        cameraController.StartFreeCam();
-
-        //The following code runs after camera has transitioned back to free cam
-        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
+        float waitTime = RoguelikeCameraController.generalDelayBetweenTransitions;
+        if(isNewNode)
         {
-            //Show other open buttons
-            foreach(PlayerOptionButtons button in openButtons)
+            waitTime += NodeManager.playerTravelAnimTime;
+        }
+        else
+        {
+            nodeMap.SetActive(false);
+        }
+
+        LeanTween.delayedCall(waitTime, () =>
+        {
+            //Hide map
+            if(isNewNode)
             {
-                playerOptionButtonsEnumToGameObject(button).SetActive(true);
+                nodeMap.SetActive(false);
             }
-            
-            //Show dialogue box
-            dialogueSystemGO.SetActive(true);
+
+            //Update game state
+            gameState = GameState.Idle;
+
+            //Update camera
+            cameraController.StartFreeCam();
+
+            //The following code runs after camera has transitioned back to free cam and paused the general delay amount
+            LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + RoguelikeCameraController.generalDelayBetweenTransitions, () =>
+            {
+                //Show other open buttons
+                foreach(PlayerOptionButtons button in openButtons)
+                {
+                    playerOptionButtonsEnumToGameObject(button).SetActive(true);
+                }
+                
+                //Show dialogue box
+                Debug.Log("showing dialogue box");
+                dialogueSystemGO.SetActive(true);
+            });
+
         });
     }
 

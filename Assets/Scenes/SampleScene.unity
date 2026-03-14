@@ -1453,7 +1453,7 @@ MonoBehaviour:
       - m_Target: {fileID: 1880359810}
         m_TargetAssemblyTypeName: RoguelikeGameplayController, Assembly-CSharp
         m_MethodName: HideMap
-        m_Mode: 1
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

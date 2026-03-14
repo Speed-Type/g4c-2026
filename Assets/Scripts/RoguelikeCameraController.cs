@@ -25,6 +25,7 @@ public class RoguelikeCameraController : MonoBehaviour
 
     [Header("Camera Transitions Timing")]
     public static float freeCamTransitionTiming = 1f;
+    public static float generalDelayBetweenTransitions = 0.25f;
 
     void Awake()
     {

@@ -62,19 +62,16 @@ public class Node_Empty : Node
         {
             return;
         }
-
-        LeanTween.delayedCall(NodeManager.playerTravelAnimTime, () =>
+        
+        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+        
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime + .1f, () =>
         {
-            //The following code is run AFTER player has finished moving on map
-            nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+            //The following code is run AFTER camera has returned to free cam view and paused the general delay time
 
-            LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
-            {
-                //The following code is run AFTER camera has returned to free cam view
-
-                //Display random flavor text
-                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)]});
-            });
+            //Display random flavor text
+            Debug.Log("Trying to set text");
+            nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)]});
         });
     }
 }
