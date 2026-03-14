@@ -13,9 +13,9 @@ public class Node_Start : Node
             return;
         }
 
-        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map});
+        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
 
-        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime + .1f, () =>
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {
             //The following code is run AFTER camera has returned to free cam view and dialogue box is just about to open
 
@@ -23,7 +23,7 @@ public class Node_Start : Node
             if(hasVisited == false)
             {
                 hasVisited = true;
-                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed."});
+                nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Must feed.", "You should search for food."});
             }
             else
             {

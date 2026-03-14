@@ -10,9 +10,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     [Header("Player Option GameObjects")]
     [SerializeField] private GameObject showMapButton;
     [SerializeField] private GameObject hideMapButton;
-    [SerializeField] private GameObject nodeMap;
-    [SerializeField] private GameObject dialogueSystemGO;
+    [SerializeField] private GameObject nodeMapGO;
+    [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
+    [SerializeField] private GameObject showInventorySystemButton;
 
     [Header("Camera Stuff")]
     [SerializeField] private RoguelikeCameraController cameraController;
@@ -22,6 +23,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
+    private bool playerCanMakeChoices;
 
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
@@ -39,6 +41,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         {
             case PlayerOptionButtons.Map:
                 return showMapButton;
+            case PlayerOptionButtons.Inventory:
+                return showInventorySystemButton;
             default:
                 return null;
         }
@@ -47,17 +51,20 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Method to show map (and by extension, hide open buttons)
     public void ShowMap()
     {
+        //Make sure player can actually open the map
+        if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
         //Update game state
         gameState = GameState.Map;
 
         //Hide other open buttons
-        foreach(PlayerOptionButtons button in openButtons)
-        {
-            playerOptionButtonsEnumToGameObject(button).SetActive(false);
-        }
+        ToggleOpenButtons(false);
 
         //Hide dialogue box
-        dialogueSystemGO.SetActive(false);
+        dialogueSystemController.HideDialogueBox();
 
         //The following code runs after general delay is met
         LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
@@ -72,7 +79,7 @@ public class RoguelikeGameplayController : MonoBehaviour
                 hideMapButton.SetActive(true);
                 
                 //Show map
-                nodeMap.SetActive(true);
+                nodeMapGO.SetActive(true);
             });
         });
     }
@@ -87,10 +94,13 @@ public class RoguelikeGameplayController : MonoBehaviour
         if(isNewNode)
         {
             waitTime += NodeManager.playerTravelAnimTime;
+
+            //Also disable player choices
+            playerCanMakeChoices = false;
         }
         else
         {
-            nodeMap.SetActive(false);
+            nodeMapGO.SetActive(false);
         }
 
         LeanTween.delayedCall(waitTime, () =>
@@ -98,7 +108,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             //Hide map
             if(isNewNode)
             {
-                nodeMap.SetActive(false);
+                nodeMapGO.SetActive(false);
             }
 
             //Update game state
@@ -111,30 +121,75 @@ public class RoguelikeGameplayController : MonoBehaviour
             LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + RoguelikeCameraController.generalDelayBetweenTransitions, () =>
             {
                 //Show other open buttons
-                foreach(PlayerOptionButtons button in openButtons)
-                {
-                    playerOptionButtonsEnumToGameObject(button).SetActive(true);
-                }
+                ToggleOpenButtons(true);
                 
                 //Show dialogue box
-                Debug.Log("showing dialogue box");
-                dialogueSystemGO.SetActive(true);
+                dialogueSystemController.ShowDialogueBox();
             });
-
         });
+    }
+
+    private void ToggleOpenButtons(bool value)
+    {
+        foreach(PlayerOptionButtons button in openButtons)
+        {
+            playerOptionButtonsEnumToGameObject(button).SetActive(value);
+
+            if(!playerCanMakeChoices)
+            {
+                //Color them gray
+                Debug.Log("coloring " + button + " gray");
+            }
+        }
+    }
+
+    public void EnablePlayerChoices()
+    {
+        playerCanMakeChoices = true;
+
+        //Color them regular
+        foreach(PlayerOptionButtons button in openButtons)
+        {
+            //playerOptionButtonsEnumToGameObject(button).SetActive(value);
+            Debug.Log("coloring " + button + " white");
+        }
+    }
+
+    public void ShowInventory()
+    {
+        //Make sure the player can actually open the map
+        if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
+        ToggleOpenButtons(false);
+        inventorySystemGO.SetActive(true);
+        dialogueSystemController.HideDialogueBox();
+    }
+
+    public void HideInventory()
+    {
+        ToggleOpenButtons(true);
+        inventorySystemGO.SetActive(false);
+        dialogueSystemController.ShowDialogueBox();
     }
 
     void Awake()
     {
         //Enable/disable necessary buttons
-        nodeMap.SetActive(true);
+        nodeMapGO.SetActive(true);
         hideMapButton.SetActive(true);
         showMapButton.SetActive(false);
+        inventorySystemGO.SetActive(false);
+        showInventorySystemButton.SetActive(false);
     }
 }
+
 public enum PlayerOptionButtons
 {
-    Map
+    Map,
+    Inventory
 }
 
 public enum GameState
