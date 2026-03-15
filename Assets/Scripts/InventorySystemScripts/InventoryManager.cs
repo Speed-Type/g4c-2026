@@ -4,6 +4,15 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : GeneralInventoryStructure
 {
+    [Header("Inventory Settings")]
+    public int inventoryNumCols;
+    public int inventoryNumRows;
+
+    void Awake()
+    {
+        GenerateInventory(inventoryNumRows, inventoryNumCols);
+    }
+    
     //Overridden fragment placement
     public override void PlaceFragment(Fragment fragment, int x, int y)
     {

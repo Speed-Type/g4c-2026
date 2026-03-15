@@ -5,33 +5,39 @@ public class GeneralInventoryStructure : MonoBehaviour
     [Header("Inventory Graphics")]
     [SerializeField] private GameObject inventoryLayoutGroupGO;
     [SerializeField] private GameObject inventorySlotGO;
+    [SerializeField] private RectTransform backgroundGraphicGO;
     [SerializeField] private float fragmentSnapAnimLength;
 
-
-    [Header("Inventory Settings")]
-    public int inventoryNumCols;
-    public int inventoryNumRows;
-    public float inventorySlotSize;
+    private int gridNumCols;
+    private int gridNumRows;
+    [SerializeField] private float inventorySlotSize;
 
     //Inventory logic
     private InventorySlot[,] inventorySlotArray;
 
-    void Awake()
+    public void GenerateInventory(int pNumRows, int pNumCols)
     {
+        //Initialize dimensions
+        gridNumCols = pNumCols;
+        gridNumRows = pNumRows;
+
+        //TODO: Initialize size of background graphic
+        backgroundGraphicGO.sizeDelta = new Vector2();
+
         //Initialize inventory array
-        inventorySlotArray = new InventorySlot[inventoryNumRows, inventoryNumCols];
+        inventorySlotArray = new InventorySlot[gridNumRows, gridNumCols];
 
         //Generate inventory game objects and assign inventory array with the corresponding scripts of those game objects
-        for(int row = 0; row < inventoryNumRows; row++)
+        for(int row = 0; row < gridNumRows; row++)
         {
-            for(int col = 0; col < inventoryNumCols; col++)
+            for(int col = 0; col < gridNumCols; col++)
             {
                 GameObject newInventorySlotGO = Instantiate(inventorySlotGO, inventoryLayoutGroupGO.transform);
                 newInventorySlotGO.name = "Inventory slot at row " + row + ", col " + col;
                 inventorySlotArray[row, col] = newInventorySlotGO.GetComponent<InventorySlot>();
 
                 //Set edges
-                if(row == 0 || col == 0 || row == inventoryNumRows - 1 || col == inventoryNumCols - 1)
+                if(row == 0 || col == 0 || row == gridNumRows - 1 || col == gridNumCols - 1)
                 {
                     inventorySlotArray[row, col].isOnEdge = true;
                 }
@@ -59,7 +65,7 @@ public class GeneralInventoryStructure : MonoBehaviour
                     int actualRow = originRow + row;
                     int actualCol = originCol + col;
 
-                    if(actualRow >= inventoryNumRows || actualCol >= inventoryNumCols)
+                    if(actualRow >= gridNumRows || actualCol >= gridNumCols)
                     {
                         return false;
                     }
@@ -161,9 +167,9 @@ public class GeneralInventoryStructure : MonoBehaviour
         fragment.isOnEdge = false;
 
         //Remove all instances of this fragment from the grid
-        for(int row = 0; row < inventoryNumRows; row++)
+        for(int row = 0; row < gridNumRows; row++)
         {
-            for(int col = 0; col < inventoryNumCols; col++)
+            for(int col = 0; col < gridNumCols; col++)
             {
                 if(inventorySlotArray[row, col].GetFragment() == fragment)
                 {
@@ -199,7 +205,7 @@ public class GeneralInventoryStructure : MonoBehaviour
                 int actualRow = gridPosition.x + row;
                 int actualCol = gridPosition.y + col;
 
-                if(actualRow >= 0 && actualCol >= 0 && actualRow < inventoryNumRows && actualCol < inventoryNumCols && fragment.shape[row,col] == true)
+                if(actualRow >= 0 && actualCol >= 0 && actualRow < gridNumRows && actualCol < gridNumCols && fragment.shape[row,col] == true)
                 {
                     //Highlight the correct color
                     if(canPlaceFragment)
@@ -220,9 +226,9 @@ public class GeneralInventoryStructure : MonoBehaviour
     //Method to de-highlight all inventory slots
     public void ClearHighlight()
     {
-        for(int row = 0; row < inventoryNumRows; row++)
+        for(int row = 0; row < gridNumRows; row++)
         {
-            for(int col = 0; col < inventoryNumCols; col++)
+            for(int col = 0; col < gridNumCols; col++)
             {
                 inventorySlotArray[row, col].ResetHighlight();
             }
