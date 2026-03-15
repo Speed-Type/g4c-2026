@@ -10,7 +10,7 @@ public class GeneralInventoryStructure : MonoBehaviour
 
     private int gridNumCols;
     private int gridNumRows;
-    [SerializeField] private float inventorySlotSize;
+    public float inventorySlotSize; //Note that this variable needs to be public for Fragment class access
 
     //Inventory logic
     private InventorySlot[,] inventorySlotArray;
@@ -22,7 +22,7 @@ public class GeneralInventoryStructure : MonoBehaviour
         gridNumRows = pNumRows;
 
         //TODO: Initialize size of background graphic
-        backgroundGraphicGO.sizeDelta = new Vector2();
+        backgroundGraphicGO.sizeDelta = new Vector2(125 + pNumCols * inventorySlotSize, 120 + pNumRows * inventorySlotSize);
 
         //Initialize inventory array
         inventorySlotArray = new InventorySlot[gridNumRows, gridNumCols];
