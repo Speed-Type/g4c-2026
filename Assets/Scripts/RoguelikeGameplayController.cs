@@ -11,12 +11,14 @@ public class RoguelikeGameplayController : MonoBehaviour
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
+    [SerializeField] private GameObject lootSystemGO;
     [SerializeField] private GameObject nodeMapGO;
     
     [Header("Player Option Buttons")]
     [SerializeField] private GameObject showMapButton;
     [SerializeField] private GameObject hideMapButton;
     [SerializeField] private GameObject showInventorySystemButton;
+    [SerializeField] private GameObject showLootSystemButton;
     [SerializeField] private float playerOptionButtonShrunkenSize;
     [SerializeField] private float playerOptionButtonShrinkSpeed;
     private Vector2 playerOptionButtonDefaultDimensions;
@@ -52,6 +54,8 @@ public class RoguelikeGameplayController : MonoBehaviour
                 return showMapButton;
             case PlayerOptionButtons.Inventory:
                 return showInventorySystemButton;
+            case PlayerOptionButtons.Loot:
+                return showLootSystemButton;
             default:
                 return null;
         }
@@ -185,14 +189,32 @@ public class RoguelikeGameplayController : MonoBehaviour
         dialogueSystemController.ShowDialogueBox();
     }
 
+    public void ShowLoot()
+    {
+        //Make sure the player can actually open the map
+        if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
+        ToggleOpenButtons(false);
+        lootSystemGO.SetActive(true);
+        dialogueSystemController.HideDialogueBox();
+    }
+
+    public void HideLoot()
+    {
+        ToggleOpenButtons(true);
+        lootSystemGO.SetActive(false);
+        dialogueSystemController.ShowDialogueBox();
+    }
+
     void Awake()
     {
-        //Enable/disable necessary buttons
+        //Enable/disable necessary systems
         nodeMapGO.SetActive(true);
-        hideMapButton.SetActive(true);
-        showMapButton.SetActive(false);
         inventorySystemGO.SetActive(false);
-        showInventorySystemButton.SetActive(false);
+        lootSystemGO.SetActive(false);
 
         //Initialize default player option button dimensions
         playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
@@ -202,11 +224,12 @@ public class RoguelikeGameplayController : MonoBehaviour
 public enum PlayerOptionButtons
 {
     Map,
-    Inventory
+    Inventory,
+    Loot
 }
 
 public enum GameState
 {
     Map,
-    Idle
+    Idle,
 }
