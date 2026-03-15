@@ -61,6 +61,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Remove from inventory manager
         inventoryManager.RemoveFragment(this);
 
+        //Stop any previous tween from snapping to a position
+        LeanTween.cancel(this.gameObject);
+
         //Do small graphic shake
         Shake(15f, 0.3f);
 

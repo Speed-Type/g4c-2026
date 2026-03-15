@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class DialogueBoxController : MonoBehaviour
 {
     //Public variables
-    public RoguelikeGameplayController rgController;
-    public TMP_Text textGraphic;
-    public GameObject textBoxGO;
-    public GameObject raycastTargetGO;
-    public float typewriterEffectSpeed;
-    public float dialogueBoxCloseSpeed;
+    [SerializeField] private RoguelikeGameplayController rgController;
+    [SerializeField] private TMP_Text textGraphic;
+    [SerializeField] private GameObject textBoxGO;
+    [SerializeField] private Image chinGraphic;
+    [SerializeField] private GameObject raycastTargetGO;
+    [SerializeField] private float typewriterEffectSpeed;
+    [SerializeField] private float dialogueBoxCloseSpeed;
 
     //internal variables
     [SerializeField] private float shrunkBoxHeight;
@@ -52,7 +53,7 @@ public class DialogueBoxController : MonoBehaviour
             if(textBuffer.Count == 0)
             {
                 //Hide text box
-                LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed);
+                LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
                 
                 raycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
 
@@ -71,6 +72,7 @@ public class DialogueBoxController : MonoBehaviour
     {
         textBoxGO.GetComponent<Image>().enabled = false;
         textGraphic.enabled = false;
+        chinGraphic.enabled = false;
         raycastTargetGO.SetActive(false);
     }
 
@@ -78,6 +80,7 @@ public class DialogueBoxController : MonoBehaviour
     {
         textBoxGO.GetComponent<Image>().enabled = true;
         textGraphic.enabled = true;
+        chinGraphic.enabled = true;
         raycastTargetGO.SetActive(true);
     }
 
@@ -103,9 +106,7 @@ public class DialogueBoxController : MonoBehaviour
     //Method to set the strings for the text buffer (CLEARS BUFFER)
     public void SetText(List<string> newText)
     {
-        Debug.Log("Setting text");
         textBuffer.Clear();
-        textBoxGO.SetActive(true);
         SetDialogueBoxHeight(defaultBoxHeight); //reset sizing
         AddText(newText);
         ContinueText();

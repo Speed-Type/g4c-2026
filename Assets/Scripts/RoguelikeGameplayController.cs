@@ -7,13 +7,19 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     //Variables in Inspector
     public GameState gameState;
-    [Header("Player Option GameObjects")]
-    [SerializeField] private GameObject showMapButton;
-    [SerializeField] private GameObject hideMapButton;
-    [SerializeField] private GameObject nodeMapGO;
+
+    [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
+    [SerializeField] private GameObject nodeMapGO;
+    
+    [Header("Player Option Buttons")]
+    [SerializeField] private GameObject showMapButton;
+    [SerializeField] private GameObject hideMapButton;
     [SerializeField] private GameObject showInventorySystemButton;
+    [SerializeField] private float playerOptionButtonShrunkenSize;
+    [SerializeField] private float playerOptionButtonShrinkSpeed;
+    private Vector2 playerOptionButtonDefaultDimensions;
 
     [Header("Camera Stuff")]
     [SerializeField] private RoguelikeCameraController cameraController;
@@ -29,6 +35,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
     {
         openButtons = newList;
+
+        //Shrink buttons
+        SetPlayerOptionButtonHeight(playerOptionButtonShrunkenSize);
 
         //Immediately show player's options
         HideMap(true);
@@ -134,12 +143,6 @@ public class RoguelikeGameplayController : MonoBehaviour
         foreach(PlayerOptionButtons button in openButtons)
         {
             playerOptionButtonsEnumToGameObject(button).SetActive(value);
-
-            if(!playerCanMakeChoices)
-            {
-                //Color them gray
-                Debug.Log("coloring " + button + " gray");
-            }
         }
     }
 
@@ -147,11 +150,18 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         playerCanMakeChoices = true;
 
-        //Color them regular
+        //Open them up
         foreach(PlayerOptionButtons button in openButtons)
         {
-            //playerOptionButtonsEnumToGameObject(button).SetActive(value);
-            Debug.Log("coloring " + button + " white");
+            LeanTween.value(this.gameObject, SetPlayerOptionButtonHeight, playerOptionButtonShrunkenSize, playerOptionButtonDefaultDimensions.y, playerOptionButtonShrinkSpeed).setEaseOutElastic();
+        }
+    }
+
+    private void SetPlayerOptionButtonHeight(float newHeight)
+    {
+        foreach(PlayerOptionButtons button in openButtons)
+        {
+            playerOptionButtonsEnumToGameObject(button).GetComponent<RectTransform>().sizeDelta = new Vector2(playerOptionButtonDefaultDimensions.x, newHeight);
         }
     }
 
@@ -183,6 +193,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         showMapButton.SetActive(false);
         inventorySystemGO.SetActive(false);
         showInventorySystemButton.SetActive(false);
+
+        //Initialize default player option button dimensions
+        playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
     }
 }
 

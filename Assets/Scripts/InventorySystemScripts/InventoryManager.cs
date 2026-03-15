@@ -5,8 +5,10 @@ using UnityEngine.InputSystem;
 public class InventoryManager : MonoBehaviour
 {
     [Header("Inventory Graphics")]
-    public GameObject inventoryLayoutGroupGO;
-    public GameObject inventorySlotGO;
+    [SerializeField] private GameObject inventoryLayoutGroupGO;
+    [SerializeField] private GameObject inventorySlotGO;
+    [SerializeField] private float fragmentSnapAnimLength;
+
 
     [Header("Inventory Settings")]
     public int inventoryNumCols;
@@ -102,7 +104,15 @@ public class InventoryManager : MonoBehaviour
         //Determine placement of actual graphic for the fragment
         Vector2 placePosition = inventorySlotArray[x, y].gameObject.GetComponent<RectTransform>().position;
         placePosition += new Vector2(-inventorySlotSize / 2f, inventorySlotSize / 2f);
-        fragment.gameObject.GetComponent<RectTransform>().position = placePosition;
+
+        //Snappily tween to position
+        LeanTween.value(fragment.gameObject, (Vector2)fragment.gameObject.GetComponent<RectTransform>().position, placePosition, fragmentSnapAnimLength).setEaseOutElastic().setOnUpdate((Vector2 val) =>
+        {
+            fragment.gameObject.GetComponent<RectTransform>().position = val;
+        });
+        //LeanTween.move(fragment.gameObject.GetComponent<RectTransform>(), placePosition, fragmentSnapAnimLength);
+        //LeanTween.value(this.gameObject, fragment.gameObject.GetComponent<RectTransform>().position.x, placePosition.x, fragmentSnapAnimLength).setEaseOutElastic();
+        //fragment.gameObject.GetComponent<RectTransform>().position = placePosition;
     }
 
     //Method to convert mouse position into grid position, to help with snapping item to array
