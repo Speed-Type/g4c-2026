@@ -31,6 +31,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
+    private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
     private bool playerCanMakeChoices;
 
     //Method to update the buttons that should be open; called primarily by nodes
@@ -39,7 +40,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         openButtons = newList;
 
         //Shrink buttons
-        SetPlayerOptionButtonHeight(playerOptionButtonShrunkenSize);
+        ResetPlayerOptionButtonHeight();
 
         //Immediately show player's options
         HideMap(true);
@@ -74,7 +75,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Map;
 
         //Hide other open buttons
-        ToggleOpenButtons(false);
+        TogglePlayerOptionButtons(false);
 
         //Hide dialogue box
         dialogueSystemController.HideDialogueBox();
@@ -134,7 +135,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + RoguelikeCameraController.generalDelayBetweenTransitions, () =>
             {
                 //Show other open buttons
-                ToggleOpenButtons(true);
+                TogglePlayerOptionButtons(true);
                 
                 //Show dialogue box
                 dialogueSystemController.ShowDialogueBox();
@@ -142,9 +143,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         });
     }
 
-    private void ToggleOpenButtons(bool value)
+    private void TogglePlayerOptionButtons(bool value)
     {
-        foreach(PlayerOptionButtons button in openButtons)
+        foreach(PlayerOptionButtons button in allButtons)
         {
             playerOptionButtonsEnumToGameObject(button).SetActive(value);
         }
@@ -157,11 +158,19 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Open them up
         foreach(PlayerOptionButtons button in openButtons)
         {
-            LeanTween.value(this.gameObject, SetPlayerOptionButtonHeight, playerOptionButtonShrunkenSize, playerOptionButtonDefaultDimensions.y, playerOptionButtonShrinkSpeed).setEaseOutElastic();
+            LeanTween.value(this.gameObject, UpdatePlayerOptionButtonHeight, playerOptionButtonShrunkenSize, playerOptionButtonDefaultDimensions.y, playerOptionButtonShrinkSpeed).setEaseOutElastic();
         }
     }
 
-    private void SetPlayerOptionButtonHeight(float newHeight)
+    private void ResetPlayerOptionButtonHeight()
+    {
+        foreach(PlayerOptionButtons button in allButtons)
+        {
+            playerOptionButtonsEnumToGameObject(button).GetComponent<RectTransform>().sizeDelta = new Vector2(playerOptionButtonDefaultDimensions.x, playerOptionButtonShrunkenSize);
+        }
+    }
+
+    private void UpdatePlayerOptionButtonHeight(float newHeight)
     {
         foreach(PlayerOptionButtons button in openButtons)
         {
@@ -177,14 +186,14 @@ public class RoguelikeGameplayController : MonoBehaviour
             return;
         }
 
-        ToggleOpenButtons(false);
+        TogglePlayerOptionButtons(false);
         inventorySystemGO.SetActive(true);
         dialogueSystemController.HideDialogueBox();
     }
 
     public void HideInventory()
     {
-        ToggleOpenButtons(true);
+        TogglePlayerOptionButtons(true);
         inventorySystemGO.SetActive(false);
         dialogueSystemController.ShowDialogueBox();
     }
@@ -197,14 +206,14 @@ public class RoguelikeGameplayController : MonoBehaviour
             return;
         }
 
-        ToggleOpenButtons(false);
+        TogglePlayerOptionButtons(false);
         lootSystemGO.SetActive(true);
         dialogueSystemController.HideDialogueBox();
     }
 
     public void HideLoot()
     {
-        ToggleOpenButtons(true);
+        TogglePlayerOptionButtons(true);
         lootSystemGO.SetActive(false);
         dialogueSystemController.ShowDialogueBox();
     }
@@ -216,8 +225,14 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.SetActive(false);
         lootSystemGO.SetActive(false);
 
+        //Disable all buttons
+        TogglePlayerOptionButtons(false);
+
         //Initialize default player option button dimensions
         playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
+
+        //Initialize the list of all buttons
+        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
     }
 }
 
