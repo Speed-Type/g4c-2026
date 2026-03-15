@@ -9418,6 +9418,7 @@ MonoBehaviour:
   showMapButton: {fileID: 618513890}
   hideMapButton: {fileID: 894034286}
   showInventorySystemButton: {fileID: 951200073}
+  hideInventorySystemButton: {fileID: 1240474851}
   showLootSystemButton: {fileID: 1188239655}
   playerOptionButtonShrunkenSize: 120
   playerOptionButtonShrinkSpeed: 0.5

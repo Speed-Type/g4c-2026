@@ -17,6 +17,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private GameObject showMapButton;
     [SerializeField] private GameObject hideMapButton;
     [SerializeField] private GameObject showInventorySystemButton;
+    [SerializeField] private GameObject hideInventorySystemButton;
     [SerializeField] private GameObject showLootSystemButton;
     [SerializeField] private float playerOptionButtonShrunkenSize;
     [SerializeField] private float playerOptionButtonShrinkSpeed;
@@ -231,6 +232,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Update graphics
         TogglePlayerOptionButtons(false);
         lootSystemGO.SetActive(true);
+        inventorySystemGO.SetActive(true);
+        hideInventorySystemButton.SetActive(false);
         dialogueSystemController.HideDialogueBox();
 
         //Update game state
@@ -242,6 +245,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Update graphics
         TogglePlayerOptionButtons(true);
         lootSystemGO.SetActive(false);
+        inventorySystemGO.SetActive(false);
+        hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
 
         //Update game state
