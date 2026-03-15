@@ -106,7 +106,7 @@ public class RoguelikeCameraController : MonoBehaviour
         LeanTween.value(this.gameObject, (Color color) =>
         {
             cloudTransitionImage.color = color;
-        }, new Color(0, 0, 0, 0), defaultCloudColor, cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
+        }, new Color(0, 0, 0, 0), defaultCloudColor, cloudTransitionLength).setOnComplete(() =>
         {
             LeanTween.value(this.gameObject, (Color color) =>
             {
