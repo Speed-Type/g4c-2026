@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class RoguelikeCameraController : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class RoguelikeCameraController : MonoBehaviour
     [SerializeField] private Transform targetTransform;
     [SerializeField] private Transform savedFreeCamTransform;
     [SerializeField] private Transform savedMapCamPosition;
+
+    [Header("Transition Settings")]
+    [SerializeField] private GameObject cloudTransitionGO;
+    [SerializeField] private float cloudTransitionLength;
+    private Color defaultCloudColor;
 
     [Header("Free Cam Rotation Parameters")]
     public float freeCamDragSensitivity = 20f;
@@ -36,6 +42,9 @@ public class RoguelikeCameraController : MonoBehaviour
         input.Player.Drag.canceled += ctx => pressing = false;
 
         input.Player.Look.performed += OnLook;
+
+        //Initialize cloud transition color
+        defaultCloudColor = cloudTransitionGO.GetComponent<Image>().color;
     }
 
     public void StartFreeCam()
@@ -47,6 +56,9 @@ public class RoguelikeCameraController : MonoBehaviour
             isFreeCam = true;
         });
         LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo);
+    
+        //Also do cloud transition
+        CloudTransitionIn();
     }
 
     public void StopFreeCam()
@@ -60,6 +72,50 @@ public class RoguelikeCameraController : MonoBehaviour
         //Smooth transition to overhead map view
         LeanTween.move(this.gameObject, savedMapCamPosition, freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
         LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
+    
+        //Also do fog transition
+        CloudTransitionOut();
+    }
+
+    private void CloudTransitionOut()
+    {
+        cloudTransitionGO.SetActive(true);
+        Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
+        LeanTween.value(this.gameObject, (Color color) =>
+        {
+            cloudTransitionImage.color = color;
+        }, new Color(0, 0, 0, 0), defaultCloudColor, freeCamTransitionTiming).setEaseOutQuad().setOnComplete(() =>
+        {
+            LeanTween.delayedCall(generalDelayBetweenTransitions, () =>
+            {
+                LeanTween.value(this.gameObject, (Color color) =>
+                {
+                    cloudTransitionImage.color = color;
+                }, defaultCloudColor, new Color(0, 0, 0, 0), cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
+                {
+                    cloudTransitionGO.SetActive(false);
+                });
+            });
+        });
+    }
+
+    private void CloudTransitionIn()
+    {
+        cloudTransitionGO.SetActive(true);
+        Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
+        LeanTween.value(this.gameObject, (Color color) =>
+        {
+            cloudTransitionImage.color = color;
+        }, new Color(0, 0, 0, 0), defaultCloudColor, cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
+        {
+            LeanTween.value(this.gameObject, (Color color) =>
+            {
+                cloudTransitionImage.color = color;
+            }, defaultCloudColor, new Color(0, 0, 0, 0), cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
+            {
+                cloudTransitionGO.SetActive(false);
+            });
+        });
     }
 
     public void OnLook(InputAction.CallbackContext ctx)

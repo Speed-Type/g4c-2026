@@ -498,6 +498,8 @@ MonoBehaviour:
   targetTransform: {fileID: 2033165042}
   savedFreeCamTransform: {fileID: 345559258}
   savedMapCamPosition: {fileID: 1080935106}
+  cloudTransitionGO: {fileID: 1974897838}
+  cloudTransitionLength: 0.5
   freeCamDragSensitivity: 20
   freeCamIdleRotationSpeed: 10
   freeCamRotationSmoothing: 3
