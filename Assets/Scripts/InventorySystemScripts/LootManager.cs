@@ -6,7 +6,7 @@ public class LootManager : GeneralInventoryStructure
     //Variable to hold all the different fragments
     public GameObject[] fragmentList;
 
-    //Private struct to hold data for a loot table
+    //Private helper class to hold data for a loot table
     private class BugLoot
     {
         public int numRows;
@@ -54,11 +54,13 @@ public class LootManager : GeneralInventoryStructure
         BugLoot bugLoot = new BugLoot(fragmentList.Length);
         switch(val)
         {
-            case LootTables.Test:
+            case LootTables.TestBug:
                 bugLoot.numRows = 3;
                 bugLoot.numCols = 5;
                 bugLoot.minLoot = 1;
                 bugLoot.maxLoot = 4;
+                bugLoot.SetChances(Fragments.Test_1, 1);
+                bugLoot.SetChances(Fragments.Test_2, 1);
                 break;
             default:
                 break;
@@ -76,21 +78,26 @@ public class LootManager : GeneralInventoryStructure
         //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
 
-        //TODO: determine which loots to instantiate
-
-        //TODO: instantiate them and place them actually in the inventory
+        //determine which loots to instantiate
+        int numLootToSpawn = Random.Range(bugLoot.minLoot, bugLoot.maxLoot);
+        for(int i = 0; i < numLootToSpawn; i++)
+        {
+            GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()]);
+            //Instantiate the gameobject in fragmentList[bugLoot.GetRandomFragmentIndex()]
+        }
     }
 }
 
 //Enumerator for loot tables
 public enum LootTables
 {
-    Test
+    TestBug
 }
 
 //Enumerator for fragments
 //NOTE: The order of values here must match exactly with the order of gameobjects in fragmentList
 public enum Fragments
 {
-    Test_Test
+    Test_1,
+    Test_2
 }
