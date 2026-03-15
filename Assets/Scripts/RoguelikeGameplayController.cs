@@ -180,8 +180,14 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void ShowInventory()
     {
-        //Make sure the player can actually open the map
+        //Make sure the player can actually make choices
         if(!playerCanMakeChoices)
+        {
+            return;
+        }
+        
+        //Make sure this option is actually one of the open ones
+        if(!openButtons.Contains(PlayerOptionButtons.Inventory))
         {
             return;
         }
@@ -200,8 +206,14 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void ShowLoot()
     {
-        //Make sure the player can actually open the map
+        //Make sure the player can actually make choices
         if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
+        //Make sure this option is actually one of the open ones
+        if(!openButtons.Contains(PlayerOptionButtons.Loot))
         {
             return;
         }
