@@ -120,7 +120,8 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext ctx)
     {
-        if (!pressing) return;
+        if(RoguelikeGameplayController.gameState != GameState.Idle) return;
+        if(!pressing) return;
 
         Vector2 delta = ctx.ReadValue<Vector2>();
         rotationVelocity = delta.x * freeCamDragSensitivity;

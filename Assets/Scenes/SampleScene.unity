@@ -786,7 +786,7 @@ MonoBehaviour:
   cloudTransitionLength: 0.75
   freeCamDragSensitivity: 20
   freeCamIdleRotationSpeed: 10
-  freeCamRotationSmoothing: 3
+  freeCamRotationSmoothing: 2
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0
@@ -9411,7 +9411,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoguelikeGameplayController
   dialogueBoxController: {fileID: 859266379}
-  gameState: 0
   dialogueSystemController: {fileID: 859266379}
   inventorySystemGO: {fileID: 2051013936}
   lootSystemGO: {fileID: 1423970772}

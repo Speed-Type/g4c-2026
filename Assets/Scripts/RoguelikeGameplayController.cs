@@ -6,7 +6,6 @@ public class RoguelikeGameplayController : MonoBehaviour
     public DialogueBoxController dialogueBoxController;
 
     //Variables in Inspector
-    public GameState gameState;
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
@@ -33,6 +32,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
     private bool playerCanMakeChoices;
+
+    //Static variable for current game state
+    public static GameState gameState;
 
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
@@ -192,16 +194,24 @@ public class RoguelikeGameplayController : MonoBehaviour
             return;
         }
 
+        //Update graphics
         TogglePlayerOptionButtons(false);
         inventorySystemGO.SetActive(true);
         dialogueSystemController.HideDialogueBox();
+
+        //Update game state
+        gameState = GameState.InMenu;
     }
 
     public void HideInventory()
     {
+        //Update graphics
         TogglePlayerOptionButtons(true);
         inventorySystemGO.SetActive(false);
         dialogueSystemController.ShowDialogueBox();
+
+        //Update game state
+        gameState = GameState.Idle;
     }
 
     public void ShowLoot()
@@ -218,16 +228,24 @@ public class RoguelikeGameplayController : MonoBehaviour
             return;
         }
 
+        //Update graphics
         TogglePlayerOptionButtons(false);
         lootSystemGO.SetActive(true);
         dialogueSystemController.HideDialogueBox();
+
+        //Update game state
+        gameState = GameState.InMenu;
     }
 
     public void HideLoot()
     {
+        //Update graphics
         TogglePlayerOptionButtons(true);
         lootSystemGO.SetActive(false);
         dialogueSystemController.ShowDialogueBox();
+
+        //Update game state
+        gameState = GameState.Idle;
     }
 
     void Awake()
@@ -259,4 +277,5 @@ public enum GameState
 {
     Map,
     Idle,
+    InMenu
 }
