@@ -76,7 +76,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to update the array with a new fragment
-    public void PlaceFragment(Fragment fragment, int x, int y)
+    public virtual void PlaceFragment(Fragment fragment, int x, int y)
     {
         //Loop through necessary spots, relative to x and y, and assign fragments
         for(int i = 0; i < fragment.shape.GetLength(0); i++)
@@ -95,9 +95,6 @@ public class GeneralInventoryStructure : MonoBehaviour
                 }
             }
         }
-
-        //Activate fragment's effects
-        fragment.ActivateEffects(); //HERE
 
         //Determine placement of actual graphic for the fragment
         Vector2 placePosition = inventorySlotArray[x, y].gameObject.GetComponent<RectTransform>().position;
@@ -155,7 +152,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
     
     //Method to remove (more like "unstick") a fragment
-    public void RemoveFragment(Fragment fragment)
+    public virtual bool RemoveFragment(Fragment fragment)
     {
         //Tracker to keep account of whether there was anything to actually remove
         bool hasRemovedAnything = false;
@@ -178,9 +175,10 @@ public class GeneralInventoryStructure : MonoBehaviour
 
         if(hasRemovedAnything)
         {
-            //Deactivate fragment's effects
-            fragment.DeactivateEffects(); //HERE
+            //Will deactivate fragment effects if this is the inventory manager class
+            return true;
         }
+        return false;
     }
 
     //Method to highlight valid positions

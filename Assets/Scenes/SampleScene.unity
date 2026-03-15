@@ -6298,6 +6298,7 @@ MonoBehaviour:
   fragmentName: 
   graphicGO: {fileID: 1268666052}
   isOnEdge: 0
+  belongsToPlayer: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -7888,6 +7889,7 @@ MonoBehaviour:
   fragmentName: 
   graphicGO: {fileID: 1075962142}
   isOnEdge: 0
+  belongsToPlayer: 1
 --- !u!114 &1463991647
 MonoBehaviour:
   m_ObjectHideFlags: 0

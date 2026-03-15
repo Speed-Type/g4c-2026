@@ -52,6 +52,13 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    //TODO: free the fragment here
+    public void FreeFragment()
+    {
+        belongsToPlayer = true;
+        SetBelongedInventory();
+    }
+
     void OnEnable()
     {
         input.Enable();
@@ -185,6 +192,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         isEquipped = true;
         totalEquippedFragments++;
+
+        Debug.Log("Effects activated");
     }
 
     //Method to be overridden in children
@@ -193,6 +202,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         isEquipped = false;
         totalEquippedFragments--;
+
+        Debug.Log("Effects deactivated");
     }
 
     //Note that the current number of Shake calls is 10; can be adjusted by changing this variable
