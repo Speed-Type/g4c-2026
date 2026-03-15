@@ -12,14 +12,15 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public GameObject graphicGO;
     public bool[,] shape; //will be initialized in subclasses
     public bool isOnEdge;
+    public bool belongsToPlayer;
 
     //Internal logic
     private RectTransform rectTransform;
     private Canvas canvas;
-    private InventoryManager inventoryManager;
+    private GeneralInventoryStructure belongedInventory;
     private PlayerInputActions input; //input action controlelr
-    private static int totalEquippedFragments = 0;
-    private static int totalExistingFragments = 0;
+    private static int totalEquippedFragments = 0; //NOTE: these variables are pretty unused...
+    private static int totalExistingFragments = 0; //NOTE: these variables are pretty unused...
     private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
     private bool isBeingDragged = false;
     private int currentRotation = 0;
@@ -30,10 +31,25 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         input = new PlayerInputActions();
         input.UI.Rotate.performed += Rotate;
 
+        //Initialize variables
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        inventoryManager = FindFirstObjectByType<InventoryManager>();
+        SetBelongedInventory();
+
+        //Update total fragments
         totalExistingFragments++;
+    }
+
+    private void SetBelongedInventory()
+    {
+        if(belongsToPlayer)
+        {
+            belongedInventory = FindFirstObjectByType<InventoryManager>();
+        }
+        else
+        {
+            belongedInventory = FindFirstObjectByType<LootManager>();
+        }
     }
 
     void OnEnable()
@@ -58,8 +74,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //When drag begins, make it the topmost item
         transform.SetAsLastSibling();
 
-        //Remove from inventory manager
-        inventoryManager.RemoveFragment(this);
+        //Remove from corresponding manager
+        belongedInventory.RemoveFragment(this);
 
         //Stop any previous tween from snapping to a position
         LeanTween.cancel(this.gameObject);
@@ -82,14 +98,14 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         isBeingDragged = false;
 
         //Snap to grid
-        if(inventoryManager.SnapToGrid(this))
+        if(belongedInventory.SnapToGrid(this))
         {
             //Set layer order
             transform.SetSiblingIndex(1);
         }
 
         //Clear inventory highlight
-        inventoryManager.ClearHighlight();
+        belongedInventory.ClearHighlight();
     }
 
     //Method to rotate 90 degrees clockwise
@@ -154,7 +170,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 break;
         }
 
-        offset *= inventoryManager.inventorySlotSize;
+        offset *= belongedInventory.inventorySlotSize;
 
         //Apply offset
         graphicGO.transform.localPosition = new Vector3(offset.x, offset.y, 0);
@@ -206,7 +222,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     IEnumerator TimedHighlightCoroutine()
     {
-        inventoryManager.Highlight(this); //call highlight
+        belongedInventory.Highlight(this); //call highlight
 
         yield return new WaitForSeconds(.15f); //wait; Can adjust this timing as necessary
 
