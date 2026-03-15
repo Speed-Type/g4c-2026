@@ -21,7 +21,7 @@ public class GeneralInventoryStructure : MonoBehaviour
         gridNumCols = pNumCols;
         gridNumRows = pNumRows;
 
-        //TODO: Initialize size of background graphic
+        //Initialize size of background graphic
         backgroundGraphicGO.sizeDelta = new Vector2(125 + pNumCols * inventorySlotSize, 120 + pNumRows * inventorySlotSize);
 
         //Initialize inventory array

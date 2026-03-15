@@ -126,15 +126,11 @@ public class RoguelikeCameraController : MonoBehaviour
         Vector2 delta = ctx.ReadValue<Vector2>();
         rotationVelocity = delta.x * freeCamDragSensitivity;
         
-        if(delta.x == 0)
-        {
-            freeCamIdleRotationDirection = 0;
-        }
-        else if(delta.x > 0)
+        if(delta.x > 0)
         {
             freeCamIdleRotationDirection = 1;
         }
-        else
+        else if(delta.x < 0)
         {
             freeCamIdleRotationDirection = -1;
         }

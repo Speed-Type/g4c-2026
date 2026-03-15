@@ -9372,7 +9372,9 @@ MonoBehaviour:
   startNode: {fileID: 3369285449052209603, guid: 790fffc899b5f486cb10a5601f0a7aaf, type: 3}
   nodeTypes:
   - {fileID: 3369285449052209603, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
+  - {fileID: 7487325553070881897, guid: c83f0e058f792465dbae93cc09f6a15b, type: 3}
   nodeWeights:
+  - 1
   - 1
   nodePositionRandomization:
   - 15

@@ -218,5 +218,6 @@ public class NodeManager : MonoBehaviour
 //NOTE: The values in this enum must line up with the order of entries in nodeTypes array
 public enum NodeTypes
 {
-    Empty
+    Empty,
+    Scavenge
 }

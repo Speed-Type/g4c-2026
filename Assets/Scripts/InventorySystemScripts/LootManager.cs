@@ -16,12 +16,6 @@ public class LootManager : GeneralInventoryStructure
         }
     }
 
-    void Awake()
-    {
-        //TEMPORARY
-        GenerateInventory(3,5);
-    }
-
     //Method to convert enumerator LootTables to struct of bug loot
     private BugLoot LootEnumToBugLoot(LootTables val)
     {
@@ -37,8 +31,15 @@ public class LootManager : GeneralInventoryStructure
     //Method to generate new loot
     public void GenerateLoot(LootTables lootEnum)
     {
+        //Get actual loot info and probabilities
         BugLoot bugLoot = LootEnumToBugLoot(lootEnum);
+
+        //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
+
+        //TODO: determine which loots to instantiate
+
+        //TODO: instantiate them and place them actually in the inventory
     }
 }
 
