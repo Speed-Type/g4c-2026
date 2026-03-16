@@ -1,16 +1,22 @@
 using UnityEngine;
 
-public class Fragment_AfricanBigHeadedAnt_HeadMinor : MonoBehaviour
+public class Fragment_AfricanBigHeadedAnt_HeadMinor : Fragment
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        shape = new bool[,]
+        {
+            {true, true}
+        };
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ActivateEffects()
     {
-        
+        base.ActivateEffects();
+    }
+
+    public override void DeactivateEffects()
+    {
+        base.DeactivateEffects();
     }
 }
