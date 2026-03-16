@@ -8,7 +8,13 @@ using UnityEngine.UI;
 
 public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public string fragmentName;
+    [Header("Fragment Data")]
+    public string displayBodyPart;
+    public string displayBug;
+    public string displayScientificName;
+    [TextArea(3,5)] public string displayDescription;
+
+    [Header("Not Important for Inspector")]
     public GameObject graphicGO;
     public bool[,] shape; //will be initialized in subclasses
     public bool isOnEdge;
