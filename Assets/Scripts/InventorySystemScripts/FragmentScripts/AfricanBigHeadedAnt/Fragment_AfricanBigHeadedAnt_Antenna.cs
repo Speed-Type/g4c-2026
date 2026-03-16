@@ -6,8 +6,7 @@ public class Fragment_AfricanBigHeadedAnt_Antenna : Fragment
     {
         shape = new bool[,]
         {
-            {true},
-            {true}
+            {true, true}
         };
     }
 

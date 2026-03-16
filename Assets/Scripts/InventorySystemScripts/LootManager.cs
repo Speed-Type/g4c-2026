@@ -82,7 +82,7 @@ public class LootManager : GeneralInventoryStructure
         int numLootToSpawn = Random.Range(bugLoot.minLoot, bugLoot.maxLoot);
         for(int i = 0; i < numLootToSpawn; i++)
         {
-            GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()]);
+            //GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()]);
             //Instantiate the gameobject in fragmentList[bugLoot.GetRandomFragmentIndex()]
         }
     }
