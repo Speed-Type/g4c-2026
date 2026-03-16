@@ -6,6 +6,8 @@ public class Fragment_AfricanBigHeadedAnt_HeadMajor : Fragment
     {
         shape = new bool[,]
         {
+            {true, true},
+            {true, true},
             {true, true}
         };
     }
