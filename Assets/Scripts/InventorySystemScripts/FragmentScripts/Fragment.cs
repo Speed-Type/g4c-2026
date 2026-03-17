@@ -55,7 +55,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         input.Enable(); //So that it is possible to interact with this fragment again
 
         //Change parent transform to inventory system parent transform
-        transform.parent = belongedInventory.inventorySystemParentTransform;
+        transform.SetParent(belongedInventory.inventorySystemParentTransform);
 
         //Possibly set sibling index here as well
     }
