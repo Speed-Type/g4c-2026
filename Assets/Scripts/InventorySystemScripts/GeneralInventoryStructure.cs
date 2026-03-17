@@ -3,6 +3,7 @@ using UnityEngine;
 public class GeneralInventoryStructure : MonoBehaviour
 {
     [Header("Inventory Graphics")]
+    public Transform inventorySystemParentTransform;
     [SerializeField] private GameObject inventoryLayoutGroupGO;
     [SerializeField] private GameObject inventorySlotGO;
     [SerializeField] private RectTransform backgroundGraphicGO;

@@ -4,7 +4,6 @@ using UnityEngine;
 public class LootManager : GeneralInventoryStructure
 {
     //Public variables visible in inspector
-    public Transform lootSystemParentTransform; //Necessary to have parent transform for spawning properly
     public GameObject[] fragmentList; //List to hold all the different fragments
 
     //Private variables for internal logic
@@ -96,10 +95,8 @@ public class LootManager : GeneralInventoryStructure
         int numLootToSpawn = Random.Range(bugLoot.minLoot, bugLoot.maxLoot);
         for(int i = 0; i < numLootToSpawn; i++)
         {
-            GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()], lootSystemParentTransform);
+            GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()], inventorySystemParentTransform);
             newFragmentGO.GetComponent<Fragment>().belongedInventory = this;
-
-            newFragmentGO.GetComponent<Fragment>().FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
         }
     }
 }

@@ -14,12 +14,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public string displayScientificName;
     [TextArea(3,5)] public string displayDescription;
 
-    [Header("Not Important for Inspector")]
-    public GameObject graphicGO;
-    public bool[,] shape; //will be initialized in subclasses
-    public bool isOnEdge;
-
     //Internal logic
+    [HideInInspector] public GameObject graphicGO;
+    [HideInInspector] public bool[,] shape; //will be initialized in subclasses
+    [HideInInspector] public bool isOnEdge;
     private RectTransform rectTransform;
     private Canvas canvas;
     [HideInInspector] public GeneralInventoryStructure belongedInventory;
@@ -45,6 +43,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Update total fragments
         totalExistingFragments++;
+
+        FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
     }
 
     //TODO: free the fragment here
@@ -54,7 +54,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         belongsToPlayer = true;
         input.Enable(); //So that it is possible to interact with this fragment again
 
-        //TODO: change parent transform to inventory system parent transform
+        //Change parent transform to inventory system parent transform
+        transform.parent = belongedInventory.inventorySystemParentTransform;
+
+        //Possibly set sibling index here as well
     }
 
     void OnEnable()
