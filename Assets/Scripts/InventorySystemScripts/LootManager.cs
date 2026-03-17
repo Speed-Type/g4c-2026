@@ -3,8 +3,12 @@ using UnityEngine;
 
 public class LootManager : GeneralInventoryStructure
 {
-    //Variable to hold all the different fragments
-    public GameObject[] fragmentList;
+    //Public variables visible in inspector
+    public Transform lootSystemParentTransform; //Necessary to have parent transform for spawning properly
+    public GameObject[] fragmentList; //List to hold all the different fragments
+
+    //Private variables for internal logic
+    private InventoryManager inventoryManager;
 
     //Private helper class to hold data for a loot table
     private class BugLoot
@@ -73,6 +77,12 @@ public class LootManager : GeneralInventoryStructure
         return bugLoot;
     }
 
+    //Overridden awake method
+    void Awake()
+    {
+        inventoryManager = FindFirstObjectByType<InventoryManager>();
+    }
+
     //Method to generate new loot
     public void GenerateLoot(LootTables lootEnum)
     {
@@ -86,8 +96,10 @@ public class LootManager : GeneralInventoryStructure
         int numLootToSpawn = Random.Range(bugLoot.minLoot, bugLoot.maxLoot);
         for(int i = 0; i < numLootToSpawn; i++)
         {
-            //GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()]);
-            //Instantiate the gameobject in fragmentList[bugLoot.GetRandomFragmentIndex()]
+            GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()], lootSystemParentTransform);
+            newFragmentGO.GetComponent<Fragment>().belongedInventory = this;
+
+            newFragmentGO.GetComponent<Fragment>().FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
         }
     }
 }

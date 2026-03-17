@@ -18,51 +18,43 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public GameObject graphicGO;
     public bool[,] shape; //will be initialized in subclasses
     public bool isOnEdge;
-    public bool belongsToPlayer;
 
     //Internal logic
     private RectTransform rectTransform;
     private Canvas canvas;
-    private GeneralInventoryStructure belongedInventory;
+    [HideInInspector] public GeneralInventoryStructure belongedInventory;
     private PlayerInputActions input; //input action controlelr
     private static int totalEquippedFragments = 0; //NOTE: these variables are pretty unused...
     private static int totalExistingFragments = 0; //NOTE: these variables are pretty unused...
     private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
     private bool isBeingDragged = false;
     private int currentRotation = 0;
+    [HideInInspector] public bool belongsToPlayer;
 
     void Awake()
     {
         //Setup input
         input = new PlayerInputActions();
         input.UI.Rotate.performed += Rotate;
+        input.Disable(); //Disable input until this fragment is free
 
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        SetBelongedInventory();
+        belongsToPlayer = false;
 
         //Update total fragments
         totalExistingFragments++;
     }
 
-    private void SetBelongedInventory()
-    {
-        if(belongsToPlayer)
-        {
-            belongedInventory = FindFirstObjectByType<InventoryManager>();
-        }
-        else
-        {
-            belongedInventory = FindFirstObjectByType<LootManager>();
-        }
-    }
-
     //TODO: free the fragment here
     public void FreeFragment()
     {
+        belongedInventory = FindFirstObjectByType<InventoryManager>();
         belongsToPlayer = true;
-        SetBelongedInventory();
+        input.Enable(); //So that it is possible to interact with this fragment again
+
+        //TODO: change parent transform to inventory system parent transform
     }
 
     void OnEnable()
