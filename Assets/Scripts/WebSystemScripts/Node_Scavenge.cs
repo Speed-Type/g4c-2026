@@ -67,7 +67,7 @@ public class Node_Scavenge : Node
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
         //Generate loot
-        FindFirstObjectByType<LootManager>().GenerateLoot(LootTables.TestBug); //CHANGE LATER
+        FindFirstObjectByType<LootManager>().GenerateLoot(LootTables.AfricanBigHeadedAnt); //CHANGE LATER
 
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {

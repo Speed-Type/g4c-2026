@@ -9259,8 +9259,12 @@ MonoBehaviour:
   fragmentSnapAnimLength: 0.25
   inventorySlotSize: 100
   fragmentList:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 135788256740271795, guid: 84664340fa6a14140937de43567b17ff, type: 3}
+  - {fileID: 442233368959522657, guid: d8840a8e6d37549ad84df6fbdd338bff, type: 3}
+  - {fileID: 112653451187411951, guid: cff09330e3ec44680ac9fff8e05f685f, type: 3}
+  - {fileID: 5279109428879742125, guid: 9d416e9fa294141838092f153e54dedf, type: 3}
+  - {fileID: 6260742422102833475, guid: 9ec02a215b4374372be1c941077a9222, type: 3}
+  - {fileID: 2751700069158436444, guid: 790fea904a2dc475bb254f00382e9ca5, type: 3}
 --- !u!1 &1912566088
 GameObject:
   m_ObjectHideFlags: 0

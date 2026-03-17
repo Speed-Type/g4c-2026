@@ -54,13 +54,17 @@ public class LootManager : GeneralInventoryStructure
         BugLoot bugLoot = new BugLoot(fragmentList.Length);
         switch(val)
         {
-            case LootTables.TestBug:
+            case LootTables.AfricanBigHeadedAnt:
                 bugLoot.numRows = 3;
                 bugLoot.numCols = 5;
-                bugLoot.minLoot = 1;
-                bugLoot.maxLoot = 4;
-                bugLoot.SetChances(Fragments.Test_1, 1);
-                bugLoot.SetChances(Fragments.Test_2, 1);
+                bugLoot.minLoot = 2;
+                bugLoot.maxLoot = 5;
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Abdomen, 4);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Antenna, 4);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 1);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 2);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Leg, 10);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Thorax, 4);
                 break;
             default:
                 break;
@@ -91,13 +95,17 @@ public class LootManager : GeneralInventoryStructure
 //Enumerator for loot tables
 public enum LootTables
 {
-    TestBug
+    AfricanBigHeadedAnt
 }
 
 //Enumerator for fragments
 //NOTE: The order of values here must match exactly with the order of gameobjects in fragmentList
 public enum Fragments
 {
-    Test_1,
-    Test_2
+    AfricanBigHeadedAnt_Abdomen,
+    AfricanBigHeadedAnt_Antenna,
+    AfricanBigHeadedAnt_HeadMajor,
+    AfricanBigHeadedAnt_HeadMinor,
+    AfricanBigHeadedAnt_Leg,
+    AfricanBigHeadedAnt_Thorax
 }
