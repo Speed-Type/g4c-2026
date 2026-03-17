@@ -4,6 +4,8 @@ using UnityEngine;
 public class LootManager : GeneralInventoryStructure
 {
     //Public variables visible in inspector
+    [Header("Loot Manager Settings")]
+    public int maxFragmentPositioningAttempts; //Used in randomly placing fragments
     public GameObject[] fragmentList; //List to hold all the different fragments
 
     //Private variables for internal logic
@@ -91,13 +93,37 @@ public class LootManager : GeneralInventoryStructure
         //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
 
-        //determine which loots to instantiate
+        //Determine how many loots to instantiate
         int numLootToSpawn = Random.Range(bugLoot.minLoot, bugLoot.maxLoot);
+
+        //Instantiate loots
         for(int i = 0; i < numLootToSpawn; i++)
         {
+            //Instantiate new fragment
             GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()], inventorySystemParentTransform);
-            newFragmentGO.GetComponent<Fragment>().belongedInventory = this;
+            Fragment newFragment = newFragmentGO.GetComponent<Fragment>();
+
+            //Try to place it in the grid
+            bool placementSuccessful = false;
+            int numTriesSoFar = 0;
+            while(!placementSuccessful && numTriesSoFar < maxFragmentPositioningAttempts)
+            {
+                numTriesSoFar++;
+            }
+
+            if(placementSuccessful)
+            {
+                //If placement successful, set new fragment's currently belonged inventory to the loot manager
+                newFragment.belongedInventory = this;
+            }
+            else
+            {
+                //If unsuccessful, destroy that fragment
+                Destroy(newFragmentGO);
+            }
         }
+
+        //TODO: Generate flesh
     }
 }
 

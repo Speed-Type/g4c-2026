@@ -9157,6 +9157,7 @@ MonoBehaviour:
   backgroundGraphicGO: {fileID: 988952334}
   fragmentSnapAnimLength: 0.25
   inventorySlotSize: 100
+  maxFragmentPositioningAttempts: 5
   fragmentList:
   - {fileID: 135788256740271795, guid: 84664340fa6a14140937de43567b17ff, type: 3}
   - {fileID: 442233368959522657, guid: d8840a8e6d37549ad84df6fbdd338bff, type: 3}

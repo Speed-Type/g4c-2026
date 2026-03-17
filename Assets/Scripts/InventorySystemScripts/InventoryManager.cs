@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class InventoryManager : GeneralInventoryStructure
 {
-    [Header("Inventory Settings")]
+    [Header("Inventory Manager Settings")]
     public int inventoryNumCols;
     public int inventoryNumRows;
 

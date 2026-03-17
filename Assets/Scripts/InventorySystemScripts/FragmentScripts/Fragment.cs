@@ -13,9 +13,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public string displayBug;
     public string displayScientificName;
     [TextArea(3,5)] public string displayDescription;
+    [Header("GameObject with Sprite for this fragment's graphics")]
+    public GameObject graphicGO;
 
     //Internal logic
-    [HideInInspector] public GameObject graphicGO;
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
     [HideInInspector] public bool isOnEdge;
     private RectTransform rectTransform;
