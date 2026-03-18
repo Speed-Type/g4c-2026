@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeneralInventoryStructure : MonoBehaviour
 {
@@ -9,8 +10,8 @@ public class GeneralInventoryStructure : MonoBehaviour
     [SerializeField] private RectTransform backgroundGraphicGO;
     [SerializeField] private float fragmentSnapAnimLength;
 
-    private int gridNumCols;
-    private int gridNumRows;
+    protected int gridNumCols;
+    protected int gridNumRows;
     public float inventorySlotSize; //Note that this variable needs to be public for Fragment class access
 
     //Inventory logic
@@ -33,17 +34,25 @@ public class GeneralInventoryStructure : MonoBehaviour
         {
             for(int col = 0; col < gridNumCols; col++)
             {
+                //Instantiate
                 GameObject newInventorySlotGO = Instantiate(inventorySlotGO, inventoryLayoutGroupGO.transform);
+
+                //Rename
                 newInventorySlotGO.name = "Inventory slot at row " + row + ", col " + col;
+
+                //Set in the 2d array data
                 inventorySlotArray[row, col] = newInventorySlotGO.GetComponent<InventorySlot>();
 
-                //Set edges
+                //Set edge-ness
                 if(row == 0 || col == 0 || row == gridNumRows - 1 || col == gridNumCols - 1)
                 {
                     inventorySlotArray[row, col].isOnEdge = true;
                 }
             }
         }
+        
+        //Force reload layout group
+        LayoutRebuilder.ForceRebuildLayoutImmediate(inventoryLayoutGroupGO.GetComponent<RectTransform>());
     }
 
     //Method to check if the fragment can be placed at these coordinates
@@ -141,21 +150,32 @@ public class GeneralInventoryStructure : MonoBehaviour
         //Snap to a grid spot (floor to int)
         int x = Mathf.FloorToInt(relativeFragmentPosition.x);
         int y = Mathf.FloorToInt(relativeFragmentPosition.y);
+
+        //Return backwards, since y position corresponds to row number, and x position corresponds to col number
         return new Vector2Int(y, x);
     }
 
     //Method to put all of the snapping together
     //Returns true if successful; false if not
-    public bool SnapToGrid(Fragment fragment)
+    public bool SnapToGrid(Fragment fragment, int rowNum, int colNum)
     {
-        Vector2Int gridPosition = GetGridPosition(fragment);
-        if(CanPlaceFragment(fragment, gridPosition.x, gridPosition.y))
+        if(CanPlaceFragment(fragment, rowNum, colNum))
         {
-            PlaceFragment(fragment, gridPosition.x, gridPosition.y);
+            PlaceFragment(fragment, rowNum, colNum);
             return true;
         }
 
         return false;
+    }
+
+    //Overloaded method to put all of the snapping together 
+    //(does not take in explicit coordinates and instead calculates them itself)
+    //Returns true if successful; false if not
+    public bool SnapToGrid(Fragment fragment)
+    {
+        Vector2Int gridPosition = GetGridPosition(fragment); //x corresponds to row number, y corresponds to col number
+        
+        return SnapToGrid(fragment, gridPosition.x, gridPosition.y);
     }
     
     //Method to remove (more like "unstick") a fragment

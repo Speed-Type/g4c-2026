@@ -45,7 +45,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Update total fragments
         totalExistingFragments++;
 
-        FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
+        //FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
     }
 
     //TODO: free the fragment here
@@ -58,12 +58,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Change parent transform to inventory system parent transform
         transform.SetParent(belongedInventory.inventorySystemParentTransform);
 
-        //Possibly set sibling index here as well
+        //TODO: Possibly set sibling index here as well
     }
 
     void OnEnable()
     {
-        input.Enable();
+        if(belongsToPlayer) input.Enable();
     }
 
     void OnDisable()
@@ -78,6 +78,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        Debug.Log("Fragment belongs to player: " + belongsToPlayer);
         isBeingDragged = true;
 
         //When drag begins, make it the topmost item
@@ -117,8 +118,14 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         belongedInventory.ClearHighlight();
     }
 
-    //Method to rotate 90 degrees clockwise
+    //Overridden method to be called by input system
     public void Rotate(InputAction.CallbackContext ctx)
+    {
+        Rotate();
+    }
+
+    //Method to rotate 90 degrees clockwise
+    public void Rotate()
     {
         if(!isBeingDragged)
         {

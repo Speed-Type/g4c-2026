@@ -7,6 +7,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     //Variables in Inspector
 
+    [Header("Player Data")]
+    public int playerHealth;
+
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
@@ -23,11 +26,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private float playerOptionButtonShrinkSpeed;
     private Vector2 playerOptionButtonDefaultDimensions;
 
+    [Header("References for Placement of Inventory and Loot Systems")]
+    [SerializeField] private Transform hiddenPosition;
+    [SerializeField] private Transform shownPosition;
+
     [Header("Camera Stuff")]
     [SerializeField] private RoguelikeCameraController cameraController;
-
-    [Header("Player Data")]
-    public int playerHealth;
     
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
@@ -197,7 +201,8 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        inventorySystemGO.SetActive(true);
+        //inventorySystemGO.SetActive(true);
+        inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         dialogueSystemController.HideDialogueBox();
 
         //Update game state
@@ -208,7 +213,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        inventorySystemGO.SetActive(false);
+        //inventorySystemGO.SetActive(false);
+        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         dialogueSystemController.ShowDialogueBox();
 
         //Update game state
@@ -231,8 +237,10 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        lootSystemGO.SetActive(true);
-        inventorySystemGO.SetActive(true);
+        //lootSystemGO.SetActive(true);
+        lootSystemGO.GetComponent<RectTransform>().position = shownPosition.position;
+        //inventorySystemGO.SetActive(true);
+        inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         hideInventorySystemButton.SetActive(false);
         dialogueSystemController.HideDialogueBox();
 
@@ -244,8 +252,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        lootSystemGO.SetActive(false);
-        inventorySystemGO.SetActive(false);
+        //lootSystemGO.SetActive(false);
+        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        //inventorySystemGO.SetActive(false);
+        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
 
@@ -257,8 +267,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Enable/disable necessary systems
         nodeMapGO.SetActive(true);
-        inventorySystemGO.SetActive(false);
-        lootSystemGO.SetActive(false);
+        //inventorySystemGO.SetActive(false);
+        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        //lootSystemGO.SetActive(false);
+        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);

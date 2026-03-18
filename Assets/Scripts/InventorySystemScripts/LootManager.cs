@@ -103,22 +103,51 @@ public class LootManager : GeneralInventoryStructure
             GameObject newFragmentGO = Instantiate(fragmentList[bugLoot.GetRandomFragmentIndex()], inventorySystemParentTransform);
             Fragment newFragment = newFragmentGO.GetComponent<Fragment>();
 
+            newFragment.belongedInventory = this;
+
             //Try to place it in the grid
             bool placementSuccessful = false;
             int numTriesSoFar = 0;
             while(!placementSuccessful && numTriesSoFar < maxFragmentPositioningAttempts)
             {
+                //TODO: ATTEMPT PLACEMENT
+                
+                //Rotate random number of times
+                for(int j = 0; j < Random.Range(0, 3); j++)
+                {
+                    newFragment.Rotate();
+                }
+
+                //Check that the dimensions of the fragment are not outside the total dimensions of the grid
+                int fragmentNumRows = newFragment.shape.GetLength(0);
+                int fragmentNumCols = newFragment.shape.GetLength(1);
+                if(fragmentNumRows > gridNumRows || fragmentNumCols > gridNumCols)
+                {
+                    newFragment.Rotate(); //rotate again
+                }
+
+                //Pick a random position (such that the new fragment will not be out of bounds)
+                int potentialRow = Random.Range(0, gridNumRows - fragmentNumRows);
+                int potentialCol = Random.Range(0, gridNumCols - fragmentNumCols);
+
+                //Check if that position works
+                if(SnapToGrid(newFragment, potentialRow, potentialCol))
+                {
+                    placementSuccessful = true;
+                }
+
                 numTriesSoFar++;
             }
 
             if(placementSuccessful)
             {
-                //If placement successful, set new fragment's currently belonged inventory to the loot manager
-                newFragment.belongedInventory = this;
+                //If placement successful, TBD
+                Debug.Log("Placement successful");
             }
             else
             {
                 //If unsuccessful, destroy that fragment
+                Debug.Log("Placement failed");
                 Destroy(newFragmentGO);
             }
         }

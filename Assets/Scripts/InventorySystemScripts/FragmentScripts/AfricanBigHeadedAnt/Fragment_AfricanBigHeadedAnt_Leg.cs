@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
 {
-    void Start()
+    public Fragment_AfricanBigHeadedAnt_Leg()
     {
         shape = new bool[,]
         {
