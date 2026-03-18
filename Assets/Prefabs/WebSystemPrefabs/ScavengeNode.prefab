@@ -146,3 +146,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Node_Scavenge
   nodeList: []
+  bugLootOdds: 01000000
