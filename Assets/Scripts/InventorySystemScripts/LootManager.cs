@@ -79,8 +79,9 @@ public class LootManager : GeneralInventoryStructure
     }
 
     //Overridden awake method
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         inventoryManager = FindFirstObjectByType<InventoryManager>();
     }
 

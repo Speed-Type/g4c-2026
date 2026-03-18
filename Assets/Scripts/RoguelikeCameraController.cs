@@ -73,7 +73,6 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         //Smooth transition to freecam view
         LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
-            //TO FIX: rotationVelocity = freeCamIdleRotationDirection * freeCamIdleRotationDirection;
             input.Enable();
             isFreeCam = true;
         });

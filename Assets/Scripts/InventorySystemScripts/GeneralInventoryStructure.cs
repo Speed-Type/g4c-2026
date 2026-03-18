@@ -19,6 +19,11 @@ public class GeneralInventoryStructure : MonoBehaviour
     private InventorySlot[,] inventorySlotArray;
     private List<Fragment> ownedFragments;
 
+    protected virtual void Awake()
+    {
+        ownedFragments = new List<Fragment>();
+    }
+
     public void GenerateInventory(int pNumRows, int pNumCols)
     {
         //Initialize dimensions

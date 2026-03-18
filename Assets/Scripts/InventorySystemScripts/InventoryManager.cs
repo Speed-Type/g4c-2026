@@ -8,8 +8,9 @@ public class InventoryManager : GeneralInventoryStructure
     public int inventoryNumCols;
     public int inventoryNumRows;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         GenerateInventory(inventoryNumRows, inventoryNumCols);
     }
     
