@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LootManager : GeneralInventoryStructure
 {
     //Public variables visible in inspector
+    [Header("Loot-System-Specific Graphics")]
+    public Image lootSystemBackground;
+
     [Header("Loot Manager Settings")]
     public int maxFragmentPositioningAttempts; //Used in randomly placing fragments
     public GameObject[] fragmentList; //List to hold all the different fragments
@@ -82,7 +86,12 @@ public class LootManager : GeneralInventoryStructure
     protected override void Awake()
     {
         base.Awake();
+
+        //Initialize inventory manager
         inventoryManager = FindFirstObjectByType<InventoryManager>();
+
+        //Create individual material for flesh background
+        lootSystemBackground.material = new Material(lootSystemBackground.material);
     }
 
     //Method to generate new loot
@@ -153,6 +162,9 @@ public class LootManager : GeneralInventoryStructure
         }
 
         //TODO: Generate flesh
+
+        //Graphically, randomize the tiling offset of the background
+        lootSystemBackground.material.mainTextureOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f,1f));
     }
 }
 

@@ -7087,14 +7087,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
+  m_Color: {r: 0.8490566, g: 0.6175291, b: 0.59674263, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 02a6fc7c7c4ef48d0b9f3b31d1ce2706, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6a8cad6a64e02414fa2153eeaceba07f, type: 3}
   m_Type: 2
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9202,6 +9202,7 @@ MonoBehaviour:
   backgroundGraphicGO: {fileID: 988952334}
   fragmentSnapAnimLength: 0.25
   inventorySlotSize: 100
+  lootSystemBackground: {fileID: 988952335}
   maxFragmentPositioningAttempts: 5
   fragmentList:
   - {fileID: 135788256740271795, guid: 84664340fa6a14140937de43567b17ff, type: 3}
