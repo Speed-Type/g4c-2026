@@ -19,19 +19,19 @@ public class RoguelikeCameraController : MonoBehaviour
 
     [Header("Free Cam Rotation Parameters")]
     public float yawDragSensitivity = 20f;
-    public float pitchDragSensitivity = 1f;
+    public float pitchDragSensitivity = 10f;
     public float yawSmoothTime = 3f;
-    public float pitchSmoothTime = .3f;
+    public float pitchSmoothTime = 6f;
     public float idleRotationSpeed = 10f;
 
     [Header("Free Cam Vertical Clamp")]
-    public float maxPitch = 75f;
+    public float maxPitch = 60f;
     public float minPitch = -20f;
 
     [Header("Zoom Parameters")]
     public float minDistance = 10f;
     public float maxDistance = 30f;
-    public float zoomSpeed = 1f;
+    public float zoomSpeed = 0.75f;
     public float zoomSmoothTime = .15f;
 
     [Header("Camera Transitions Timing")]
@@ -40,9 +40,11 @@ public class RoguelikeCameraController : MonoBehaviour
 
     //Internal logic variables
     private int freeCamIdleRotationDirection = 1;
+    private float currentPitch;
     private float currentDistance;
     private float targetDistance;
     private float yawVelocity;
+    private float pitchVelocity;
     private float zoomVelocity;
     private bool pressing;
     private bool isFreeCam;
@@ -59,6 +61,7 @@ public class RoguelikeCameraController : MonoBehaviour
         input.Player.Zoom.performed += OnZoom;
 
         //Initialize freecam values
+        currentPitch = 0;
         currentDistance = (maxDistance + minDistance) / 2f;
         targetDistance = currentDistance;
 
@@ -144,6 +147,7 @@ public class RoguelikeCameraController : MonoBehaviour
 
         Vector2 delta = ctx.ReadValue<Vector2>();
         yawVelocity = delta.x * yawDragSensitivity;
+        pitchVelocity = delta.y * pitchDragSensitivity;
 
         if(delta.x > 0)
         {
@@ -160,6 +164,9 @@ public class RoguelikeCameraController : MonoBehaviour
         float scroll = ctx.ReadValue<float>();
 
         targetDistance -= scroll * zoomSpeed;
+
+        //Clamp it
+        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
     }
 
     void LateUpdate()
@@ -171,19 +178,49 @@ public class RoguelikeCameraController : MonoBehaviour
             {
                 //Smoothly transition yaw speed to idle speed
                 yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
+                
+                //Smoothly transition pitch speed to 0
+                pitchVelocity = Mathf.Lerp(pitchVelocity, 0, Time.deltaTime * pitchSmoothTime);
             }
 
-            //Smoothly adjust zoom
+            //Smoothly transition zoom
             currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
 
-
             //Rotate around the target by yaw
-            transform.RotateAround(targetTransform.position, Vector3.forward, yawVelocity * Time.deltaTime);
+            transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
+
+            //---------SCREW THIS MATH---------//
+            //Update pitch value
+            currentPitch -= pitchVelocity * Time.deltaTime;
+            currentPitch = Mathf.Clamp(currentPitch, minPitch, maxPitch); //Clamp
+
+            //Get direction from target to camera, set distance to the current distance
+            Vector3 offset = transform.position - targetTransform.position;
+            float radius = currentDistance;
+
+            //Calculate yaw direction (horizontal plane)
+            Vector3 flatDir = new Vector3(offset.x, 0, offset.z).normalized;
+
+            //Apply pitch vertically
+            float pitchRad = currentPitch * Mathf.Deg2Rad;
+
+            //Calculate offset for where camera should be
+            Vector3 newOffset = new Vector3(
+                flatDir.x * Mathf.Cos(pitchRad),
+                Mathf.Sin(pitchRad),
+                flatDir.z * Mathf.Cos(pitchRad)
+            ) * radius; //Multiplied by the total distance from target
+
+            //Apply the offset
+            transform.position = targetTransform.position + newOffset;
+            //---------SCREW THIS MATH---------//
 
             //Always look at the target
             transform.LookAt(targetTransform);
         }
 
+        // //Smoothly adjust rotate
+        // currentPitch = Mathf.SmoothDampAngle(currentPitch, targetPitch, ref pitchVelocity, pitchSmoothTime);
     
 
         // //Smoothly adjust zoom (this should always be smooth)

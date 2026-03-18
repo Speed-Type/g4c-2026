@@ -785,18 +785,16 @@ MonoBehaviour:
   cloudTransitionGO: {fileID: 1974897838}
   cloudTransitionLength: 0.75
   yawDragSensitivity: 20
-  pitchDragSensitivity: 20
+  pitchDragSensitivity: 12.5
   yawSmoothTime: 3
-  pitchSmoothTime: 3
+  pitchSmoothTime: 6
   idleRotationSpeed: 10
-  maxPitch: 75
+  maxPitch: 60
   minPitch: -20
   minDistance: 10
   maxDistance: 30
   zoomSpeed: 0.75
   zoomSmoothTime: 0.15
-  currentPitch: 0
-  pitchVelocity: 0
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0
