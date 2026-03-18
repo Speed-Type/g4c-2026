@@ -40,12 +40,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
     //Internal logic variables
     private int freeCamIdleRotationDirection = 1;
-    private float currentPitch;
     private float currentDistance;
-    private float targetPitch;
     private float targetDistance;
     private float yawVelocity;
-    private float pitchVelocity;
     private float zoomVelocity;
     private bool pressing;
     private bool isFreeCam;
@@ -61,6 +58,7 @@ public class RoguelikeCameraController : MonoBehaviour
         input.Player.Look.performed += OnLook;
         input.Player.Zoom.performed += OnZoom;
 
+        //Initialize freecam values
         currentDistance = (maxDistance + minDistance) / 2f;
         targetDistance = currentDistance;
 
@@ -155,20 +153,6 @@ public class RoguelikeCameraController : MonoBehaviour
         {
             freeCamIdleRotationDirection = -1;
         }
-
-        // if(newSystem)
-        // {
-        //     targetPitch -= delta.y * pitchDragSensitivity;
-            
-        //     if(delta.x > 0)
-        //     {
-        //         freeCamIdleRotationDirection = 1;
-        //     }
-        //     else if(delta.x < 0)
-        //     {
-        //         freeCamIdleRotationDirection = -1;
-        //     }
-        // }
     }
 
     public void OnZoom(InputAction.CallbackContext ctx)
@@ -182,25 +166,24 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         if(isFreeCam)
         {
-            //Clamp
-            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
-            targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
-
             //Rotation when not dragging
             if (!pressing)
             {
+                //Smoothly transition yaw speed to idle speed
                 yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
             }
 
-            //Rotate around the target
-            transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
-        
+            //Smoothly adjust zoom
+            currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
+
+
+            //Rotate around the target by yaw
+            transform.RotateAround(targetTransform.position, Vector3.forward, yawVelocity * Time.deltaTime);
+
             //Always look at the target
             transform.LookAt(targetTransform);
         }
 
-        // //Smoothly adjust rotate
-        // currentPitch = Mathf.SmoothDampAngle(currentPitch, targetPitch, ref pitchVelocity, pitchSmoothTime);
     
 
         // //Smoothly adjust zoom (this should always be smooth)

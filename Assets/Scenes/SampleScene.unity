@@ -784,16 +784,19 @@ MonoBehaviour:
   savedMapCamPosition: {fileID: 1080935106}
   cloudTransitionGO: {fileID: 1974897838}
   cloudTransitionLength: 0.75
-  freeCamDragSensitivity: 20
-  freeCamIdleRotationSpeed: 10
-  freeCamRotationSmoothTime: 0.3
-  freeCamMaxPitch: 60
-  freeCamMinPitch: -20
-  distance: 5
+  yawDragSensitivity: 20
+  pitchDragSensitivity: 20
+  yawSmoothTime: 3
+  pitchSmoothTime: 3
+  idleRotationSpeed: 10
+  maxPitch: 75
+  minPitch: -20
   minDistance: 10
   maxDistance: 30
   zoomSpeed: 0.75
   zoomSmoothTime: 0.15
+  currentPitch: 0
+  pitchVelocity: 0
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0
