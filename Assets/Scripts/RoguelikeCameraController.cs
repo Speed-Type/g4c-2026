@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class RoguelikeCameraController : MonoBehaviour
 {
-    private PlayerInputActions input; //input action controlelr
+    private PlayerInputActions input; //input action controller
 
     //Variables in inspector
     [Header("Reference Transforms")]
@@ -18,19 +18,19 @@ public class RoguelikeCameraController : MonoBehaviour
     private Color defaultCloudColor;
 
     [Header("Free Cam Rotation Parameters")]
-    public float freeCamDragSensitivity = 20f;
-    public float freeCamIdleRotationSpeed = 10f;
-    public float freeCamRotationSmoothTime = .1f;
-    private int freeCamIdleRotationDirection = 1;
+    public float yawDragSensitivity = 20f;
+    public float pitchDragSensitivity = 1f;
+    public float yawSmoothTime = 3f;
+    public float pitchSmoothTime = .3f;
+    public float idleRotationSpeed = 10f;
 
     [Header("Free Cam Vertical Clamp")]
-    public float freeCamMaxPitch = 60f;
-    public float freeCamMinPitch = -20f;
+    public float maxPitch = 75f;
+    public float minPitch = -20f;
 
     [Header("Zoom Parameters")]
-    public float distance = 5f;
-    public float minDistance = 2f;
-    public float maxDistance = 10f;
+    public float minDistance = 10f;
+    public float maxDistance = 30f;
     public float zoomSpeed = 1f;
     public float zoomSmoothTime = .15f;
 
@@ -39,9 +39,9 @@ public class RoguelikeCameraController : MonoBehaviour
     public static float generalDelayBetweenTransitions = 0.25f;
 
     //Internal logic variables
-    private float yaw;
-    private float pitch;
-    private float targetYaw;
+    private int freeCamIdleRotationDirection = 1;
+    private float currentPitch;
+    private float currentDistance;
     private float targetPitch;
     private float targetDistance;
     private float yawVelocity;
@@ -61,7 +61,8 @@ public class RoguelikeCameraController : MonoBehaviour
         input.Player.Look.performed += OnLook;
         input.Player.Zoom.performed += OnZoom;
 
-        targetDistance = distance;
+        currentDistance = (maxDistance + minDistance) / 2f;
+        targetDistance = currentDistance;
 
         //Initialize cloud transition color
         defaultCloudColor = cloudTransitionGO.GetComponent<Image>().color;
@@ -144,8 +145,8 @@ public class RoguelikeCameraController : MonoBehaviour
         if(!pressing) return;
 
         Vector2 delta = ctx.ReadValue<Vector2>();
-        rotationVelocity = delta.x * freeCamDragSensitivity;
-        
+        yawVelocity = delta.x * yawDragSensitivity;
+
         if(delta.x > 0)
         {
             freeCamIdleRotationDirection = 1;
@@ -154,6 +155,20 @@ public class RoguelikeCameraController : MonoBehaviour
         {
             freeCamIdleRotationDirection = -1;
         }
+
+        // if(newSystem)
+        // {
+        //     targetPitch -= delta.y * pitchDragSensitivity;
+            
+        //     if(delta.x > 0)
+        //     {
+        //         freeCamIdleRotationDirection = 1;
+        //     }
+        //     else if(delta.x < 0)
+        //     {
+        //         freeCamIdleRotationDirection = -1;
+        //     }
+        // }
     }
 
     public void OnZoom(InputAction.CallbackContext ctx)
@@ -167,17 +182,32 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         if(isFreeCam)
         {
+            //Clamp
+            targetPitch = Mathf.Clamp(targetPitch, minPitch, maxPitch);
+            targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+
             //Rotation when not dragging
             if (!pressing)
             {
-                rotationVelocity = Mathf.Lerp(rotationVelocity, freeCamIdleRotationDirection * freeCamIdleRotationSpeed, Time.deltaTime * freeCamIdleRotationSmoothing);
+                yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
             }
 
             //Rotate around the target
-            transform.RotateAround(targetTransform.position, Vector3.up, rotationVelocity * Time.deltaTime);
+            transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
         
             //Always look at the target
             transform.LookAt(targetTransform);
         }
+
+        // //Smoothly adjust rotate
+        // currentPitch = Mathf.SmoothDampAngle(currentPitch, targetPitch, ref pitchVelocity, pitchSmoothTime);
+    
+
+        // //Smoothly adjust zoom (this should always be smooth)
+        // currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
+
+        // //Apply these
+        // Quaternion rotation = Quaternion.Euler(currentPitch, currentYaw, 0);
+        // Vector3 offset = rotation * new Vector3(0, 0, -currentDistance);
     }
 }

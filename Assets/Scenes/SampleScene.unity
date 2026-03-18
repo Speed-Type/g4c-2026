@@ -786,7 +786,14 @@ MonoBehaviour:
   cloudTransitionLength: 0.75
   freeCamDragSensitivity: 20
   freeCamIdleRotationSpeed: 10
-  freeCamRotationSmoothing: 2
+  freeCamRotationSmoothTime: 0.3
+  freeCamMaxPitch: 60
+  freeCamMinPitch: -20
+  distance: 5
+  minDistance: 10
+  maxDistance: 30
+  zoomSpeed: 0.75
+  zoomSmoothTime: 0.15
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0
