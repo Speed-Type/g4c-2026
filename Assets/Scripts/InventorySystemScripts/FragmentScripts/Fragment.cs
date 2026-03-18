@@ -35,7 +35,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Setup input
         input = new PlayerInputActions();
         input.UI.Rotate.performed += Rotate;
-        input.Disable(); //Disable input until this fragment is free
 
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
@@ -53,7 +52,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         belongedInventory = FindFirstObjectByType<InventoryManager>();
         belongsToPlayer = true;
-        input.Enable(); //So that it is possible to interact with this fragment again
 
         //Change parent transform to inventory system parent transform
         transform.SetParent(belongedInventory.inventorySystemParentTransform);
@@ -63,7 +61,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     void OnEnable()
     {
-        if(belongsToPlayer) input.Enable();
+        input.Enable();
     }
 
     void OnDisable()
@@ -78,7 +76,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("Fragment belongs to player: " + belongsToPlayer);
+        //Make sure this fragment is free
+        if(!belongsToPlayer) return;
+
         isBeingDragged = true;
 
         //When drag begins, make it the topmost item
@@ -100,11 +100,17 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Actual dragging functionality
     public void OnDrag(PointerEventData eventData)
     {
+        //Make sure this fragment is free
+        if(!belongsToPlayer) return;
+
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        //Make sure this fragment is free
+        if(!belongsToPlayer) return;
+
         isBeingDragged = false;
 
         //Snap to grid
@@ -121,17 +127,17 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Overridden method to be called by input system
     public void Rotate(InputAction.CallbackContext ctx)
     {
+        if(!isBeingDragged)
+        {
+            return;
+        }
+
         Rotate();
     }
 
     //Method to rotate 90 degrees clockwise
     public void Rotate()
     {
-        if(!isBeingDragged)
-        {
-            return;
-        }
-
         //Need to transpose matrix and then reverse each column
         int numRows = shape.GetLength(0);
         int numCols = shape.GetLength(1);
