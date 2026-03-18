@@ -119,16 +119,16 @@ public class LootManager : GeneralInventoryStructure
                 }
 
                 //Check that the dimensions of the fragment are not outside the total dimensions of the grid
-                int fragmentNumRows = newFragment.shape.GetLength(0);
-                int fragmentNumCols = newFragment.shape.GetLength(1);
-                if(fragmentNumRows > gridNumRows || fragmentNumCols > gridNumCols)
+                if(newFragment.shape.GetLength(0) > gridNumRows || newFragment.shape.GetLength(1) > gridNumCols)
                 {
+                    Debug.Log("Rotating to fix");
                     newFragment.Rotate(); //rotate again
                 }
+                //Note that GetLength(0) returns number of rows, and GetLength(1) returns number of cols
 
                 //Pick a random position (such that the new fragment will not be out of bounds)
-                int potentialRow = Random.Range(0, gridNumRows - fragmentNumRows);
-                int potentialCol = Random.Range(0, gridNumCols - fragmentNumCols);
+                int potentialRow = Random.Range(0, gridNumRows - newFragment.shape.GetLength(0));
+                int potentialCol = Random.Range(0, gridNumCols - newFragment.shape.GetLength(1));
 
                 //Check if that position works
                 if(SnapToGrid(newFragment, potentialRow, potentialCol))
