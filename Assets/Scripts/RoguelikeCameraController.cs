@@ -20,18 +20,26 @@ public class RoguelikeCameraController : MonoBehaviour
     [Header("Free Cam Rotation Parameters")]
     public float freeCamDragSensitivity = 20f;
     public float freeCamIdleRotationSpeed = 10f;
-    public float freeCamRotationSmoothing = 3f;
+    public float freeCamIdleRotationSmoothing = 3f;
     private int freeCamIdleRotationDirection = 1;
+    public float freeCamMaxPitch = 60f;
+    public float freeCamMinPitch = -20f;
+    public float freeCamPitchSmoothing = 3f;
 
-    private float rotationVelocity;
-    private bool pressing;
-    private bool isFreeCam;
-
-    //[Header("Zoom Parameters")]
+    [Header("Zoom Parameters")]
+    private float distance = 5f;
+    public float minDistance = 2f;
+    public float maxDistance = 10f;
+    public float zoomSpeed = 1f;
 
     [Header("Camera Transitions Timing")]
     public static float freeCamTransitionTiming = 1f;
     public static float generalDelayBetweenTransitions = 0.25f;
+
+    //Internal logic variables
+    private float rotationVelocity;
+    private bool pressing;
+    private bool isFreeCam;
 
     void Awake()
     {
@@ -143,7 +151,7 @@ public class RoguelikeCameraController : MonoBehaviour
             //Rotation when not dragging
             if (!pressing)
             {
-                rotationVelocity = Mathf.Lerp(rotationVelocity, freeCamIdleRotationDirection * freeCamIdleRotationSpeed, Time.deltaTime * freeCamRotationSmoothing);
+                rotationVelocity = Mathf.Lerp(rotationVelocity, freeCamIdleRotationDirection * freeCamIdleRotationSpeed, Time.deltaTime * freeCamIdleRotationSmoothing);
             }
 
             //Rotate around the target

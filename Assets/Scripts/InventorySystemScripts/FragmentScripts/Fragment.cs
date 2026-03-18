@@ -13,6 +13,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public string displayBug;
     public string displayScientificName;
     [TextArea(3,5)] public string displayDescription;
+    public int maxHealth;
+    public int currentHealth;
+
     [Header("GameObject with Sprite for this fragment's graphics")]
     public GameObject graphicGO;
 
@@ -23,9 +26,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private Canvas canvas;
     [HideInInspector] public GeneralInventoryStructure belongedInventory;
     private PlayerInputActions input; //input action controlelr
-    private static int totalEquippedFragments = 0; //NOTE: these variables are pretty unused...
-    private static int totalExistingFragments = 0; //NOTE: these variables are pretty unused...
-    private bool isEquipped = false; //TODO: use for deleting unequipped fragments on node change
     private bool isBeingDragged = false;
     private int currentRotation = 0;
     [HideInInspector] public bool belongsToPlayer;
@@ -40,9 +40,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         belongsToPlayer = false;
-
-        //Update total fragments
-        totalExistingFragments++;
+        currentHealth = maxHealth;
 
         //FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
     }
@@ -67,11 +65,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     void OnDisable()
     {
         input.Disable();
-    }
-
-    void OnDestroy()
-    {
-        totalExistingFragments--;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -205,9 +198,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //The effects of a fragment should be here, as this is called when a fragment is equipped
     public virtual void ActivateEffects()
     {
-        isEquipped = true;
-        totalEquippedFragments++;
-
         Debug.Log("Effects activated");
     }
 
@@ -215,9 +205,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Should deactivate the effects of a fragment, as this is called when a fragment is unequipped
     public virtual void DeactivateEffects()
     {
-        isEquipped = false;
-        totalEquippedFragments--;
-
         Debug.Log("Effects deactivated");
     }
 
@@ -233,8 +220,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 rotationAmount *= -1;
             }
             
-            //Vector3 dir = transform.position - rectTransform.anchoredPosition;
-
             LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
             {
                 Shake(intensity, duration, callsSoFar + 1, rotationAmount);
@@ -255,6 +240,15 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if(isBeingDragged)
         {
             StartCoroutine(TimedHighlightCoroutine());
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        if(currentHealth <= 0)
+        {
+            
         }
     }
 }

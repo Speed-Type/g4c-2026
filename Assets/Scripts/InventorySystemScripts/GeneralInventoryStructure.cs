@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,7 @@ public class GeneralInventoryStructure : MonoBehaviour
 
     //Inventory logic
     private InventorySlot[,] inventorySlotArray;
+    private List<Fragment> ownedFragments;
 
     public void GenerateInventory(int pNumRows, int pNumCols)
     {
@@ -94,6 +96,9 @@ public class GeneralInventoryStructure : MonoBehaviour
     //Method to update the array with a new fragment
     public virtual void PlaceFragment(Fragment fragment, int x, int y)
     {
+        //Add to owned list
+        ownedFragments.Add(fragment);
+
         //Loop through necessary spots, relative to x and y, and assign fragments
         for(int i = 0; i < fragment.shape.GetLength(0); i++)
         {
@@ -202,6 +207,9 @@ public class GeneralInventoryStructure : MonoBehaviour
 
         if(hasRemovedAnything)
         {
+            //Remove this from the owned fragments list
+            ownedFragments.Remove(fragment);
+
             //Will deactivate fragment effects if this is the inventory manager class
             return true;
         }
