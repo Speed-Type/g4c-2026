@@ -63,7 +63,7 @@ public class LootManager : GeneralInventoryStructure
                 bugLoot.numRows = 3;
                 bugLoot.numCols = 5;
                 bugLoot.minLoot = 2;
-                bugLoot.maxLoot = 5;
+                bugLoot.maxLoot = 4;
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Abdomen, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Antenna, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 1);
@@ -121,14 +121,13 @@ public class LootManager : GeneralInventoryStructure
                 //Check that the dimensions of the fragment are not outside the total dimensions of the grid
                 if(newFragment.shape.GetLength(0) > gridNumRows || newFragment.shape.GetLength(1) > gridNumCols)
                 {
-                    Debug.Log("Rotating to fix");
                     newFragment.Rotate(); //rotate again
                 }
                 //Note that GetLength(0) returns number of rows, and GetLength(1) returns number of cols
 
                 //Pick a random position (such that the new fragment will not be out of bounds)
-                int potentialRow = Random.Range(0, gridNumRows - newFragment.shape.GetLength(0));
-                int potentialCol = Random.Range(0, gridNumCols - newFragment.shape.GetLength(1));
+                int potentialRow = Random.Range(0, gridNumRows - newFragment.shape.GetLength(0) + 1);
+                int potentialCol = Random.Range(0, gridNumCols - newFragment.shape.GetLength(1) + 1);
 
                 //Check if that position works
                 if(SnapToGrid(newFragment, potentialRow, potentialCol))

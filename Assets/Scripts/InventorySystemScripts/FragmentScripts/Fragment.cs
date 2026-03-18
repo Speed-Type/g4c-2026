@@ -138,7 +138,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Method to rotate 90 degrees clockwise
     public void Rotate()
     {
-        Debug.Log("Rotated");
         //Need to transpose matrix and then reverse each column
         int numRows = shape.GetLength(0);
         int numCols = shape.GetLength(1);
