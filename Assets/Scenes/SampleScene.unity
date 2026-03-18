@@ -8150,8 +8150,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 65, y: -60}
-  m_SizeDelta: {x: -125, y: -120}
+  m_AnchoredPosition: {x: 40, y: -40}
+  m_SizeDelta: {x: -80, y: -80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1443599160
 MonoBehaviour:
@@ -9181,6 +9181,8 @@ MonoBehaviour:
   inventorySlotGO: {fileID: 484055259424364027, guid: bd54b1b2826ba4e26811adaad4660410, type: 3}
   backgroundGraphicGO: {fileID: 1736916438}
   fragmentSnapAnimLength: 0.25
+  gridBorderHorizontalPadding: 125
+  gridBorderVerticalPadding: 120
   inventorySlotSize: 100
   inventoryNumCols: 5
   inventoryNumRows: 7
@@ -9201,6 +9203,8 @@ MonoBehaviour:
   inventorySlotGO: {fileID: 484055259424364027, guid: bd54b1b2826ba4e26811adaad4660410, type: 3}
   backgroundGraphicGO: {fileID: 988952334}
   fragmentSnapAnimLength: 0.25
+  gridBorderHorizontalPadding: 80
+  gridBorderVerticalPadding: 80
   inventorySlotSize: 100
   lootSystemBackground: {fileID: 988952335}
   maxFragmentPositioningAttempts: 5

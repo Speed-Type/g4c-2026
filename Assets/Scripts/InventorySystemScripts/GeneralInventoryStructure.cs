@@ -10,6 +10,8 @@ public class GeneralInventoryStructure : MonoBehaviour
     [SerializeField] private GameObject inventorySlotGO;
     [SerializeField] private RectTransform backgroundGraphicGO;
     [SerializeField] private float fragmentSnapAnimLength;
+    [SerializeField] private float gridBorderHorizontalPadding;
+    [SerializeField] private float gridBorderVerticalPadding;
 
     protected int gridNumCols;
     protected int gridNumRows;
@@ -17,7 +19,7 @@ public class GeneralInventoryStructure : MonoBehaviour
 
     //Inventory logic
     private InventorySlot[,] inventorySlotArray;
-    private List<Fragment> ownedFragments;
+    protected List<Fragment> ownedFragments;
 
     protected virtual void Awake()
     {
@@ -31,7 +33,20 @@ public class GeneralInventoryStructure : MonoBehaviour
         gridNumRows = pNumRows;
 
         //Initialize size of background graphic
-        backgroundGraphicGO.sizeDelta = new Vector2(125 + pNumCols * inventorySlotSize, 120 + pNumRows * inventorySlotSize);
+        backgroundGraphicGO.sizeDelta = new Vector2(gridBorderHorizontalPadding + pNumCols * inventorySlotSize, gridBorderVerticalPadding + pNumRows * inventorySlotSize);
+
+        //Delete any previous inventory slot objects
+        if(inventorySlotArray != null)
+        {
+            for(int i = 0; i < inventorySlotArray.GetLength(0); i++)
+            {
+                for(int j = 0; j < inventorySlotArray.GetLength(1); j++)
+                {
+                    inventorySlotArray[i,j].transform.SetParent(transform);
+                    Destroy(inventorySlotArray[i,j].gameObject);
+                }
+            }
+        }
 
         //Initialize inventory array
         inventorySlotArray = new InventorySlot[gridNumRows, gridNumCols];
