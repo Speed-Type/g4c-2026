@@ -93,8 +93,11 @@ MonoBehaviour:
   displayBug: 
   displayScientificName: 
   displayDescription: 
+  maxHealth: 0
+  currentHealth: 0
   graphicGO: {fileID: 6307907070595829674}
   isOnEdge: 0
+  belongedInventory: {fileID: 0}
   belongsToPlayer: 0
 --- !u!1 &2670429983737397158
 GameObject:

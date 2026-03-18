@@ -8,11 +8,15 @@ using UnityEngine.UI;
 
 public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    //Note: these variables are now protected (they used to be adjustable in the inspector)
+    //Any names/popup details need to be configured in individual subclasses, for sake of making sure they don't get wiped by inspector
+    protected string displayBugGroup;
+    protected string displayBodyPart;
+    protected string displayCommonName;
+    protected string displayScientificName;
+    protected string displayDescription;
+
     [Header("Fragment Data")]
-    public string displayBodyPart;
-    public string displayBug;
-    public string displayScientificName;
-    [TextArea(3,5)] public string displayDescription;
     public int maxHealth;
     public int currentHealth;
 
@@ -242,7 +246,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        TooltipManager.ShowTooltip_Static("Test here");
+        TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, displayDescription);
     }
 
     public void OnPointerExit(PointerEventData eventData)
