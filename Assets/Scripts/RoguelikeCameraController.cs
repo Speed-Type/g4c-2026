@@ -20,24 +20,33 @@ public class RoguelikeCameraController : MonoBehaviour
     [Header("Free Cam Rotation Parameters")]
     public float freeCamDragSensitivity = 20f;
     public float freeCamIdleRotationSpeed = 10f;
-    public float freeCamIdleRotationSmoothing = 3f;
+    public float freeCamRotationSmoothTime = .1f;
     private int freeCamIdleRotationDirection = 1;
+
+    [Header("Free Cam Vertical Clamp")]
     public float freeCamMaxPitch = 60f;
     public float freeCamMinPitch = -20f;
-    public float freeCamPitchSmoothing = 3f;
 
     [Header("Zoom Parameters")]
-    private float distance = 5f;
+    public float distance = 5f;
     public float minDistance = 2f;
     public float maxDistance = 10f;
     public float zoomSpeed = 1f;
+    public float zoomSmoothTime = .15f;
 
     [Header("Camera Transitions Timing")]
     public static float freeCamTransitionTiming = 1f;
     public static float generalDelayBetweenTransitions = 0.25f;
 
     //Internal logic variables
-    private float rotationVelocity;
+    private float yaw;
+    private float pitch;
+    private float targetYaw;
+    private float targetPitch;
+    private float targetDistance;
+    private float yawVelocity;
+    private float pitchVelocity;
+    private float zoomVelocity;
     private bool pressing;
     private bool isFreeCam;
 
@@ -50,6 +59,9 @@ public class RoguelikeCameraController : MonoBehaviour
         input.Player.Drag.canceled += ctx => pressing = false;
 
         input.Player.Look.performed += OnLook;
+        input.Player.Zoom.performed += OnZoom;
+
+        targetDistance = distance;
 
         //Initialize cloud transition color
         defaultCloudColor = cloudTransitionGO.GetComponent<Image>().color;
@@ -59,7 +71,7 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         //Smooth transition to freecam view
         LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
-            rotationVelocity = freeCamIdleRotationDirection * freeCamIdleRotationDirection;
+            //TO FIX: rotationVelocity = freeCamIdleRotationDirection * freeCamIdleRotationDirection;
             input.Enable();
             isFreeCam = true;
         });
@@ -142,6 +154,13 @@ public class RoguelikeCameraController : MonoBehaviour
         {
             freeCamIdleRotationDirection = -1;
         }
+    }
+
+    public void OnZoom(InputAction.CallbackContext ctx)
+    {
+        float scroll = ctx.ReadValue<float>();
+
+        targetDistance -= scroll * zoomSpeed;
     }
 
     void LateUpdate()
