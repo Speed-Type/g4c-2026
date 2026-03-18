@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Fragment Data")]
     public string displayBodyPart;
@@ -41,11 +41,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         canvas = GetComponentInParent<Canvas>();
         belongsToPlayer = false;
         currentHealth = maxHealth;
-
-        //FreeFragment(); //DELETE LATER; THIS IS TEMPORARY TO TEST OUT FRAGMENT FREEING
     }
 
-    //TODO: free the fragment here
     public void FreeFragment()
     {
         belongedInventory = FindFirstObjectByType<InventoryManager>();
@@ -243,6 +240,17 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        TooltipManager.ShowTooltip_Static("Test here");
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipManager.HideTooltip_Static();
+    }
+
+    //TODO
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
