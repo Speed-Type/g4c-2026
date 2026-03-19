@@ -23,6 +23,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [Header("GameObject with Sprite for this fragment's graphics")]
     public GameObject graphicGO;
 
+    [Header("Radial Fill Health Indicator")]
+    public Image healthIndicator;
+
     //Internal logic
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
     [HideInInspector] public bool isOnEdge;
@@ -257,7 +260,11 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //TODO
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
+        currentHealth -= damage; //Reduce health
+
+        healthIndicator.fillAmount = Math.Max((float)currentHealth / maxHealth, 0); //Update radial fill indicator
+
+        //If dead
         if(currentHealth <= 0)
         {
             
