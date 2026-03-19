@@ -154,7 +154,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Method to rotate 90 degrees clockwise
     public void Rotate()
     {
-        TakeDamage(1);//TEMPORARY
         //Need to transpose matrix and then reverse each column
         int numRows = shape.GetLength(0);
         int numCols = shape.GetLength(1);
@@ -328,7 +327,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             DeactivateEffects();
         }
 
-        //TODO: Graphically update
+        //Graphically update
         graphicGO.GetComponent<Image>().color = destroyedFragmentColor;
     }
 
