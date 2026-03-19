@@ -33,6 +33,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [HideInInspector] public bool isOnEdge;
     private RectTransform rectTransform;
     private Canvas canvas;
+    private RectTransform canvasRectTransform;
     [HideInInspector] public GeneralInventoryStructure belongedInventory;
     private PlayerInputActions input; //input action controlelr
     private bool isBeingDragged = false;
@@ -56,6 +57,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
+        canvasRectTransform = canvas.GetComponent<RectTransform>();
         isFree = false;
         effectsActive = false;
         isEquipped = false;
@@ -119,7 +121,22 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Make sure this fragment is free
         if(!isFree) return;
 
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        //Do the actual movement (with calculations so that it stays within screen bounds)
+        Vector2 newPosition = rectTransform.anchoredPosition + eventData.delta / canvas.scaleFactor;
+
+        Vector2 canvasSize = canvasRectTransform.rect.size;
+        Vector2 elementSize = rectTransform.rect.size;
+
+        float minX = -canvasSize.x / 2 + elementSize.x / 2;
+        float maxX = canvasSize.x / 2 - elementSize.x / 2;
+
+        float minY = -canvasSize.y / 2 + elementSize.y / 2;
+        float maxY = canvasSize.y / 2 - elementSize.y / 2;
+
+        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+
+        rectTransform.anchoredPosition = newPosition;
     }
 
     public void OnEndDrag(PointerEventData eventData)
