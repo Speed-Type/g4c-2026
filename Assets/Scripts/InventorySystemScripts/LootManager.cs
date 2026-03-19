@@ -179,6 +179,7 @@ public class LootManager : GeneralInventoryStructure
                         {
                             //Make new flesh
                             Fragment newFlesh = Instantiate(fleshList[j], inventorySystemParentTransform).GetComponent<Fragment>();
+                            newFlesh.belongedInventory = this;
 
                             //Rotate a random number of times
                             for(int k = 0; k < Random.Range(0,3); k++)

@@ -10014,6 +10014,7 @@ MonoBehaviour:
   - {fileID: 6260742422102833475, guid: 9ec02a215b4374372be1c941077a9222, type: 3}
   - {fileID: 2751700069158436444, guid: 790fea904a2dc475bb254f00382e9ca5, type: 3}
   fleshList:
+  - {fileID: 7482046112208554959, guid: c1e3ba18744304bebaf175d9c0aaf015, type: 3}
   - {fileID: 5587133841796263442, guid: 0340855a83db541b49fdf721272e4cb1, type: 3}
 --- !u!1 &1912566088
 GameObject:
