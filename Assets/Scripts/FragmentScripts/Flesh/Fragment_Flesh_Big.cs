@@ -19,13 +19,12 @@ public class Fragment_Flesh_Big : Fragment
         displayDescription = "You need it to grow.";
     }
 
-    public override void ActivateEffects()
+    public override void Die()
     {
-        base.ActivateEffects();
-    }
+        //TODO: Add flesh to player
 
-    public override void DeactivateEffects()
-    {
-        base.DeactivateEffects();
+        //TODO: Do graphical effect
+
+        Destroy(this.gameObject);
     }
 }
