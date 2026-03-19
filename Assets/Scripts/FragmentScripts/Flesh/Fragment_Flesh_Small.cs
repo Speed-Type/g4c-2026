@@ -18,13 +18,13 @@ public class Fragment_Flesh_Small : Fragment
         displayDescription = "You need it to grow.";
     }
 
-    public override void ActivateEffects()
+    public override void Die()
     {
-        base.ActivateEffects();
-    }
+        //Add flesh to player
+        RoguelikeGameplayController.AddFlesh(1);
 
-    public override void DeactivateEffects()
-    {
-        base.DeactivateEffects();
+        //TODO: Do graphical effect
+
+        Destroy(this.gameObject);
     }
 }

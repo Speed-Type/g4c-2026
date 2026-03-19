@@ -9,6 +9,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     [Header("Player Data")]
     public int playerHealth;
+    public int playerFlesh;
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
@@ -40,6 +41,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     //Static variable for current game state
     public static GameState gameState;
+
+    //Static variable for holding the one instance of this variable
+    private static RoguelikeGameplayController instance;
 
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
@@ -265,6 +269,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     void Awake()
     {
+        //Set the instance
+        instance = this;
+
         //Enable/disable necessary systems
         nodeMapGO.SetActive(true);
         //inventorySystemGO.SetActive(false);
@@ -283,6 +290,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     
         //Reset Fragment class's static variable
         Fragment.ResetFragmentList();
+    }
+
+    //Static method to add flesh
+    public static void AddFlesh(int amount)
+    {
+        instance.playerFlesh += amount;
     }
 }
 

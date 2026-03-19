@@ -21,7 +21,8 @@ public class Fragment_Flesh_Big : Fragment
 
     public override void Die()
     {
-        //TODO: Add flesh to player
+        //Add flesh to player
+        RoguelikeGameplayController.AddFlesh(4);
 
         //TODO: Do graphical effect
 
