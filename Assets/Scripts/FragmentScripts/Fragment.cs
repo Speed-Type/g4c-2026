@@ -108,6 +108,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Start highlight coroutine
         StartCoroutine(TimedHighlightCoroutine());
+
+        //Hide tooltip
+        TooltipManager.HideTooltip_Static();
     }
 
     //Actual dragging functionality
@@ -274,6 +277,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if(isBeingDragged) return; //This should not run if it's being dragged
+
         TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, displayDescription);
     }
 
