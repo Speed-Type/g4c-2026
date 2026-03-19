@@ -275,13 +275,26 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
+    //Method for starting tooltip hovering
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(isBeingDragged) return; //This should not run if it's being dragged
 
-        TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, displayDescription);
+        //Determine what to display for fragment health
+        string durabilityDescription = "Durability: " + Math.Max(currentHealth, 0) + "/" + maxHealth + "\n";
+        if(currentHealth <= 0)
+        {
+            TooltipManager.ColorRed_Static();
+        }
+        else
+        {
+            TooltipManager.ColorDefault_Static();
+        }
+
+        TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, durabilityDescription, displayDescription);
     }
 
+    //Method for stopping tooltip hovering
     public void OnPointerExit(PointerEventData eventData)
     {
         TooltipManager.HideTooltip_Static();

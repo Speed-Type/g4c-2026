@@ -10,6 +10,7 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tooltipTitle;
     [SerializeField] private TextMeshProUGUI tooltipSubtitle1;
     [SerializeField] private TextMeshProUGUI tooltipSubtitle2;
+    [SerializeField] private TextMeshProUGUI tooltipDurabilitySubtitle;
     [SerializeField] private TextMeshProUGUI tooltipDescription;
     [SerializeField] private RectTransform tooltipBackground; //Background of the tooltip
     [SerializeField] private RectTransform tooltipParentRectTransform;
@@ -20,16 +21,24 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] private float tooltipShowDelay = 0.4f;
     [SerializeField] private float tooltipHideDelay = 0.1f;
     [SerializeField] private float fadeDuration = 0.15f;
+    [SerializeField] private Color redColor;
 
     private Coroutine showTooltipCoroutine;
     private Coroutine hideTooltipCoroutine;
+    private Color defaultColor;
 
     //Internal variable for the single instance of the tooltip manager
     private static TooltipManager instance;
 
     void Awake()
     {
+        //Set instance
         instance = this;
+
+        //Initialize default color
+        defaultColor = tooltipDurabilitySubtitle.color;
+
+        //Hide tooltip for now
         HideTooltip_Static();
     }
 
@@ -76,7 +85,7 @@ public class TooltipManager : MonoBehaviour
     }
 
     //Shows tooltip with set text for title, subtitle, and description
-    public void ShowTooltip(string title, string subtitle1, string subtitle2, string description)
+    private void ShowTooltip(string title, string subtitle1, string subtitle2, string durability, string description)
     {
         //Necessary for grace period between shows/hides
         if(hideTooltipCoroutine != null)
@@ -91,9 +100,11 @@ public class TooltipManager : MonoBehaviour
         tooltipTitle.gameObject.SetActive(true);
         tooltipSubtitle1.gameObject.SetActive(true);
         tooltipSubtitle2.gameObject.SetActive(true);
+        tooltipDurabilitySubtitle.gameObject.SetActive(true);
         tooltipTitle.text = title;
         tooltipSubtitle1.text = subtitle1;
         tooltipSubtitle2.text = subtitle2;
+        tooltipDurabilitySubtitle.text = durability;
         tooltipDescription.text = description;
 
         //If we're going from object to object, don't have to delay or fade in/out
@@ -111,7 +122,7 @@ public class TooltipManager : MonoBehaviour
     }
 
     //Shows tooltip with simple text
-    public void ShowTooltip(string simpleText)
+    private void ShowTooltip(string simpleText)
     {
         //Necessary for grace period between shows/hides
         if(hideTooltipCoroutine != null)
@@ -126,6 +137,7 @@ public class TooltipManager : MonoBehaviour
         tooltipTitle.gameObject.SetActive(false);
         tooltipSubtitle1.gameObject.SetActive(false);
         tooltipSubtitle2.gameObject.SetActive(false);
+        tooltipDurabilitySubtitle.gameObject.SetActive(false);
         tooltipDescription.text = simpleText;
 
         //If we're going from object to object, don't have to delay or fade in/out
@@ -143,7 +155,7 @@ public class TooltipManager : MonoBehaviour
     }
 
     //Hides tooltip
-    public void HideTooltip()
+    private void HideTooltip()
     {
         //Stop the tooltip delay, like a dash cancel
         if(showTooltipCoroutine != null)
@@ -164,9 +176,9 @@ public class TooltipManager : MonoBehaviour
         tooltipParentRectTransform.gameObject.SetActive(false);
     }
 
-    public static void ShowTooltip_Static(string title, string subtitle1, string subtitle2, string description)
+    public static void ShowTooltip_Static(string title, string subtitle1, string subtitle2, string durability, string description)
     {
-        instance.ShowTooltip(title, subtitle1, subtitle2, description);
+        instance.ShowTooltip(title, subtitle1, subtitle2, durability, description);
     }
 
     public static void ShowTooltip_Static(string simpleText)
@@ -177,5 +189,25 @@ public class TooltipManager : MonoBehaviour
     public static void HideTooltip_Static()
     {
         instance.HideTooltip();
+    }
+
+    private void ColorRed()
+    {
+        tooltipDurabilitySubtitle.color = redColor;
+    }
+
+    private void ColorDefault()
+    {
+        tooltipDurabilitySubtitle.color = defaultColor;
+    }
+
+    public static void ColorRed_Static()
+    {
+        instance.ColorRed();
+    }
+
+    public static void ColorDefault_Static()
+    {
+        instance.ColorDefault();
     }
 }
