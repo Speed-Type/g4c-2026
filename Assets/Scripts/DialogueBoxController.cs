@@ -37,12 +37,12 @@ public class DialogueBoxController : MonoBehaviour
     //Method to continue to the next line of text in buffer
     public void ContinueText()
     {
-        if(textGraphic.maxVisibleCharacters != textGraphic.text.Length)
+        if(textGraphic.maxVisibleCharacters != textGraphic.text.Length) //CASE 1: Not yet done typing text
         {
             //Finish current text typewriter effect
             textGraphic.maxVisibleCharacters = textGraphic.text.Length;
         }
-        else if(textBuffer.Count >= 0)
+        else if(textBuffer.Count == 1) //CASE 2: Last text to show
         {
             //Load new text
             textGraphic.text = textBuffer[0];
@@ -50,16 +50,21 @@ public class DialogueBoxController : MonoBehaviour
             textGraphic.maxVisibleCharacters = 0;
             typewriterCoroutine = StartCoroutine(TypewriterCoroutine());
 
-            if(textBuffer.Count == 0)
-            {
-                //Hide text box
-                LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
-                
-                raycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
+            //Hide text box
+            LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
+            
+            raycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
 
-                //HERE, CALL THE METHOD TO ENABLE PLAYER CHOICES AGAIN
-                rgController.EnablePlayerChoices();
-            }
+            //HERE, CALL THE METHOD TO ENABLE PLAYER CHOICES AGAIN
+            rgController.EnablePlayerChoices();
+        }
+        else if(textBuffer.Count > 0) //CASE 3: Not the last text to show
+        {
+            //Load new text
+            textGraphic.text = textBuffer[0];
+            textBuffer.RemoveAt(0);
+            textGraphic.maxVisibleCharacters = 0;
+            typewriterCoroutine = StartCoroutine(TypewriterCoroutine());
         }
     }
 
