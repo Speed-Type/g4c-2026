@@ -4,7 +4,14 @@ using System.Collections.Generic;
 public class Node_Start : Node
 {
     //Start node is where the player starts
-    bool hasVisited = false;
+    private bool hasVisited = false;
+
+    void Awake()
+    {
+        //MIGHT LEAD TO A BUG LATER??
+        nodeType = NodeTypes.Start;
+    }
+
     public override void VisitNode()
     {
         //Send request to NodeManager; if this node is not accessible, the rest of the function won't run

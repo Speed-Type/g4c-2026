@@ -8,6 +8,7 @@ public class Node : MonoBehaviour
 
     //Instance variables
     [SerializeField] private List<Node> nodeList;
+    public NodeTypes nodeType;
 
     //Accessor methods
     public bool HasNode(Node other)

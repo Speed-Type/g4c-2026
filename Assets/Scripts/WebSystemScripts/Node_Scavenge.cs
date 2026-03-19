@@ -8,6 +8,11 @@ public class Node_Scavenge : Node
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
 
+    void Awake()
+    {
+        nodeType = NodeTypes.Scavenge;
+    }
+
     public override void VisitNode()
     {
         //Send request to NodeManager; if this node is not accessible, the rest of the function won't run

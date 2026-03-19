@@ -53,6 +53,8 @@ public class Node_Empty : Node
     void Awake()
     {
         flavorText.Add("There is a 1 in " + (flavorText.Count + 1) + " chance of getting this flavor text.");
+
+        nodeType = NodeTypes.Empty;
     }
 
     public override void VisitNode()
