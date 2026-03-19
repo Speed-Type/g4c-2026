@@ -90,13 +90,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a65f9669194f472ab516d28e52f2ce4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fragment_AfricanBigHeadedAnt_Leg
-  maxHealth: 0
-  currentHealth: 0
   graphicGO: {fileID: 7141693543540602586}
+  destroyedFragmentColor: {r: 0.42745098, g: 0, b: 0, a: 1}
   healthIndicator: {fileID: 5524964998731263489}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
-  belongsToPlayer: 0
+  isEquipped: 0
 --- !u!1 &7141693543540602586
 GameObject:
   m_ObjectHideFlags: 0

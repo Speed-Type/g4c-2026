@@ -22,10 +22,11 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected int currentHealth;
 
     [Header("GameObject with Sprite for this fragment's graphics")]
-    public GameObject graphicGO;
+    [SerializeField] private GameObject graphicGO;
+    [SerializeField] private Color destroyedFragmentColor;
 
     [Header("Radial Fill Health Indicator")]
-    public Image healthIndicator;
+    [SerializeField] private Image healthIndicator;
 
     //Internal logic
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
@@ -150,6 +151,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Method to rotate 90 degrees clockwise
     public void Rotate()
     {
+        TakeDamage(1);//TEMPORARY
         //Need to transpose matrix and then reverse each column
         int numRows = shape.GetLength(0);
         int numCols = shape.GetLength(1);
@@ -309,6 +311,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
 
         //TODO: Graphically update
+        graphicGO.GetComponent<Image>().color = destroyedFragmentColor;
     }
 
     //Method to auto-delete all fragments that are either not free or not equipped
