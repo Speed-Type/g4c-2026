@@ -1013,7 +1013,11 @@ MonoBehaviour:
   tooltipDescription: {fileID: 1388215139}
   tooltipBackground: {fileID: 1734174568}
   tooltipParentRectTransform: {fileID: 418963396}
+  tooltipCanvasGroup: {fileID: 418963397}
   mouseOffset: 14
+  tooltipShowDelay: 0.4
+  tooltipHideDelay: 0.1
+  fadeDuration: 0.15
 --- !u!1 &399652561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,6 +1229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 418963396}
+  - component: {fileID: 418963397}
   m_Layer: 5
   m_Name: TooltipParent
   m_TagString: Untagged
@@ -1252,6 +1257,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!225 &418963397
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418963395}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &501995606
 GameObject:
   m_ObjectHideFlags: 0
