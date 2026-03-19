@@ -100,7 +100,6 @@ public class LootManager : GeneralInventoryStructure
         //FIRST, Delete all previous fragments
         for(int i = 0; i < ownedFragments.Count; i++)
         {
-            Debug.Log("Destroying " + ownedFragments[i].gameObject.name);
             Destroy(ownedFragments[i].gameObject);
             ownedFragments.RemoveAt(i);
             i--;
