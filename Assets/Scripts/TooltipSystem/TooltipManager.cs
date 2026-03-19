@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.InputSystem;
-using System;
 
 public class TooltipManager : MonoBehaviour
 {
@@ -12,7 +11,9 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tooltipSubtitle2;
     [SerializeField] private TextMeshProUGUI tooltipDescription;
     [SerializeField] private RectTransform tooltipBackground; //Background of the tooltip
-    [SerializeField] private RectTransform tooltipParentTransform;
+    [SerializeField] private RectTransform tooltipParentRectTransform;
+    [Header("Small Graphic Constant")]
+    [SerializeField] private float mouseOffset = 14f;
 
     //Internal variable for the single instance of the tooltip manager
     private static TooltipManager instance;
@@ -26,8 +27,8 @@ public class TooltipManager : MonoBehaviour
     void Update()
     {
         //Dynamically position and anchor the tooltip based on mouse position
-        //Make sure it doesn't go off screen (clamp it)
-        Vector2 screenPoint = Mouse.current.position.ReadValue();
+        //Make sure it doesn't go off screen by clamping (flipping pivot didnt' really work)
+        Vector2 screenPoint = Mouse.current.position.ReadValue() + new Vector2(mouseOffset, -mouseOffset);
 
         float width = tooltipBackground.sizeDelta.x;
         float height = tooltipBackground.sizeDelta.y;
@@ -35,7 +36,7 @@ public class TooltipManager : MonoBehaviour
         screenPoint.x = Mathf.Min(screenPoint.x, Screen.width - width);
         screenPoint.y = Mathf.Min(screenPoint.y, Screen.height - height);
 
-        tooltipParentTransform.position = screenPoint;
+        tooltipParentRectTransform.position = screenPoint;
     }
 
     //Shows tooltip with set text for title, subtitle, and description
@@ -50,7 +51,7 @@ public class TooltipManager : MonoBehaviour
         tooltipSubtitle2.text = subtitle2;
         tooltipDescription.text = description;
 
-        tooltipParentTransform.gameObject.SetActive(true);
+        tooltipParentRectTransform.gameObject.SetActive(true);
     }
 
     //Shows tooltip with simple text
@@ -62,13 +63,13 @@ public class TooltipManager : MonoBehaviour
         tooltipSubtitle2.gameObject.SetActive(false);
         tooltipDescription.text = simpleText;
 
-        tooltipParentTransform.gameObject.SetActive(true);
+        tooltipParentRectTransform.gameObject.SetActive(true);
     }
 
     //Hides tooltip
     public void HideTooltip()
     {
-        tooltipParentTransform.gameObject.SetActive(false);
+        tooltipParentRectTransform.gameObject.SetActive(false);
     }
 
     public static void ShowTooltip_Static(string title, string subtitle1, string subtitle2, string description)
