@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fragment_AfricanBigHeadedAnt_Thorax
   graphicGO: {fileID: 5873005190610393758}
-  destroyedFragmentColor: {r: 0.42745098, g: 0, b: 0, a: 1}
+  destroyedFragmentColor: {r: 0.6039216, g: 0.19607843, b: 0.19607843, a: 0.7647059}
   healthIndicator: {fileID: 4498893449156508615}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
