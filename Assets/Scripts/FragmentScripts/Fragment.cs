@@ -67,15 +67,18 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         fragmentList.Add(this);
     }
 
-    public void FreeFragment()
+    //Method to remove fragment; nothing needs to be changed in subclasses for this (only flesh overrides it with an empty method)
+    public virtual void TryFreeFragment()
     {
+        //If there is any surrounding flesh, the method stops here
+        if(belongedInventory.IsAdjacentFlesh(this)) return;
+
+        //Otherwise, make this fragment belong to the player
         belongedInventory = FindFirstObjectByType<InventoryManager>();
         isFree = true;
 
         //Change parent transform to inventory system parent transform
         transform.SetParent(belongedInventory.inventorySystemParentTransform);
-
-        //TODO: Possibly set sibling index here as well
     }
 
     void OnEnable()
@@ -90,9 +93,13 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        FreeFragment();//DELETE LATER
-        //Make sure this fragment is free
-        if(!isFree) return;
+        //Try to free this fragment if it is not already free
+        if(!isFree)
+        {
+            TryFreeFragment();
+        }
+
+        if(!isFree) return; //If still not free, return
 
         isBeingDragged = true;
 
@@ -367,5 +374,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 i--;
             }
         }
+    }
+
+    public virtual bool IsFlesh()
+    {
+        return false;
     }
 }

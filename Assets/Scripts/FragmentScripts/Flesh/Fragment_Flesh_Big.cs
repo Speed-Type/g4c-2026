@@ -16,9 +16,18 @@ public class Fragment_Flesh_Big : Fragment
         displayBodyPart = "";
         displayCommonName = "";
         displayScientificName = "";
-        displayDescription = "You need it to grow.";
+        displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
     }
 
+    public override bool IsFlesh()
+    {
+        return true;
+    }
+
+    public override void TryFreeFragment()
+    {
+        //Do nothing; this fragment should not be movable to begin with
+    }
     public override void Die()
     {
         //Add flesh to player

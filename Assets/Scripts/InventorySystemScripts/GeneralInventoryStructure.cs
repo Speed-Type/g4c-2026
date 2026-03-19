@@ -76,6 +76,30 @@ public class GeneralInventoryStructure : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(inventoryLayoutGroupGO.GetComponent<RectTransform>());
     }
 
+    //Method to check for adjacent flesh for a fragment
+    public bool IsAdjacentFlesh(Fragment fragmentToCheck)
+    {
+        //Loop through this fragment's occupied positions
+        for(int row = 0; row < fragmentToCheck.shape.GetLength(0); row++)
+        {
+            for(int col = 0; col < fragmentToCheck.shape.GetLength(1); col++)
+            {
+                //Check that this part of the fragment's shape is actually occupied
+                if(fragmentToCheck.shape[row,col] == true)
+                {
+                    //Check adjacent squares for flesh
+                    if(row - 1 >= 0 && inventorySlotArray[row-1,col].GetFragment() != null && inventorySlotArray[row-1,col].GetFragment().IsFlesh()) return true;
+                    if(col - 1 >= 0 && inventorySlotArray[row,col-1].GetFragment() != null && inventorySlotArray[row,col-1].GetFragment().IsFlesh()) return true;
+                    if(row + 1 < inventorySlotArray.GetLength(0) && inventorySlotArray[row+1,col].GetFragment() != null && inventorySlotArray[row+1,col].GetFragment().IsFlesh()) return true;
+                    if(col + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[row,col+1].GetFragment() != null && inventorySlotArray[row,col+1].GetFragment().IsFlesh()) return true;                
+                }
+            }
+        }
+
+        //If no flesh found, return false
+        return false;
+    }
+
     //Method to check if the fragment can be placed at these coordinates
     protected bool CanPlaceFragment(Fragment fragment, int originRow, int originCol)
     {
@@ -276,5 +300,4 @@ public class GeneralInventoryStructure : MonoBehaviour
             }
         }
     }
-    
 }
