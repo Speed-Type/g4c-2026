@@ -18,7 +18,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     public float inventorySlotSize; //Note that this variable needs to be public for Fragment class access
 
     //Inventory logic
-    private InventorySlot[,] inventorySlotArray;
+    protected InventorySlot[,] inventorySlotArray;
 
     protected virtual void Awake()
     {
@@ -77,7 +77,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to check if the fragment can be placed at these coordinates
-    private bool CanPlaceFragment(Fragment fragment, int originRow, int originCol)
+    protected bool CanPlaceFragment(Fragment fragment, int originRow, int originCol)
     {
         //Check that x and y are within bounds
         if(originRow < 0 || originCol < 0)

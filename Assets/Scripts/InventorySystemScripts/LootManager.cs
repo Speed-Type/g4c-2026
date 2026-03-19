@@ -11,6 +11,8 @@ public class LootManager : GeneralInventoryStructure
     [Header("Loot Manager Settings")]
     public int maxFragmentPositioningAttempts; //Used in randomly placing fragments
     public GameObject[] fragmentList; //List to hold all the different fragments
+    [Tooltip("Should be placed in order of priority to spawn (Largest in grid size to smallest)")]
+    public GameObject[] fleshList; //List of fleshes to attempt to spawn
 
     //Private variables for internal logic
     private InventoryManager inventoryManager;
@@ -20,8 +22,8 @@ public class LootManager : GeneralInventoryStructure
     {
         public int numRows;
         public int numCols;
-        public int minLoot;
-        public int maxLoot;
+        public int minLoot, maxLoot;
+        public float scavengeFleshChance;
         public int[] ratioList;
 
         private int totalRatio;
@@ -68,6 +70,7 @@ public class LootManager : GeneralInventoryStructure
                 bugLoot.numCols = 5;
                 bugLoot.minLoot = 2;
                 bugLoot.maxLoot = 4;
+                bugLoot.scavengeFleshChance = .3f;
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Abdomen, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Antenna, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 1);
@@ -119,9 +122,7 @@ public class LootManager : GeneralInventoryStructure
             bool placementSuccessful = false;
             int numTriesSoFar = 0;
             while(!placementSuccessful && numTriesSoFar < maxFragmentPositioningAttempts)
-            {
-                //TODO: ATTEMPT PLACEMENT
-                
+            {                
                 //Rotate random number of times
                 for(int j = 0; j < Random.Range(0, 3); j++)
                 {
@@ -161,7 +162,46 @@ public class LootManager : GeneralInventoryStructure
             }
         }
 
-        //TODO: Generate flesh
+        //Loop through inventory slots
+        for(int row = 0; row < gridNumRows; row++)
+        {
+            for(int col = 0; col < gridNumCols; col++)
+            {
+                //For every empty inventory slot
+                if(inventorySlotArray[row,col].GetFragment() == null)
+                {
+                    //Random chance to make it a flesh
+                    //TODO: Make battle loot better than scavenge loot
+                    if(Random.Range(0f,1f) < bugLoot.scavengeFleshChance)
+                    {
+                        //Loop through possible fleshes to spawn and spawn the first one possible
+                        for(int j = 0; j < fleshList.Length; j++)
+                        {
+                            //Make new flesh
+                            Fragment newFlesh = Instantiate(fleshList[j], inventorySystemParentTransform).GetComponent<Fragment>();
+
+                            //Rotate a random number of times
+                            for(int k = 0; k < Random.Range(0,3); k++)
+                            {
+                                newFlesh.Rotate();
+                            }
+
+                            //Try to snap to grid
+                            if(SnapToGrid(newFlesh, row, col))
+                            {
+                                //If successful, break out of loop
+                                j = fleshList.Length + 67;
+                            }
+                            else
+                            {
+                                //If not, destroy this attempt at spawn
+                                Destroy(newFlesh.gameObject);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         //Graphically, randomize the tiling offset of the background
         lootSystemBackground.material.mainTextureOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f,1f));

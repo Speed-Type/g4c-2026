@@ -84,6 +84,20 @@ public class TooltipManager : MonoBehaviour
         tooltipCanvasGroup.alpha = end;
     }
 
+    //Helper method to set the text of one chunk of the tooltip
+    private void SetSingleTooltipText(TextMeshProUGUI tmp, string text)
+    {
+        if(text.Equals(""))
+        {
+            tmp.gameObject.SetActive(false);
+        }
+        else
+        {
+            tmp.gameObject.SetActive(true);
+            tmp.text = text;
+        }
+    }
+
     //Shows tooltip with set text for title, subtitle, and description
     private void ShowTooltip(string title, string subtitle1, string subtitle2, string durability, string description)
     {
@@ -97,15 +111,11 @@ public class TooltipManager : MonoBehaviour
         }
 
         //Set texts
-        tooltipTitle.gameObject.SetActive(true);
-        tooltipSubtitle1.gameObject.SetActive(true);
-        tooltipSubtitle2.gameObject.SetActive(true);
-        tooltipDurabilitySubtitle.gameObject.SetActive(true);
-        tooltipTitle.text = title;
-        tooltipSubtitle1.text = subtitle1;
-        tooltipSubtitle2.text = subtitle2;
-        tooltipDurabilitySubtitle.text = durability;
-        tooltipDescription.text = description;
+        SetSingleTooltipText(tooltipTitle, title);
+        SetSingleTooltipText(tooltipSubtitle1, subtitle1);
+        SetSingleTooltipText(tooltipSubtitle2, subtitle2);
+        SetSingleTooltipText(tooltipDurabilitySubtitle, durability);
+        SetSingleTooltipText(tooltipDescription, description);
 
         //If we're going from object to object, don't have to delay or fade in/out
         if(tooltipParentRectTransform.gameObject.activeSelf)
@@ -124,34 +134,8 @@ public class TooltipManager : MonoBehaviour
     //Shows tooltip with simple text
     private void ShowTooltip(string simpleText)
     {
-        //Necessary for grace period between shows/hides
-        if(hideTooltipCoroutine != null)
-        {
-            StopCoroutine(hideTooltipCoroutine);
-            hideTooltipCoroutine = null;
-
-            tooltipCanvasGroup.alpha = 1;
-        }
-
-        //Set texts
-        tooltipTitle.gameObject.SetActive(false);
-        tooltipSubtitle1.gameObject.SetActive(false);
-        tooltipSubtitle2.gameObject.SetActive(false);
-        tooltipDurabilitySubtitle.gameObject.SetActive(false);
-        tooltipDescription.text = simpleText;
-
-        //If we're going from object to object, don't have to delay or fade in/out
-        if(tooltipParentRectTransform.gameObject.activeSelf)
-        {
-            return;
-        }
-
-        if(showTooltipCoroutine != null)
-        {
-            StopCoroutine(showTooltipCoroutine);
-        }
-
-        showTooltipCoroutine = StartCoroutine(ShowTooltipDelayed(0));
+        //Just call multi-parameter function with every other field but description empty
+        ShowTooltip("", "", "", "", simpleText);
     }
 
     //Hides tooltip
