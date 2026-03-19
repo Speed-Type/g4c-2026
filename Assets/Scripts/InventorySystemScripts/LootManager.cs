@@ -97,14 +97,6 @@ public class LootManager : GeneralInventoryStructure
     //Method to generate new loot
     public void GenerateLoot(LootTables lootEnum)
     {
-        //FIRST, Delete all previous fragments
-        for(int i = 0; i < ownedFragments.Count; i++)
-        {
-            Destroy(ownedFragments[i].gameObject);
-            ownedFragments.RemoveAt(i);
-            i--;
-        }
-
         //Get actual loot info and probabilities
         BugLoot bugLoot = LootEnumToBugLoot(lootEnum);
 

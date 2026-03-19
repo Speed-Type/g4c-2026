@@ -9,6 +9,8 @@ public class Fragment_AfricanBigHeadedAnt_Antenna : Fragment
             {true, true}
         };
 
+        maxHealth = 2;
+
         displayBugGroup = "Ant";
         displayBodyPart = "Antenna";
         displayCommonName = "African Big-Headed Ant";

@@ -9,6 +9,8 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
             {true, true}
         };
 
+        maxHealth = 2;
+
         displayBugGroup = "Ant";
         displayBodyPart = "Leg";
         displayCommonName = "African Big-Headed Ant";

@@ -280,6 +280,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Initialize the list of all buttons
         allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
+    
+        //Reset Fragment class's static variable
+        Fragment.ResetFragmentList();
     }
 }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -17,8 +18,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected string displayDescription;
 
     [Header("Fragment Data")]
-    public int maxHealth;
-    public int currentHealth;
+    protected int maxHealth;
+    protected int currentHealth;
 
     [Header("GameObject with Sprite for this fragment's graphics")]
     public GameObject graphicGO;
@@ -35,7 +36,15 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private PlayerInputActions input; //input action controlelr
     private bool isBeingDragged = false;
     private int currentRotation = 0;
-    [HideInInspector] public bool belongsToPlayer;
+    private bool isFree;
+    private bool effectsActive; //Used for effect logic
+    [HideInInspector] public bool isEquipped; //Used for equipped/fragment filtering logic
+    private static List<Fragment> fragmentList;
+
+    public static void ResetFragmentList()
+    {
+        fragmentList = new List<Fragment>();
+    }
 
     void Awake()
     {
@@ -46,14 +55,19 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        belongsToPlayer = false;
+        isFree = false;
+        effectsActive = false;
+        isEquipped = false;
         currentHealth = maxHealth;
+
+        //Add this instance to the fragment list
+        fragmentList.Add(this);
     }
 
     public void FreeFragment()
     {
         belongedInventory = FindFirstObjectByType<InventoryManager>();
-        belongsToPlayer = true;
+        isFree = true;
 
         //Change parent transform to inventory system parent transform
         transform.SetParent(belongedInventory.inventorySystemParentTransform);
@@ -73,8 +87,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        FreeFragment();//DELETE LATER
         //Make sure this fragment is free
-        if(!belongsToPlayer) return;
+        if(!isFree) return;
 
         isBeingDragged = true;
 
@@ -98,7 +113,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnDrag(PointerEventData eventData)
     {
         //Make sure this fragment is free
-        if(!belongsToPlayer) return;
+        if(!isFree) return;
 
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
@@ -106,7 +121,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void OnEndDrag(PointerEventData eventData)
     {
         //Make sure this fragment is free
-        if(!belongsToPlayer) return;
+        if(!isFree) return;
 
         isBeingDragged = false;
 
@@ -202,6 +217,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //The effects of a fragment should be here, as this is called when a fragment is equipped
     public virtual void ActivateEffects()
     {
+        if(effectsActive) return; //Just in case, so as to avoid re-activating effects
+        if(currentHealth <= 0) return; //ActivateEffects only handles effect things when not dead
+        
+        effectsActive = true;
         Debug.Log("Effects activated");
     }
 
@@ -209,6 +228,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Should deactivate the effects of a fragment, as this is called when a fragment is unequipped
     public virtual void DeactivateEffects()
     {
+        if(!effectsActive) return; //Just in case, so as to avoid re-deactivating effects
+        if(currentHealth <= 0) return; //DeactivateEffects only handles effect things when not dead
+
+        effectsActive = false;
         Debug.Log("Effects deactivated");
     }
 
@@ -257,17 +280,55 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         TooltipManager.HideTooltip_Static();
     }
 
-    //TODO
     public void TakeDamage(int damage)
     {
         currentHealth -= damage; //Reduce health
 
-        healthIndicator.fillAmount = Math.Max((float)currentHealth / maxHealth, 0); //Update radial fill indicator
+        //NOTE: The gameobject cancelled is the health indicator, not this fragment itself, since that would cancel every other tween
+        LeanTween.cancel(healthIndicator.gameObject);
+        
+        //Tween update the health indicator fill
+        LeanTween.value(healthIndicator.gameObject, healthIndicator.fillAmount, Math.Max((float)currentHealth / maxHealth, 0), .25f).setEaseOutElastic().setOnUpdate((float val) =>
+        {
+            healthIndicator.fillAmount = val;
+        });
 
         //If dead
         if(currentHealth <= 0)
         {
-            
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        //If effects were already active, deactivate them
+        if(effectsActive)
+        {
+            DeactivateEffects();
+        }
+
+        //TODO: Graphically update
+    }
+
+    //On destroy, remove this item from the fragment list
+    void OnDestroy()
+    {
+        fragmentList.Remove(this);
+    }
+
+    //Method to auto-delete all fragments that are either not free or not equipped
+    public static void FilterFragments()
+    {
+        for(int i = 0; i < fragmentList.Count; i++)
+        {
+            Debug.Log("Fragment 1: " + fragmentList[i].name);
+            if(!fragmentList[i].isFree || !fragmentList[i].isEquipped)
+            {
+                Destroy(fragmentList[i].gameObject); //Fragment is automatically removed from the list, as per OnDestroy() in Fragment
+                Debug.Log("Deleted fragment " + i);
+                i--;
+            }
         }
     }
 }

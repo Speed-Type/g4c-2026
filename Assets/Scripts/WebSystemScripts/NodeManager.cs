@@ -195,6 +195,9 @@ public class NodeManager : MonoBehaviour
         {
             isFirstNode = false;
 
+            //Now, clean up all fragments
+            Fragment.FilterFragments();
+
             //*******HERE, check if the previous node was anything that needs to be replaced upon exit
             if(currentNode.nodeType == NodeTypes.Scavenge)
             {

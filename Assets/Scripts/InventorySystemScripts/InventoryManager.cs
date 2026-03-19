@@ -20,6 +20,7 @@ public class InventoryManager : GeneralInventoryStructure
         base.PlaceFragment(fragment, x, y);
         //Activate fragment's effects
         fragment.ActivateEffects();
+        fragment.isEquipped = true;
     }
 
     //Overridden fragment removal
@@ -28,6 +29,7 @@ public class InventoryManager : GeneralInventoryStructure
         if(base.RemoveFragment(fragment))
         {
             fragment.DeactivateEffects();
+            fragment.isEquipped = false;
         }
 
         return true; //this does nothing
