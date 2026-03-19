@@ -311,22 +311,22 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //TODO: Graphically update
     }
 
-    //On destroy, remove this item from the fragment list
-    void OnDestroy()
-    {
-        fragmentList.Remove(this);
-    }
-
     //Method to auto-delete all fragments that are either not free or not equipped
     public static void FilterFragments()
     {
         for(int i = 0; i < fragmentList.Count; i++)
         {
-            Debug.Log("Fragment 1: " + fragmentList[i].name);
+            if(fragmentList[i] == null)
+            {
+                fragmentList.RemoveAt(i);
+                i--;
+                continue;
+            }
+
             if(!fragmentList[i].isFree || !fragmentList[i].isEquipped)
             {
                 Destroy(fragmentList[i].gameObject); //Fragment is automatically removed from the list, as per OnDestroy() in Fragment
-                Debug.Log("Deleted fragment " + i);
+                fragmentList.RemoveAt(i);
                 i--;
             }
         }
