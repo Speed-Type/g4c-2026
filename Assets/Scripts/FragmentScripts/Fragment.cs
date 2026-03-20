@@ -337,22 +337,20 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    private bool isShowingWouldBeDamage = false;
+    private int wouldBeDamage = 0;
     public void ShowWouldBeDamage(int damage)
     {
-        if(isShowingWouldBeDamage) return;
-
-        isShowingWouldBeDamage = true;
-        UpdateDamageIndicator(Math.Max((float)(currentHealth - damage) / maxHealth, 0));
+        wouldBeDamage += damage;
+        UpdateDamageIndicator(Math.Max((float)(currentHealth - wouldBeDamage) / maxHealth, 0));
     }
 
     public static void HideWouldBeDamage()
     {
         foreach(Fragment fragment in fragmentList)
         {
-            if(!fragment.isFree && fragment.isShowingWouldBeDamage)
+            if(!fragment.isFree && fragment.wouldBeDamage > 0)
             {
-                fragment.isShowingWouldBeDamage = false;
+                fragment.wouldBeDamage = 0;
                 fragment.UpdateDamageIndicator(Math.Max((float)fragment.currentHealth / fragment.maxHealth, 0));
             }
         }
