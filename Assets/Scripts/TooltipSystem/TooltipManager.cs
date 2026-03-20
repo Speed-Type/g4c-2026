@@ -52,7 +52,7 @@ public class TooltipManager : MonoBehaviour
         float height = tooltipBackground.sizeDelta.y;
 
         screenPoint.x = Mathf.Min(screenPoint.x, Screen.width - width);
-        screenPoint.y = Mathf.Min(screenPoint.y, Screen.height - height);
+        screenPoint.y = Mathf.Max(screenPoint.y, height);
 
         tooltipParentRectTransform.position = screenPoint;
     }
