@@ -37,6 +37,9 @@ public class Fragment_Flesh_Small : Fragment
 
     public override void Die()
     {
+        if(isDead) return; //only want to call this once
+        isDead = true;
+        
         //Add flesh to player
         RoguelikeGameplayController.AddFlesh(1);
 

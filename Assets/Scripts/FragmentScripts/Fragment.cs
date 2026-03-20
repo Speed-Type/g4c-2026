@@ -385,8 +385,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         });
     }
 
+    protected bool isDead = false;
     public virtual void Die()
     {
+        if(isDead) return; //only want to call this once
+        isDead = true;
+
         //If effects were already active, deactivate them
         if(effectsActive)
         {

@@ -17,7 +17,6 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
     [SerializeField] private GameObject lootSystemGO;
-    [SerializeField] private GameObject biteGO;
     [SerializeField] private GameObject nodeMapGO;
     
     [Header("Player Option Buttons")]
@@ -29,6 +28,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private float playerOptionButtonShrunkenSize;
     [SerializeField] private float playerOptionButtonShrinkSpeed;
     private Vector2 playerOptionButtonDefaultDimensions;
+
+    [Header("References for Bite System")]
+    [SerializeField] private GameObject biteGO;
+    [SerializeField] private RectTransform biteHomePosition;
 
     [Header("References for Placement of Inventory and Loot Systems")]
     [SerializeField] private Transform hiddenPosition;
@@ -311,6 +314,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static void ReduceBites()
     {
         instance.remainingBites--;
+    }
+
+    public static void ReloadBite_Static()
+    {
         instance.ReloadBite();
     }
 
@@ -319,7 +326,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         if(remainingBites > 0)
         {
-            //TODO: RESET POSITION
+            biteGO.GetComponent<RectTransform>().position = biteHomePosition.position; //Reset position
             biteGO.SetActive(true);
         }
         else

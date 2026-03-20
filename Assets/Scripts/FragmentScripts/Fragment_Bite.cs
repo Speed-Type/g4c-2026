@@ -91,6 +91,8 @@ public class Fragment_Bite : Fragment
             RoguelikeGameplayController.ReduceBites(); //if successful, have the rg gameplay controller process bites remaining
         }
 
+        RoguelikeGameplayController.ReloadBite_Static();
+
         //Clear inventory highlight
         belongedInventory.ClearBiteHighlight(); //TODO: make sure this clears the bite's unique higlights too
 
