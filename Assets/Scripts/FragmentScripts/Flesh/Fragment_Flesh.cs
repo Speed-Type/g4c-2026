@@ -14,8 +14,6 @@ public class Fragment_Flesh : Fragment
 
     protected override void Awake()
     {
-        base.Awake();
-
         //Set dummy values, since this is derived from fragment
         maxHealth = 1;
         displayBugGroup = "Flesh";
@@ -23,6 +21,8 @@ public class Fragment_Flesh : Fragment
         displayCommonName = "";
         displayScientificName = "";
         displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
+        
+        base.Awake();
 
         Pulse(); //Start idle pulsating
     }
