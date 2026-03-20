@@ -300,4 +300,48 @@ public class GeneralInventoryStructure : MonoBehaviour
             }
         }
     }
+
+    //Method to put all of the biting together
+    //Returns true if successful; false if not
+    public bool TryBite(Fragment fragment, int damage)
+    {
+        Vector2Int targetPosition = GetGridPosition(fragment);
+        int rowNum = targetPosition.x;
+        int colNum = targetPosition.y;
+        
+        //TODO: Check that this bite is in valid bounds
+        //(return false when invalid bound found)
+        if(rowNum < 0) return false;
+        if(colNum < 0) return false;
+        if(rowNum + fragment.shape.GetLength(0) > inventorySlotArray.GetLength(0)) return false;
+        if(colNum + fragment.shape.GetLength(1) > inventorySlotArray.GetLength(1)) return false;
+
+        //Deal damage to each necessary spot
+        //Functionally like PlaceFragment, except it deals damage
+        //Loop through necessary spots, relative to x and y, and deal damage to fragments
+        for(int i = 0; i < fragment.shape.GetLength(0); i++)
+        {
+            for(int j = 0; j < fragment.shape.GetLength(1); j++)
+            {
+                if(fragment.shape[i,j] == true && inventorySlotArray[rowNum + i, colNum + j].GetFragment() != null)
+                {
+                    inventorySlotArray[rowNum + i, colNum + j].GetFragment().TakeDamage(damage);
+                }
+            }
+        }
+
+        //TODO: Make pretty graphics here
+
+        return true;
+    }
+
+    public void BiteHighlight(Fragment fragment)
+    {
+        //MAKE IT FUNCTIONALLY LIKE HIGHLIGHT, BUT INSTEAD SHOWING THE VALUES OF WOULD-BE HEALTH DRAIN TOO
+    }
+
+    public void ClearBiteHighlight()
+    {
+        //CAN PROBABLY CALL CLEARHIGHLIGHT HERE TOO, BUT ALSO NEED TO UN-SHOW THE VALUES OF WOULD-BE HEALTH DRAIN
+    }
 }

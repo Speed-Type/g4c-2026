@@ -7,14 +7,9 @@ using System.Collections;
 
 public class Fragment_Bite : Fragment
 {
+    private int damage;
     public Fragment_Bite()
     {
-        shape = new bool[,] //default bite
-        {
-            {true, true},
-            {true, true}
-        };
-
         maxHealth = 999;
 
         displayBugGroup = "";
@@ -29,8 +24,6 @@ public class Fragment_Bite : Fragment
     //Separate Awake method
     protected override void Awake() //SHOULD HIDE THE FRAGMENT BASE CLASS'S AWAKE
     {
-        //STILL CHANGING
-
         //Setup input
         input = new PlayerInputActions();
         input.UI.Rotate.performed += Rotate;
@@ -47,6 +40,13 @@ public class Fragment_Bite : Fragment
 
         ////Add this instance to the fragment list
         //fragmentList.Add(this);
+
+        //Set bite
+        UpdateBite(new bool[,]
+        {
+            {true, true},
+            {true, true}
+        }, 1);
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -66,7 +66,7 @@ public class Fragment_Bite : Fragment
         Shake(15f, 0.3f);
 
         //Start highlight coroutine
-        StartCoroutine(TimedHighlightCoroutine());
+        StartCoroutine(TimedBiteHighlightCoroutine());
 
         // //Hide tooltip
         // TooltipManager.HideTooltip_Static();
@@ -103,6 +103,7 @@ public class Fragment_Bite : Fragment
         isBeingDragged = false;
 
         //TODO: ADD THE ACTUAL BITING HERE
+        belongedInventory.TryBite(this, damage);
 
         // //Snap to grid
         // if(belongedInventory.SnapToGrid(this))
@@ -112,7 +113,7 @@ public class Fragment_Bite : Fragment
         // }
 
         //Clear inventory highlight
-        belongedInventory.ClearHighlight();
+        belongedInventory.ClearBiteHighlight(); //TODO: make sure this clears the bite's unique higlights too
     }
 
     public override void Rotate()
@@ -145,8 +146,21 @@ public class Fragment_Bite : Fragment
 
 
     //METHODS UNIQUE TO BIT
-    public void UpdateShape(bool[,] newShape)
+    public void UpdateBite(bool[,] newShape, int newDamage)
     {
         shape = newShape;
+        damage = newDamage;
+    }
+
+    private IEnumerator TimedBiteHighlightCoroutine()
+    {
+        belongedInventory.BiteHighlight(this); //call highlight
+
+        yield return new WaitForSeconds(.15f); //wait; Can adjust this timing as necessary
+
+        if(isBeingDragged)
+        {
+            StartCoroutine(TimedBiteHighlightCoroutine());
+        }
     }
 }
