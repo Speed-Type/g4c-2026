@@ -79,6 +79,12 @@ public class GeneralInventoryStructure : MonoBehaviour
     //Method to check for adjacent flesh for a fragment
     public bool IsAdjacentFlesh(Fragment fragmentToCheck)
     {
+        //Get position of fragment
+        Vector2Int gridPosition = GetGridPosition(fragmentToCheck); //x corresponds to row number, y corresponds to col number
+        
+        int rowOrigin = gridPosition.x;
+        int colOrigin = gridPosition.y;
+
         //Loop through this fragment's occupied positions
         for(int row = 0; row < fragmentToCheck.shape.GetLength(0); row++)
         {
@@ -88,10 +94,12 @@ public class GeneralInventoryStructure : MonoBehaviour
                 if(fragmentToCheck.shape[row,col] == true)
                 {
                     //Check adjacent squares for flesh
-                    if(row - 1 >= 0 && inventorySlotArray[row-1,col].GetFragment() != null && inventorySlotArray[row-1,col].GetFragment().IsFlesh()) return true;
-                    if(col - 1 >= 0 && inventorySlotArray[row,col-1].GetFragment() != null && inventorySlotArray[row,col-1].GetFragment().IsFlesh()) return true;
-                    if(row + 1 < inventorySlotArray.GetLength(0) && inventorySlotArray[row+1,col].GetFragment() != null && inventorySlotArray[row+1,col].GetFragment().IsFlesh()) return true;
-                    if(col + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[row,col+1].GetFragment() != null && inventorySlotArray[row,col+1].GetFragment().IsFlesh()) return true;                
+                    int rowToCheck = row + rowOrigin;
+                    int colToCheck = col + colOrigin;
+                    if(rowToCheck - 1 >= 0 && inventorySlotArray[rowToCheck-1,colToCheck].GetFragment() != null && inventorySlotArray[rowToCheck-1,colToCheck].GetFragment().IsFlesh()) return true;
+                    if(colToCheck - 1 >= 0 && inventorySlotArray[rowToCheck,colToCheck-1].GetFragment() != null && inventorySlotArray[rowToCheck,colToCheck-1].GetFragment().IsFlesh()) return true;
+                    if(rowToCheck + 1 < inventorySlotArray.GetLength(0) && inventorySlotArray[rowToCheck+1,colToCheck].GetFragment() != null && inventorySlotArray[rowToCheck+1,colToCheck].GetFragment().IsFlesh()) return true;
+                    if(colToCheck + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment() != null && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment().IsFlesh()) return true;                
                 }
             }
         }
@@ -309,7 +317,6 @@ public class GeneralInventoryStructure : MonoBehaviour
         int rowNum = targetPosition.x;
         int colNum = targetPosition.y;
         
-        //TODO: Check that this bite is in valid bounds
         //(return false when invalid bound found)
         if(rowNum < 0) return false;
         if(colNum < 0) return false;
