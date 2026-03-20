@@ -31,13 +31,13 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Internal logic
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
     [HideInInspector] public bool isOnEdge;
-    private RectTransform rectTransform;
-    private Canvas canvas;
-    private RectTransform canvasRectTransform;
+    protected RectTransform rectTransform;
+    protected Canvas canvas;
+    protected RectTransform canvasRectTransform;
     [HideInInspector] public GeneralInventoryStructure belongedInventory;
-    private PlayerInputActions input; //input action controlelr
-    private bool isBeingDragged = false;
-    private int currentRotation = 0;
+    protected PlayerInputActions input; //input action controller
+    protected bool isBeingDragged = false;
+    protected int currentRotation = 0;
     private bool isFree;
     private bool effectsActive; //Used for effect logic
     [HideInInspector] public bool isEquipped; //Used for equipped/fragment filtering logic
@@ -48,7 +48,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         fragmentList = new List<Fragment>();
     }
 
-    void Awake()
+    protected virtual void Awake()
     {
         //Setup input
         input = new PlayerInputActions();
@@ -91,7 +91,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         input.Disable();
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public virtual void OnBeginDrag(PointerEventData eventData)
     {
         //Try to free this fragment if it is not already free
         if(!isFree)
@@ -123,7 +123,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Actual dragging functionality
-    public void OnDrag(PointerEventData eventData)
+    public virtual void OnDrag(PointerEventData eventData)
     {
         //Make sure this fragment is free
         if(!isFree) return;
@@ -146,7 +146,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         rectTransform.anchoredPosition = newPosition;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public virtual void OnEndDrag(PointerEventData eventData)
     {
         //Make sure this fragment is free
         if(!isFree) return;
@@ -176,7 +176,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Method to rotate 90 degrees clockwise
-    public void Rotate()
+    public virtual void Rotate()
     {
         //Need to transpose matrix and then reverse each column
         int numRows = shape.GetLength(0);
@@ -265,7 +265,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     //Note that the current number of Shake calls is 10; can be adjusted by changing this variable
     private int totalCalls = 10;
-    private void Shake(float intensity, float duration, int callsSoFar = 0, float previousRotation = 0f)
+    protected void Shake(float intensity, float duration, int callsSoFar = 0, float previousRotation = 0f)
     {
         if(callsSoFar < totalCalls)
         {
@@ -286,7 +286,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    IEnumerator TimedHighlightCoroutine()
+    protected IEnumerator TimedHighlightCoroutine()
     {
         belongedInventory.Highlight(this); //call highlight
 
@@ -299,7 +299,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Method for starting tooltip hovering
-    public void OnPointerEnter(PointerEventData eventData)
+    public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if(isBeingDragged) return; //This should not run if it's being dragged
 
@@ -318,7 +318,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Method for stopping tooltip hovering
-    public void OnPointerExit(PointerEventData eventData)
+    public virtual void OnPointerExit(PointerEventData eventData)
     {
         TooltipManager.HideTooltip_Static();
     }
