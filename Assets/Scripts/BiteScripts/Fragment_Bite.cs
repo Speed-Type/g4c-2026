@@ -62,7 +62,7 @@ public class Fragment_Bite : Fragment
             .id;
         
         //Also scale up a teense
-        LeanTween.scale(rectTransform, Vector3.one * 1.05f, 0.1f);
+        LeanTween.scale(rectTransform, Vector3.one * 1.1f, 0.1f);
 
         //Start highlight coroutine
         StartCoroutine(TimedBiteHighlightCoroutine());
@@ -103,26 +103,31 @@ public class Fragment_Bite : Fragment
             RoguelikeGameplayController.ReduceBites(); //if successful, have the rg gameplay controller process bites remaining
         }
 
-        //Do visual for bite
-        graphicImage.sprite = closedBiteSprite;
-        //TODO: SPWAN PARTICLES
-        LeanTween.delayedCall(.1f, () =>
-        {
-            //And then reposition
-            RoguelikeGameplayController.ReloadBite_Static();
-            graphicImage.sprite = openBiteSprite;
-            isBiting = false;
-        });
-
-        //Clear inventory highlight
-        belongedInventory.ClearBiteHighlight();
-
         //Stop shake
         LeanTween.cancel(shakeTween);
         rectTransform.rotation = Quaternion.identity; //Reset rotation
 
         //Reset scale
         LeanTween.scale(rectTransform, Vector3.one, 0.1f);
+
+        //Clear inventory highlight
+        belongedInventory.ClearBiteHighlight();
+
+        //Now do visual for bite
+
+        graphicImage.sprite = closedBiteSprite; //change sprite
+        //TODO: SPWAN PARTICLES
+        LeanTween.rotateZ(gameObject, 12f, 0.05f)
+            .setEaseShake()
+            .setLoopPingPong(2)
+            .setOnComplete(() =>
+            {
+                //And then reposition
+                RoguelikeGameplayController.ReloadBite_Static();
+                rectTransform.rotation = Quaternion.identity; //Reset rotation
+                graphicImage.sprite = openBiteSprite;
+                isBiting = false;
+            });
     }
 
     public override void Rotate()

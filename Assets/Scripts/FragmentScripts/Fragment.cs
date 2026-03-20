@@ -146,7 +146,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void OnDrag(PointerEventData eventData)
     {
         //Make sure this fragment is free
-        if(!isFree) return;
+        if(!isFree)
+        {
+            //Do visual indicator that it isn't free
+            Shake();
+            return;
+        }
 
         //Do the actual movement (with calculations so that it stays within screen bounds)
         Vector2 newPosition = rectTransform.anchoredPosition + eventData.delta / canvas.scaleFactor;
