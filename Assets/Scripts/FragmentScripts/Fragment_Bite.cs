@@ -39,6 +39,7 @@ public class Fragment_Bite : Fragment
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         canvasRectTransform = canvas.GetComponent<RectTransform>();
+        belongedInventory = FindFirstObjectByType<LootManager>();
         //isFree = false;
         //effectsActive = false;
         //isEquipped = false;
