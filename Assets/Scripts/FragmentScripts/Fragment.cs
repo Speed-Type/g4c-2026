@@ -326,21 +326,47 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public void TakeDamage(int damage)
     {
         currentHealth -= damage; //Reduce health
-
-        //NOTE: The gameobject cancelled is the health indicator, not this fragment itself, since that would cancel every other tween
-        LeanTween.cancel(healthIndicator.gameObject);
         
         //Tween update the health indicator fill
-        LeanTween.value(healthIndicator.gameObject, healthIndicator.fillAmount, Math.Max((float)currentHealth / maxHealth, 0), .25f).setEaseOutElastic().setOnUpdate((float val) =>
-        {
-            healthIndicator.fillAmount = val;
-        });
+        UpdateDamageIndicator(Math.Max((float)currentHealth / maxHealth, 0));
 
         //If dead
         if(currentHealth <= 0)
         {
             Die();
         }
+    }
+
+    private bool isShowingWouldBeDamage = false;
+    public void ShowWouldBeDamage(int damage)
+    {
+        if(isShowingWouldBeDamage) return;
+
+        isShowingWouldBeDamage = true;
+        UpdateDamageIndicator(Math.Max((float)(currentHealth - damage) / maxHealth, 0));
+    }
+
+    public static void HideWouldBeDamage()
+    {
+        foreach(Fragment fragment in fragmentList)
+        {
+            if(!fragment.isFree && fragment.isShowingWouldBeDamage)
+            {
+                fragment.isShowingWouldBeDamage = false;
+                fragment.UpdateDamageIndicator(Math.Max((float)fragment.currentHealth / fragment.maxHealth, 0));
+            }
+        }
+    }
+    
+    public void UpdateDamageIndicator(float fillVal)
+    {
+        //NOTE: The gameobject cancelled is the health indicator, not this fragment itself, since that would cancel every other tween
+        LeanTween.cancel(healthIndicator.gameObject);
+
+        LeanTween.value(healthIndicator.gameObject, healthIndicator.fillAmount, fillVal, .2f).setEaseOutElastic().setOnUpdate((float val) =>
+        {
+            healthIndicator.fillAmount = val;
+        });
     }
 
     public virtual void Die()

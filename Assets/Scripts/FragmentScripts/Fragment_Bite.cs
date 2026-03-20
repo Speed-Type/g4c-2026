@@ -145,7 +145,7 @@ public class Fragment_Bite : Fragment
 
 
 
-    //METHODS UNIQUE TO BIT
+    //METHODS UNIQUE TO BITE
     public void UpdateBite(bool[,] newShape, int newDamage)
     {
         shape = newShape;
@@ -154,7 +154,7 @@ public class Fragment_Bite : Fragment
 
     private IEnumerator TimedBiteHighlightCoroutine()
     {
-        belongedInventory.BiteHighlight(this); //call highlight
+        belongedInventory.BiteHighlight(this, damage); //call highlight
 
         yield return new WaitForSeconds(.15f); //wait; Can adjust this timing as necessary
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -343,7 +344,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Functionally like highlight, but a different color, and also shows would-be damage dealt to fragments
-    public void BiteHighlight(Fragment fragment)
+    public void BiteHighlight(Fragment fragment, int damage)
     {
         Vector2Int gridPosition = GetGridPosition(fragment);
         int rowOrigin = gridPosition.x;
@@ -358,7 +359,7 @@ public class GeneralInventoryStructure : MonoBehaviour
         }
 
         //De-highlight all positions
-        ClearHighlight();
+        ClearBiteHighlight();
 
         //Loop through necessary highlighted positions and highlight as needed
         for(int row = 0; row < fragment.shape.GetLength(0); row++)
@@ -382,6 +383,13 @@ public class GeneralInventoryStructure : MonoBehaviour
                         //Red
                         inventorySlotArray[actualRow, actualCol].HighlightInvalid();
                     }
+
+                    //Show would-be damage
+                    Fragment currentFragment = inventorySlotArray[actualRow, actualCol].GetFragment();
+                    if(currentFragment != null)
+                    {
+                        currentFragment.ShowWouldBeDamage(damage);
+                    }
                 }
             }
         }
@@ -392,6 +400,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     {
         ClearHighlight(); //Clears the color
 
-        //TODO: UN-SHOW THE VALUES OF WOULD-BE HEALTH DRAIN
+        //Un-show the values of would-be health drain
+        Fragment.HideWouldBeDamage();
     }
 }
