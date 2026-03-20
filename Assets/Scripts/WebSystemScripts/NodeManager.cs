@@ -24,6 +24,8 @@ public class NodeManager : MonoBehaviour
     [Header("Web Animations Timing")]
     public static float playerTravelAnimTime = 1f;
 
+    public static bool isMovingNodes = false;
+
     public void GenerateWeb()
     {
         //Set Node's NodeManager
@@ -193,6 +195,9 @@ public class NodeManager : MonoBehaviour
     {
         if(isFirstNode || currentNode.HasNode(nodeToVisit))
         {
+            if(isMovingNodes) return false; //If already mid-node move, set it so that a node can't be selected
+            isMovingNodes = true;
+
             isFirstNode = false;
 
             //Now, clean up all fragments
@@ -219,12 +224,15 @@ public class NodeManager : MonoBehaviour
     private void UpdatePlayerMarker()
     {
         playerMarkerGO.transform.SetAsLastSibling();
-        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime).setEase(LeanTweenType.easeInOutQuad);
+        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
+            .setEase(LeanTweenType.easeInOutQuad);
     }
 
     void Start()
     {
         GenerateWeb();
+
+        isMovingNodes = false;
     }
 }
 

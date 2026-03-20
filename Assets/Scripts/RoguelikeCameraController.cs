@@ -139,6 +139,7 @@ public class RoguelikeCameraController : MonoBehaviour
             }, defaultCloudColor, new Color(0, 0, 0, 0), cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
             {
                 cloudTransitionGO.SetActive(false);
+                NodeManager.isMovingNodes = false;
             });
         });
     }
