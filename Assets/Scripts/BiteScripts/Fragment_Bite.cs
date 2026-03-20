@@ -116,7 +116,13 @@ public class Fragment_Bite : Fragment
         //Now do visual for bite
 
         graphicImage.sprite = closedBiteSprite; //change sprite
-        //TODO: SPWAN PARTICLES
+
+        //Spawn particles
+        GameObject newParticles = Instantiate(deathParticles, transform.parent.transform);
+        newParticles.GetComponent<RectTransform>().position = rectTransform.position;
+        newParticles.transform.SetAsFirstSibling(); //Move under the bite
+        
+        //Tween crunch
         LeanTween.rotateZ(gameObject, 12f, 0.05f)
             .setEaseShake()
             .setLoopPingPong(2)
