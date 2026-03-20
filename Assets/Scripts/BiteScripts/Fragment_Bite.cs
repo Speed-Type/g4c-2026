@@ -21,20 +21,22 @@ public class Fragment_Bite : Fragment
             {true, true}
         };
 
-        maxHealth = 999;
-
-        displayBugGroup = "";
-        displayBodyPart = "";
-        displayCommonName = "";
-        displayScientificName = "";
-        displayDescription = "";
+        damage = 1;
     }
 
     //OVERRIDDEN/HIDDEN METHODS
 
     //Separate Awake method
-    protected override void Awake() //SHOULD HIDE THE FRAGMENT BASE CLASS'S AWAKE
+    protected override void Awake() //Hides the base class' awake
     {
+        //Initialize dummy values, since this is a fragment
+        maxHealth = 999;
+        displayBugGroup = "";
+        displayBodyPart = "";
+        displayCommonName = "";
+        displayScientificName = "";
+        displayDescription = "";
+
         //Setup input
         input = new PlayerInputActions();
         input.UI.Rotate.performed += Rotate;

@@ -10880,7 +10880,7 @@ GameObject:
   - component: {fileID: 449272006209463556}
   - component: {fileID: 4916343258719778121}
   - component: {fileID: 519192643571807692}
-  - component: {fileID: 7732393482049450752}
+  - component: {fileID: 7732393482049450753}
   m_Layer: 5
   m_Name: DefaultBite
   m_TagString: Untagged
@@ -10888,7 +10888,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7732393482049450752
+--- !u!114 &7732393482049450753
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10897,9 +10897,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7732393482049450751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2c40dd94d744520a69970187c07c93, type: 3}
+  m_Script: {fileID: 11500000, guid: 0a1331a9c58f94b97abfef7522c3c7e0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fragment_Bite
+  m_EditorClassIdentifier: Assembly-CSharp::Bite_Default
   graphicGO: {fileID: 3378642402841122374}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
   healthIndicator: {fileID: 8295546601029374767}

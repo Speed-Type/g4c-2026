@@ -1,27 +1,28 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Fragment_Flesh_Big : Fragment
+public class Fragment_Flesh : Fragment
 {
-    public Fragment_Flesh_Big()
+    public Fragment_Flesh()
     {
         shape = new bool[,]
         {
             {true, true},
             {true, true}
         };
-
-        maxHealth = 1;
-
-        displayBugGroup = "Flesh";
-        displayBodyPart = "";
-        displayCommonName = "";
-        displayScientificName = "";
-        displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
     }
 
     protected override void Awake()
     {
         base.Awake();
+
+        //Set dummy values, since this is derived from fragment
+        maxHealth = 1;
+        displayBugGroup = "Flesh";
+        displayBodyPart = "";
+        displayCommonName = "";
+        displayScientificName = "";
+        displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
 
         Pulse(); //Start idle pulsating
     }
@@ -52,6 +53,14 @@ public class Fragment_Flesh_Big : Fragment
             RoguelikeCameraController.SpawnParticle(transform.position, deathParticles);
             Destroy(this.gameObject);
         });
+    }
+
+    //Just overriding to fix the bug where tooltip appears while flesh is mid-death animation
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        if(isDead) return;
+
+        base.OnPointerEnter(eventData);
     }
     
     //Method to do the graphical pulsating
