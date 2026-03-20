@@ -39,6 +39,7 @@ public class RoguelikeCameraController : MonoBehaviour
     public static float generalDelayBetweenTransitions = 0.25f;
 
     //Internal logic variables
+    private static Canvas canvas;
     private int freeCamIdleRotationDirection = 1;
     private float currentPitch;
     private float currentDistance;
@@ -59,6 +60,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
         input.Player.Look.performed += OnLook;
         input.Player.Zoom.performed += OnZoom;
+
+        //Initialize canvas
+        canvas = FindFirstObjectByType<Canvas>();
 
         //Initialize freecam values
         currentPitch = 0;
@@ -217,16 +221,14 @@ public class RoguelikeCameraController : MonoBehaviour
             //Always look at the target
             transform.LookAt(targetTransform);
         }
+    }
 
-        // //Smoothly adjust rotate
-        // currentPitch = Mathf.SmoothDampAngle(currentPitch, targetPitch, ref pitchVelocity, pitchSmoothTime);
-    
+    public static void SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)
+    {
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, positionToSpawnAt);
 
-        // //Smoothly adjust zoom (this should always be smooth)
-        // currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 5f));
 
-        // //Apply these
-        // Quaternion rotation = Quaternion.Euler(currentPitch, currentYaw, 0);
-        // Vector3 offset = rotation * new Vector3(0, 0, -currentDistance);
+        Instantiate(particleGO, worldPos, Quaternion.identity);
     }
 }

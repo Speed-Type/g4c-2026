@@ -41,9 +41,14 @@ public class Fragment_Flesh_Big : Fragment
         //Add flesh to player
         RoguelikeGameplayController.AddFlesh(4);
 
-        //TODO: Do graphical effect
-
-        Destroy(this.gameObject);
+        //Do graphical effect
+        LeanTween.scale(gameObject, Vector3.one * 1.6f, 0.25f)
+        .setEaseOutBack()
+        .setOnComplete(() =>
+        {
+            RoguelikeCameraController.SpawnParticle(transform.position, deathParticles);
+            Destroy(this.gameObject);
+        });
     }
     
     //Method to do the graphical pulsating

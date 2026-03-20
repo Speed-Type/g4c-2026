@@ -10826,6 +10826,7 @@ MonoBehaviour:
   graphicGO: {fileID: 3378642402841122374}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
   healthIndicator: {fileID: 8295546601029374767}
+  deathParticles: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0

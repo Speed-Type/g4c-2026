@@ -28,6 +28,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [Header("Radial Fill Health Indicator")]
     [SerializeField] private Image healthIndicator;
 
+    [Header("Particle Effects for Fragment OR Flesh Destruction")]
+    [SerializeField] protected GameObject deathParticles;
+
     //Internal logic
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
     [HideInInspector] public bool isOnEdge;
@@ -371,6 +374,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     
     public void UpdateDamageIndicator(float fillVal)
     {
+        if(IsFlesh()) return; //No need to run this for flesh
+
         //NOTE: The gameobject cancelled is the health indicator, not this fragment itself, since that would cancel every other tween
         LeanTween.cancel(healthIndicator.gameObject);
 
