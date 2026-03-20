@@ -248,6 +248,7 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0
+  connectorGO: {fileID: 2740457705585157438, guid: ccb2767bad0354980b68d4f94e042f0a, type: 3}
 --- !u!1 &7968445766005908664
 GameObject:
   m_ObjectHideFlags: 0

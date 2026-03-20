@@ -190,8 +190,10 @@ public class LootManager : GeneralInventoryStructure
                             //Try to snap to grid
                             if(SnapToGrid(newFlesh, row, col))
                             {
-                                //If successful, break out of loop
+                                //If successful, break out of loop and call for attachments
                                 j = fleshList.Length + 67;
+
+                                newFlesh.gameObject.GetComponent<Fragment_Flesh>().GenerateConnectors(row, col);
                             }
                             else
                             {

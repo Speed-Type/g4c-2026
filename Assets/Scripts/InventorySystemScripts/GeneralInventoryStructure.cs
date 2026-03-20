@@ -100,13 +100,25 @@ public class GeneralInventoryStructure : MonoBehaviour
                     if(rowToCheck - 1 >= 0 && inventorySlotArray[rowToCheck-1,colToCheck].GetFragment() != null && inventorySlotArray[rowToCheck-1,colToCheck].GetFragment().IsFlesh()) return true;
                     if(colToCheck - 1 >= 0 && inventorySlotArray[rowToCheck,colToCheck-1].GetFragment() != null && inventorySlotArray[rowToCheck,colToCheck-1].GetFragment().IsFlesh()) return true;
                     if(rowToCheck + 1 < inventorySlotArray.GetLength(0) && inventorySlotArray[rowToCheck+1,colToCheck].GetFragment() != null && inventorySlotArray[rowToCheck+1,colToCheck].GetFragment().IsFlesh()) return true;
-                    if(colToCheck + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment() != null && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment().IsFlesh()) return true;                
+                    if(colToCheck + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment() != null && inventorySlotArray[rowToCheck,colToCheck+1].GetFragment().IsFlesh()) return true;
                 }
             }
         }
 
         //If no flesh found, return false
         return false;
+    }
+
+    //Method to check for adjacent fragments for one single inventory slot (used by flesh for drawing connectors)
+    public Vector4 GetAdjacentFragmentsFromSingleSlot(int row, int col)
+    {
+        Vector4 result = new Vector4();
+        if(row - 1 >= 0 && inventorySlotArray[row-1,col].GetFragment() != null && !inventorySlotArray[row-1,col].GetFragment().IsFlesh()) result.x = 1;
+        if(col - 1 >= 0 && inventorySlotArray[row,col-1].GetFragment() != null && !inventorySlotArray[row,col-1].GetFragment().IsFlesh()) result.y = 1;
+        if(row + 1 < inventorySlotArray.GetLength(0) && inventorySlotArray[row+1,col].GetFragment() != null && !inventorySlotArray[row+1,col].GetFragment().IsFlesh()) result.z = 1;
+        if(col + 1 < inventorySlotArray.GetLength(1) && inventorySlotArray[row,col+1].GetFragment() != null && !inventorySlotArray[row,col+1].GetFragment().IsFlesh()) result.w = 1;
+    
+        return result;
     }
 
     //Method to check if the fragment can be placed at these coordinates
@@ -178,7 +190,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to convert mouse position into grid position, to help with snapping item to array
-    Vector2Int GetGridPosition(Fragment fragment)
+    public Vector2Int GetGridPosition(Fragment fragment)
     {
         //Calculate relative position
         Vector2 fragmentPosition = fragment.gameObject.transform.position;

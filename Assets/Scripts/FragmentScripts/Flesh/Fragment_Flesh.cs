@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 
 public class Fragment_Flesh : Fragment
 {
+    public GameObject connectorGO;
     public Fragment_Flesh()
     {
         shape = new bool[,]
@@ -85,5 +86,36 @@ public class Fragment_Flesh : Fragment
                 LeanTween.rotateZ(gameObject, 0, time)
                     .setEaseInOutSine();
             });
+    }
+
+    //Method to draw connectors to fragments (they'll have already all been placed down before this)
+    public void GenerateConnectors(int rowOrigin, int colOrigin)
+    {
+        //Calculate offset to get center of squares, not just pivots
+        Vector3 offset = new Vector3(belongedInventory.inventorySlotSize / 2f, -belongedInventory.inventorySlotSize / 2f, 0);
+
+        for(int row = 0; row < shape.GetLength(0); row++)
+        {
+            for(int col = 0; col < shape.GetLength(1); col++)
+            {
+                //Check that this square of the shape is actually filled
+                if(shape[row,col] == false) continue;
+
+                int actualRow = rowOrigin + row;
+                int actualCol = colOrigin + col;
+
+                //Now, check the adjacent inventory slots for fragments
+                Vector4 adjacentFragments = belongedInventory.GetAdjacentFragmentsFromSingleSlot(actualRow, actualCol);
+                //Note that x corresponds to up, y is left, z is down, and w is right
+
+                Vector3 thisSlotPosition = new Vector3(col * belongedInventory.inventorySlotSize, -row * belongedInventory.inventorySlotSize, 0);
+
+                //Now draw connectors
+                if(adjacentFragments.x == 1) Instantiate(connectorGO, transform.position + thisSlotPosition + offset, Quaternion.Euler(0, 0, 90 + Random.Range(-5f, 5f)), transform);
+                if(adjacentFragments.y == 1) Instantiate(connectorGO, transform.position + thisSlotPosition + offset, Quaternion.Euler(0, 0, 180 + Random.Range(-5f, 5f)), transform);
+                if(adjacentFragments.z == 1) Instantiate(connectorGO, transform.position + thisSlotPosition + offset, Quaternion.Euler(0, 0, -90 + Random.Range(-5f, 5f)), transform);
+                if(adjacentFragments.w == 1) Instantiate(connectorGO, transform.position + thisSlotPosition + offset, Quaternion.Euler(0, 0, 0 + Random.Range(-5f, 5f)), transform);
+            }
+        }
     }
 }
