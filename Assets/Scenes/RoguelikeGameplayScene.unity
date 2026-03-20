@@ -9934,9 +9934,11 @@ MonoBehaviour:
   dialogueBoxController: {fileID: 859266379}
   playerHealth: 0
   playerFlesh: 0
+  maxBites: 3
   dialogueSystemController: {fileID: 859266379}
   inventorySystemGO: {fileID: 2051013936}
   lootSystemGO: {fileID: 1423970772}
+  biteGO: {fileID: 7732393482049450751}
   nodeMapGO: {fileID: 194874353}
   showMapButton: {fileID: 618513890}
   hideMapButton: {fileID: 894034286}

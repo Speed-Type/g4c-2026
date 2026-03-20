@@ -86,7 +86,10 @@ public class Fragment_Bite : Fragment
         isBeingDragged = false;
 
         //Do the actual biting here
-        belongedInventory.TryBite(this, damage);
+        if(belongedInventory.TryBite(this, damage))
+        {
+            RoguelikeGameplayController.ReduceBites(); //if successful, have the rg gameplay controller process bites remaining
+        }
 
         //Clear inventory highlight
         belongedInventory.ClearBiteHighlight(); //TODO: make sure this clears the bite's unique higlights too

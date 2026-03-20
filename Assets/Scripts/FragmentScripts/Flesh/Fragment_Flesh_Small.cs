@@ -41,7 +41,7 @@ public class Fragment_Flesh_Small : Fragment
         RoguelikeGameplayController.AddFlesh(1);
 
         //Do graphical effect
-        LeanTween.scale(gameObject, Vector3.one * 1.6f, 0.25f)
+        LeanTween.scale(gameObject, Vector3.one * 1.3f, 0.25f)
         .setEaseOutBack()
         .setOnComplete(() =>
         {

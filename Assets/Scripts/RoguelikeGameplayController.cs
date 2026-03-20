@@ -10,11 +10,14 @@ public class RoguelikeGameplayController : MonoBehaviour
     [Header("Player Data")]
     public int playerHealth;
     public int playerFlesh;
+    public int maxBites;
+    private int remainingBites;
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
     [SerializeField] private GameObject lootSystemGO;
+    [SerializeField] private GameObject biteGO;
     [SerializeField] private GameObject nodeMapGO;
     
     [Header("Player Option Buttons")]
@@ -247,6 +250,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         hideInventorySystemButton.SetActive(false);
         dialogueSystemController.HideDialogueBox();
+        ReloadBite();
 
         //Update game state
         gameState = GameState.InMenu;
@@ -262,6 +266,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
+        biteGO.SetActive(false);
 
         //Update game state
         gameState = GameState.Idle;
@@ -290,12 +295,43 @@ public class RoguelikeGameplayController : MonoBehaviour
     
         //Reset Fragment class's static variable
         Fragment.ResetFragmentList();
+
+        //Set number of bites
+        ResetBites();
+        biteGO.SetActive(false);
     }
 
     //Static method to add flesh
     public static void AddFlesh(int amount)
     {
         instance.playerFlesh += amount;
+    }
+
+    //Static method to do a bite and decrease number of bites remaining
+    public static void ReduceBites()
+    {
+        instance.remainingBites--;
+        instance.ReloadBite();
+    }
+
+    //Moves bite back to proper position, shows if there are any bites remaining
+    private void ReloadBite()
+    {
+        if(remainingBites > 0)
+        {
+            //TODO: RESET POSITION
+            biteGO.SetActive(true);
+        }
+        else
+        {
+            biteGO.SetActive(false);
+        }
+    }
+
+    //Sets current bites to max bites for the next looting
+    public static void ResetBites()
+    {
+        instance.remainingBites = instance.maxBites;
     }
 }
 

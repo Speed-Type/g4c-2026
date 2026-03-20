@@ -198,6 +198,9 @@ public class NodeManager : MonoBehaviour
             //Now, clean up all fragments
             Fragment.FilterFragments();
 
+            //Reset player bites
+            RoguelikeGameplayController.ResetBites();
+
             //*******HERE, check if the previous node was anything that needs to be replaced upon exit
             if(currentNode.nodeType == NodeTypes.Scavenge)
             {
