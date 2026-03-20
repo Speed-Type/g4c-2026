@@ -30,7 +30,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     private Vector2 playerOptionButtonDefaultDimensions;
 
     [Header("References for Bite System")]
-    [SerializeField] private GameObject biteGO;
+    [SerializeField] private GameObject[] biteList;
+    [SerializeField] private int currentBite;
     [SerializeField] private RectTransform biteHomePosition;
 
     [Header("References for Placement of Inventory and Loot Systems")]
@@ -269,7 +270,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
-        biteGO.SetActive(false);
+        biteList[currentBite].SetActive(false);
 
         //Update game state
         gameState = GameState.Idle;
@@ -301,7 +302,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Set number of bites
         ResetBites();
-        biteGO.SetActive(false);
+        biteList[currentBite].SetActive(false);
     }
 
     //Static method to add flesh
@@ -326,12 +327,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         if(remainingBites > 0)
         {
-            biteGO.GetComponent<RectTransform>().position = biteHomePosition.position; //Reset position
-            biteGO.SetActive(true);
+            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position; //Reset position
+            biteList[currentBite].SetActive(true);
         }
         else
         {
-            biteGO.SetActive(false);
+            biteList[currentBite].SetActive(false);
         }
     }
 

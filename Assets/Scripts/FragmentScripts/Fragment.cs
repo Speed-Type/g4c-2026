@@ -22,7 +22,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected int currentHealth;
 
     [Header("GameObject with Sprite for this fragment's graphics")]
-    [SerializeField] private GameObject graphicGO;
+    [SerializeField] protected GameObject graphicGO;
     [SerializeField] private Color destroyedFragmentColor;
 
     [Header("Radial Fill Health Indicator")]

@@ -1,17 +1,26 @@
 using UnityEngine;
-
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using System.Collections;
+using UnityEngine.UI;
 
 
 public class Fragment_Bite : Fragment
 {
-    private int damage;
+    protected int damage = 1;
     private int shakeTween;
+    [SerializeField] protected Sprite openBiteSprite;
+    [SerializeField] protected Sprite closedBiteSprite;
+    private Image graphicImage;
 
     public Fragment_Bite()
     {
+        shape = new bool[,] 
+        {
+            {true, true},
+            {true, true}
+        };
+
         maxHealth = 999;
 
         displayBugGroup = "";
@@ -35,17 +44,13 @@ public class Fragment_Bite : Fragment
         canvas = GetComponentInParent<Canvas>();
         canvasRectTransform = canvas.GetComponent<RectTransform>();
         belongedInventory = FindFirstObjectByType<LootManager>();
-
-        //Set bite
-        UpdateBite(new bool[,]
-        {
-            {true, true},
-            {true, true}
-        }, 1);
+        graphicImage = graphicGO.GetComponent<Image>();
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
     {
+        if(isBiting) return;
+
         isBeingDragged = true;
 
         //Do continual shake
@@ -61,6 +66,7 @@ public class Fragment_Bite : Fragment
         StartCoroutine(TimedBiteHighlightCoroutine());
     }
 
+    //NOTE: OnDrag does need to stay overridden
     public override void OnDrag(PointerEventData eventData)
     {
         //Do the actual movement (with calculations so that it stays within screen bounds)
@@ -81,8 +87,12 @@ public class Fragment_Bite : Fragment
         rectTransform.anchoredPosition = newPosition;
     }
 
+    private bool isBiting = false;
     public override void OnEndDrag(PointerEventData eventData)
     {
+        if(isBiting) return;
+
+        isBiting = true;
         isBeingDragged = false;
 
         //Do the actual biting here
@@ -91,10 +101,19 @@ public class Fragment_Bite : Fragment
             RoguelikeGameplayController.ReduceBites(); //if successful, have the rg gameplay controller process bites remaining
         }
 
-        RoguelikeGameplayController.ReloadBite_Static();
+        //Do visual for bite
+        graphicImage.sprite = closedBiteSprite;
+        //TODO: SPWAN PARTICLES
+        LeanTween.delayedCall(.1f, () =>
+        {
+            //And then reposition
+            RoguelikeGameplayController.ReloadBite_Static();
+            graphicImage.sprite = openBiteSprite;
+            isBiting = false;
+        });
 
         //Clear inventory highlight
-        belongedInventory.ClearBiteHighlight(); //TODO: make sure this clears the bite's unique higlights too
+        belongedInventory.ClearBiteHighlight();
 
         //Stop shake
         LeanTween.cancel(shakeTween);
@@ -134,11 +153,6 @@ public class Fragment_Bite : Fragment
 
 
     //METHODS UNIQUE TO BITE
-    public void UpdateBite(bool[,] newShape, int newDamage)
-    {
-        shape = newShape;
-        damage = newDamage;
-    }
 
     private IEnumerator TimedBiteHighlightCoroutine()
     {
