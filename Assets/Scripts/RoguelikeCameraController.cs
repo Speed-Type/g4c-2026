@@ -164,6 +164,8 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public void OnZoom(InputAction.CallbackContext ctx)
     {
+        if(RoguelikeGameplayController.gameState != GameState.Idle) return;
+        
         float scroll = ctx.ReadValue<float>();
 
         targetDistance -= scroll * zoomSpeed;
