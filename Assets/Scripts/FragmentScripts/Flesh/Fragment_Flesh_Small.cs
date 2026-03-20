@@ -48,8 +48,9 @@ public class Fragment_Flesh_Small : Fragment
     //Method to do the graphical pulsating
     void Pulse()
     {
-        float scale = Random.Range(1.05f, 1.10f);
-        float time = Random.Range(0.6f, 0.9f);
+        float scale = Random.Range(1.03f, 1.08f);
+        float rotation = Random.Range(-1.5f,1.5f);
+        float time = Random.Range(0.7f, 1.0f);
 
         LeanTween.scale(gameObject, Vector3.one * scale, time)
             .setEaseInOutSine()
@@ -58,6 +59,13 @@ public class Fragment_Flesh_Small : Fragment
                 LeanTween.scale(gameObject, Vector3.one, time)
                     .setEaseInOutSine()
                     .setOnComplete(Pulse);
+            });
+
+        LeanTween.rotateZ(gameObject, rotation, time)
+            .setEaseInOutSine().setOnComplete(() =>
+            {
+                LeanTween.rotateZ(gameObject, 0, time)
+                    .setEaseInOutSine();
             });
     }
 }

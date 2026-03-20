@@ -50,6 +50,7 @@ public class Fragment_Flesh_Big : Fragment
     void Pulse()
     {
         float scale = Random.Range(1.03f, 1.08f);
+        float rotation = Random.Range(-1f,1f);
         float time = Random.Range(0.75f, 1.05f);
 
         LeanTween.scale(gameObject, Vector3.one * scale, time)
@@ -59,6 +60,13 @@ public class Fragment_Flesh_Big : Fragment
                 LeanTween.scale(gameObject, Vector3.one, time)
                     .setEaseInOutSine()
                     .setOnComplete(Pulse);
+            });
+
+        LeanTween.rotateZ(gameObject, rotation, time)
+            .setEaseInOutSine().setOnComplete(() =>
+            {
+                LeanTween.rotateZ(gameObject, 0, time)
+                    .setEaseInOutSine();
             });
     }
 }
