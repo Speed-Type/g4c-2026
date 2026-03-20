@@ -229,6 +229,6 @@ public class RoguelikeCameraController : MonoBehaviour
 
         Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 5f));
 
-        Instantiate(particleGO, worldPos, Quaternion.identity);
+        Instantiate(particleGO, worldPos, Quaternion.identity, canvas.transform);
     }
 }
