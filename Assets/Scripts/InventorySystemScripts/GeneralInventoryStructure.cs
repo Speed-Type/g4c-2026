@@ -109,10 +109,10 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to check if the fragment can be placed at these coordinates
-    protected bool CanPlaceFragment(Fragment fragment, int originRow, int originCol)
+    protected bool CanPlaceFragment(Fragment fragment, int rowOrigin, int colOrigin)
     {
         //Check that x and y are within bounds
-        if(originRow < 0 || originCol < 0)
+        if(rowOrigin < 0 || colOrigin < 0)
         {
             return false;
         }
@@ -125,8 +125,8 @@ public class GeneralInventoryStructure : MonoBehaviour
                 if(fragment.shape[row,col] == true)
                 {
                     //Calculate whether this specific spot at (x+i), (y+j) is (1) in bounds and (2) empty
-                    int actualRow = originRow + row;
-                    int actualCol = originCol + col;
+                    int actualRow = rowOrigin + row;
+                    int actualCol = colOrigin + col;
 
                     if(actualRow >= gridNumRows || actualCol >= gridNumCols)
                     {
@@ -342,13 +342,56 @@ public class GeneralInventoryStructure : MonoBehaviour
         return true;
     }
 
+    //Functionally like highlight, but a different color, and also shows would-be damage dealt to fragments
     public void BiteHighlight(Fragment fragment)
     {
-        //MAKE IT FUNCTIONALLY LIKE HIGHLIGHT, BUT INSTEAD SHOWING THE VALUES OF WOULD-BE HEALTH DRAIN TOO
+        Vector2Int gridPosition = GetGridPosition(fragment);
+        int rowOrigin = gridPosition.x;
+        int colOrigin = gridPosition.y;
+
+        bool canPlaceFragment = true;
+
+        //Calculate if we can actually place the fragment
+        if(rowOrigin < 0 || colOrigin < 0 || rowOrigin + fragment.shape.GetLength(0) > inventorySlotArray.GetLength(0)  || colOrigin + fragment.shape.GetLength(1) > inventorySlotArray.GetLength(1))
+        {
+            canPlaceFragment = false;
+        }
+
+        //De-highlight all positions
+        ClearHighlight();
+
+        //Loop through necessary highlighted positions and highlight as needed
+        for(int row = 0; row < fragment.shape.GetLength(0); row++)
+        {
+            for(int col = 0; col < fragment.shape.GetLength(1); col++)
+            {
+                //Check that this part of the fragment's shape does actually need space and is in bounds
+                int actualRow = gridPosition.x + row;
+                int actualCol = gridPosition.y + col;
+
+                if(actualRow >= 0 && actualCol >= 0 && actualRow < gridNumRows && actualCol < gridNumCols && fragment.shape[row,col] == true)
+                {
+                    //Highlight the correct color
+                    if(canPlaceFragment)
+                    {
+                        //Green
+                        inventorySlotArray[actualRow, actualCol].HighlightValid();
+                    }
+                    else
+                    {
+                        //Red
+                        inventorySlotArray[actualRow, actualCol].HighlightInvalid();
+                    }
+                }
+            }
+        }
     }
 
+    //Clears bite highlight color and would-be health drain visuals
     public void ClearBiteHighlight()
     {
-        //CAN PROBABLY CALL CLEARHIGHLIGHT HERE TOO, BUT ALSO NEED TO UN-SHOW THE VALUES OF WOULD-BE HEALTH DRAIN
+        ClearHighlight(); //Clears the color
+
+        //TODO: UN-SHOW THE VALUES OF WOULD-BE HEALTH DRAIN
     }
 }

@@ -95,6 +95,7 @@ MonoBehaviour:
   noHighlightColor: {r: 1, g: 1, b: 1, a: 0}
   validHighlightColor: {r: 0.1312752, g: 0.7924528, b: 0, a: 1}
   invalidHighlightColor: {r: 1, g: 0, b: 0, a: 1}
+  biteHighlightColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
 --- !u!1 &3793001146631200792
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,3 +190,4 @@ MonoBehaviour:
   noHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   validHighlightColor: {r: 0, g: 0, b: 0, a: 0}
   invalidHighlightColor: {r: 0, g: 0, b: 0, a: 0}
+  biteHighlightColor: {r: 0, g: 0, b: 0, a: 0}
