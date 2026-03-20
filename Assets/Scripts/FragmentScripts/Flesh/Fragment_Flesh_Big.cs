@@ -19,6 +19,13 @@ public class Fragment_Flesh_Big : Fragment
         displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Pulse(); //Start idle pulsating
+    }
+
     public override bool IsFlesh()
     {
         return true;
@@ -37,5 +44,21 @@ public class Fragment_Flesh_Big : Fragment
         //TODO: Do graphical effect
 
         Destroy(this.gameObject);
+    }
+    
+    //Method to do the graphical pulsating
+    void Pulse()
+    {
+        float scale = Random.Range(1.03f, 1.08f);
+        float time = Random.Range(0.75f, 1.05f);
+
+        LeanTween.scale(gameObject, Vector3.one * scale, time)
+            .setEaseInOutSine()
+            .setOnComplete(() =>
+            {
+                LeanTween.scale(gameObject, Vector3.one, time)
+                    .setEaseInOutSine()
+                    .setOnComplete(Pulse);
+            });
     }
 }

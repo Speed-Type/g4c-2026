@@ -120,15 +120,17 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         LeanTween.cancel(this.gameObject);
 
         //Do graphics stuff
-        undulateTween = LeanTween.scale(rectTransform, Vector3.one * 1.05f, 0.42f) //Scale undulate
+        undulateTween = LeanTween.scale(rectTransform, Vector3.one * 1.05f, 0.45f) //Scale undulate
             .setEaseInOutSine()
             .setLoopPingPong()
             .id;
 
-        wiggleTween = LeanTween.rotateZ(gameObject, 1.5f, 0.175f) //Wiggle rotation
+        wiggleTween = LeanTween.rotateZ(gameObject, 1.25f, 0.175f) //Wiggle rotation
             .setEaseShake()
             .setLoopPingPong()
             .id;
+
+        Shake();
 
         //Start highlight coroutine
         StartCoroutine(TimedHighlightCoroutine());
@@ -222,9 +224,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //GRAPHICALLY
 
-        //Stop current tween for shake effect
-        LeanTween.cancel(rotateTween);
-        transform.localRotation = Quaternion.Euler(0,0,0);
+        //Do small shake graphic
+        Shake();
 
         //Change current rotation positioning
         currentRotation = (currentRotation + 1) % 4;
@@ -260,9 +261,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Apply offset
         graphicGO.transform.localPosition = new Vector3(offset.x, offset.y, 0);
-
-        //Do small graphic shake
-        Shake(15f, 0.3f);
     }
 
     //Method to be overridden in children
@@ -288,26 +286,17 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     }
 
     //Note that the current number of Shake calls is 10; can be adjusted by changing this variable
-    private int totalCalls = 10;
-    protected void Shake(float intensity, float duration, int callsSoFar = 0, float previousRotation = 0f)
+    protected void Shake()
     {
-        if(callsSoFar < totalCalls)
-        {
-            float rotationAmount = UnityEngine.Random.Range(0, intensity * (1 - (callsSoFar / 10f)));
-            if(callsSoFar % 2 == 1)
-            {
-                rotationAmount *= -1;
-            }
-            
-            rotateTween = LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
-            {
-                Shake(intensity, duration, callsSoFar + 1, rotationAmount);
-            }).id;
-        }
-        else
-        {
-            rotateTween = LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, -previousRotation, duration / totalCalls).id;
-        }
+        //Stop current tween for shake effect
+        LeanTween.cancel(rotateTween);
+        transform.localRotation = Quaternion.Euler(0,0,0);
+
+        //Do small graphic shake
+        rotateTween = LeanTween.rotateZ(gameObject, 6f, 0.05f)
+            .setEaseShake()
+            .setLoopPingPong(2)
+            .id;
     }
 
     protected IEnumerator TimedHighlightCoroutine()
