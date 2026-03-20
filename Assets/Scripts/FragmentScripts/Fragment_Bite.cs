@@ -8,6 +8,8 @@ using System.Collections;
 public class Fragment_Bite : Fragment
 {
     private int damage;
+    private int shakeTween;
+
     public Fragment_Bite()
     {
         maxHealth = 999;
@@ -33,13 +35,6 @@ public class Fragment_Bite : Fragment
         canvas = GetComponentInParent<Canvas>();
         canvasRectTransform = canvas.GetComponent<RectTransform>();
         belongedInventory = FindFirstObjectByType<LootManager>();
-        //isFree = false;
-        //effectsActive = false;
-        //isEquipped = false;
-        //currentHealth = maxHealth;
-
-        ////Add this instance to the fragment list
-        //fragmentList.Add(this);
 
         //Set bite
         UpdateBite(new bool[,]
@@ -53,30 +48,21 @@ public class Fragment_Bite : Fragment
     {
         isBeingDragged = true;
 
-        // //When drag begins, make it the topmost item
-        // transform.SetAsLastSibling();
-
-        // //Remove from corresponding manager
-        // belongedInventory.RemoveFragment(this);
-
-        // //Stop any previous tween from snapping to a position
-        // LeanTween.cancel(this.gameObject);
-
-        //Do small graphic shake
-        Shake(15f, 0.3f);
+        //Do continual shake
+        shakeTween = LeanTween.rotateZ(gameObject, 3f, 0.08f)
+            .setEaseShake()
+            .setLoopPingPong()
+            .id;
+        
+        //Also scale up a teense
+        LeanTween.scale(rectTransform, Vector3.one * 1.05f, 0.1f);
 
         //Start highlight coroutine
         StartCoroutine(TimedBiteHighlightCoroutine());
-
-        // //Hide tooltip
-        // TooltipManager.HideTooltip_Static();
     }
 
     public override void OnDrag(PointerEventData eventData)
     {
-        // //Make sure this fragment is free
-        // if(!isFree) return;
-
         //Do the actual movement (with calculations so that it stays within screen bounds)
         Vector2 newPosition = rectTransform.anchoredPosition + eventData.delta / canvas.scaleFactor;
 
@@ -97,23 +83,20 @@ public class Fragment_Bite : Fragment
 
     public override void OnEndDrag(PointerEventData eventData)
     {
-        // //Make sure this fragment is free
-        // if(!isFree) return;
-
         isBeingDragged = false;
 
-        //TODO: ADD THE ACTUAL BITING HERE
+        //Do the actual biting here
         belongedInventory.TryBite(this, damage);
-
-        // //Snap to grid
-        // if(belongedInventory.SnapToGrid(this))
-        // {
-        //     //Set layer order
-        //     transform.SetSiblingIndex(1);
-        // }
 
         //Clear inventory highlight
         belongedInventory.ClearBiteHighlight(); //TODO: make sure this clears the bite's unique higlights too
+
+        //Stop shake
+        LeanTween.cancel(shakeTween);
+        rectTransform.rotation = Quaternion.identity; //Reset rotation
+
+        //Reset scale
+        LeanTween.scale(rectTransform, Vector3.one, 0.1f);
     }
 
     public override void Rotate()

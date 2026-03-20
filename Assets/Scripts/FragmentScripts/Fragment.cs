@@ -41,6 +41,13 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private bool isFree;
     private bool effectsActive; //Used for effect logic
     [HideInInspector] public bool isEquipped; //Used for equipped/fragment filtering logic
+    
+    //LeanTween References
+    private int wiggleTween;
+    private int undulateTween;
+    private int rotateTween;
+
+    //Static list for all fragments
     private static List<Fragment> fragmentList;
 
     public static void ResetFragmentList()
@@ -112,8 +119,16 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Stop any previous tween from snapping to a position
         LeanTween.cancel(this.gameObject);
 
-        //Do small graphic shake
-        Shake(15f, 0.3f);
+        //Do graphics stuff
+        undulateTween = LeanTween.scale(rectTransform, Vector3.one * 1.05f, 0.42f) //Scale undulate
+            .setEaseInOutSine()
+            .setLoopPingPong()
+            .id;
+
+        wiggleTween = LeanTween.rotateZ(gameObject, 1.5f, 0.175f) //Wiggle rotation
+            .setEaseShake()
+            .setLoopPingPong()
+            .id;
 
         //Start highlight coroutine
         StartCoroutine(TimedHighlightCoroutine());
@@ -160,6 +175,15 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             transform.SetSiblingIndex(1);
         }
 
+        //Do graphics reset
+        //Stop tweens
+        LeanTween.cancel(wiggleTween);
+        LeanTween.cancel(undulateTween);
+
+        //Reset rotation and scale
+        LeanTween.rotateZ(gameObject, 0f, 0.1f);
+        LeanTween.scale(rectTransform, Vector3.one, 0.1f);
+
         //Clear inventory highlight
         belongedInventory.ClearHighlight();
     }
@@ -199,7 +223,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //GRAPHICALLY
 
         //Stop current tween for shake effect
-        LeanTween.cancel(this.gameObject);
+        LeanTween.cancel(rotateTween);
         transform.localRotation = Quaternion.Euler(0,0,0);
 
         //Change current rotation positioning
@@ -275,14 +299,14 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
                 rotationAmount *= -1;
             }
             
-            LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
+            rotateTween = LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, rotationAmount - previousRotation, duration / totalCalls).setOnComplete(() =>
             {
                 Shake(intensity, duration, callsSoFar + 1, rotationAmount);
-            });
+            }).id;
         }
         else
         {
-            LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, -previousRotation, duration / totalCalls);
+            rotateTween = LeanTween.rotateAroundLocal(this.gameObject, Vector3.forward, -previousRotation, duration / totalCalls).id;
         }
     }
 
