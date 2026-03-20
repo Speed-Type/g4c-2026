@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8603382122298582768}
   - component: {fileID: 121672809025648366}
   - component: {fileID: 3289734877092705554}
+  - component: {fileID: 8277718912705011392}
   m_Layer: 5
   m_Name: ScavengeNode
   m_TagString: Untagged
@@ -146,4 +147,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Node_Scavenge
   nodeList: []
+  nodeType: 0
   bugLootOdds: 01000000
+--- !u!114 &8277718912705011392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487325553070881897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39dcefc5bb4f45d38c619accd155373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NodeAnim
+  initialSizeMultiplier: 1.5
+  undulatingSizeMultiplier: 1.3
+  initialGrowthSpeed: 0.2
+  undulatingGrowthSpeed: 0.45

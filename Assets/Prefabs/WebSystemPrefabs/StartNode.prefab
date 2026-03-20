@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 933511517984092521}
   - component: {fileID: 175793547148954673}
   - component: {fileID: 5967581704977082970}
+  - component: {fileID: 5259167695022146623}
   m_Layer: 5
   m_Name: StartNode
   m_TagString: Untagged
@@ -146,3 +147,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Node_Start
   nodeList: []
+  nodeType: 0
+--- !u!114 &5259167695022146623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3369285449052209603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b39dcefc5bb4f45d38c619accd155373, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NodeAnim
+  initialSizeMultiplier: 1.5
+  undulatingSizeMultiplier: 1.3
+  initialGrowthSpeed: 0.2
+  undulatingGrowthSpeed: 0.45
