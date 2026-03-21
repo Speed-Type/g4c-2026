@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class ButtonHoverAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Animation Parameters")]
-    [SerializeField] private float initialSizeMultiplier = 1.5f;
-    [SerializeField] private float undulatingSizeMultiplier = 1.3f;
-    [SerializeField] private float initialGrowthSpeed = 0.3f;
-    [SerializeField] private float undulatingGrowthSpeed = 0.45f;
+    public float initialSizeMultiplier = 1.5f;
+    public float undulatingSizeMultiplier = 1.3f;
+    public float initialGrowthSpeed = 0.3f;
+    public float undulatingGrowthSpeed = 0.45f;
     [Header("Optional to Set; If left blank, will pull from the same object as this script")]
     [SerializeField] private RectTransform rectTransform;
 
@@ -27,7 +27,7 @@ public class ButtonHoverAnim : MonoBehaviour, IPointerEnterHandler, IPointerExit
         
     }
 
-    public virtual void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerEnter(PointerEventData eventData)
     {
         if(doubleCheckIsHovered) return;
         doubleCheckIsHovered = true;
@@ -45,7 +45,7 @@ public class ButtonHoverAnim : MonoBehaviour, IPointerEnterHandler, IPointerExit
             .id;
     }
 
-    public virtual void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)
     {
         if(!doubleCheckIsHovered) return;
         doubleCheckIsHovered = false;
@@ -54,9 +54,11 @@ public class ButtonHoverAnim : MonoBehaviour, IPointerEnterHandler, IPointerExit
         LeanTween.scale(rectTransform, Vector3.one, initialGrowthSpeed).setEaseOutElastic();
     }
 
-    void OnDisable()
+    //On enabled, reset tween and scale to default
+    void OnEnable()
     {
         LeanTween.cancel(runningTween);
-        LeanTween.scale(rectTransform, Vector3.one, initialGrowthSpeed).setEaseOutElastic();
+        transform.localScale = Vector3.one;
+        doubleCheckIsHovered = false;
     }
 }

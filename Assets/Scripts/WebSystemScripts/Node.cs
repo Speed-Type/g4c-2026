@@ -15,13 +15,21 @@ public class Node : MonoBehaviour
     [SerializeField] private Image nodeTypeImage;
     [SerializeField] private Sprite revealedSprite;
     private Image backgroundImage; //this would be the background
-    private bool hasBeenVisited;
+    private bool hasBeenVisited = false;
+    private RectTransform rectTransform;
+    private float revealAnimSizeMultiplier, revealAnimLength;
 
 
     protected virtual void Awake()
     {
+        //Initialize variables
         backgroundImage = GetComponent<Image>();
-        hasBeenVisited = false;
+        rectTransform = GetComponent<RectTransform>();
+
+        //Get animation parameters from the ButtonHoverAnim script that should also be on this object
+        ButtonHoverAnim buttonHoverAnim = GetComponent<ButtonHoverAnim>();
+        revealAnimSizeMultiplier = buttonHoverAnim.initialSizeMultiplier;
+        revealAnimLength = buttonHoverAnim.initialGrowthSpeed;
     }
 
     //Accessor methods
@@ -58,6 +66,14 @@ public class Node : MonoBehaviour
         isRevealed = true;
 
         nodeTypeImage.sprite = revealedSprite;
+
+        //Do visual effect
+        LeanTween.scale(rectTransform, Vector3.one * revealAnimSizeMultiplier, revealAnimLength)
+            .setEaseOutElastic()
+            .setOnComplete(() =>
+            {
+                LeanTween.scale(rectTransform, Vector3.one, revealAnimLength).setEaseOutElastic();
+            });
     }
 
     //Node traversal method

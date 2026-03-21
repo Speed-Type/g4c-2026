@@ -23,7 +23,7 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float[] nodePositionRandomization;
 
     [Header("Web Animations Timing")]
-    public static float playerTravelAnimTime = 1f;
+    public static float playerTravelAnimTime = 1.25f;
 
     public static bool isMovingNodes = false;
 
@@ -190,7 +190,7 @@ public class NodeManager : MonoBehaviour
         Destroy(nodeToReplace);
 
         //If setVisited is true, we want to set this new node to be already visited
-        newNodeGO.GetComponent<Node>().SetNodeBGColorVisited();
+        if(setVisited) newNodeGO.GetComponent<Node>().SetNodeBGColorVisited();
     }
 
     //Function to check if this node is reachable from the current node; note that the first node is auto allowed
@@ -233,7 +233,12 @@ public class NodeManager : MonoBehaviour
     {
         for(int i = 0; i < RoguelikeGameplayController.instance.emptyNodesToReveal; i++)
         {
-            if(TryRevealNode(currentNode, NodeTypes.Empty) == false) i = 9999;
+            if(TryRevealNode(currentNode, NodeTypes.Empty) == false) break;
+        }
+
+        for(int i = 0; i < RoguelikeGameplayController.instance.scavengerNodesToReveal; i++)
+        {
+            if(TryRevealNode(currentNode, NodeTypes.Scavenge) == false) break;
         }
     }
 
@@ -257,7 +262,6 @@ public class NodeManager : MonoBehaviour
             if(checkingNode.nodeType == nodeType && !checkingNode.isRevealed)
             {
                 checkingNode.RevealNode();
-                Debug.Log("Revealed node " + checkingNode.gameObject.name);
                 return true;
             }
 
@@ -277,7 +281,7 @@ public class NodeManager : MonoBehaviour
     {
         playerMarkerGO.transform.SetAsLastSibling();
         LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
-            .setEase(LeanTweenType.easeInOutQuad);
+            .setEase(LeanTweenType.easeInOutSine);
     }
 
     void Start()
