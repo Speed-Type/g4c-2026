@@ -3,22 +3,23 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class NodeAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ButtonHoverAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Animation Parameters")]
     [SerializeField] private float initialSizeMultiplier = 1.5f;
     [SerializeField] private float undulatingSizeMultiplier = 1.3f;
     [SerializeField] private float initialGrowthSpeed = 0.3f;
     [SerializeField] private float undulatingGrowthSpeed = 0.45f;
+    [Header("Optional to Set; If left blank, will pull from the same object as this script")]
+    [SerializeField] private RectTransform rectTransform;
 
     //Private variables
-    private RectTransform rectTransform;
     private int runningTween;
     private bool doubleCheckIsHovered = false;
 
     void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
+        if(rectTransform == null) rectTransform = GetComponent<RectTransform>();
     }
 
     void Update()

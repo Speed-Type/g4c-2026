@@ -69,7 +69,7 @@ public class Fragment_Bite : Fragment
             .setLoopPingPong()
             .id;
         
-        //Also scale up a teense
+        //Scale up graphic to normal size
         LeanTween.scale(graphicRectTransform, Vector3.one, 0.1f);
 
         //Start highlight coroutine
@@ -135,7 +135,7 @@ public class Fragment_Bite : Fragment
             {
                 //And then reposition
                 RoguelikeGameplayController.ReloadBite_Static();
-                graphicGO.transform.localScale = Vector3.one / scaleFactor;
+                graphicGO.transform.localScale = Vector3.one / scaleFactor; //Shrink graphic size again
                 rectTransform.rotation = Quaternion.identity; //Reset rotation
                 graphicImage.sprite = openBiteSprite;
                 isBiting = false;
@@ -161,6 +161,7 @@ public class Fragment_Bite : Fragment
     public override void OnPointerEnter(PointerEventData eventData)
     {
         //no tooltip
+        Shake(); //do little shake effect
     }
 
     //Method for stopping tooltip hovering
