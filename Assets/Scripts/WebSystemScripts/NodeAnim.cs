@@ -8,7 +8,7 @@ public class NodeAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [Header("Animation Parameters")]
     [SerializeField] private float initialSizeMultiplier = 1.5f;
     [SerializeField] private float undulatingSizeMultiplier = 1.3f;
-    [SerializeField] private float initialGrowthSpeed = 0.2f;
+    [SerializeField] private float initialGrowthSpeed = 0.3f;
     [SerializeField] private float undulatingGrowthSpeed = 0.45f;
 
     //Private variables

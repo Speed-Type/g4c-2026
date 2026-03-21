@@ -162,5 +162,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NodeAnim
   initialSizeMultiplier: 1.5
   undulatingSizeMultiplier: 1.3
-  initialGrowthSpeed: 0.2
+  initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
