@@ -37,6 +37,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private RectTransform biteBackgroundRectTransform;
     [SerializeField] private float biteBackgroundPopupAnimLength = .2f;
     private Vector2 biteBackgroundOriginalPos;
+    private int biteBackgroundPopupTween;
     [SerializeField] private TMP_Text bitesRemainingText;
 
     [Header("References for Placement of Inventory and Loot Systems")]
@@ -260,6 +261,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         dialogueSystemController.HideDialogueBox();
 
         //Prepare bite system
+        LeanTween.cancel(biteBackgroundPopupTween); //cancel current tween to avoid overlap
         biteBackgroundRectTransform.localPosition = biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y); //TODO: reset bg position to a lower position
         ReloadBite();
 
@@ -276,6 +278,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
         biteList[currentBite].SetActive(false);
+
+        LeanTween.cancel(biteBackgroundPopupTween); //cancel current tween to avoid overlap
 
         //Update game state
         gameState = GameState.Idle;
@@ -339,20 +343,22 @@ public class RoguelikeGameplayController : MonoBehaviour
             biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-inventoryManager.inventorySlotSize / 2f, inventoryManager.inventorySlotSize / 2f, 0); //Reset position
 
             //Move into view
-            LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos, biteBackgroundPopupAnimLength)
+            biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos, biteBackgroundPopupAnimLength)
                 .setEaseOutElastic()
                 .setOnComplete(() =>
                 {
                     biteList[currentBite].SetActive(true); //Show after the popup is done
-                });
+                })
+                .id;
         }
         else
         {
             biteList[currentBite].SetActive(false); //immediately hide the bite
 
             //Hide background
-            LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
-                .setEaseOutElastic();
+            biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
+                .setEaseOutElastic()
+                .id;
         }
     }
 
