@@ -225,7 +225,7 @@ MonoBehaviour:
   nodeList: []
   nodeType: 0
   isRevealed: 0
-  nodeImage: {fileID: 6685982698714108940}
+  nodeTypeImage: {fileID: 6685982698714108940}
   revealedSprite: {fileID: 21300000, guid: bf9855e078f524ae4b7a66c257293002, type: 3}
 --- !u!114 &5584512649453909239
 MonoBehaviour:

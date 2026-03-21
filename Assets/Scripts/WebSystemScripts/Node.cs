@@ -12,8 +12,17 @@ public class Node : MonoBehaviour
     public NodeTypes nodeType;
     public bool isRevealed = false;
     [Tooltip("This should be the node border image, not the fill")]
-    [SerializeField] private Image nodeImage;
+    [SerializeField] private Image nodeTypeImage;
     [SerializeField] private Sprite revealedSprite;
+    private Image backgroundImage; //this would be the background
+    private bool hasBeenVisited;
+
+
+    protected virtual void Awake()
+    {
+        backgroundImage = GetComponent<Image>();
+        hasBeenVisited = false;
+    }
 
     //Accessor methods
     public bool HasNode(Node other)
@@ -47,12 +56,21 @@ public class Node : MonoBehaviour
     {
         if(isRevealed) return;
 
-        nodeImage.sprite = revealedSprite;
+        nodeTypeImage.sprite = revealedSprite;
     }
 
     //Node traversal method
     public virtual void VisitNode()
     {
         //This method is called using super in subclasses
+    }
+
+    //Method called in child classes to change node bg color to show it has been visited
+    protected void SetNodeBGColorVisited()
+    {
+        if(hasBeenVisited) return; //ensures this code only runs once
+        hasBeenVisited = true;
+
+        backgroundImage.color = Color.white;
     }
 }

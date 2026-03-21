@@ -66,8 +66,10 @@ public class Node_Empty : Node
         "Tip: Any goodies you leave behind usually fall off the web. Be sure to take anything you really want!"
     };
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         flavorText.Add("There is a 1 in " + (flavorText.Count + 1) + " chance of getting this flavor text.");
 
         nodeType = NodeTypes.Empty;
@@ -80,6 +82,9 @@ public class Node_Empty : Node
         {
             return;
         }
+
+        //Update node bg color
+        SetNodeBGColorVisited();
         
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
         

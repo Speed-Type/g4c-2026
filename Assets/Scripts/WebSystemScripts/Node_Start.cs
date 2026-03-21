@@ -4,10 +4,12 @@ using System.Collections.Generic;
 public class Node_Start : Node
 {
     //Start node is where the player starts
-    private bool hasVisited = false;
+    private bool hasVisited = false; //note that this variable does not interfere/interact with the Node parent class's hasBeenVisited variable
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         //MIGHT LEAD TO A BUG LATER??
         nodeType = NodeTypes.Start;
     }
@@ -19,6 +21,9 @@ public class Node_Start : Node
         {
             return;
         }
+
+        //Update node bg color
+        SetNodeBGColorVisited();
 
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
 

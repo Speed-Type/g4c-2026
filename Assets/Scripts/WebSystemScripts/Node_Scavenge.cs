@@ -8,8 +8,10 @@ public class Node_Scavenge : Node
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
 
-    void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+        
         nodeType = NodeTypes.Scavenge;
     }
 
@@ -20,6 +22,9 @@ public class Node_Scavenge : Node
         {
             return;
         }
+
+        //Update node bg color
+        SetNodeBGColorVisited();
         
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
