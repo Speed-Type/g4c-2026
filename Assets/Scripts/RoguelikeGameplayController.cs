@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
 
 public class RoguelikeGameplayController : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private GameObject[] biteList;
     [SerializeField] private int currentBite;
     [SerializeField] private RectTransform biteHomePosition;
+    [SerializeField] private TMP_Text bitesRemainingText;
 
     [Header("References for Placement of Inventory and Loot Systems")]
     [SerializeField] private Transform hiddenPosition;
@@ -329,7 +331,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Moves bite back to proper position, shows if there are any bites remaining
     private void ReloadBite()
     {
-        //POTENTIALLY: Reset size of bite here
+        //Change text for bites remaining
+        bitesRemainingText.text = "" + remainingBites;
+
         if(remainingBites > 0)
         {
             biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-inventoryManager.inventorySlotSize / 2f, inventoryManager.inventorySlotSize / 2f, 0); //Reset position

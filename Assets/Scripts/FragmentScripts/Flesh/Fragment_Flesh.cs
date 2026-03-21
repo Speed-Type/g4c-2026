@@ -47,8 +47,8 @@ public class Fragment_Flesh : Fragment
         RoguelikeGameplayController.AddFlesh(4);
 
         //Do graphical effect
-        LeanTween.scale(gameObject, Vector3.one * 1.3f, 0.25f)
-        .setEaseOutBack()
+        LeanTween.scale(gameObject, Vector3.one * 1.3f, 0.20f)
+        .setEaseOutElastic()
         .setOnComplete(() =>
         {
             RoguelikeCameraController.SpawnParticle(transform.position, deathParticles);

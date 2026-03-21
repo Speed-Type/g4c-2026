@@ -170,8 +170,6 @@ public class Fragment_Bite : Fragment
         //no tooltip
     }
 
-
-
     //METHODS UNIQUE TO BITE
 
     private IEnumerator TimedBiteHighlightCoroutine()
