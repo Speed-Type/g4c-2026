@@ -66,7 +66,7 @@ public class Node : MonoBehaviour
     }
 
     //Method called in child classes to change node bg color to show it has been visited
-    protected void SetNodeBGColorVisited()
+    public void SetNodeBGColorVisited()
     {
         if(hasBeenVisited) return; //ensures this code only runs once
         hasBeenVisited = true;

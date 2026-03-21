@@ -69,7 +69,7 @@ public class Node_Empty : Node
     protected override void Awake()
     {
         base.Awake();
-        
+
         flavorText.Add("There is a 1 in " + (flavorText.Count + 1) + " chance of getting this flavor text.");
 
         nodeType = NodeTypes.Empty;
@@ -82,15 +82,15 @@ public class Node_Empty : Node
         {
             return;
         }
-
-        //Update node bg color
-        SetNodeBGColorVisited();
         
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
         
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {
             //The following code is run AFTER camera has returned to free cam view and paused the general delay time
+
+            //Update node bg color
+            SetNodeBGColorVisited();
 
             //Display random flavor text
             nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});

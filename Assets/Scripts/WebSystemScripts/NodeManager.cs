@@ -164,7 +164,7 @@ public class NodeManager : MonoBehaviour
     }
 
     //Function to replace a node with another
-    public void ReplaceNode(GameObject nodeToReplace, NodeTypes newNodeType)
+    public void ReplaceNode(GameObject nodeToReplace, NodeTypes newNodeType, bool setVisited = false)
     {
         //Instantiate the new node, move it to the right position
         GameObject newNodeGO = Instantiate(nodeTypes[(int)newNodeType], UIParentGO.transform);
@@ -187,6 +187,9 @@ public class NodeManager : MonoBehaviour
 
         //Delete the node to replace
         Destroy(nodeToReplace);
+
+        //If setVisited is true, we want to set this new node to be already visited
+        newNodeGO.GetComponent<Node>().SetNodeBGColorVisited();
     }
 
     //Function to check if this node is reachable from the current node; note that the first node is auto allowed
@@ -207,9 +210,12 @@ public class NodeManager : MonoBehaviour
             RoguelikeGameplayController.ResetBites();
 
             //*******HERE, check if the previous node was anything that needs to be replaced upon exit
+            
+            //Replace scavenge nodes with empty nodes
             if(currentNode.nodeType == NodeTypes.Scavenge)
             {
-                ReplaceNode(currentNode.gameObject, NodeTypes.Empty);
+                ReplaceNode(currentNode.gameObject, NodeTypes.Empty, true);
+
             }
 
             currentNode = nodeToVisit; //update the current node

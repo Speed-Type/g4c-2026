@@ -9,7 +9,7 @@ public class Node_Start : Node
     protected override void Awake()
     {
         base.Awake();
-        
+
         //MIGHT LEAD TO A BUG LATER??
         nodeType = NodeTypes.Start;
     }
@@ -22,15 +22,15 @@ public class Node_Start : Node
             return;
         }
 
-        //Update node bg color
-        SetNodeBGColorVisited();
-
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
 
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {
             //The following code is run AFTER camera has returned to free cam view and dialogue box is just about to open
 
+            //Update node bg color
+            SetNodeBGColorVisited();
+            
             //Display flavor text, depending on whether the player has returned to this node or this is the first time they've been here
             if(hasVisited == false)
             {

@@ -11,7 +11,7 @@ public class Node_Scavenge : Node
     protected override void Awake()
     {
         base.Awake();
-        
+
         nodeType = NodeTypes.Scavenge;
     }
 
@@ -22,9 +22,6 @@ public class Node_Scavenge : Node
         {
             return;
         }
-
-        //Update node bg color
-        SetNodeBGColorVisited();
         
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
@@ -56,6 +53,9 @@ public class Node_Scavenge : Node
         {
             //The following code is run AFTER camera has returned to free cam view and paused the general delay time
 
+            //Update node bg color
+            SetNodeBGColorVisited();
+            
             //Display random flavor text
             //nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
             nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Temp text for found bug", "..."});
