@@ -183,6 +183,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Open them up
         foreach(PlayerOptionButtons button in openButtons)
         {
+            //These tweens are tied to this RGManager gameobject (important to note)
             LeanTween.value(this.gameObject, UpdatePlayerOptionButtonHeight, playerOptionButtonShrunkenSize, playerOptionButtonDefaultDimensions.y, playerOptionButtonShrinkSpeed).setEaseOutElastic();
         }
     }
