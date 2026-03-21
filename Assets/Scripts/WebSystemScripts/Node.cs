@@ -72,5 +72,7 @@ public class Node : MonoBehaviour
         hasBeenVisited = true;
 
         backgroundImage.color = Color.white;
+
+        RevealNode(); //If the player has visited a node it should also reveal its type
     }
 }
