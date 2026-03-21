@@ -11,8 +11,8 @@ public class Fragment_AfricanBigHeadedAnt_Antenna : Fragment
 
         maxHealth = 2;
 
-        displayBugGroup = "Ant";
-        displayBodyPart = "Antenna";
+        displayBugGroup = "Ant-enna";
+        displayBodyPart = "";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
         displayDescription = "[Fun flavor text; this fragment's effect also here; just gonna put a bunch of words for now to test out text wrapping n stuff]";

@@ -8,10 +8,14 @@ using UnityEngine.UI;
 public class Fragment_Bite : Fragment
 {
     protected int damage = 1;
-    private int shakeTween;
     [SerializeField] protected Sprite openBiteSprite;
     [SerializeField] protected Sprite closedBiteSprite;
+
+    //Scale factor should be the multiplier necessary to make the 100x100 ver. of this fragment into its actual size
+    [SerializeField] private float scaleFactor;
+    private int shakeTween;
     private Image graphicImage;
+    private RectTransform graphicRectTransform;
 
     public Fragment_Bite()
     {
@@ -47,6 +51,10 @@ public class Fragment_Bite : Fragment
         canvasRectTransform = canvas.GetComponent<RectTransform>();
         belongedInventory = FindFirstObjectByType<LootManager>();
         graphicImage = graphicGO.GetComponent<Image>();
+        graphicRectTransform = graphicGO.GetComponent<RectTransform>();
+
+        //Set size to shrunken size
+        graphicGO.transform.localScale = Vector3.one / scaleFactor;
     }
 
     public override void OnBeginDrag(PointerEventData eventData)
@@ -62,7 +70,7 @@ public class Fragment_Bite : Fragment
             .id;
         
         //Also scale up a teense
-        LeanTween.scale(rectTransform, Vector3.one * 1.1f, 0.1f);
+        LeanTween.scale(graphicRectTransform, Vector3.one, 0.1f);
 
         //Start highlight coroutine
         StartCoroutine(TimedBiteHighlightCoroutine());
@@ -107,9 +115,6 @@ public class Fragment_Bite : Fragment
         LeanTween.cancel(shakeTween);
         rectTransform.rotation = Quaternion.identity; //Reset rotation
 
-        //Reset scale
-        LeanTween.scale(rectTransform, Vector3.one, 0.1f);
-
         //Clear inventory highlight
         belongedInventory.ClearBiteHighlight();
 
@@ -130,6 +135,7 @@ public class Fragment_Bite : Fragment
             {
                 //And then reposition
                 RoguelikeGameplayController.ReloadBite_Static();
+                graphicGO.transform.localScale = Vector3.one / scaleFactor;
                 rectTransform.rotation = Quaternion.identity; //Reset rotation
                 graphicImage.sprite = openBiteSprite;
                 isBiting = false;

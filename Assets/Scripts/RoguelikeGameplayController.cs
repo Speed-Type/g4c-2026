@@ -44,6 +44,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
+    private GeneralInventoryStructure inventoryManager;
     private bool playerCanMakeChoices;
 
     //Static variable for current game state
@@ -297,6 +298,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Initialize the list of all buttons
         allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
     
+        //Initialize inventory manager (is attached to the same object)
+        inventoryManager = GetComponent<InventoryManager>();
+
         //Reset Fragment class's static variable
         Fragment.ResetFragmentList();
 
@@ -325,9 +329,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Moves bite back to proper position, shows if there are any bites remaining
     private void ReloadBite()
     {
+        //POTENTIALLY: Reset size of bite here
         if(remainingBites > 0)
         {
-            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position; //Reset position
+            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-biteList[currentBite].GetComponent<Fragment_Bite>().shape.GetLength(1) * inventoryManager.inventorySlotSize / 2f, biteList[currentBite].GetComponent<Fragment_Bite>().shape.GetLength(0) * inventoryManager.inventorySlotSize / 2f, 0); //Reset position
             biteList[currentBite].SetActive(true);
         }
         else
