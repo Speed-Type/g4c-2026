@@ -11,13 +11,9 @@ public class Node : MonoBehaviour
     [SerializeField] private List<Node> nodeList;
     public NodeTypes nodeType;
     public bool isRevealed = false;
-    public Sprite revealedSprite;
-    private Image image;
-
-    void Awake()
-    {
-        image = GetComponent<Image>();
-    }
+    [Tooltip("This should be the node border image, not the fill")]
+    [SerializeField] private Image nodeImage;
+    [SerializeField] private Sprite revealedSprite;
 
     //Accessor methods
     public bool HasNode(Node other)
@@ -51,7 +47,7 @@ public class Node : MonoBehaviour
     {
         if(isRevealed) return;
 
-        image.sprite = revealedSprite;
+        nodeImage.sprite = revealedSprite;
     }
 
     //Node traversal method
