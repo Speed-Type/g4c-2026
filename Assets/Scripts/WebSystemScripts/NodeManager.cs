@@ -110,8 +110,8 @@ public class NodeManager : MonoBehaviour
         //Create array
         GameObject[] generatedNodeTypes = new GameObject[1 + webNumRadii * webNumCircleWebs];
 
-        //Center node is guaranteed [TODO]
-        generatedNodeTypes[0] = nodeTypes[2]; //temporarily, it's a scavenge node
+        //Center node is guaranteed a scavenger node
+        generatedNodeTypes[0] = nodeTypes[2];
 
         //Fill in rest randomly
         float totalRandomPool = 0;
