@@ -294,7 +294,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         Debug.Log("Effects deactivated");
     }
 
-    //Note that the current number of Shake calls is 10; can be adjusted by changing this variable
     protected void Shake()
     {
         //Stop current tween for shake effect

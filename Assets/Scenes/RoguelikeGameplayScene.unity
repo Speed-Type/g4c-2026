@@ -589,8 +589,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39dcefc5bb4f45d38c619accd155373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverAnim
-  initialSizeMultiplier: 1.2
-  undulatingSizeMultiplier: 1.2
+  initialSizeMultiplier: 1.1
+  undulatingSizeMultiplier: 1.1
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
@@ -1670,6 +1670,7 @@ GameObject:
   - component: {fileID: 618513893}
   - component: {fileID: 618513892}
   - component: {fileID: 618513895}
+  - component: {fileID: 618513896}
   m_Layer: 5
   m_Name: ShowMapButton
   m_TagString: Untagged
@@ -1809,6 +1810,20 @@ MonoBehaviour:
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
+--- !u!114 &618513896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618513890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 944f2f9bd8bf04405bc392cc603c29a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickAnim
+  maxRotation: 6
+  shakeTime: 0.05
 --- !u!1001 &647211180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7306,8 +7321,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39dcefc5bb4f45d38c619accd155373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverAnim
-  initialSizeMultiplier: 1.2
-  undulatingSizeMultiplier: 1.2
+  initialSizeMultiplier: 1.1
+  undulatingSizeMultiplier: 1.1
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
@@ -7324,6 +7339,7 @@ GameObject:
   - component: {fileID: 951200076}
   - component: {fileID: 951200075}
   - component: {fileID: 951200078}
+  - component: {fileID: 951200079}
   m_Layer: 5
   m_Name: ShowInventoryButton
   m_TagString: Untagged
@@ -7463,6 +7479,20 @@ MonoBehaviour:
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
+--- !u!114 &951200079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951200073}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 944f2f9bd8bf04405bc392cc603c29a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickAnim
+  maxRotation: 6
+  shakeTime: 0.05
 --- !u!1 &983832745
 GameObject:
   m_ObjectHideFlags: 0
@@ -7895,6 +7925,7 @@ GameObject:
   - component: {fileID: 1188239658}
   - component: {fileID: 1188239657}
   - component: {fileID: 1188239660}
+  - component: {fileID: 1188239661}
   m_Layer: 5
   m_Name: ShowLootButton
   m_TagString: Untagged
@@ -8034,6 +8065,20 @@ MonoBehaviour:
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
+--- !u!114 &1188239661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188239655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 944f2f9bd8bf04405bc392cc603c29a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonClickAnim
+  maxRotation: 6
+  shakeTime: 0.05
 --- !u!1 &1191268155
 GameObject:
   m_ObjectHideFlags: 0
@@ -8429,8 +8474,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b39dcefc5bb4f45d38c619accd155373, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonHoverAnim
-  initialSizeMultiplier: 1.2
-  undulatingSizeMultiplier: 1.2
+  initialSizeMultiplier: 1.1
+  undulatingSizeMultiplier: 1.1
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
@@ -8795,8 +8840,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 618513891}
   - {fileID: 894034287}
+  - {fileID: 618513891}
   - {fileID: 951200074}
   - {fileID: 1188239656}
   m_Father: {fileID: 2060764577}
