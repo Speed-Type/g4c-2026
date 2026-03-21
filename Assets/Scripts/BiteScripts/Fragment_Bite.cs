@@ -12,7 +12,7 @@ public class Fragment_Bite : Fragment
     [SerializeField] protected Sprite closedBiteSprite;
 
     //Scale factor should be the multiplier necessary to make the 100x100 ver. of this fragment into its actual size
-    [SerializeField] private float scaleFactor;
+    public float scaleFactor;
     private int shakeTween;
     private Image graphicImage;
     private RectTransform graphicRectTransform;

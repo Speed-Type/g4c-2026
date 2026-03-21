@@ -332,7 +332,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         //POTENTIALLY: Reset size of bite here
         if(remainingBites > 0)
         {
-            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-biteList[currentBite].GetComponent<Fragment_Bite>().shape.GetLength(1) * inventoryManager.inventorySlotSize / 2f, biteList[currentBite].GetComponent<Fragment_Bite>().shape.GetLength(0) * inventoryManager.inventorySlotSize / 2f, 0); //Reset position
+            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-inventoryManager.inventorySlotSize / 2f, inventoryManager.inventorySlotSize / 2f, 0); //Reset position
             biteList[currentBite].SetActive(true);
         }
         else

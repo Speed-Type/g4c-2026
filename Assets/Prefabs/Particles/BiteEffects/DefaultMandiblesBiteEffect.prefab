@@ -105,6 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2416896165011049775}
   - component: {fileID: 6092432435892384881}
+  - component: {fileID: 6868545927717388988}
   m_Layer: 5
   m_Name: DefaultMandiblesBiteEffect
   m_TagString: Untagged
@@ -140,3 +141,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6540945806359403633}
   m_CullTransparentMesh: 1
+--- !u!114 &6868545927717388988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6540945806359403633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca8b7ae1ecc743099398a062b7ac688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyAfterTime
+  timeTilDestroy: 1
