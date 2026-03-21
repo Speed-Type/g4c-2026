@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class NodeManager : MonoBehaviour
 {
@@ -215,14 +216,59 @@ public class NodeManager : MonoBehaviour
             if(currentNode.nodeType == NodeTypes.Scavenge)
             {
                 ReplaceNode(currentNode.gameObject, NodeTypes.Empty, true);
-
             }
 
             currentNode = nodeToVisit; //update the current node
 
+            RevealAdjacentNodes(); //Show adjacent nodes as necessary
+
             UpdatePlayerMarker();
             return true;
         }
+        return false;
+    }
+
+    //Method that reveals the proper number of surrounding nodes of the player, according to their upgrades
+    private void RevealAdjacentNodes()
+    {
+        for(int i = 0; i < RoguelikeGameplayController.instance.emptyNodesToReveal; i++)
+        {
+            if(TryRevealNode(currentNode, NodeTypes.Empty) == false) i = 9999;
+        }
+    }
+
+    //Method to try to reveal a single not-yet-revealed node of a given type that is adjacent to the parameter node
+    //Returns: Whether or not it was successful
+    private bool TryRevealNode(Node nodeToCheck, NodeTypes nodeType, bool doRecursion = true)
+    {
+        //Store data to reduce number of accesses
+        List<Node> adjacentNodes = nodeToCheck.GetNodeList();
+        int totalNodes = adjacentNodes.Count;
+
+        //Pick a random node to check first
+        int firstIndex = UnityEngine.Random.Range(0, totalNodes);
+
+        //Looping around from that node, check nodes to see if they match the nodeType parameter
+        for(int i = 0; i < totalNodes; i++)
+        {
+            Node checkingNode = adjacentNodes[(firstIndex + i) % totalNodes];
+
+            //Check if this node itself hits all conditions
+            if(checkingNode.nodeType == nodeType && !checkingNode.isRevealed)
+            {
+                checkingNode.RevealNode();
+                Debug.Log("Revealed node " + checkingNode.gameObject.name);
+                return true;
+            }
+
+            //Otherwise, if this is not already a recursive call, check if this node's adjacent nodes hit conditions
+            if(doRecursion && TryRevealNode(checkingNode, nodeType, false))
+            {
+                return true;
+            }
+        }
+
+        //If nothing else, return false
         return false;
     }
 

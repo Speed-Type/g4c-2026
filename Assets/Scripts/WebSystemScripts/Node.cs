@@ -55,6 +55,7 @@ public class Node : MonoBehaviour
     public void RevealNode()
     {
         if(isRevealed) return;
+        isRevealed = true;
 
         nodeTypeImage.sprite = revealedSprite;
     }

@@ -14,6 +14,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     public int maxBites;
     private int remainingBites;
 
+    //Variables for revealing nodes
+    public int emptyNodesToReveal;
+    public int scavengerNodesToReveal;
+    //public int combatNodesToReveal;
+    //public int eventNodesToReveal;
+
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     [SerializeField] private GameObject inventorySystemGO;
@@ -57,7 +63,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static GameState gameState;
 
     //Static variable for holding the one instance of this variable
-    private static RoguelikeGameplayController instance;
+    public static RoguelikeGameplayController instance;
 
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
