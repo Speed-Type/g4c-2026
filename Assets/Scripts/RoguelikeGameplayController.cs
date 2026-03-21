@@ -357,7 +357,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
             //Hide background
             biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
-                .setEaseOutElastic()
+                .setEaseInElastic()
                 .id;
         }
     }
