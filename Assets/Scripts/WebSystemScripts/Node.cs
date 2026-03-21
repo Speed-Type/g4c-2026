@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class Node : MonoBehaviour
 {
@@ -9,6 +10,14 @@ public class Node : MonoBehaviour
     //Instance variables
     [SerializeField] private List<Node> nodeList;
     public NodeTypes nodeType;
+    public bool isRevealed = false;
+    public Sprite revealedSprite;
+    private Image image;
+
+    void Awake()
+    {
+        image = GetComponent<Image>();
+    }
 
     //Accessor methods
     public bool HasNode(Node other)
@@ -37,9 +46,15 @@ public class Node : MonoBehaviour
         nodeManager = other;
     }
 
-    //Node traversal methods
+    //Method to reveal the actual node type
+    public void RevealNode()
+    {
+        if(isRevealed) return;
 
-    
+        image.sprite = revealedSprite;
+    }
+
+    //Node traversal method
     public virtual void VisitNode()
     {
         //This method is called using super in subclasses

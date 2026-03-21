@@ -956,7 +956,7 @@ MonoBehaviour:
   savedFreeCamTransform: {fileID: 345559258}
   savedMapCamPosition: {fileID: 1080935106}
   cloudTransitionGO: {fileID: 1974897838}
-  cloudTransitionLength: 0.75
+  cloudTransitionLength: 0.6
   yawDragSensitivity: 20
   pitchDragSensitivity: 12.5
   yawSmoothTime: 3
@@ -10093,10 +10093,10 @@ MonoBehaviour:
   webNumRadii: 9
   webNumCircleWebs: 4
   webRadiusSize:
-  - 175
-  - 100
-  - 100
-  - 100
+  - 140
+  - 110
+  - 110
+  - 110
   nodeTypes:
   - {fileID: 3369285449052209603, guid: 790fffc899b5f486cb10a5601f0a7aaf, type: 3}
   - {fileID: 3369285449052209603, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
@@ -10106,10 +10106,10 @@ MonoBehaviour:
   - 1
   - 1
   nodePositionRandomization:
+  - 10
   - 15
-  - 20
-  - 20
-  - 30
+  - 15
+  - 25
 --- !u!1 &1876415590
 GameObject:
   m_ObjectHideFlags: 0
