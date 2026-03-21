@@ -8140,7 +8140,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1876415591}
-  - {fileID: 1801756513}
   m_Father: {fileID: 1423970773}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -9793,16 +9792,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801756512}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1218308484}
+  m_Father: {fileID: 1876415591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0000070333, y: 113.3181}
+  m_AnchoredPosition: {x: 0, y: 149.9}
   m_SizeDelta: {x: 57.8462, y: 49.7638}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1801756514
@@ -10123,7 +10122,7 @@ GameObject:
   - component: {fileID: 1876415593}
   - component: {fileID: 1876415592}
   m_Layer: 5
-  m_Name: Graphic
+  m_Name: BackgroundGraphic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10140,13 +10139,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1801756513}
   m_Father: {fileID: 1218308484}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -87}
-  m_SizeDelta: {x: 270, y: 521.9937}
+  m_AnchoredPosition: {x: 0, y: -34.954895}
+  m_SizeDelta: {x: 270, y: 417.9035}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1876415592
 MonoBehaviour:
@@ -10236,6 +10236,8 @@ MonoBehaviour:
   - {fileID: 7732393482049450751}
   currentBite: 0
   biteHomePosition: {fileID: 1218308484}
+  biteBackgroundRectTransform: {fileID: 1876415591}
+  biteBackgroundPopupAnimLength: 0.5
   bitesRemainingText: {fileID: 1801756514}
   hiddenPosition: {fileID: 2043729213}
   shownPosition: {fileID: 1448716845}

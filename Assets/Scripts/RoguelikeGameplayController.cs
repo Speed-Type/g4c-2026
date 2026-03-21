@@ -34,6 +34,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private GameObject[] biteList;
     [SerializeField] private int currentBite;
     [SerializeField] private RectTransform biteHomePosition;
+    [SerializeField] private RectTransform biteBackgroundRectTransform;
+    [SerializeField] private float biteBackgroundPopupAnimLength = .2f;
+    private Vector2 biteBackgroundOriginalPos;
     [SerializeField] private TMP_Text bitesRemainingText;
 
     [Header("References for Placement of Inventory and Loot Systems")]
@@ -251,12 +254,13 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        //lootSystemGO.SetActive(true);
         lootSystemGO.GetComponent<RectTransform>().position = shownPosition.position;
-        //inventorySystemGO.SetActive(true);
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         hideInventorySystemButton.SetActive(false);
         dialogueSystemController.HideDialogueBox();
+
+        //Prepare bite system
+        biteBackgroundRectTransform.localPosition = biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y); //TODO: reset bg position to a lower position
         ReloadBite();
 
         //Update game state
@@ -267,9 +271,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        //lootSystemGO.SetActive(false);
         lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        //inventorySystemGO.SetActive(false);
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
@@ -284,27 +286,25 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Set the instance
         instance = this;
 
+        //Initialize variables
+        playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
+        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
+        inventoryManager = GetComponent<InventoryManager>();
+        biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
+
+        //Reset Fragment class's static variable
+        Fragment.ResetFragmentList();
+    }
+
+    void Start()
+    {
         //Enable/disable necessary systems
         nodeMapGO.SetActive(true);
-        //inventorySystemGO.SetActive(false);
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        //lootSystemGO.SetActive(false);
         lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
-
-        //Initialize default player option button dimensions
-        playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
-
-        //Initialize the list of all buttons
-        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
-    
-        //Initialize inventory manager (is attached to the same object)
-        inventoryManager = GetComponent<InventoryManager>();
-
-        //Reset Fragment class's static variable
-        Fragment.ResetFragmentList();
 
         //Set number of bites
         ResetBites();
@@ -337,11 +337,22 @@ public class RoguelikeGameplayController : MonoBehaviour
         if(remainingBites > 0)
         {
             biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-inventoryManager.inventorySlotSize / 2f, inventoryManager.inventorySlotSize / 2f, 0); //Reset position
-            biteList[currentBite].SetActive(true);
+
+            //Move into view
+            LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos, biteBackgroundPopupAnimLength)
+                .setEaseOutElastic()
+                .setOnComplete(() =>
+                {
+                    biteList[currentBite].SetActive(true); //Show after the popup is done
+                });
         }
         else
         {
-            biteList[currentBite].SetActive(false);
+            biteList[currentBite].SetActive(false); //immediately hide the bite
+
+            //Hide background
+            LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
+                .setEaseOutElastic();
         }
     }
 
