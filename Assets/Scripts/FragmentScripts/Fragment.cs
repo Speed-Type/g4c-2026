@@ -83,7 +83,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //If there is any surrounding flesh, the method stops here
         if(belongedInventory.IsAdjacentFlesh(this)) return;
 
-        //Otherwise, make this fragment belong to the player
+        //Otherwise, remove this fragment from the loot manager and then make this fragment belong to the player
+        belongedInventory.RemoveFragment(this);
         belongedInventory = FindFirstObjectByType<InventoryManager>();
         isFree = true;
 
