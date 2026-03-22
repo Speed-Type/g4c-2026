@@ -404,6 +404,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Graphically update
         graphicGO.GetComponent<Image>().color = destroyedFragmentColor;
+
+        Shake(); //Animate
+
+
+        //Spawn Particles
+        RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
     }
 
     //Method to auto-delete all fragments that are either not free or not equipped

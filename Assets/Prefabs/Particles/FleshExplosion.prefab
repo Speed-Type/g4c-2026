@@ -174,8 +174,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 20
-      minScalar: 15
+      scalar: 10
+      minScalar: 30
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -292,8 +292,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
-      minScalar: 0.25
+      scalar: 1.5
+      minScalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -616,7 +616,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 9.8
+      scalar: 30
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -670,7 +670,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 90
+    angle: 53.9
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -756,7 +756,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.0001
+      value: 1
       mode: 0
       spread: 0
       speed:
@@ -985,7 +985,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 30
+        scalar: 20
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -1051,20 +1051,20 @@ ParticleSystem:
         - serializedVersion: 3
           time: 0
           value: 0
-          inSlope: 30.221584
-          outSlope: 30.221584
+          inSlope: 6.3715043
+          outSlope: 6.3715043
           tangentMode: 0
           weightedMode: 0
           inWeight: 0
-          outWeight: 0.013536379
+          outWeight: 0.087986454
         - serializedVersion: 3
           time: 1
           value: 0
-          inSlope: -8.721195
-          outSlope: -8.721195
+          inSlope: -4.531212
+          outSlope: -4.531212
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.0829103
+          inWeight: 0.14044005
           outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -1201,7 +1201,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   RotationModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 3
@@ -1554,7 +1554,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -2034,29 +2034,29 @@ ParticleSystem:
         m_RotationOrder: 4
     radial:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0
-      minScalar: 0
+      minMaxState: 1
+      scalar: 10
+      minScalar: -5
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: 0.5757561
+          inSlope: 0.68881977
+          outSlope: 0.68881977
           tangentMode: 0
           weightedMode: 0
           inWeight: 0.33333334
-          outWeight: 0.33333334
+          outWeight: 0.17597291
         - serializedVersion: 3
           time: 1
-          value: 0
-          inSlope: 0
-          outSlope: 0
+          value: -1
+          inSlope: -6.6329865
+          outSlope: -6.6329865
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
+          inWeight: 0.04568535
           outWeight: 0.33333334
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -2088,7 +2088,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.49
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -4845,7 +4845,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 03152583f2c33474e8aa465929c7082b, type: 2}
+  - {fileID: 2100000, guid: a884c6dd42f094be0b8e34bf2adb89ed, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4918,6 +4918,7 @@ GameObject:
   - component: {fileID: 4744221135459583187}
   - component: {fileID: 3060232899737076851}
   - component: {fileID: 4791364983173098973}
+  - component: {fileID: 5980896972700050844}
   m_Layer: 0
   m_Name: FleshExplosion
   m_TagString: Untagged
@@ -4976,7 +4977,7 @@ MonoBehaviour:
   m_IsTrail: 0
   m_IgnoreCanvasScaler: 0
   m_AbsoluteMode: 0
-  m_Scale3D: {x: 10, y: 10, z: 10}
+  m_Scale3D: {x: 20, y: 20, z: 20}
   m_AnimatableProperties: []
   m_Particles:
   - {fileID: 1350799594055680421}
@@ -4989,3 +4990,16 @@ MonoBehaviour:
   m_UseCustomView: 0
   m_CustomViewSize: 10
   m_TimeScaleMultiplier: 1
+--- !u!114 &5980896972700050844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2407011753175084463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca8b7ae1ecc743099398a062b7ac688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyAfterTime
+  timeTilDestroy: 3
