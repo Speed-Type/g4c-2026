@@ -228,10 +228,6 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public static void SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)
     {
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(canvas.worldCamera, positionToSpawnAt);
-
-        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 5f));
-
-        Instantiate(particleGO, worldPos, Quaternion.identity, canvas.transform);
+        Instantiate(particleGO, positionToSpawnAt, Quaternion.identity, canvas.transform);
     }
 }

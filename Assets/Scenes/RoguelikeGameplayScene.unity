@@ -10419,6 +10419,8 @@ MonoBehaviour:
   playerHealth: 0
   playerFlesh: 0
   maxBites: 3
+  emptyNodesToReveal: 0
+  scavengerNodesToReveal: 0
   dialogueSystemController: {fileID: 859266379}
   inventorySystemGO: {fileID: 2051013936}
   lootSystemGO: {fileID: 1423970772}

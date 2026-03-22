@@ -51,7 +51,7 @@ public class Fragment_Flesh : Fragment
         .setEaseOutElastic()
         .setOnComplete(() =>
         {
-            RoguelikeCameraController.SpawnParticle(transform.position, deathParticles);
+            RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(belongedInventory.inventorySlotSize / 2f, -belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
             Destroy(this.gameObject);
         });
     }
