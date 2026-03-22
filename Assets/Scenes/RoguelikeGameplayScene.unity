@@ -989,6 +989,8 @@ MonoBehaviour:
   zoomSpeed: 0.75
   zoomSmoothTime: 0.15
   inventoryCamHorizontalOffset: 5
+  inventoryCamVerticalOffset: 4
+  inventoryCamTransitionAnimTime: 0.5
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0

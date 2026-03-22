@@ -39,6 +39,7 @@ public class RoguelikeCameraController : MonoBehaviour
 
     [Header("Inventory Cam Parameters")]
     [SerializeField] private float inventoryCamHorizontalOffset = 5;
+    [SerializeField] private float inventoryCamVerticalOffset = 1;
     [SerializeField] private float inventoryCamTransitionAnimTime = 0.5f;
 
     [Header("Camera Transitions Timing")]
@@ -51,6 +52,7 @@ public class RoguelikeCameraController : MonoBehaviour
     private float currentPitch;
     private float currentZoom;
     private float currentHorizontalOffset; //used in inventory cam focus shift
+    private float currentVerticalOffset;
     private float targetZoom;
     private float yawVelocity;
     private float pitchVelocity;
@@ -59,7 +61,8 @@ public class RoguelikeCameraController : MonoBehaviour
     private bool isFreeCam;
     private bool isOverUI;
     private int inventoryCamTransitionTween;
-    private int offsetTransitionTween;
+    private int horizontalOffsetTransitionTween;
+    private int verticalOffsetTransitionTween;
 
     void Awake()
     {
@@ -125,17 +128,26 @@ public class RoguelikeCameraController : MonoBehaviour
             .id;
 
         //Reset offset
-        LeanTween.cancel(offsetTransitionTween);
-        offsetTransitionTween = LeanTween.value(currentHorizontalOffset, 0, inventoryCamTransitionAnimTime)
+        LeanTween.cancel(horizontalOffsetTransitionTween);
+        LeanTween.cancel(verticalOffsetTransitionTween);
+        horizontalOffsetTransitionTween = LeanTween.value(currentHorizontalOffset, 0, inventoryCamTransitionAnimTime)
             .setOnUpdate((float val) =>
             {
                 currentHorizontalOffset = val;
             })
             .setEaseInOutSine()
             .id;
+        verticalOffsetTransitionTween = LeanTween.value(currentVerticalOffset, 0, inventoryCamTransitionAnimTime)
+            .setOnUpdate((float val) =>
+            {
+                currentVerticalOffset = val;
+            })
+            .setEaseInOutSine()
+            .id;
 
-        //Reset idle rotation speed
+        //Reset freecam capabilities
         idleRotationSpeed *= 2f;
+        maxPitch *= 2f;
     }
 
     public void ShiftFreecamFocusToCaterpillar()
@@ -147,20 +159,27 @@ public class RoguelikeCameraController : MonoBehaviour
             .id;
 
         //Set offset (so that caterpillar remains on right side of screen)
-        LeanTween.cancel(offsetTransitionTween);
-        offsetTransitionTween = LeanTween.value(currentHorizontalOffset, inventoryCamHorizontalOffset, inventoryCamTransitionAnimTime)
+        LeanTween.cancel(horizontalOffsetTransitionTween);
+        LeanTween.cancel(verticalOffsetTransitionTween);
+        horizontalOffsetTransitionTween = LeanTween.value(currentHorizontalOffset, inventoryCamHorizontalOffset, inventoryCamTransitionAnimTime)
             .setOnUpdate((float val) =>
             {
                 currentHorizontalOffset = val;
             })
             .setEaseInOutSine()
             .id;
+        verticalOffsetTransitionTween = LeanTween.value(currentVerticalOffset, inventoryCamVerticalOffset, inventoryCamTransitionAnimTime)
+            .setOnUpdate((float val) =>
+            {
+                currentVerticalOffset = val;
+            })
+            .setEaseInOutSine()
+            .id;
         
-        //Set zoom
+        //Reduce freecam capabilities
         targetZoom = 20f;
-
-        //Decrease idle rotation speed
         idleRotationSpeed /= 2f;
+        maxPitch /= 2f;
     }
 
     private void CloudTransitionOut()
@@ -286,7 +305,7 @@ public class RoguelikeCameraController : MonoBehaviour
             //---------SCREW THIS MATH---------//
 
             //Always look at the target
-            transform.LookAt(targetTransform.position - transform.right * currentHorizontalOffset);
+            transform.LookAt(targetTransform.position - transform.right * currentHorizontalOffset - transform.up * currentVerticalOffset);
         }
     }
 
