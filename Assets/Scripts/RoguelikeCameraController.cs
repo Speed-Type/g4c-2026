@@ -309,8 +309,8 @@ public class RoguelikeCameraController : MonoBehaviour
         }
     }
 
-    public static void SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)
+    public static GameObject SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)
     {
-        Instantiate(particleGO, positionToSpawnAt, Quaternion.identity, canvas.transform);
+        return Instantiate(particleGO, positionToSpawnAt, Quaternion.identity, canvas.transform);
     }
 }

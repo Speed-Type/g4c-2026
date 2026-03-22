@@ -23,8 +23,8 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
-    [SerializeField] private GameObject inventorySystemGO;
-    [SerializeField] private GameObject lootSystemGO;
+    public GameObject inventorySystemGO;
+    public GameObject lootSystemGO;
     [SerializeField] private GameObject nodeMapGO;
     
     [Header("Player Option Buttons")]

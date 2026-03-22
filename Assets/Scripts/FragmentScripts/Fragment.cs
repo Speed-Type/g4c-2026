@@ -411,7 +411,18 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
 
         //Spawn Particles
-        RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
+       GameObject spawnedParticles = RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
+    
+        if(isFree)
+        {
+            //Parent the spawned particles under the inventory system
+            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.inventorySystemGO.transform);
+        }
+        else
+        {
+            //Parent the spawned particles under the loot system
+            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.lootSystemGO.transform);
+        }
     }
 
     //Method to auto-delete all fragments that are either not free or not equipped
