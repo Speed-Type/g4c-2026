@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -13,12 +14,18 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float peekHeight;
     [SerializeField] private float statWindowAnimLength;
 
+    [Header("Flesh Fill Bar Anim Params")]
+    [SerializeField] private float flashAnimLength;
+    [SerializeField] private Color fleshBarFlashColor;
+    [SerializeField] private float smoothGrowthAnimLength;
+
     //Internal variables
     private float inventoryBarMaxWidth;
     private float lootBarMaxWidth;
     private DisplayState displayState;
     private float openHeight;
     private int statWindowTween;
+    private Color fleshBarOriginalColor;
     private static StatDisplay instance;
 
     void Awake()
@@ -30,7 +37,8 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         openHeight = statWindow.sizeDelta.y;
         displayState = DisplayState.Closed;
         inventoryBarMaxWidth = fleshFillBarInventory.sizeDelta.x;
-        lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x; 
+        lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x;
+        fleshBarOriginalColor = fleshFillBarInventory.gameObject.GetComponent<Image>().color;
 
         //Close stat window
         statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, 0);
@@ -100,9 +108,16 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     //Method to update a single flesh fill bar
     private void UpdateFleshFillBar(RectTransform fillBar, float maxWidth)
     {
+        //Update the fill bar size
         float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
-
         fillBar.sizeDelta = new Vector2(desiredPercentage * maxWidth, fillBar.sizeDelta.y);
+
+        //Flash the bar
+        fillBar.gameObject.GetComponent<Image>().color = fleshBarFlashColor;
+        LeanTween.delayedCall(flashAnimLength, () =>
+        {
+            fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor;
+        });
     }
 
     private void UpdateAllFleshFillBars()

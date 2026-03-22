@@ -11692,8 +11692,11 @@ MonoBehaviour:
   statWindow: {fileID: 1488140583}
   fleshFillBarInventory: {fileID: 1863216548}
   fleshFillBarLooting: {fileID: 50146096}
-  peekHeight: 30
-  statWindowAnimLength: 0.4
+  peekHeight: 50
+  statWindowAnimLength: 0.5
+  flashAnimLength: 0.1
+  fleshBarFlashColor: {r: 1, g: 0, b: 0.8392157, a: 1}
+  smoothGrowthAnimLength: 0.1
 --- !u!1 &1970615138
 GameObject:
   m_ObjectHideFlags: 0
