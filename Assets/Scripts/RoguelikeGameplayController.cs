@@ -115,7 +115,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
         {
             //Camera transition
-            cameraController.StopFreeCam();
+            cameraController.TransitionToMapCam();
 
             //The following code runs after free cam has transitioned to map state
             LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming, () =>
@@ -160,7 +160,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             gameState = GameState.Idle;
 
             //Update camera
-            cameraController.StartFreeCam();
+            cameraController.TransitionToFreeCam();
 
             //The following code runs after camera has transitioned back to free cam and paused the general delay amount
             LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + RoguelikeCameraController.generalDelayBetweenTransitions, () =>
@@ -226,21 +226,25 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        //inventorySystemGO.SetActive(true);
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         dialogueSystemController.HideDialogueBox();
 
+        //Update camera
+        cameraController.ShiftFreecamFocusToCaterpillar();
+
         //Update game state
-        gameState = GameState.InMenu;
+        gameState = GameState.Inventory;
     }
 
     public void HideInventory()
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        //inventorySystemGO.SetActive(false);
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         dialogueSystemController.ShowDialogueBox();
+
+        //Update camera
+        cameraController.ShiftFreecamFocusToIdle();
 
         //Update game state
         gameState = GameState.Idle;
@@ -273,7 +277,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         ReloadBite();
 
         //Update game state
-        gameState = GameState.InMenu;
+        gameState = GameState.Loot;
     }
 
     public void HideLoot()
@@ -387,5 +391,6 @@ public enum GameState
 {
     Map,
     Idle,
-    InMenu
+    Inventory,
+    Loot
 }

@@ -9,8 +9,10 @@ public class RoguelikeCameraController : MonoBehaviour
     //Variables in inspector
     [Header("Reference Transforms")]
     [SerializeField] private Transform targetTransform;
+    [SerializeField] Transform freeCamIdleTransform;
     [SerializeField] private Transform savedFreeCamTransform;
-    [SerializeField] private Transform savedMapCamPosition;
+    [SerializeField] private Transform mapCamTransform;
+    [SerializeField] private Transform inventoryFocusTransform;
 
     [Header("Transition Settings")]
     [SerializeField] private GameObject cloudTransitionGO;
@@ -18,21 +20,25 @@ public class RoguelikeCameraController : MonoBehaviour
     private Color defaultCloudColor;
 
     [Header("Free Cam Rotation Parameters")]
-    public float yawDragSensitivity = 20f;
-    public float pitchDragSensitivity = 10f;
-    public float yawSmoothTime = 3f;
-    public float pitchSmoothTime = 6f;
-    public float idleRotationSpeed = 10f;
+    [SerializeField] private float yawDragSensitivity = 20f;
+    [SerializeField] private float pitchDragSensitivity = 10f;
+    [SerializeField] private float yawSmoothTime = 3f;
+    [SerializeField] private float pitchSmoothTime = 6f;
+    [SerializeField] private float idleRotationSpeed = 10f;
 
     [Header("Free Cam Vertical Clamp")]
-    public float maxPitch = 60f;
-    public float minPitch = -20f;
+    [SerializeField] private float maxPitch = 60f;
+    [SerializeField] private float minPitch = -20f;
 
     [Header("Zoom Parameters")]
-    public float minDistance = 10f;
-    public float maxDistance = 30f;
-    public float zoomSpeed = 0.75f;
-    public float zoomSmoothTime = .15f;
+    [SerializeField] private float minZoom = 10f;
+    [SerializeField] private float maxZoom = 30f;
+    [SerializeField] private float zoomSpeed = 0.75f;
+    [SerializeField] private float zoomSmoothTime = .15f;
+
+    [Header("Inventory Cam Parameters")]
+    [SerializeField] private float inventoryCamHorizontalOffset = 5;
+    [SerializeField] private float inventoryCamTransitionAnimTime = 0.5f;
 
     [Header("Camera Transitions Timing")]
     public static float freeCamTransitionTiming = 1f;
@@ -42,13 +48,16 @@ public class RoguelikeCameraController : MonoBehaviour
     private static Canvas canvas;
     private int freeCamIdleRotationDirection = 1;
     private float currentPitch;
-    private float currentDistance;
-    private float targetDistance;
+    private float currentZoom;
+    private float currentHorizontalOffset; //used in inventory cam focus shift
+    private float targetZoom;
     private float yawVelocity;
     private float pitchVelocity;
     private float zoomVelocity;
     private bool pressing;
     private bool isFreeCam;
+    private int inventoryCamTransitionTween;
+    private int offsetTransitionTween;
 
     void Awake()
     {
@@ -66,14 +75,14 @@ public class RoguelikeCameraController : MonoBehaviour
 
         //Initialize freecam values
         currentPitch = 0;
-        currentDistance = (maxDistance + minDistance) / 2f;
-        targetDistance = currentDistance;
+        currentZoom = (maxZoom + minZoom) / 2f;
+        targetZoom = currentZoom;
 
         //Initialize cloud transition color
         defaultCloudColor = cloudTransitionGO.GetComponent<Image>().color;
     }
 
-    public void StartFreeCam()
+    public void TransitionToFreeCam()
     {
         //Smooth transition to freecam view
         LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
@@ -84,9 +93,12 @@ public class RoguelikeCameraController : MonoBehaviour
     
         //Also do cloud transition
         CloudTransitionIn();
+
+        //Set target transform position
+        targetTransform.position = freeCamIdleTransform.position;
     }
 
-    public void StopFreeCam()
+    public void TransitionToMapCam()
     {
         //Save necessary positions
         savedFreeCamTransform.position = transform.position;
@@ -95,11 +107,58 @@ public class RoguelikeCameraController : MonoBehaviour
         isFreeCam = false;
 
         //Smooth transition to overhead map view
-        LeanTween.move(this.gameObject, savedMapCamPosition, freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
+        LeanTween.move(this.gameObject, mapCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
         LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
     
         //Also do fog transition
         CloudTransitionOut();
+    }
+
+    public void ShiftFreecamFocusToIdle()
+    {
+        //Tween target transform position
+        LeanTween.cancel(inventoryCamTransitionTween);
+        inventoryCamTransitionTween = LeanTween.move(targetTransform.gameObject, freeCamIdleTransform.position, inventoryCamTransitionAnimTime)
+            .setEaseInOutSine()
+            .id;
+
+        //Reset offset
+        LeanTween.cancel(offsetTransitionTween);
+        offsetTransitionTween = LeanTween.value(currentHorizontalOffset, 0, inventoryCamTransitionAnimTime)
+            .setOnUpdate((float val) =>
+            {
+                currentHorizontalOffset = val;
+            })
+            .setEaseInOutSine()
+            .id;
+
+        //Reset idle rotation speed
+        idleRotationSpeed *= 2f;
+    }
+
+    public void ShiftFreecamFocusToCaterpillar()
+    {
+        //Tween target transform position
+        LeanTween.cancel(inventoryCamTransitionTween);
+        inventoryCamTransitionTween = LeanTween.move(targetTransform.gameObject, inventoryFocusTransform.position, inventoryCamTransitionAnimTime)
+            .setEaseInOutSine()
+            .id;
+
+        //Set offset (so that caterpillar remains on right side of screen)
+        LeanTween.cancel(offsetTransitionTween);
+        offsetTransitionTween = LeanTween.value(currentHorizontalOffset, inventoryCamHorizontalOffset, inventoryCamTransitionAnimTime)
+            .setOnUpdate((float val) =>
+            {
+                currentHorizontalOffset = val;
+            })
+            .setEaseInOutSine()
+            .id;
+        
+        //Set zoom
+        targetZoom = 20f;
+
+        //Decrease idle rotation speed
+        idleRotationSpeed /= 2f;
     }
 
     private void CloudTransitionOut()
@@ -146,7 +205,7 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext ctx)
     {
-        if(RoguelikeGameplayController.gameState != GameState.Idle) return;
+        if(RoguelikeGameplayController.gameState == GameState.Loot || !isFreeCam) return; //look should be available in all cases where cam is in freecam mode (eg idle, inventory) EXCEPT looting
         if(!pressing) return;
 
         Vector2 delta = ctx.ReadValue<Vector2>();
@@ -165,14 +224,14 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public void OnZoom(InputAction.CallbackContext ctx)
     {
-        if(RoguelikeGameplayController.gameState != GameState.Idle) return;
+        if(RoguelikeGameplayController.gameState != GameState.Idle) return; //zoom should ONLY be available in idle freecam mode (i.e. not in inventory)
         
         float scroll = ctx.ReadValue<float>();
 
-        targetDistance -= scroll * zoomSpeed;
+        targetZoom -= scroll * zoomSpeed;
 
         //Clamp it
-        targetDistance = Mathf.Clamp(targetDistance, minDistance, maxDistance);
+        targetZoom = Mathf.Clamp(targetZoom, minZoom, maxZoom);
     }
 
     void LateUpdate()
@@ -190,7 +249,7 @@ public class RoguelikeCameraController : MonoBehaviour
             }
 
             //Smoothly transition zoom
-            currentDistance = Mathf.SmoothDamp(currentDistance, targetDistance, ref zoomVelocity, zoomSmoothTime);
+            currentZoom = Mathf.SmoothDamp(currentZoom, targetZoom, ref zoomVelocity, zoomSmoothTime);
 
             //Rotate around the target by yaw
             transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
@@ -202,7 +261,7 @@ public class RoguelikeCameraController : MonoBehaviour
 
             //Get direction from target to camera, set distance to the current distance
             Vector3 offset = transform.position - targetTransform.position;
-            float radius = currentDistance;
+            float radius = currentZoom;
 
             //Calculate yaw direction (horizontal plane)
             Vector3 flatDir = new Vector3(offset.x, 0, offset.z).normalized;
@@ -222,7 +281,7 @@ public class RoguelikeCameraController : MonoBehaviour
             //---------SCREW THIS MATH---------//
 
             //Always look at the target
-            transform.LookAt(targetTransform);
+            transform.LookAt(targetTransform.position - transform.right * currentHorizontalOffset);
         }
     }
 
