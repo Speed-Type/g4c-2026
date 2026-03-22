@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class RoguelikeCameraController : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class RoguelikeCameraController : MonoBehaviour
     private float zoomVelocity;
     private bool pressing;
     private bool isFreeCam;
+    private bool isOverUI;
     private int inventoryCamTransitionTween;
     private int offsetTransitionTween;
 
@@ -207,6 +209,7 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         if(RoguelikeGameplayController.gameState == GameState.Loot || !isFreeCam) return; //look should be available in all cases where cam is in freecam mode (eg idle, inventory) EXCEPT looting
         if(!pressing) return;
+        if(isOverUI) return; //only rotate when not hovered over UI
 
         Vector2 delta = ctx.ReadValue<Vector2>();
         yawVelocity = delta.x * yawDragSensitivity;
@@ -238,8 +241,10 @@ public class RoguelikeCameraController : MonoBehaviour
     {
         if(isFreeCam)
         {
+            isOverUI = EventSystem.current.IsPointerOverGameObject();
+
             //Rotation when not dragging
-            if (!pressing)
+            if (!pressing || isOverUI)
             {
                 //Smoothly transition yaw speed to idle speed
                 yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
