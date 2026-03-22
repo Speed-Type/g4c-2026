@@ -209,6 +209,17 @@ public class LootManager : GeneralInventoryStructure
         //Graphically, randomize the tiling offset of the background
         lootSystemBackground.material.mainTextureOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f,1f));
     }
+
+    public static string LootTableEnumToBugName(LootTables lootTable)
+    {
+        switch(lootTable)
+        {
+            case LootTables.AfricanBigHeadedAnt:
+                return "African Big-Headed Ant";
+        }
+
+        return "ERROR: NOT FOUND";
+    }
 }
 
 //Enumerator for loot tables

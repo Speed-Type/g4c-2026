@@ -7,25 +7,25 @@ public class Node_Scavenge : Node
 
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
+    private LootTables spawnedBug;
+
+    private List<string> flavorText = new List<string> //USE [BugName] (CASE-SENSITIVE) AS PLACEHOLDER FOR THE BUG'S NAME
+    {
+        "The [BugName] is trapped. Easy prey.",
+        "You find the [BugName] wrapped in the spider's webbing. Surely there's something left of it to take.",
+        "The [BugName] is long chewed-through, but maybe there's some flesh left for you.",
+        "The [BugName]'s remains would go to waste anyway. Might as well take what you can.",
+        "Well, it's your namesake after all. Go collect the bones of that [BugName].",
+        "That [BugName]'s limbs would make excellent decoration for your silk casing."
+    };
 
     protected override void Awake()
     {
         base.Awake();
 
         nodeType = NodeTypes.Scavenge;
-    }
 
-    public override void VisitNode()
-    {
-        //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
-        if(!nodeManager.TryVisitNode(this))
-        {
-            return;
-        }
-        
-        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
-        
-        //Generate loot
+        //Set the spawned bug
 
         //First, get the total odds
         int sum = 0;
@@ -44,10 +44,23 @@ public class Node_Scavenge : Node
             if(current >= rand)
             {
                 //This is the correct index
-                FindFirstObjectByType<LootManager>().GenerateLoot((LootTables)j);
-                j = bugLootOdds.Length + 67;
+                spawnedBug = (LootTables)j;
             }
         }
+    }
+
+    public override void VisitNode()
+    {
+        //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
+        if(!nodeManager.TryVisitNode(this))
+        {
+            return;
+        }
+        
+        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
+        
+        //Generate loot
+        FindFirstObjectByType<LootManager>().GenerateLoot(spawnedBug);
 
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {
@@ -57,8 +70,10 @@ public class Node_Scavenge : Node
             SetNodeBGColorVisited();
             
             //Display random flavor text
-            //nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
-            nodeManager.rgController.dialogueBoxController.SetText(new List<string> {"Temp text for found bug", "..."});
+            string encounterText = flavorText[Random.Range(0, flavorText.Count)];
+            encounterText = encounterText.Replace("[BugName]", LootManager.LootTableEnumToBugName(spawnedBug));
+
+            nodeManager.rgController.dialogueBoxController.SetText(new List<string> {encounterText, "..."});
         });
     }
 }

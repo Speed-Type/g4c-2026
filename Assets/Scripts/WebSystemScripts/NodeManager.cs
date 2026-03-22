@@ -25,6 +25,13 @@ public class NodeManager : MonoBehaviour
     [Header("Web Animations Timing")]
     public static float playerTravelAnimTime = 1.25f;
 
+    [Header("Caterpillar Movement Reference Transforms")]
+    [SerializeField] private GameObject caterpillarGO;
+    [SerializeField] private Transform startingPositionTransform;
+    [SerializeField] private Transform singleBugPositionTransform;
+    [SerializeField] private Transform doubleBugPositionTransform;
+    [SerializeField] private float caterpillarMovementAnimTime;
+
     public static bool isMovingNodes = false;
 
     public void GenerateWeb()
@@ -222,7 +229,7 @@ public class NodeManager : MonoBehaviour
 
             RevealAdjacentNodes(); //Show adjacent nodes as necessary
 
-            UpdatePlayerMarker();
+            UpdatePlayerMarker(); //Make player marker actually move to the selected node
             return true;
         }
         return false;
@@ -281,7 +288,29 @@ public class NodeManager : MonoBehaviour
     {
         playerMarkerGO.transform.SetAsLastSibling();
         LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
-            .setEase(LeanTweenType.easeInOutSine);
+            .setEase(LeanTweenType.easeInOutSine)
+            .setOnComplete(() =>
+            {
+                //Make the 3d caterpillar do its tween to enter the scene
+                TweenCaterpillar();
+            });
+    }
+
+    //Tween 3d caterpillar to proper spot
+    private void TweenCaterpillar()
+    {
+        //Reset caterpillar position
+        caterpillarGO.transform.position = startingPositionTransform.position;
+
+        //Determine final position based on current node's type
+        if(currentNode.nodeType == NodeTypes.Scavenge)
+        {
+            LeanTween.move(caterpillarGO, doubleBugPositionTransform, caterpillarMovementAnimTime);
+        }
+        else
+        {
+            LeanTween.move(caterpillarGO, singleBugPositionTransform, caterpillarMovementAnimTime);
+        }
     }
 
     void Start()

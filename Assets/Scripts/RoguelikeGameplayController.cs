@@ -11,6 +11,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [Header("Player Data")]
     public int playerHealth;
     public int playerFlesh;
+    public int goalFlesh;
     public int maxBites;
     private int remainingBites;
 

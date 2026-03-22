@@ -63,7 +63,8 @@ public class Node_Empty : Node
         "You wonder what the world will be like, even just a generation into the future.",
         "The Hawaiian weather is just wonderful. It almost distracts you from the fact that you're stealing food from under a spider's nose.",
         "Tip: The center node of a web is guaranteed to have some goodies. It can be a bit dangerous to reach though.",
-        "Tip: Any goodies you leave behind usually fall off the web. Be sure to take anything you really want!"
+        "Tip: Any goodies you leave behind usually fall off the web. Be sure to take anything you really want!",
+        "For a bug that's about as small as a grain of rice, you feel disproportionately hungry."
     };
 
     protected override void Awake()
