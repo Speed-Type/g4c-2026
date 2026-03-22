@@ -15,16 +15,24 @@ public class Fragment_AfricanBigHeadedAnt_Antenna : Fragment
         displayBodyPart = "";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "[Fun flavor text; this fragment's effect also here; just gonna put a bunch of words for now to test out text wrapping n stuff]";
+        displayDescription = "The primary navigation tool of the ant.\nReveal one extra Scavenge node upon moving nodes.";
     }
 
-    public override void ActivateEffects()
+    public override bool ActivateEffects()
     {
-        base.ActivateEffects();
+        if(base.ActivateEffects() == false) return false;
+
+        RoguelikeGameplayController.instance.scavengerNodesToReveal++;
+
+        return true;
     }
 
-    public override void DeactivateEffects()
+    public override bool DeactivateEffects()
     {
-        base.DeactivateEffects();
+        if(base.DeactivateEffects() == false) return false;
+
+        RoguelikeGameplayController.instance.scavengerNodesToReveal--;
+
+        return true;
     }
 }

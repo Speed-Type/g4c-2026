@@ -152,12 +152,12 @@ public class LootManager : GeneralInventoryStructure
             if(placementSuccessful)
             {
                 //If placement successful, TBD
-                Debug.Log("Placement successful");
+                
             }
             else
             {
                 //If unsuccessful, destroy that fragment
-                Debug.Log("Placement failed");
+                
                 Destroy(newFragmentGO);
             }
         }

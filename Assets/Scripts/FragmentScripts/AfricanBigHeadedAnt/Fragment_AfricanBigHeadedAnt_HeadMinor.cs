@@ -16,16 +16,24 @@ public class Fragment_AfricanBigHeadedAnt_HeadMinor : Fragment
         displayBodyPart = "Head (Minor)";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "[Fun flavor text; this fragment's effect also here; just gonna put a bunch of words for now to test out text wrapping n stuff]";
+        displayDescription = "These ants are dimorphic, split between major workers (soldiers) and minor workers.\nIncrease number of bites by 1.";
     }
 
-    public override void ActivateEffects()
+    public override bool ActivateEffects()
     {
-        base.ActivateEffects();
+        if(base.ActivateEffects() == false) return false;
+        
+        RoguelikeGameplayController.instance.maxBites++;
+
+        return true;
     }
 
-    public override void DeactivateEffects()
+    public override bool DeactivateEffects()
     {
-        base.DeactivateEffects();
+        if(base.DeactivateEffects() == false) return false;
+
+        RoguelikeGameplayController.instance.maxBites--;
+
+        return true;
     }
 }

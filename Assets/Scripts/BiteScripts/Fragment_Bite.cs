@@ -147,14 +147,16 @@ public class Fragment_Bite : Fragment
         //Should not be able to rotate
     }
 
-    public override void ActivateEffects()
+    public override bool ActivateEffects()
     {
         //Has no effect
+        return false;
     }
 
-    public override void DeactivateEffects()
+    public override bool DeactivateEffects()
     {
         //Has no effect
+        return false;
     }
 
     //Method for starting tooltip hovering

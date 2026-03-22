@@ -10,13 +10,17 @@ public class Fragment_Test2 : Fragment
         };
     }
 
-    public override void ActivateEffects()
+    public override bool ActivateEffects()
     {
-        base.ActivateEffects();
+        if(base.ActivateEffects() == false) return false;
+        
+        return true;
     }
 
-    public override void DeactivateEffects()
+    public override bool DeactivateEffects()
     {
-        base.DeactivateEffects();
+        if(base.DeactivateEffects() == false) return false;
+        
+        return true;
     }
 }

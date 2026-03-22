@@ -274,24 +274,26 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     //Method to be overridden in children
     //The effects of a fragment should be here, as this is called when a fragment is equipped
-    public virtual void ActivateEffects()
+    public virtual bool ActivateEffects()
     {
-        if(effectsActive) return; //Just in case, so as to avoid re-activating effects
-        if(currentHealth <= 0) return; //ActivateEffects only handles effect things when not dead
+        if(effectsActive) return false; //Just in case, so as to avoid re-activating effects
+        if(currentHealth <= 0) return false; //ActivateEffects only handles effect things when not dead
         
         effectsActive = true;
         Debug.Log("Effects activated");
+        return true;
     }
 
     //Method to be overridden in children
     //Should deactivate the effects of a fragment, as this is called when a fragment is unequipped
-    public virtual void DeactivateEffects()
+    public virtual bool DeactivateEffects()
     {
-        if(!effectsActive) return; //Just in case, so as to avoid re-deactivating effects
-        if(currentHealth <= 0) return; //DeactivateEffects only handles effect things when not dead
+        if(!effectsActive) return false; //Just in case, so as to avoid re-deactivating effects
+        if(currentHealth <= 0) return false; //DeactivateEffects only handles effect things when not dead
 
         effectsActive = false;
         Debug.Log("Effects deactivated");
+        return true;
     }
 
     protected void Shake()
