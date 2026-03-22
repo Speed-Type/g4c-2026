@@ -470,10 +470,10 @@ RectTransform:
   m_Father: {fileID: 899230195}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: 828, y: -20}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &50146097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1163,7 +1163,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 947949841}
   - {fileID: 1849130982}
   - {fileID: 2106849937}
   - {fileID: 45881614}
@@ -7871,37 +7870,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 899230194}
   m_CullTransparentMesh: 1
---- !u!1 &947949840
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 947949841}
-  m_Layer: 0
-  m_Name: StartingPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &947949841
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 947949840}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.04, y: 0.75, z: 17.09}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 321082789}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951200073
 GameObject:
   m_ObjectHideFlags: 0
@@ -11170,10 +11138,10 @@ RectTransform:
   m_Father: {fileID: 1407533305}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 10, y: 0}
+  m_SizeDelta: {x: 600, y: -20}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &1863216549
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11282,10 +11250,8 @@ MonoBehaviour:
   - 15
   - 25
   caterpillarGO: {fileID: 1907272274}
-  startingPositionTransform: {fileID: 947949841}
   singleBugPositionTransform: {fileID: 1849130982}
   doubleBugPositionTransform: {fileID: 2106849937}
-  caterpillarMovementAnimTime: 5
 --- !u!1 &1876415590
 GameObject:
   m_ObjectHideFlags: 0
@@ -11395,8 +11361,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoguelikeGameplayController
   dialogueBoxController: {fileID: 859266379}
   playerHealth: 0
-  playerFlesh: 0
-  goalFlesh: 0
+  currentFlesh: 0
+  goalFlesh: 10
   maxBites: 3
   emptyNodesToReveal: 0
   scavengerNodesToReveal: 0
@@ -11644,7 +11610,7 @@ GameObject:
   - component: {fileID: 1946982348}
   - component: {fileID: 1946982350}
   m_Layer: 5
-  m_Name: StatsButton
+  m_Name: StatSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11726,8 +11692,8 @@ MonoBehaviour:
   statWindow: {fileID: 1488140583}
   fleshFillBarInventory: {fileID: 1863216548}
   fleshFillBarLooting: {fileID: 50146096}
-  peekHeight: 15
-  statWindowAnimLength: 0.25
+  peekHeight: 30
+  statWindowAnimLength: 0.4
 --- !u!1 &1970615138
 GameObject:
   m_ObjectHideFlags: 0

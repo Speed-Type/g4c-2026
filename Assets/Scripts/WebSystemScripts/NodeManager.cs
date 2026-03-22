@@ -27,12 +27,17 @@ public class NodeManager : MonoBehaviour
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
-    [SerializeField] private Transform startingPositionTransform;
     [SerializeField] private Transform singleBugPositionTransform;
     [SerializeField] private Transform doubleBugPositionTransform;
-    [SerializeField] private float caterpillarMovementAnimTime;
 
     public static bool isMovingNodes = false;
+
+    void Start()
+    {
+        GenerateWeb();
+
+        isMovingNodes = false;
+    }
 
     public void GenerateWeb()
     {
@@ -230,6 +235,9 @@ public class NodeManager : MonoBehaviour
             RevealAdjacentNodes(); //Show adjacent nodes as necessary
 
             UpdatePlayerMarker(); //Make player marker actually move to the selected node
+
+            SetCaterpillarPosition(); //Update 3d caterpillar position for this new node
+
             return true;
         }
         return false;
@@ -288,36 +296,21 @@ public class NodeManager : MonoBehaviour
     {
         playerMarkerGO.transform.SetAsLastSibling();
         LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
-            .setEase(LeanTweenType.easeInOutSine)
-            .setOnComplete(() =>
-            {
-                //Make the 3d caterpillar do its tween to enter the scene
-                TweenCaterpillar();
-            });
+            .setEase(LeanTweenType.easeInOutSine);
     }
 
     //Tween 3d caterpillar to proper spot
-    private void TweenCaterpillar()
+    private void SetCaterpillarPosition()
     {
-        //Reset caterpillar position
-        caterpillarGO.transform.position = startingPositionTransform.position;
-
-        //Determine final position based on current node's type
+        //Determine caterpillar's position based on current node's type
         if(currentNode.nodeType == NodeTypes.Scavenge)
         {
-            LeanTween.move(caterpillarGO, doubleBugPositionTransform, caterpillarMovementAnimTime);
+            caterpillarGO.transform.position = doubleBugPositionTransform.position;
         }
         else
         {
-            LeanTween.move(caterpillarGO, singleBugPositionTransform, caterpillarMovementAnimTime);
+            caterpillarGO.transform.position = singleBugPositionTransform.position;
         }
-    }
-
-    void Start()
-    {
-        GenerateWeb();
-
-        isMovingNodes = false;
     }
 }
 

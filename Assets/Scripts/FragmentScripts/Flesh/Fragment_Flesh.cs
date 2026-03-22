@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 public class Fragment_Flesh : Fragment
 {
     public GameObject connectorGO;
+    private int fleshValue;
     public Fragment_Flesh()
     {
         shape = new bool[,]
@@ -23,7 +24,17 @@ public class Fragment_Flesh : Fragment
         displayScientificName = "";
         displayDescription = "You need it to grow.\nFragments can't be removed until their adjacent flesh is removed.";
         
-        base.Awake();
+        base.Awake(); //After, call the base class' Awake()
+
+        //Calculate flesh value
+        fleshValue = 0;
+        for(int row = 0; row < shape.GetLength(0); row++)
+        {
+            for(int col = 0; col < shape.GetLength(1); col++)
+            {
+                if(shape[row,col]) fleshValue++;
+            }
+        }
 
         Pulse(); //Start idle pulsating
     }
@@ -44,7 +55,7 @@ public class Fragment_Flesh : Fragment
         isDead = true;
         
         //Add flesh to player
-        RoguelikeGameplayController.AddFlesh(4);
+        RoguelikeGameplayController.AddFlesh(fleshValue);
 
         //Do graphical effect
         LeanTween.scale(gameObject, Vector3.one * 1.3f, 0.20f)

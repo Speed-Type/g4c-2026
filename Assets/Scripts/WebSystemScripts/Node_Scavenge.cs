@@ -14,9 +14,10 @@ public class Node_Scavenge : Node
         "The [BugName] is trapped. Easy prey.",
         "You find the [BugName] wrapped in the spider's webbing. Surely there's something left of it to take.",
         "The [BugName] is long chewed-through, but maybe there's some flesh left for you.",
-        "The [BugName]'s remains would go to waste anyway. Might as well take what you can.",
+        "This [BugName]'s remains would go to waste anyway. Might as well take what you can.",
         "Well, it's your namesake after all. Go collect the bones of that [BugName].",
-        "That [BugName]'s limbs would make excellent decoration for your silk casing."
+        "That [BugName]'s limbs would make excellent decoration for your silk casing.",
+        "This [BugName] still has some goodies left on it. You'll have to be strategic with extracting it though."
     };
 
     protected override void Awake()

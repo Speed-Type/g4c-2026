@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -13,6 +14,8 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float statWindowAnimLength;
 
     //Internal variables
+    private float inventoryBarMaxWidth;
+    private float lootBarMaxWidth;
     private DisplayState displayState;
     private float openHeight;
     private int statWindowTween;
@@ -26,11 +29,11 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //Initialize variables
         openHeight = statWindow.sizeDelta.y;
         displayState = DisplayState.Closed;
-    }
+        inventoryBarMaxWidth = fleshFillBarInventory.sizeDelta.x;
+        lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x; 
 
-    void OnEnable()
-    {
-        UpdateAllFleshFillBars();
+        //Close stat window
+        statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, 0);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -78,7 +81,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //Just tween anim stuff
         LeanTween.cancel(statWindowTween);
         statWindowTween = LeanTween.value(statWindow.sizeDelta.y, endVal, statWindowAnimLength)
-            .setEaseInOutQuart()
+            .setEaseOutElastic()
             .setOnUpdate((float val) =>
             {
                 statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, val);
@@ -88,21 +91,24 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OpenDisplay()
     {
-        //First, update all texts to display the right words n stuff
+        //TODO: First, update all texts to display the right words n stuff
 
         //Then, do the tween anim
         TweenStatWindow(openHeight);
     }
 
-    private void UpdateFleshFillBar(RectTransform fillBar)
+    //Method to update a single flesh fill bar
+    private void UpdateFleshFillBar(RectTransform fillBar, float maxWidth)
     {
-        //TODO: Method to update a single flesh fill bar
+        float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
+
+        fillBar.sizeDelta = new Vector2(desiredPercentage * maxWidth, fillBar.sizeDelta.y);
     }
 
     private void UpdateAllFleshFillBars()
     {
-        UpdateFleshFillBar(fleshFillBarInventory);
-        UpdateFleshFillBar(fleshFillBarLooting);
+        UpdateFleshFillBar(fleshFillBarInventory, inventoryBarMaxWidth);
+        UpdateFleshFillBar(fleshFillBarLooting, lootBarMaxWidth);
     }
 
     public static void UpdateAllFleshFillBars_Static()

@@ -10,7 +10,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     [Header("Player Data")]
     public int playerHealth;
-    public int playerFlesh;
+    public int currentFlesh;
     public int goalFlesh;
     public int maxBites;
     private int remainingBites;
@@ -66,6 +66,21 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     //Static variable for holding the one instance of this variable
     public static RoguelikeGameplayController instance;
+
+    void Awake()
+    {
+        //Set the instance
+        instance = this;
+
+        //Reset Fragment class's static variable
+        Fragment.ResetFragmentList();
+
+        //Initialize variables
+        playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
+        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
+        inventoryManager = GetComponent<InventoryManager>();
+        biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
+    }
 
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
@@ -231,6 +246,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         dialogueSystemController.HideDialogueBox();
         statSystemGO.SetActive(true);
+        StatDisplay.UpdateAllFleshFillBars_Static();
 
         //Update camera
         cameraController.ShiftFreecamFocusToCaterpillar();
@@ -274,6 +290,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         hideInventorySystemButton.SetActive(false);
         dialogueSystemController.HideDialogueBox();
+        StatDisplay.UpdateAllFleshFillBars_Static();
 
         //Prepare bite system
         LeanTween.cancel(biteBackgroundPopupTween); //cancel current tween to avoid overlap
@@ -300,21 +317,6 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Idle;
     }
 
-    void Awake()
-    {
-        //Set the instance
-        instance = this;
-
-        //Initialize variables
-        playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
-        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
-        inventoryManager = GetComponent<InventoryManager>();
-        biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
-
-        //Reset Fragment class's static variable
-        Fragment.ResetFragmentList();
-    }
-
     void Start()
     {
         //Enable/disable necessary systems
@@ -334,7 +336,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Static method to add flesh
     public static void AddFlesh(int amount)
     {
-        instance.playerFlesh += amount;
+        instance.currentFlesh += amount;
+
+        StatDisplay.UpdateAllFleshFillBars_Static(); //Also update flesh bars
     }
 
     //Static method to do a bite and decrease number of bites remaining
