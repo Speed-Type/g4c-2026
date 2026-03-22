@@ -25,6 +25,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private DialogueBoxController dialogueSystemController;
     public GameObject inventorySystemGO;
     public GameObject lootSystemGO;
+    public GameObject statSystemGO;
     [SerializeField] private GameObject nodeMapGO;
     
     [Header("Player Option Buttons")]
@@ -229,6 +230,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         TogglePlayerOptionButtons(false);
         inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
         dialogueSystemController.HideDialogueBox();
+        statSystemGO.SetActive(true);
 
         //Update camera
         cameraController.ShiftFreecamFocusToCaterpillar();
@@ -243,6 +245,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         TogglePlayerOptionButtons(true);
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         dialogueSystemController.ShowDialogueBox();
+        statSystemGO.SetActive(false);
 
         //Update camera
         cameraController.ShiftFreecamFocusToIdle();
@@ -318,6 +321,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         nodeMapGO.SetActive(true);
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        statSystemGO.SetActive(false);
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
