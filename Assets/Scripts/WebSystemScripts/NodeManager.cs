@@ -5,11 +5,13 @@ using System.Collections.Generic;
 public class NodeManager : MonoBehaviour
 {
     //Variables in Inspector
-    public RoguelikeGameplayController rgController;
+    [Header("Node Map References")]
     [SerializeField] private GameObject UIParentGO;
     [SerializeField] private GameObject playerMarkerGO;
+    [SerializeField] private GameObject spiderMarkerGO;
     [SerializeField] private GameObject threadGO;
-    [SerializeField] private Node currentNode;
+    [SerializeField] private Node playerNode;
+    [SerializeField] private Node spiderNode;
 
     [Header("Web Generation Parameters")]
     [Tooltip("Number of Web Radii must be >= 3")]
@@ -24,6 +26,7 @@ public class NodeManager : MonoBehaviour
 
     [Header("Web Animations Timing")]
     public static float playerTravelAnimTime = 1.25f;
+    public static float spiderTravelAnimTime = 1f;
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
@@ -93,10 +96,10 @@ public class NodeManager : MonoBehaviour
                 //Add web thread between graphically
                 AddThread(previousNodeRectTransform, newNodeRectTransform);
 
-                //In the case that this is the start node, update currentNode
+                //In the case that this is the start node, update playerNode
                 if(generatedNodeTypes[i * webNumRadii + j] == nodeTypes[0]) //note that nodeTypes[0] is the start node
                 {
-                    currentNode = newNode;
+                    playerNode = newNode;
                 }
             }
 
@@ -118,7 +121,7 @@ public class NodeManager : MonoBehaviour
         UpdatePlayerMarker();
 
         //Visit the current node
-        currentNode.VisitNode();
+        playerNode.VisitNode();
     }
     
     private GameObject[] GenerateRandomNodes()
@@ -196,9 +199,9 @@ public class NodeManager : MonoBehaviour
         }
 
         //If the node to replace is also the current node, update current node pointer
-        if(nodeToReplace.GetComponent<Node>() == currentNode)
+        if(nodeToReplace.GetComponent<Node>() == playerNode)
         {
-            currentNode = newNodeGO.GetComponent<Node>();
+            playerNode = newNodeGO.GetComponent<Node>();
         }
 
         //Delete the node to replace
@@ -212,7 +215,7 @@ public class NodeManager : MonoBehaviour
     private bool isFirstNode = true;
     public bool TryVisitNode(Node nodeToVisit)
     {
-        if(isFirstNode || currentNode.HasNode(nodeToVisit))
+        if(isFirstNode || playerNode.HasNode(nodeToVisit))
         {
             if(isMovingNodes) return false; //If already mid-node move, set it so that a node can't be selected
             isMovingNodes = true;
@@ -225,15 +228,20 @@ public class NodeManager : MonoBehaviour
             //Reset player bites
             RoguelikeGameplayController.ResetBites();
 
-            //*******HERE, check if the previous node was anything that needs to be replaced upon exit
+            //Preload the hide method
+            RoguelikeGameplayController.instance.HideMapPreloadFromScript();
+
+            //*******HERE, check if the previous node was anything that needs to be replaced upon exit*****
             
             //Replace scavenge nodes with empty nodes
-            if(currentNode.nodeType == NodeTypes.Scavenge)
+            if(playerNode.nodeType == NodeTypes.Scavenge)
             {
-                ReplaceNode(currentNode.gameObject, NodeTypes.Empty, true);
+                ReplaceNode(playerNode.gameObject, NodeTypes.Empty, true);
             }
 
-            currentNode = nodeToVisit; //update the current node
+            //*********************************************************************************************
+
+            playerNode = nodeToVisit; //update the current node
 
             RevealAdjacentNodes(); //Show adjacent nodes as necessary
 
@@ -251,12 +259,12 @@ public class NodeManager : MonoBehaviour
     {
         for(int i = 0; i < RoguelikeGameplayController.instance.emptyNodesToReveal; i++)
         {
-            if(TryRevealNode(currentNode, NodeTypes.Empty) == false) break;
+            if(TryRevealNode(playerNode, NodeTypes.Empty) == false) break;
         }
 
         for(int i = 0; i < RoguelikeGameplayController.instance.scavengerNodesToReveal; i++)
         {
-            if(TryRevealNode(currentNode, NodeTypes.Scavenge) == false) break;
+            if(TryRevealNode(playerNode, NodeTypes.Scavenge) == false) break;
         }
     }
 
@@ -298,8 +306,65 @@ public class NodeManager : MonoBehaviour
     private void UpdatePlayerMarker()
     {
         playerMarkerGO.transform.SetAsLastSibling();
-        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), currentNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
-            .setEase(LeanTweenType.easeInOutSine);
+        LeanTween.move(playerMarkerGO.GetComponent<RectTransform>(), playerNode.GetComponent<RectTransform>().localPosition, playerTravelAnimTime)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setOnComplete(() =>
+            {
+                //TODO: CALL SPIDER MOVEMENT METHOD TOO
+                DoSpiderTurn();
+            });
+    }
+
+    //Method that handles the spider's turn
+    private bool hasAttackedPlayer = false;
+    private void DoSpiderTurn(int currentMoveNum = 0)
+    {
+        if(spiderNode == playerNode) //TODO: CASE 1: SPIDER AND PLAYER ON SAME NODE
+        {
+            hasAttackedPlayer = true;
+
+            //TODO: build anticipation with long delay
+            LeanTween.delayedCall(1f, () =>
+            {
+                //Calculate if the player survives
+                if(RoguelikeGameplayController.instance.CheckCaterpillarSurvives())
+                {
+                    Debug.Log("SAFE");
+                    //Player lives, spider moves on (and moves off of player node)
+                    //We give the spider an extra turn (by not incrementing currentMoveNum)
+                    //This way the spider gets to move one more square, and it stops moving afterwards because hasAttackedPlayer == true
+                    DoSpiderTurn(currentMoveNum);
+                }
+                else
+                {
+                    //GAME OVER
+                    Debug.Log("GAME OVER");
+                }
+            });
+        }
+        else if(currentMoveNum == RoguelikeGameplayController.instance.spiderMovesPerTurn) //CASE 2: SPIDER HAS NO MORE MOVES
+        {
+            //Call to hide map
+            RoguelikeGameplayController.instance.HideMap(true);
+
+            //Call method for playerNode to its their thing
+            playerNode.DoNodeEffects();
+
+            //Set player attackable again
+            hasAttackedPlayer = false;
+        }
+        else //TODO: CASE 3: SPIDER JUST MOVES A NODE
+        {
+            //Calculate which node spider should move to
+
+            //Actually move spider
+            LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), playerNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
+            .setEase(LeanTweenType.easeInOutSine)
+            .setOnComplete(() =>
+            {
+                if(!hasAttackedPlayer) DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
+            });
+        }
     }
 
     //Tween 3d caterpillar to proper spot
@@ -309,14 +374,14 @@ public class NodeManager : MonoBehaviour
         if(enemyBugGO != null) Destroy(enemyBugGO);
 
         //Determine caterpillar's position based on current node's type
-        if(currentNode.nodeType == NodeTypes.Scavenge)
+        if(playerNode.nodeType == NodeTypes.Scavenge)
         {
             caterpillarGO.transform.position = doubleBugCaterpillarPositionTransform.position;
 
             //Also have to spawn the right bug
-            if(currentNode.nodeType == NodeTypes.Scavenge)
+            if(playerNode.nodeType == NodeTypes.Scavenge)
             {
-                enemyBugGO = Instantiate(currentNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
+                enemyBugGO = Instantiate(playerNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
             }
             //TODO: ALSO ADD ELSE CASE FOR BATTLE NODES
         }

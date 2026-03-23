@@ -14,6 +14,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public int goalFlesh;
     public int maxBites;
     private int remainingBites;
+    public float stealthChance;
 
     //Variables for revealing nodes
     public int emptyNodesToReveal;
@@ -22,6 +23,9 @@ public class RoguelikeGameplayController : MonoBehaviour
     //public int eventNodesToReveal;
 
     [Header("Spider Behavior")]
+    public int currentSpiderAlertness;
+    public int maxSpiderAlertness;
+    public int spiderMovesPerTurn;
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
@@ -55,7 +59,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private Transform shownPosition;
 
     [Header("Camera Stuff")]
-    [SerializeField] private RoguelikeCameraController cameraController;
+    public RoguelikeCameraController cameraController;
     
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
@@ -91,9 +95,6 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Shrink buttons
         ResetPlayerOptionButtonHeight();
-
-        //Immediately show player's options
-        HideMap(true);
     }
 
     //Method to convert enum PlayerOptionButtons to actual GameObjects
@@ -148,28 +149,30 @@ public class RoguelikeGameplayController : MonoBehaviour
         });
     }
 
-    //Method to hide map (and by extension, show open buttons)
-    public void HideMap(bool isNewNode = false)
+    public void HideMapPreloadFromScript()
     {
         //Hide "hide map" button
         hideMapButton.SetActive(false);
 
-        float waitTime = RoguelikeCameraController.generalDelayBetweenTransitions;
-        if(isNewNode)
-        {
-            waitTime += NodeManager.playerTravelAnimTime;
+        //Also disable player choices
+        playerCanMakeChoices = false;
+    }
 
-            //Also disable player choices
-            playerCanMakeChoices = false;
-        }
-        else
+    //General method to hide map (and by extension, show open buttons)
+    public void HideMap(bool isNewNode)
+    {
+        //Hide "hide map" button
+        hideMapButton.SetActive(false);
+
+        if(!isNewNode)
         {
+            //Hide map itself now
             nodeMapGO.SetActive(false);
         }
 
-        LeanTween.delayedCall(waitTime, () =>
+        LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
         {
-            //Hide map
+            //Hide map itself here if not already
             if(isNewNode)
             {
                 nodeMapGO.SetActive(false);
@@ -381,6 +384,26 @@ public class RoguelikeGameplayController : MonoBehaviour
             biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
                 .setEaseInElastic()
                 .id;
+        }
+    }
+
+    //Method to calculate whether the caterpillar survives
+    public bool CheckCaterpillarSurvives()
+    {
+        if(currentSpiderAlertness >= maxSpiderAlertness) //auto dead if spider is at max alertness
+        {
+            return false;
+        }
+        else //Otherwise, depends on player's stealth stat
+        {
+            if(Random.Range(0f,1f) < stealthChance)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 

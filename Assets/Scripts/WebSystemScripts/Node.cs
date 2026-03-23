@@ -76,8 +76,14 @@ public class Node : MonoBehaviour
             });
     }
 
-    //Node traversal method
+    //Node traversal method called by Button component
     public virtual void VisitNode()
+    {
+        //This method is called using super in subclasses
+    }
+
+    //Method that holds the actual node effects
+    public virtual void DoNodeEffects()
     {
         //This method is called using super in subclasses
     }

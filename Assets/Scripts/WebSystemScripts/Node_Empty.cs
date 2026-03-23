@@ -84,9 +84,12 @@ public class Node_Empty : Node
             return;
         }
         
-        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
-        
-        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
+        RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory});
+    }
+
+    public override void DoNodeEffects()
+    {
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions, () =>
         {
             //The following code is run AFTER camera has returned to free cam view and paused the general delay time
 
@@ -94,7 +97,7 @@ public class Node_Empty : Node
             SetNodeBGColorVisited();
 
             //Display random flavor text
-            nodeManager.rgController.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
+            RoguelikeGameplayController.instance.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
         });
     }
 }

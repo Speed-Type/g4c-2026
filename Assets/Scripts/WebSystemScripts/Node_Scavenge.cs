@@ -60,12 +60,15 @@ public class Node_Scavenge : Node
             return;
         }
         
-        nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
+        RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
         //Generate loot
         lootManager.GenerateLoot(spawnedBug);
+    }
 
-        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
+    public override void DoNodeEffects()
+    {
+        LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions, () =>
         {
             //The following code is run AFTER camera has returned to free cam view and paused the general delay time
 
@@ -76,7 +79,7 @@ public class Node_Scavenge : Node
             string encounterText = flavorText[Random.Range(0, flavorText.Count)];
             encounterText = encounterText.Replace("[BugName]", LootManager.LootTableEnumToBugName(spawnedBug));
 
-            nodeManager.rgController.dialogueBoxController.SetText(new List<string> {encounterText, "..."});
+            RoguelikeGameplayController.instance.dialogueBoxController.SetText(new List<string> {encounterText, "..."});
         });
     }
 
