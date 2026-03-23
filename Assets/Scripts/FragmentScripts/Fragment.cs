@@ -57,11 +57,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Static list for all fragments
     private static List<Fragment> fragmentList;
 
-    public static void ResetFragmentList()
-    {
-        fragmentList = new List<Fragment>();
-    }
-
     protected virtual void Awake()
     {
         //Setup input
@@ -81,19 +76,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         fragmentList.Add(this);
     }
 
-    //Method to remove fragment; nothing needs to be changed in subclasses for this (only flesh overrides it with an empty method)
-    public virtual void TryFreeFragment()
+    public static void ResetFragmentList()
     {
-        //If there is any surrounding flesh, the method stops here
-        if(belongedInventory.IsAdjacentFlesh(this)) return;
-
-        //Otherwise, remove this fragment from the loot manager and then make this fragment belong to the player
-        belongedInventory.RemoveFragment(this);
-        belongedInventory = FindFirstObjectByType<InventoryManager>();
-        isFree = true;
-
-        //Change parent transform to inventory system parent transform
-        transform.SetParent(belongedInventory.inventorySystemParentTransform);
+        fragmentList = new List<Fragment>();
     }
 
     void OnEnable()
@@ -201,6 +186,46 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         //Clear inventory highlight
         belongedInventory.ClearHighlight();
+    }
+
+    //Method for starting tooltip hovering
+    public virtual void OnPointerEnter(PointerEventData eventData)
+    {
+        if(isBeingDragged) return; //This should not run if it's being dragged
+
+        //Determine what to display for fragment health
+        string durabilityDescription = "Durability: " + Math.Max(currentHealth, 0) + "/" + maxHealth + "\n";
+        if(currentHealth <= 0)
+        {
+            TooltipManager.ColorRed_Static();
+        }
+        else
+        {
+            TooltipManager.ColorDefault_Static();
+        }
+
+        TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, durabilityDescription, displayDescription);
+    }
+
+    //Method for stopping tooltip hovering
+    public virtual void OnPointerExit(PointerEventData eventData)
+    {
+        TooltipManager.HideTooltip_Static();
+    }
+
+    //Method to remove fragment; nothing needs to be changed in subclasses for this (only flesh overrides it with an empty method)
+    public virtual void TryFreeFragment()
+    {
+        //If there is any surrounding flesh, the method stops here
+        if(belongedInventory.IsAdjacentFlesh(this)) return;
+
+        //Otherwise, remove this fragment from the loot manager and then make this fragment belong to the player
+        belongedInventory.RemoveFragment(this);
+        belongedInventory = FindFirstObjectByType<InventoryManager>();
+        isFree = true;
+
+        //Change parent transform to inventory system parent transform
+        transform.SetParent(belongedInventory.inventorySystemParentTransform);
     }
 
     //Overridden method to be called by input system
@@ -325,31 +350,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
     }
 
-    //Method for starting tooltip hovering
-    public virtual void OnPointerEnter(PointerEventData eventData)
-    {
-        if(isBeingDragged) return; //This should not run if it's being dragged
-
-        //Determine what to display for fragment health
-        string durabilityDescription = "Durability: " + Math.Max(currentHealth, 0) + "/" + maxHealth + "\n";
-        if(currentHealth <= 0)
-        {
-            TooltipManager.ColorRed_Static();
-        }
-        else
-        {
-            TooltipManager.ColorDefault_Static();
-        }
-
-        TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, durabilityDescription, displayDescription);
-    }
-
-    //Method for stopping tooltip hovering
-    public virtual void OnPointerExit(PointerEventData eventData)
-    {
-        TooltipManager.HideTooltip_Static();
-    }
-
     public void TakeDamage(int damage)
     {
         currentHealth -= damage; //Reduce health
@@ -453,5 +453,11 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual bool IsFlesh()
     {
         return false;
+    }
+
+    //Returns center's grid offset from the top left corner pivot position
+    public Vector2 GetCenterOffset()
+    {
+        return new Vector2(shape.GetLength(0) / 2f, shape.GetLength(1) / 2f);
     }
 }

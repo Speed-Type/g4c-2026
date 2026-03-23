@@ -26,15 +26,19 @@ public class InventoryManager : GeneralInventoryStructure
         fragment.ActivateEffects();
         fragment.isEquipped = true;
 
-        //TODO: Place visually on player model
         //Note that x corresponds to row number, which is basically y in cartesian coordinates,
         //and y corresponds to column number, which is basically x in cartesian coordinates
 
-        //First, calculate position of this 3d model
-        float t = (float)y / (inventoryNumCols - 1);
+        //Get center of fragment
+        Vector2 centerOffset = fragment.GetCenterOffset();
+        float newX = x + centerOffset.x;
+        float newY = y + centerOffset.y;
+
+        //Calculate spawn position
+        float t = (float)newY / (inventoryNumCols - 1);
         float angle = Mathf.Lerp(0f, Mathf.PI, t);
 
-        float heightOffset = (x + 1 - inventoryNumRows * 0.5f) * (caterpillarLength / inventoryNumRows);
+        float heightOffset = (newX + 1 - inventoryNumRows * 0.5f) * (caterpillarLength / inventoryNumRows);
 
         Vector3 localPos = new Vector3(
             Mathf.Cos(angle) * caterpillarRadius,
@@ -44,7 +48,7 @@ public class InventoryManager : GeneralInventoryStructure
 
         Vector3 spawnPosition = playerModelTransform.TransformPoint(localPos);
 
-        //Now, calculate rotation, such that the model points outward
+        //Now, calculate spawn rotation, such that the model points outward
         Vector3 localOutward = new Vector3(
             Mathf.Cos(angle),
             Mathf.Sin(angle),
@@ -55,8 +59,17 @@ public class InventoryManager : GeneralInventoryStructure
 
         Quaternion spawnRotation = Quaternion.LookRotation(outward, playerModelTransform.forward);
 
+        //Apply some randomness to rotation
+        float tilt = Random.Range(-10f, 10f);
+        float twist = Random.Range(-180, 180);
+
+        Quaternion tiltRot = Quaternion.AngleAxis(tilt, playerModelTransform.forward);
+        Quaternion twistRot = Quaternion.AngleAxis(twist, outward);
+
+        Quaternion randomizedSpawnRotation = twistRot * tiltRot * spawnRotation;
+
         //Spawn it as a child of the player model
-        fragment.existingFragmentModel = Instantiate(fragment.fragmentModel, spawnPosition, spawnRotation, playerModelTransform);
+        fragment.existingFragmentModel = Instantiate(fragment.fragmentModel, spawnPosition, randomizedSpawnRotation, playerModelTransform);
     }
 
     //Overridden fragment removal

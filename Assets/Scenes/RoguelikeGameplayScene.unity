@@ -1919,7 +1919,7 @@ Transform:
   m_GameObject: {fileID: 441406999}
   serializedVersion: 2
   m_LocalRotation: {x: 0.50000006, y: -0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: -1, y: -0.000000059604645, z: -2.857143}
+  m_LocalPosition: {x: -0.5, y: -0.000000059604645, z: -2.857143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12018,7 +12018,7 @@ MonoBehaviour:
   inventoryNumCols: 5
   inventoryNumRows: 7
   playerModelTransform: {fileID: 2033165042}
-  caterpillarRadius: 0.5
+  caterpillarRadius: 0.7
   caterpillarLength: 8
 --- !u!114 &1880359813
 MonoBehaviour:
