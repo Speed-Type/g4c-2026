@@ -11,6 +11,7 @@ public class LootManager : GeneralInventoryStructure
     [Header("Loot Manager Settings")]
     public int maxFragmentPositioningAttempts; //Used in randomly placing fragments
     public GameObject[] fragmentList; //List to hold all the different fragments
+    public GameObject[] scavengeBugModelList; //List to hold all the different bug models for scavenge nodes
     [Tooltip("Should be placed in order of priority to spawn (Largest in grid size to smallest)")]
     public GameObject[] fleshList; //List of fleshes to attempt to spawn
 
@@ -219,6 +220,11 @@ public class LootManager : GeneralInventoryStructure
         }
 
         return "ERROR: NOT FOUND";
+    }
+
+    public GameObject LootTableEnumToScavengeModel(LootTables lootTable)
+    {
+        return scavengeBugModelList[(int)lootTable];
     }
 }
 

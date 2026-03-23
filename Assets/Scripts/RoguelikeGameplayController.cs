@@ -21,6 +21,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     //public int combatNodesToReveal;
     //public int eventNodesToReveal;
 
+    [Header("Spider Behavior")]
+
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
     public GameObject inventorySystemGO;

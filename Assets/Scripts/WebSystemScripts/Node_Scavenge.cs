@@ -4,10 +4,10 @@ using System.Collections.Generic;
 public class Node_Scavenge : Node
 {
     //Scavenge node contains loot for the player
-
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
     private LootTables spawnedBug;
+    private LootManager lootManager;
 
     private List<string> flavorText = new List<string> //USE [BugName] (CASE-SENSITIVE) AS PLACEHOLDER FOR THE BUG'S NAME
     {
@@ -25,6 +25,8 @@ public class Node_Scavenge : Node
         base.Awake();
 
         nodeType = NodeTypes.Scavenge;
+
+        lootManager = FindFirstObjectByType<LootManager>();
 
         //Set the spawned bug
 
@@ -61,7 +63,7 @@ public class Node_Scavenge : Node
         nodeManager.rgController.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
         //Generate loot
-        FindFirstObjectByType<LootManager>().GenerateLoot(spawnedBug);
+        lootManager.GenerateLoot(spawnedBug);
 
         LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + 2 * RoguelikeCameraController.generalDelayBetweenTransitions + NodeManager.playerTravelAnimTime, () =>
         {
@@ -76,5 +78,11 @@ public class Node_Scavenge : Node
 
             nodeManager.rgController.dialogueBoxController.SetText(new List<string> {encounterText, "..."});
         });
+    }
+
+    public override GameObject GetBug()
+    {
+        //RETURN BUG MODEL CORRESPONDING TO THIS BUG LOOT OBJECT
+        return lootManager.LootTableEnumToScavengeModel(spawnedBug);
     }
 }

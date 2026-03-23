@@ -431,7 +431,7 @@ Transform:
   m_GameObject: {fileID: 45881613}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.04, y: 0.75, z: -6.43}
+  m_LocalPosition: {x: 1.04, y: -0, z: -6.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11842,8 +11842,9 @@ MonoBehaviour:
   - 15
   - 25
   caterpillarGO: {fileID: 1907272274}
-  singleBugPositionTransform: {fileID: 1849130982}
-  doubleBugPositionTransform: {fileID: 2106849937}
+  singleBugCaterpillarPositionTransform: {fileID: 1849130982}
+  doubleBugCaterpillarPositionTransform: {fileID: 2106849937}
+  enemyBugPositionTransform: {fileID: 45881614}
 --- !u!1 &1876415590
 GameObject:
   m_ObjectHideFlags: 0
@@ -12050,6 +12051,8 @@ MonoBehaviour:
   - {fileID: 5279109428879742125, guid: 9d416e9fa294141838092f153e54dedf, type: 3}
   - {fileID: 6260742422102833475, guid: 9ec02a215b4374372be1c941077a9222, type: 3}
   - {fileID: 2751700069158436444, guid: 790fea904a2dc475bb254f00382e9ca5, type: 3}
+  scavengeBugModelList:
+  - {fileID: 6786424482437604017, guid: 1eb4cc2e736134072a5f45061e074b0a, type: 3}
   fleshList:
   - {fileID: 7482046112208554959, guid: c1e3ba18744304bebaf175d9c0aaf015, type: 3}
   - {fileID: 5587133841796263442, guid: 0340855a83db541b49fdf721272e4cb1, type: 3}

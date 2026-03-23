@@ -27,8 +27,11 @@ public class NodeManager : MonoBehaviour
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
-    [SerializeField] private Transform singleBugPositionTransform;
-    [SerializeField] private Transform doubleBugPositionTransform;
+    private GameObject enemyBugGO;
+    [SerializeField] private Transform singleBugCaterpillarPositionTransform;
+    [SerializeField] private Transform doubleBugCaterpillarPositionTransform;
+    [SerializeField] private Transform enemyBugPositionTransform;
+
 
     public static bool isMovingNodes = false;
 
@@ -302,14 +305,24 @@ public class NodeManager : MonoBehaviour
     //Tween 3d caterpillar to proper spot
     private void SetCaterpillarPosition()
     {
+        //Delete previous enemy bug if there is one
+        if(enemyBugGO != null) Destroy(enemyBugGO);
+
         //Determine caterpillar's position based on current node's type
         if(currentNode.nodeType == NodeTypes.Scavenge)
         {
-            caterpillarGO.transform.position = doubleBugPositionTransform.position;
+            caterpillarGO.transform.position = doubleBugCaterpillarPositionTransform.position;
+
+            //Also have to spawn the right bug
+            if(currentNode.nodeType == NodeTypes.Scavenge)
+            {
+                enemyBugGO = Instantiate(currentNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
+            }
+            //TODO: ALSO ADD ELSE CASE FOR BATTLE NODES
         }
         else
         {
-            caterpillarGO.transform.position = singleBugPositionTransform.position;
+            caterpillarGO.transform.position = singleBugCaterpillarPositionTransform.position;
         }
     }
 }
