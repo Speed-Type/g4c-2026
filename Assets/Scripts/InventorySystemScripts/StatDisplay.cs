@@ -44,6 +44,11 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, 0);
     }
 
+    void Start()
+    {
+        UpdateAllFleshFillBars();
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
         //Toggle stat window open/close
@@ -110,14 +115,17 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         //Update the fill bar size
         float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
-        fillBar.sizeDelta = new Vector2(desiredPercentage * maxWidth, fillBar.sizeDelta.y);
-
-        //Flash the bar
-        fillBar.gameObject.GetComponent<Image>().color = fleshBarFlashColor;
-        LeanTween.delayedCall(flashAnimLength, () =>
-        {
-            fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor;
-        });
+        fillBar.gameObject.GetComponent<Image>().color = fleshBarFlashColor; //set color to flashed
+        LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, flashAnimLength)
+            .setEaseOutQuad()
+            .setOnUpdate((float val) =>
+            {
+                fillBar.sizeDelta = new Vector2(val, fillBar.sizeDelta.y);
+            })
+            .setOnComplete(() =>
+            {
+                fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor; //reset color when done
+            });
     }
 
     private void UpdateAllFleshFillBars()
