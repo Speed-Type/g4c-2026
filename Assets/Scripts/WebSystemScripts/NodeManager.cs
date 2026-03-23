@@ -25,8 +25,8 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float[] nodePositionRandomization;
 
     [Header("Web Animations Timing")]
-    public static float playerTravelAnimTime = 1.25f;
-    public static float spiderTravelAnimTime = 1f;
+    [SerializeField] private float playerTravelAnimTime = 1.25f;
+    [SerializeField] private float spiderTravelAnimTime = 1f;
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
@@ -58,6 +58,9 @@ public class NodeManager : MonoBehaviour
         Node centerNode = centerNodeGO.GetComponent<Node>();
         centerNode.GetComponent<RectTransform>().localPosition = Vector3.zero;
         centerNodeGO.name += "@Center"; //rename
+
+        //Set spider position at center
+        spiderNode = centerNode;
 
         //Setup array for circling node generation logic
         Node[] previousCircle = new Node[webNumRadii];
@@ -310,7 +313,7 @@ public class NodeManager : MonoBehaviour
             .setEase(LeanTweenType.easeInOutSine)
             .setOnComplete(() =>
             {
-                //TODO: CALL SPIDER MOVEMENT METHOD TOO
+                //Begin spider movement
                 DoSpiderTurn();
             });
     }
@@ -356,9 +359,12 @@ public class NodeManager : MonoBehaviour
         else //TODO: CASE 3: SPIDER JUST MOVES A NODE
         {
             //Calculate which node spider should move to
+            //Temp: Pick a random one
+            Debug.Log("Moving spider");
+            spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
 
             //Actually move spider
-            LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), playerNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
+            LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
             .setEase(LeanTweenType.easeInOutSine)
             .setOnComplete(() =>
             {
