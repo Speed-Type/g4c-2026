@@ -8,6 +8,7 @@ public class InventoryManager : GeneralInventoryStructure
     public int inventoryNumCols;
     public int inventoryNumRows;
     public Transform playerModelTransform;
+    public GameObject silkTuftGO;
     public float caterpillarRadius;
     public float caterpillarLength;
 
@@ -70,6 +71,9 @@ public class InventoryManager : GeneralInventoryStructure
 
         //Spawn it as a child of the player model
         fragment.existingFragmentModel = Instantiate(fragment.fragmentModel, spawnPosition, randomizedSpawnRotation, playerModelTransform);
+    
+        //Also spawn a silk tuft
+        Instantiate(silkTuftGO, spawnPosition, randomizedSpawnRotation, fragment.existingFragmentModel.transform);
     }
 
     //Overridden fragment removal

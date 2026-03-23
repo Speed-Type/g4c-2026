@@ -12018,6 +12018,7 @@ MonoBehaviour:
   inventoryNumCols: 5
   inventoryNumRows: 7
   playerModelTransform: {fileID: 2033165042}
+  silkTuftGO: {fileID: 2079226398102025746, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
   caterpillarRadius: 0.7
   caterpillarLength: 8
 --- !u!114 &1880359813
