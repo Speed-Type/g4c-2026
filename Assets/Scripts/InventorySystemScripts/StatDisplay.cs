@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
 public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
@@ -17,7 +18,10 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("Flesh Fill Bar Anim Params")]
     [SerializeField] private float flashAnimLength;
     [SerializeField] private Color fleshBarFlashColor;
-    [SerializeField] private float smoothGrowthAnimLength;
+
+    [Header("Flesh Text Displays")]
+    [SerializeField] private TMP_Text inventoryFleshText;
+    [SerializeField] private TMP_Text lootFleshText;
 
     //Internal variables
     private float inventoryBarMaxWidth;
@@ -117,21 +121,30 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
         fillBar.gameObject.GetComponent<Image>().color = fleshBarFlashColor; //set color to flashed
         LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, flashAnimLength)
-            .setEaseOutQuad()
+            .setEaseOutElastic()
             .setOnUpdate((float val) =>
             {
                 fillBar.sizeDelta = new Vector2(val, fillBar.sizeDelta.y);
             })
             .setOnComplete(() =>
             {
-                fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor; //reset color when done
+                if((float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh < 1)
+                {
+                    fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor; //reset color when done, unless of course we've hit the goal
+                }
             });
     }
 
     private void UpdateAllFleshFillBars()
     {
+        //Update the fill bars
         UpdateFleshFillBar(fleshFillBarInventory, inventoryBarMaxWidth);
         UpdateFleshFillBar(fleshFillBarLooting, lootBarMaxWidth);
+
+        //Update the texts
+        string str = RoguelikeGameplayController.instance.currentFlesh + "/" + RoguelikeGameplayController.instance.goalFlesh;
+        inventoryFleshText.text = "Flesh: " + str;
+        lootFleshText.text = str;
     }
 
     public static void UpdateAllFleshFillBars_Static()

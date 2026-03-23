@@ -31,6 +31,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [Header("Particle Effects for Fragment OR Flesh Destruction")]
     [SerializeField] protected GameObject deathParticles;
 
+    [Header("3D Model for Fragment")]
+    public GameObject fragmentModel;
+    [HideInInspector] public GameObject existingFragmentModel;
+
     //Internal logic
     [HideInInspector] public bool[,] shape; //will be initialized in subclasses
     [HideInInspector] public bool isOnEdge;

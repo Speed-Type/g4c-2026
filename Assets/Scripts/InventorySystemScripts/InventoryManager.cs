@@ -7,6 +7,9 @@ public class InventoryManager : GeneralInventoryStructure
     [Header("Inventory Manager Settings")]
     public int inventoryNumCols;
     public int inventoryNumRows;
+    public Transform playerModelTransform;
+    public float caterpillarRadius;
+    public float caterpillarLength;
 
     protected override void Awake()
     {
@@ -18,9 +21,42 @@ public class InventoryManager : GeneralInventoryStructure
     public override void PlaceFragment(Fragment fragment, int x, int y)
     {
         base.PlaceFragment(fragment, x, y);
+
         //Activate fragment's effects
         fragment.ActivateEffects();
         fragment.isEquipped = true;
+
+        //TODO: Place visually on player model
+        //Note that x corresponds to row number, which is basically y in cartesian coordinates,
+        //and y corresponds to column number, which is basically x in cartesian coordinates
+
+        //First, calculate position of this 3d model
+        float t = (float)y / (inventoryNumCols - 1);
+        float angle = Mathf.Lerp(0f, Mathf.PI, t);
+
+        float heightOffset = (x + 1 - inventoryNumRows * 0.5f) * (caterpillarLength / inventoryNumRows);
+
+        Vector3 localPos = new Vector3(
+            Mathf.Cos(angle) * caterpillarRadius,
+            Mathf.Sin(angle) * caterpillarRadius,
+            heightOffset
+        );
+
+        Vector3 spawnPosition = playerModelTransform.TransformPoint(localPos);
+
+        //Now, calculate rotation, such that the model points outward
+        Vector3 localOutward = new Vector3(
+            Mathf.Cos(angle),
+            Mathf.Sin(angle),
+            0f
+        );
+
+        Vector3 outward = playerModelTransform.TransformDirection(localOutward);
+
+        Quaternion spawnRotation = Quaternion.LookRotation(outward, playerModelTransform.forward);
+
+        //Spawn it as a child of the player model
+        fragment.existingFragmentModel = Instantiate(fragment.fragmentModel, spawnPosition, spawnRotation, playerModelTransform);
     }
 
     //Overridden fragment removal
@@ -28,8 +64,13 @@ public class InventoryManager : GeneralInventoryStructure
     {
         if(base.RemoveFragment(fragment))
         {
+            //Deactivate fragment effects
             fragment.DeactivateEffects();
             fragment.isEquipped = false;
+
+            //Remove from player model
+            Destroy(fragment.existingFragmentModel);
+            fragment.existingFragmentModel = null;
         }
 
         return true; //this does nothing

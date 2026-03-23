@@ -94,6 +94,8 @@ MonoBehaviour:
   destroyedFragmentColor: {r: 0.6039216, g: 0.19607843, b: 0.19607843, a: 0.7647059}
   healthIndicator: {fileID: 4560195823202301846}
   deathParticles: {fileID: 2383499103439553418, guid: 811512314f1424df0b80bd5a3108fa1f, type: 3}
+  fragmentModel: {fileID: 7056426260594757340, guid: d6d83bb7cb9f643c08f9565a1dc3d204, type: 3}
+  existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0
