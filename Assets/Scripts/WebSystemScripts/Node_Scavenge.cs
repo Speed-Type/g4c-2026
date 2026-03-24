@@ -17,7 +17,9 @@ public class Node_Scavenge : Node
         "This [BugName]'s remains would go to waste anyway. Might as well take what you can.",
         "Well, it's your namesake after all. Go collect the bones of that [BugName].",
         "That [BugName]'s limbs would make excellent decoration for your silk casing.",
-        "This [BugName] still has some goodies left on it. You'll have to be strategic with extracting it though."
+        "This [BugName] still has some goodies left on it. You'll have to be strategic with extracting it though.",
+        "You don't know how long this half-eaten [BugName] has been here, but flesh is flesh.",
+        "It's the remains of some [BugName]. Perhaps there's something left for you to take."
     };
 
     protected override void Awake()

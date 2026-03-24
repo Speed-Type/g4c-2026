@@ -16,7 +16,10 @@ public class Node_Combat : Node
         "You find the [BugName] caught in the spider's web but otherwise untouched. What to do is up to you.",
         "This [BugName] could be dangerous, but it also has the flesh you need.",
         "The [BugName] is fresh, untouched by the Spider. It's yours to take, if you're willing to put in the work.",
-        "Taking on this [BugName] is a risk, but surely one with great rewards."
+        "Taking on this [BugName] is a risk, but surely one with great rewards.",
+        "A wild [BugName] appeared! What will you do?",
+        "It's a freshly-trapped [BugName]. You might be able to take it in a fight.",
+        "A challenger approaches. Will you fight the [BugName]?"
     };
 
     protected override void Awake()
