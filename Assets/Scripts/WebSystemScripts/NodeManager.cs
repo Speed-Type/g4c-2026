@@ -237,6 +237,9 @@ public class NodeManager : MonoBehaviour
             //Reset player bites
             RoguelikeGameplayController.ResetBites();
 
+            //Increase spider alertness
+            RoguelikeGameplayController.instance.currentSpiderAlertness += 2;
+
             //Preload the hide method
             RoguelikeGameplayController.instance.HideMapPreloadFromScript();
 

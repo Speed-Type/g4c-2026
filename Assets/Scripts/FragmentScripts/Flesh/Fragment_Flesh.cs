@@ -49,7 +49,7 @@ public class Fragment_Flesh : Fragment
         //Do nothing; this fragment should not be movable to begin with
     }
 
-    public override void Die()
+    public override void Die() //Does not call base Die()
     {
         if(isDead) return; //only want to call this once
         isDead = true;

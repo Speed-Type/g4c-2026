@@ -75,7 +75,7 @@ public class LootManager : GeneralInventoryStructure
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Abdomen, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Antenna, 4);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 1);
-                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 2);
+                bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 1);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Leg, 10);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Thorax, 4);
                 break;

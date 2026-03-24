@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 public class RoguelikeGameplayController : MonoBehaviour
 {
@@ -349,6 +350,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static void ReduceBites()
     {
         instance.remainingBites--;
+        instance.currentSpiderAlertness++;
     }
 
     public static void ReloadBite_Static()
@@ -401,7 +403,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
         else //Otherwise, depends on player's stealth stat
         {
-            if(Random.Range(0f,1f) < stealthChance)
+            if(UnityEngine.Random.Range(0f,1f) < stealthChance)
             {
                 return true;
             }
@@ -419,7 +421,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public static float ChanceForSpiderToPursue()
     {
-        return (float)instance.currentSpiderAlertness / instance.maxSpiderAlertness;
+        return Math.Min((float)instance.currentSpiderAlertness / instance.maxSpiderAlertness, 1f);
     }
 }
 

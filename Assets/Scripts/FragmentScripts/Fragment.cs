@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -407,15 +408,19 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         {
             DeactivateEffects();
         }
+        else
+        {
+            //If the fragment was shattered outside of inventory, increase alertness because it was destroyed while looting
+            RoguelikeGameplayController.instance.currentSpiderAlertness += 3;
+        }
 
         //Graphically update
         graphicGO.GetComponent<Image>().color = destroyedFragmentColor;
 
         Shake(); //Animate
 
-
         //Spawn Particles
-       GameObject spawnedParticles = RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
+        GameObject spawnedParticles = RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);
     
         if(isFree)
         {

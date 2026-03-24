@@ -120,10 +120,10 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //Update stealth stats
         bool isCritical = RoguelikeGameplayController.instance.currentSpiderAlertness >= RoguelikeGameplayController.instance.maxSpiderAlertness;
         stealthStatsText.text = 
-            "Spider Alertness: " + RoguelikeGameplayController.instance.currentSpiderAlertness + (isCritical ? " (!!!)" : "") + "\n" +
-            "Critical Spider Alertness: " + RoguelikeGameplayController.instance.maxSpiderAlertness + "\n" +
+            "Spider Alertness: " + RoguelikeGameplayController.instance.currentSpiderAlertness + "/" + RoguelikeGameplayController.instance.maxSpiderAlertness + 
+            (isCritical ? " (!!!)\nWARNING: Spider is on the hunt" : "") + "\n" +
             "Chance for Spider to pursue: " + RoguelikeGameplayController.ChanceForSpiderToPursue().ToString("P2") + "\n" +
-            "Camouflage Chance: " + (isCritical ? "0.00% (Instakill)" : RoguelikeGameplayController.instance.stealthChance.ToString("P2"));
+            "Camouflage Chance: " + (isCritical ? "0.00 % (Instakill)" : RoguelikeGameplayController.instance.stealthChance.ToString("P2"));
 
         //Store current bite's fragment script for sake of speed
         GameObject currentBite = RoguelikeGameplayController.GetCurrentBiteGO_Static();
@@ -162,7 +162,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             })
             .setOnComplete(() =>
             {
-                if((float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh < 1)
+                if(desiredPercentage < 1)
                 {
                     fillBar.gameObject.GetComponent<Image>().color = originalColor; //reset color when done, unless of course we've hit the goal
                 }
