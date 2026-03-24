@@ -120,9 +120,6 @@ public class NodeManager : MonoBehaviour
             AddThread(previousCircle[0].GetComponent<RectTransform>(), previousCircle[previousCircle.Length - 1].GetComponent<RectTransform>());
         }
 
-        //Put the player marker in the right place
-        UpdatePlayerMarker();
-
         //Visit the current node
         playerNode.VisitNode();
     }
@@ -322,7 +319,9 @@ public class NodeManager : MonoBehaviour
     private bool hasAttackedPlayer = false;
     private void DoSpiderTurn(int currentMoveNum = 0)
     {
-        if(spiderNode == playerNode) //TODO: CASE 1: SPIDER AND PLAYER ON SAME NODE
+        Debug.Log("Current move: " + currentMoveNum);
+        spiderMarkerGO.transform.SetAsLastSibling();
+        if(spiderNode == playerNode && !hasAttackedPlayer) //TODO: CASE 1: SPIDER AND PLAYER ON SAME NODE
         {
             hasAttackedPlayer = true;
 
@@ -359,15 +358,26 @@ public class NodeManager : MonoBehaviour
         else //TODO: CASE 3: SPIDER JUST MOVES A NODE
         {
             //Calculate which node spider should move to
-            //Temp: Pick a random one
-            Debug.Log("Moving spider");
-            spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+            if(UnityEngine.Random.Range(0f,1f) < RoguelikeGameplayController.instance.stealthChance)
+            {
+                //Just a random node
+                spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+                Debug.Log("Random node");
+            }
+            else
+            {
+                //A node specifically toward the player
+                spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+                Debug.Log("Towards player");
+            }
 
             //Actually move spider
+            Debug.Log("Starting move");
             LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
             .setEase(LeanTweenType.easeInOutSine)
             .setOnComplete(() =>
             {
+                Debug.Log("Done moving");
                 if(!hasAttackedPlayer) DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
             });
         }

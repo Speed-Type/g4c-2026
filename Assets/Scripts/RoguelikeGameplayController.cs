@@ -88,6 +88,22 @@ public class RoguelikeGameplayController : MonoBehaviour
         biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
     }
 
+    void Start()
+    {
+        //Enable/disable necessary systems
+        nodeMapGO.SetActive(true);
+        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        statSystemGO.SetActive(false);
+
+        //Disable all buttons
+        TogglePlayerOptionButtons(false);
+
+        //Set number of bites
+        ResetBites();
+        biteList[currentBite].SetActive(false);
+    }
+
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
     {
@@ -322,22 +338,6 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Idle;
     }
 
-    void Start()
-    {
-        //Enable/disable necessary systems
-        nodeMapGO.SetActive(true);
-        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        statSystemGO.SetActive(false);
-
-        //Disable all buttons
-        TogglePlayerOptionButtons(false);
-
-        //Set number of bites
-        ResetBites();
-        biteList[currentBite].SetActive(false);
-    }
-
     //Static method to add flesh
     public static void AddFlesh(int amount)
     {
@@ -355,6 +355,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static void ReloadBite_Static()
     {
         instance.ReloadBite();
+    }
+
+    //Sets current bites to max bites for the next looting
+    public static void ResetBites()
+    {
+        instance.remainingBites = instance.maxBites;
     }
 
     //Moves bite back to proper position, shows if there are any bites remaining
@@ -407,10 +413,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
     }
 
-    //Sets current bites to max bites for the next looting
-    public static void ResetBites()
+    public static GameObject GetCurrentBiteGO_Static()
     {
-        instance.remainingBites = instance.maxBites;
+        return instance.biteList[instance.currentBite];
     }
 }
 

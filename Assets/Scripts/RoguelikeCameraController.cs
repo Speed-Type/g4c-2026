@@ -177,7 +177,7 @@ public class RoguelikeCameraController : MonoBehaviour
             .id;
         
         //Reduce freecam capabilities
-        targetZoom = 20f;
+        targetZoom = 17.5f;
         idleRotationSpeed /= 2f;
         maxPitch /= 2f;
     }

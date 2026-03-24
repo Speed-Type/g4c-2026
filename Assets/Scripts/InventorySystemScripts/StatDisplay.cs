@@ -23,6 +23,12 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private TMP_Text inventoryFleshText;
     [SerializeField] private TMP_Text lootFleshText;
 
+    [Header("Stat Window Content")]
+    [SerializeField] private TMP_Text stealthStatsText;
+    [SerializeField] private Image biteImage;
+    [SerializeField] private TMP_Text biteStatsText;
+    [SerializeField] private TMP_Text sensoryStatsText;
+
     //Internal variables
     private float inventoryBarMaxWidth;
     private float lootBarMaxWidth;
@@ -108,7 +114,21 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OpenDisplay()
     {
-        //TODO: First, update all texts to display the right words n stuff
+        //TODO: Update stealth stats
+
+        //Update bite stats
+        GameObject currentBite = RoguelikeGameplayController.GetCurrentBiteGO_Static();
+        biteStatsText.text = 
+            "Damage: " + currentBite.GetComponent<Fragment_Bite>().damage + "\n" +
+            "Uses: " + RoguelikeGameplayController.instance.maxBites;
+
+        //Update bite image
+        biteImage.sprite = currentBite.GetComponent<Fragment_Bite>().openBiteSprite;
+
+        //Update sensory stats
+        sensoryStatsText.text = 
+            "Empty Nodes: " + RoguelikeGameplayController.instance.emptyNodesToReveal + "\n" +
+            "Scavenge Nodes: " + RoguelikeGameplayController.instance.scavengerNodesToReveal + "\n";
 
         //Then, do the tween anim
         TweenStatWindow(openHeight);

@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 public class Fragment_Bite : Fragment
 {
-    protected int damage = 1;
-    [SerializeField] protected Sprite openBiteSprite;
-    [SerializeField] protected Sprite closedBiteSprite;
+    public int damage = 1;
+    public Sprite openBiteSprite;
+    public Sprite closedBiteSprite;
 
     //Scale factor should be the multiplier necessary to make the 100x100 ver. of this fragment into its actual size
     public float scaleFactor;
