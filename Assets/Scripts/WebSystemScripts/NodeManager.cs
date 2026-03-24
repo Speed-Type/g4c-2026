@@ -361,14 +361,17 @@ public class NodeManager : MonoBehaviour
             Node previousNode = spiderNode; //Save the previous node to set it later
 
             //Calculate which node spider should move to
-            if(UnityEngine.Random.Range(0f,1f) > (float)RoguelikeGameplayController.instance.currentSpiderAlertness / RoguelikeGameplayController.instance.maxSpiderAlertness)
+            if(UnityEngine.Random.Range(0f,1f) > RoguelikeGameplayController.ChanceForSpiderToPursue())
             {
                 //Just a random node
+                Node newNode;
                 do
                 {
-                    spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+                    newNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
                 }
-                while(spiderNode == lastSpiderNode);
+                while(newNode == lastSpiderNode);
+
+                spiderNode = newNode;
             }
             else
             {

@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using UnityEngine.UI;
 
-
 public class Fragment_Bite : Fragment
 {
     public int damage = 1;

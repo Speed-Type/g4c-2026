@@ -9,7 +9,6 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Variables in Inspector
 
     [Header("Player Data")]
-    public int playerHealth;
     public int currentFlesh;
     public int goalFlesh;
     public int maxBites;
@@ -416,6 +415,11 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static GameObject GetCurrentBiteGO_Static()
     {
         return instance.biteList[instance.currentBite];
+    }
+
+    public static float ChanceForSpiderToPursue()
+    {
+        return (float)instance.currentSpiderAlertness / instance.maxSpiderAlertness;
     }
 }
 
