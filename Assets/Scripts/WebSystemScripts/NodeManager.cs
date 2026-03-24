@@ -259,7 +259,7 @@ public class NodeManager : MonoBehaviour
 
             UpdatePlayerMarker(); //Make player marker actually move to the selected node
 
-            SetCaterpillarPosition(); //Update 3d caterpillar position for this new node
+            SetBugModelsPosition(); //Update 3d bug models for this new node
 
             return true;
         }
@@ -277,6 +277,11 @@ public class NodeManager : MonoBehaviour
         for(int i = 0; i < RoguelikeGameplayController.instance.scavengerNodesToReveal; i++)
         {
             if(TryRevealNode(playerNode, NodeTypes.Scavenge) == false) break;
+        }
+
+        for(int i = 0; i < RoguelikeGameplayController.instance.combatNodesToReveal; i++)
+        {
+            if(TryRevealNode(playerNode, NodeTypes.Combat) == false) break;
         }
     }
 
@@ -485,23 +490,19 @@ public class NodeManager : MonoBehaviour
         }
     }
 
-    //Tween 3d caterpillar to proper spot
-    private void SetCaterpillarPosition()
+    //Spawn/move 3d bugs in proper spots
+    private void SetBugModelsPosition()
     {
         //Delete previous enemy bug if there is one
         if(enemyBugGO != null) Destroy(enemyBugGO);
 
         //Determine caterpillar's position based on current node's type
-        if(playerNode.nodeType == NodeTypes.Scavenge)
+        if(playerNode.nodeType == NodeTypes.Scavenge || playerNode.nodeType == NodeTypes.Combat)
         {
             caterpillarGO.transform.position = doubleBugCaterpillarPositionTransform.position;
 
-            //Also have to spawn the right bug
-            if(playerNode.nodeType == NodeTypes.Scavenge)
-            {
-                enemyBugGO = Instantiate(playerNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
-            }
-            //TODO: ALSO ADD ELSE CASE FOR BATTLE NODES
+            //Then spawn the right bug
+            enemyBugGO = Instantiate(playerNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
         }
         else
         {
@@ -515,5 +516,6 @@ public enum NodeTypes
 {
     Start,
     Empty,
-    Scavenge
+    Scavenge,
+    Combat
 }

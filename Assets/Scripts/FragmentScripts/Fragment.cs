@@ -311,6 +311,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         
         effectsActive = true;
         Debug.Log("Effects activated");
+
+        //Update stat display
+        StatDisplay.UpdateStats_Static();
+
         return true;
     }
 
@@ -323,6 +327,10 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         effectsActive = false;
         Debug.Log("Effects deactivated");
+
+        //Update stat display
+        StatDisplay.UpdateStats_Static();
+        
         return true;
     }
 

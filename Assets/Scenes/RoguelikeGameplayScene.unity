@@ -13955,8 +13955,10 @@ MonoBehaviour:
   - {fileID: 3369285449052209603, guid: 790fffc899b5f486cb10a5601f0a7aaf, type: 3}
   - {fileID: 3369285449052209603, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
   - {fileID: 7487325553070881897, guid: c83f0e058f792465dbae93cc09f6a15b, type: 3}
+  - {fileID: 7487325553070881897, guid: ad751c4ab312641519a570b0f678561c, type: 3}
   nodeWeights:
   - 0
+  - 1
   - 1
   - 10
   nodePositionRandomization:
@@ -14091,6 +14093,7 @@ MonoBehaviour:
   stealthChance: 0.5
   emptyNodesToReveal: 0
   scavengerNodesToReveal: 0
+  combatNodesToReveal: 0
   currentSpiderAlertness: 0
   maxSpiderAlertness: 50
   spiderMovesPerTurn: 2
@@ -14191,6 +14194,8 @@ MonoBehaviour:
   - {fileID: 2751700069158436444, guid: 790fea904a2dc475bb254f00382e9ca5, type: 3}
   scavengeBugModelList:
   - {fileID: 6786424482437604017, guid: 1eb4cc2e736134072a5f45061e074b0a, type: 3}
+  combatBugModelList:
+  - {fileID: 6700625219792766500, guid: 258561a708f754e688f0d0183f94bf04, type: 3}
   fleshList:
   - {fileID: 7482046112208554959, guid: c1e3ba18744304bebaf175d9c0aaf015, type: 3}
   - {fileID: 5587133841796263442, guid: 0340855a83db541b49fdf721272e4cb1, type: 3}

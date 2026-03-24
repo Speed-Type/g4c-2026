@@ -117,6 +117,15 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OpenDisplay()
     {
+        //Update stats
+        UpdateStats();
+
+        //Then, do the tween anim
+        TweenStatWindow(openHeight);
+    }
+    
+    private void UpdateStats()
+    {
         //Update stealth stats
         bool isCritical = RoguelikeGameplayController.instance.currentSpiderAlertness >= RoguelikeGameplayController.instance.maxSpiderAlertness;
         stealthStatsText.text = 
@@ -143,10 +152,13 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //Update sensory stats
         sensoryStatsText.text = 
             "Empty Nodes: " + RoguelikeGameplayController.instance.emptyNodesToReveal + "\n" +
-            "Scavenge Nodes: " + RoguelikeGameplayController.instance.scavengerNodesToReveal + "\n";
+            "Scavenge Nodes: " + RoguelikeGameplayController.instance.scavengerNodesToReveal + "\n" +
+            "Combat Nodes: " + RoguelikeGameplayController.instance.combatNodesToReveal;
+    }
 
-        //Then, do the tween anim
-        TweenStatWindow(openHeight);
+    public static void UpdateStats_Static()
+    {
+        instance.UpdateStats();
     }
 
     //Method to update a single flesh fill bar

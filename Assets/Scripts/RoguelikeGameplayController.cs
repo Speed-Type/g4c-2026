@@ -19,7 +19,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Variables for revealing nodes
     public int emptyNodesToReveal;
     public int scavengerNodesToReveal;
-    //public int combatNodesToReveal;
+    public int combatNodesToReveal;
     //public int eventNodesToReveal;
 
     [Header("Spider Behavior")]
@@ -245,7 +245,6 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     private void OpenButtonAnimation()
     {
-        Debug.Log("OpenButtonAnimation called");
         //If the player has met the flesh requirement, add
         if(CanInstar() && !openButtons.Contains(PlayerOptionButtons.Instar)) openButtons.Add(PlayerOptionButtons.Instar);
 

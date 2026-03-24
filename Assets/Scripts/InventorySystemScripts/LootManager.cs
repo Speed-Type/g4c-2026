@@ -12,6 +12,7 @@ public class LootManager : GeneralInventoryStructure
     public int maxFragmentPositioningAttempts; //Used in randomly placing fragments
     public GameObject[] fragmentList; //List to hold all the different fragments
     public GameObject[] scavengeBugModelList; //List to hold all the different bug models for scavenge nodes
+    public GameObject[] combatBugModelList; //List to hold all the different bug models for combat nodes
     [Tooltip("Should be placed in order of priority to spawn (Largest in grid size to smallest)")]
     public GameObject[] fleshList; //List of fleshes to attempt to spawn
 
@@ -60,13 +61,13 @@ public class LootManager : GeneralInventoryStructure
         }
     }
 
-    //Method to convert enumerator LootTables to struct of bug loot
-    private BugLoot LootEnumToBugLoot(LootTables val)
+    //Method to convert enumerator Bugs to struct of bug loot
+    private BugLoot LootEnumToBugLoot(Bugs val)
     {
         BugLoot bugLoot = new BugLoot(fragmentList.Length);
         switch(val)
         {
-            case LootTables.AfricanBigHeadedAnt:
+            case Bugs.AfricanBigHeadedAnt:
                 bugLoot.numRows = 3;
                 bugLoot.numCols = 5;
                 bugLoot.minLoot = 2;
@@ -99,7 +100,7 @@ public class LootManager : GeneralInventoryStructure
     }
 
     //Method to generate new loot
-    public void GenerateLoot(LootTables lootEnum)
+    public void GenerateLoot(Bugs lootEnum)
     {
         //Get actual loot info and probabilities
         BugLoot bugLoot = LootEnumToBugLoot(lootEnum);
@@ -211,25 +212,30 @@ public class LootManager : GeneralInventoryStructure
         lootSystemBackground.material.mainTextureOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f,1f));
     }
 
-    public static string LootTableEnumToBugName(LootTables lootTable)
+    public static string BugEnumToBugName(Bugs bug)
     {
-        switch(lootTable)
+        switch(bug)
         {
-            case LootTables.AfricanBigHeadedAnt:
+            case Bugs.AfricanBigHeadedAnt:
                 return "African Big-Headed Ant";
         }
 
         return "ERROR: NOT FOUND";
     }
 
-    public GameObject LootTableEnumToScavengeModel(LootTables lootTable)
+    public GameObject BugEnumToScavengeModel(Bugs bug)
     {
-        return scavengeBugModelList[(int)lootTable];
+        return scavengeBugModelList[(int)bug];
+    }
+
+    public GameObject BugEnumToCombatModel(Bugs bug)
+    {
+        return combatBugModelList[(int)bug];
     }
 }
 
 //Enumerator for loot tables
-public enum LootTables
+public enum Bugs
 {
     AfricanBigHeadedAnt
 }

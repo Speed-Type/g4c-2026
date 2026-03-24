@@ -49,7 +49,6 @@ public class DialogueBoxController : MonoBehaviour
     //Method to continue to the next line of text in buffer
     public void ContinueText()
     {
-        Debug.Log("ContinueText called");
         if(textGraphic.maxVisibleCharacters != textGraphic.text.Length) //CASE 1: Not yet done typing text
         {
             //Finish current text typewriter effect
