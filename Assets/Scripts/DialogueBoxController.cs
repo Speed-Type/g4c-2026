@@ -10,17 +10,24 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private RoguelikeGameplayController rgController;
     [SerializeField] private TMP_Text textGraphic;
     [SerializeField] private GameObject textBoxGO;
+    [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image chinGraphic;
     [SerializeField] private GameObject raycastTargetGO;
     [SerializeField] private float typewriterEffectSpeed;
     [SerializeField] private float dialogueBoxCloseSpeed;
-
-    //internal variables
     [SerializeField] private float shrunkBoxHeight;
+
+    [Header("Spider Alertness Bar")]
+    [SerializeField] private RectTransform alertnessFillBar;
+    [SerializeField] private Color alertnessBarFlashColor;
+
+    //Internal Variables
     private float defaultBoxHeight;
     private List<string> textBuffer;
     private Coroutine typewriterCoroutine;
     private RectTransform textBoxRectTransform;
+    private float alertnessBarMaxWidth;
+    private Color alertnessBarOriginalColor;
 
     void Awake()
     {
@@ -28,6 +35,8 @@ public class DialogueBoxController : MonoBehaviour
         textBuffer = new List<string>();
         textBoxRectTransform = textBoxGO.GetComponent<RectTransform>();
         defaultBoxHeight = textBoxRectTransform.sizeDelta.y;
+        alertnessBarMaxWidth = alertnessFillBar.sizeDelta.x;
+        alertnessBarOriginalColor = alertnessFillBar.gameObject.GetComponent<Image>().color;
 
         ContinueText();
 
@@ -76,7 +85,7 @@ public class DialogueBoxController : MonoBehaviour
     public void HideDialogueBox()
     {
         textBoxGO.GetComponent<Image>().enabled = false;
-        textGraphic.enabled = false;
+        canvasGroup.alpha = 0;
         chinGraphic.enabled = false;
         raycastTargetGO.SetActive(false);
     }
@@ -84,9 +93,13 @@ public class DialogueBoxController : MonoBehaviour
     public void ShowDialogueBox()
     {
         textBoxGO.GetComponent<Image>().enabled = true;
-        textGraphic.enabled = true;
+        canvasGroup.alpha = 1;
         chinGraphic.enabled = true;
         raycastTargetGO.SetActive(true);
+
+        //Also update spider alertness bar
+        float percentToFill = RoguelikeGameplayController.ChanceForSpiderToPursue();
+        StatDisplay.UpdateFillBar(alertnessFillBar, percentToFill, alertnessBarMaxWidth, alertnessBarFlashColor, alertnessBarOriginalColor);
     }
 
     IEnumerator TypewriterCoroutine()

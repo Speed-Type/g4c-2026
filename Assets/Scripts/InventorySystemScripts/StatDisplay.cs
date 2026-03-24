@@ -150,12 +150,11 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     }
 
     //Method to update a single flesh fill bar
-    private void UpdateFleshFillBar(RectTransform fillBar, float maxWidth)
+    public static void UpdateFillBar(RectTransform fillBar, float desiredPercentage, float maxWidth, Color flashColor, Color originalColor)
     {
         //Update the fill bar size
-        float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
-        fillBar.gameObject.GetComponent<Image>().color = fleshBarFlashColor; //set color to flashed
-        LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, flashAnimLength)
+        fillBar.gameObject.GetComponent<Image>().color = flashColor; //set color to flashed
+        LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, instance.flashAnimLength)
             .setEaseOutElastic()
             .setOnUpdate((float val) =>
             {
@@ -165,7 +164,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 if((float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh < 1)
                 {
-                    fillBar.gameObject.GetComponent<Image>().color = fleshBarOriginalColor; //reset color when done, unless of course we've hit the goal
+                    fillBar.gameObject.GetComponent<Image>().color = originalColor; //reset color when done, unless of course we've hit the goal
                 }
             });
     }
@@ -173,8 +172,9 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void UpdateAllFleshFillBars()
     {
         //Update the fill bars
-        UpdateFleshFillBar(fleshFillBarInventory, inventoryBarMaxWidth);
-        UpdateFleshFillBar(fleshFillBarLooting, lootBarMaxWidth);
+        float desiredPercentage = Math.Min(1, (float)RoguelikeGameplayController.instance.currentFlesh / RoguelikeGameplayController.instance.goalFlesh);
+        UpdateFillBar(fleshFillBarInventory, desiredPercentage, inventoryBarMaxWidth, fleshBarFlashColor, fleshBarOriginalColor);
+        UpdateFillBar(fleshFillBarLooting, desiredPercentage, lootBarMaxWidth, fleshBarFlashColor, fleshBarOriginalColor);
 
         //Update the texts
         string str = RoguelikeGameplayController.instance.currentFlesh + "/" + RoguelikeGameplayController.instance.goalFlesh;
