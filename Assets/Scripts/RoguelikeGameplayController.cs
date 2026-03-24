@@ -40,6 +40,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private GameObject showInventorySystemButton;
     [SerializeField] private GameObject hideInventorySystemButton;
     [SerializeField] private GameObject showLootSystemButton;
+    [SerializeField] private GameObject combatButton;
+    [SerializeField] private GameObject instarButton;
     [SerializeField] private float playerOptionButtonShrunkenSize;
     [SerializeField] private float playerOptionButtonShrinkSpeed;
     private Vector2 playerOptionButtonDefaultDimensions;
@@ -83,7 +85,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Initialize variables
         playerOptionButtonDefaultDimensions = showMapButton.GetComponent<RectTransform>().sizeDelta;
-        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot};
+        allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot, PlayerOptionButtons.Combat, PlayerOptionButtons.Instar};
         inventoryManager = GetComponent<InventoryManager>();
         biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
     }
@@ -107,7 +109,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Method to update the buttons that should be open; called primarily by nodes
     public void SetOpenButtons(List<PlayerOptionButtons> newList)
     {
-        openButtons = newList;
+        openButtons = new List<PlayerOptionButtons>(newList);
 
         //Shrink buttons
         ResetPlayerOptionButtonHeight();
@@ -124,6 +126,10 @@ public class RoguelikeGameplayController : MonoBehaviour
                 return showInventorySystemButton;
             case PlayerOptionButtons.Loot:
                 return showLootSystemButton;
+            case PlayerOptionButtons.Combat:
+                return combatButton;
+            case PlayerOptionButtons.Instar:
+                return instarButton;
             default:
                 return null;
         }
@@ -218,11 +224,27 @@ public class RoguelikeGameplayController : MonoBehaviour
         {
             playerOptionButtonsEnumToGameObject(button).SetActive(value);
         }
+
+        if(playerCanMakeChoices)
+        {
+            //Only do the animation if this is not being called from dialogue box controller
+            //Otherwise, stay shut until the dialogue box controller calls for the options to open up
+            OpenButtonAnimation();
+        }
     }
 
+    //Called from DialogueBoxController
     public void EnablePlayerChoices()
     {
         playerCanMakeChoices = true;
+
+        OpenButtonAnimation();
+    }
+
+    private void OpenButtonAnimation()
+    {
+        //If the player has met the flesh requirement, add
+        if(CanInstar() && !openButtons.Contains(PlayerOptionButtons.Instar)) openButtons.Add(PlayerOptionButtons.Instar);
 
         //Open them up
         foreach(PlayerOptionButtons button in openButtons)
@@ -423,13 +445,20 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         return Math.Min((float)instance.currentSpiderAlertness / instance.maxSpiderAlertness, 1f);
     }
+
+    public static bool CanInstar()
+    {
+        return instance.currentFlesh >= instance.goalFlesh;
+    }
 }
 
 public enum PlayerOptionButtons
 {
     Map,
     Inventory,
-    Loot
+    Loot,
+    Combat,
+    Instar
 }
 
 public enum GameState
@@ -437,5 +466,6 @@ public enum GameState
     Map,
     Idle,
     Inventory,
-    Loot
+    Loot,
+    Combat
 }
