@@ -358,6 +358,8 @@ public class NodeManager : MonoBehaviour
         }
         else //CASE 3: SPIDER JUST MOVES A NODE
         {
+            Node previousNode = spiderNode; //Save the previous node to set it later
+
             //Calculate which node spider should move to
             if(UnityEngine.Random.Range(0f,1f) > (float)RoguelikeGameplayController.instance.currentSpiderAlertness / RoguelikeGameplayController.instance.maxSpiderAlertness)
             {
@@ -396,7 +398,7 @@ public class NodeManager : MonoBehaviour
                 spiderNode = bestNode;
             }
             
-            lastSpiderNode = spiderNode; //Update the previous node for the next call
+            lastSpiderNode = previousNode; //Update the previous node for the next call
 
             //Do the math to calculate new rotation
             RectTransform spiderRect = spiderMarkerGO.GetComponent<RectTransform>();
