@@ -67,7 +67,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
     private GeneralInventoryStructure inventoryManager;
-    private bool playerCanMakeChoices;
+    public bool playerCanMakeChoices;
 
     //Static variable for current game state
     public static GameState gameState;
@@ -231,6 +231,8 @@ public class RoguelikeGameplayController : MonoBehaviour
             //Otherwise, stay shut until the dialogue box controller calls for the options to open up
             OpenButtonAnimation();
         }
+
+        doubleCheckInstar = false;
     }
 
     //Called from DialogueBoxController
@@ -243,6 +245,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     private void OpenButtonAnimation()
     {
+        Debug.Log("OpenButtonAnimation called");
         //If the player has met the flesh requirement, add
         if(CanInstar() && !openButtons.Contains(PlayerOptionButtons.Instar)) openButtons.Add(PlayerOptionButtons.Instar);
 
@@ -449,6 +452,20 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static bool CanInstar()
     {
         return instance.currentFlesh >= instance.goalFlesh;
+    }
+
+    private bool doubleCheckInstar = false;
+    public void Instar()
+    {
+        if(doubleCheckInstar)
+        {
+            //TODO: INSTAR HERE
+        }
+        else
+        {
+            dialogueBoxController.SetText(new List<string> {"Test text"});
+            doubleCheckInstar = true;
+        }
     }
 }
 

@@ -47,6 +47,7 @@ public class DialogueBoxController : MonoBehaviour
     //Method to continue to the next line of text in buffer
     public void ContinueText()
     {
+        Debug.Log("ContinueText called");
         if(textGraphic.maxVisibleCharacters != textGraphic.text.Length) //CASE 1: Not yet done typing text
         {
             //Finish current text typewriter effect
@@ -60,13 +61,14 @@ public class DialogueBoxController : MonoBehaviour
             textGraphic.maxVisibleCharacters = 0;
             typewriterCoroutine = StartCoroutine(TypewriterCoroutine());
 
-            //Hide text box
-            LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
-            
-            continueRaycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
-
-            //HERE, CALL THE METHOD TO ENABLE PLAYER CHOICES AGAIN
-            rgController.EnablePlayerChoices();
+            if(!rgController.playerCanMakeChoices)
+            {
+                //Hide text box
+                LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
+                
+                //HERE, CALL THE METHOD TO ENABLE PLAYER CHOICES AGAIN
+                rgController.EnablePlayerChoices();
+            }
         }
         else if(textBuffer.Count > 0) //CASE 3: Not the last text to show
         {
@@ -128,7 +130,7 @@ public class DialogueBoxController : MonoBehaviour
     public void SetText(List<string> newText)
     {
         textBuffer.Clear();
-        SetDialogueBoxHeight(defaultBoxHeight); //reset sizing
+        if(!rgController.playerCanMakeChoices) SetDialogueBoxHeight(defaultBoxHeight); //reset sizing
         AddText(newText);
         ContinueText();
     }
