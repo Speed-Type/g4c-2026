@@ -12,7 +12,8 @@ public class DialogueBoxController : MonoBehaviour
     [SerializeField] private GameObject textBoxGO;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Image chinGraphic;
-    [SerializeField] private GameObject raycastTargetGO;
+    [SerializeField] private GameObject continueRaycastTargetGO;
+    [SerializeField] private GameObject alertnessBarRaycastTargetGO;
     [SerializeField] private float typewriterEffectSpeed;
     [SerializeField] private float dialogueBoxCloseSpeed;
     [SerializeField] private float shrunkBoxHeight;
@@ -62,7 +63,7 @@ public class DialogueBoxController : MonoBehaviour
             //Hide text box
             LeanTween.value(this.gameObject, SetDialogueBoxHeight, defaultBoxHeight, shrunkBoxHeight, dialogueBoxCloseSpeed).setEaseOutElastic();
             
-            raycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
+            continueRaycastTargetGO.SetActive(false); //make it so it can't be interacted with anymore
 
             //HERE, CALL THE METHOD TO ENABLE PLAYER CHOICES AGAIN
             rgController.EnablePlayerChoices();
@@ -87,7 +88,8 @@ public class DialogueBoxController : MonoBehaviour
         textBoxGO.GetComponent<Image>().enabled = false;
         canvasGroup.alpha = 0;
         chinGraphic.enabled = false;
-        raycastTargetGO.SetActive(false);
+        continueRaycastTargetGO.SetActive(false);
+        alertnessBarRaycastTargetGO.SetActive(false);
     }
 
     public void ShowDialogueBox()
@@ -95,7 +97,8 @@ public class DialogueBoxController : MonoBehaviour
         textBoxGO.GetComponent<Image>().enabled = true;
         canvasGroup.alpha = 1;
         chinGraphic.enabled = true;
-        raycastTargetGO.SetActive(true);
+        continueRaycastTargetGO.SetActive(true);
+        alertnessBarRaycastTargetGO.SetActive(true);
 
         //Also update spider alertness bar
         float percentToFill = RoguelikeGameplayController.ChanceForSpiderToPursue();
