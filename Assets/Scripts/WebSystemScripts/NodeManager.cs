@@ -28,9 +28,14 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float playerTravelAnimTime = .75f;
     [SerializeField] private float spiderTravelAnimTime = .5f;
     [SerializeField] private float spiderRotateAnimTime = .2f;
+    [SerializeField] private float spiderAnticipationAnimTime = 2f;
+    [SerializeField] private float spiderAnticipationAnimMaxStrength = 30f;
+    [SerializeField] private float spiderAnticipationAnimMaxFrequency = 40f;
+    [SerializeField] private float spiderAnticipationAnimPause = 1f;
 
-    [Header("Particle Prefab for Spider Pursue Indication")]
+    [Header("Particle Prefabs for Spider Pursue Indication")]
     [SerializeField] private GameObject spiderPursueParticle;
+    [SerializeField] private GameObject spiderConfusedParticle;
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
@@ -329,23 +334,52 @@ public class NodeManager : MonoBehaviour
         {
             hasAttackedPlayer = true;
 
-            //TODO: build anticipation with long delay
-            LeanTween.delayedCall(1f, () =>
+            //Do shaking effect for anticipation
+            RectTransform spiderRect = spiderMarkerGO.GetComponent<RectTransform>();
+            Vector2 originalPos = spiderRect.anchoredPosition;
+            float time = 0f;
+
+            LeanTween.value(spiderMarkerGO, 0f, 1f, spiderAnticipationAnimTime)
+            .setOnUpdate((float t) =>
             {
-                //Calculate if the player survives
-                if(RoguelikeGameplayController.instance.CheckCaterpillarSurvives())
+                //t is the parameter that goes from 0 → 1 over duration
+
+                //Strength increases over time
+                float strength = Mathf.Lerp(0f, spiderAnticipationAnimMaxStrength, t);
+
+                //Frequency increases over time
+                float frequency = Mathf.Lerp(5f, spiderAnticipationAnimMaxFrequency, t);
+
+                time += Time.deltaTime * frequency;
+
+                Vector2 offset = new Vector2(
+                    Mathf.PerlinNoise(time, 0f) - 0.5f,
+                    Mathf.PerlinNoise(0f, time) - 0.5f
+                ) * strength;
+
+                spiderRect.anchoredPosition = originalPos + offset;
+            })
+            .setOnComplete(() =>
+            {
+                spiderRect.anchoredPosition = originalPos;
+
+                LeanTween.delayedCall(spiderAnticipationAnimPause, () =>
                 {
-                    Debug.Log("SAFE");
-                    //Player lives, spider moves on (and moves off of player node)
-                    //We give the spider an extra turn (by not incrementing currentMoveNum)
-                    //This way the spider gets to move one more square, and it stops moving afterwards because hasAttackedPlayer == true
-                    DoSpiderTurn(currentMoveNum - 1);
-                }
-                else
-                {
-                    //GAME OVER
-                    Debug.Log("GAME OVER");
-                }
+                    //Calculate if the player survives
+                    if(RoguelikeGameplayController.instance.CheckCaterpillarSurvives())
+                    {
+                        Debug.Log("SAFE");
+                        //Player lives, spider moves on (and moves off of player node)
+                        //We give the spider an extra turn (by not incrementing currentMoveNum)
+                        //This way the spider gets to move one more square, and it stops moving afterwards because hasAttackedPlayer == true
+                        DoSpiderTurn(currentMoveNum - 1);
+                    }
+                    else
+                    {
+                        //GAME OVER
+                        Debug.Log("GAME OVER");
+                    }
+                });
             });
         }
         else if(currentMoveNum == RoguelikeGameplayController.instance.spiderMovesPerTurn) //CASE 2: SPIDER HAS NO MORE MOVES
@@ -404,10 +438,13 @@ public class NodeManager : MonoBehaviour
                 spiderNode = bestNode; //Set the node to the closest node
 
                 //Spawn particles to indicate spider pursuing
-                RoguelikeCameraController.SpawnParticle(spiderMarkerGO.transform.position, spiderPursueParticle);
+                if(!hasAttackedPlayer) RoguelikeCameraController.SpawnParticle(spiderMarkerGO.transform.position, spiderPursueParticle);
             }
             
             lastSpiderNode = previousNode; //Update the previous node for the next call
+
+            //Spawn particles for safe if this is the safe movement
+            if(hasAttackedPlayer) RoguelikeCameraController.SpawnParticle(spiderMarkerGO.transform.position, spiderConfusedParticle);
 
             //Do the math to calculate new rotation
             RectTransform spiderRect = spiderMarkerGO.GetComponent<RectTransform>();
