@@ -29,6 +29,9 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float spiderTravelAnimTime = .5f;
     [SerializeField] private float spiderRotateAnimTime = .2f;
 
+    [Header("Particle Prefab for Spider Pursue Indication")]
+    [SerializeField] private GameObject spiderPursueParticle;
+
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
     private GameObject enemyBugGO;
@@ -398,7 +401,10 @@ public class NodeManager : MonoBehaviour
                     }
                 }
 
-                spiderNode = bestNode;
+                spiderNode = bestNode; //Set the node to the closest node
+
+                //Spawn particles to indicate spider pursuing
+                RoguelikeCameraController.SpawnParticle(spiderMarkerGO.transform.position, spiderPursueParticle);
             }
             
             lastSpiderNode = previousNode; //Update the previous node for the next call
