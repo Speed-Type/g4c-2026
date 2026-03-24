@@ -26,6 +26,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("Stat Window Content")]
     [SerializeField] private TMP_Text stealthStatsText;
     [SerializeField] private Image biteImage;
+    [SerializeField] private float biteImageMaxHeight;
     [SerializeField] private TMP_Text biteStatsText;
     [SerializeField] private TMP_Text sensoryStatsText;
 
@@ -36,6 +37,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private float openHeight;
     private int statWindowTween;
     private Color fleshBarOriginalColor;
+    private RectTransform biteRectTransform;
     private static StatDisplay instance;
 
     void Awake()
@@ -49,6 +51,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         inventoryBarMaxWidth = fleshFillBarInventory.sizeDelta.x;
         lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x;
         fleshBarOriginalColor = fleshFillBarInventory.gameObject.GetComponent<Image>().color;
+        biteRectTransform = biteImage.GetComponent<RectTransform>();
 
         //Close stat window
         statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, 0);
@@ -114,21 +117,27 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void OpenDisplay()
     {
-        //TODO: Update stealth stats
+        //Update stealth stats
         stealthStatsText.text = 
             "Spider Alertness: " + RoguelikeGameplayController.instance.currentSpiderAlertness + "\n" +
-            "Critical-Level Spider Alertness: " + RoguelikeGameplayController.instance.maxSpiderAlertness + "\n" +
+            "Critical Spider Alertness: " + RoguelikeGameplayController.instance.maxSpiderAlertness + "\n" +
             "Chance for Spider to pursue bone collector: " + RoguelikeGameplayController.ChanceForSpiderToPursue().ToString("P2") + "\n" +
             "Chance to avoid combat on Spider encounter: " + RoguelikeGameplayController.instance.stealthChance.ToString("P2");
 
-        //Update bite stats
+        //Store current bite's fragment script for sake of speed
         GameObject currentBite = RoguelikeGameplayController.GetCurrentBiteGO_Static();
+        Fragment_Bite fragmentScript = currentBite.GetComponent<Fragment_Bite>();
+
+        //Update bite stats
         biteStatsText.text = 
-            "Damage: " + currentBite.GetComponent<Fragment_Bite>().damage + "\n" +
-            "Uses: " + RoguelikeGameplayController.instance.maxBites;
+            "Damage: " + fragmentScript.damage + "\n" +
+            "Uses: " + RoguelikeGameplayController.instance.maxBites + "\n" +
+            "Dimensions: " + fragmentScript.shape.GetLength(1) + "x" + fragmentScript.shape.GetLength(0);
 
         //Update bite image
-        biteImage.sprite = currentBite.GetComponent<Fragment_Bite>().openBiteSprite;
+        float width = biteImageMaxHeight / fragmentScript.shape.GetLength(0) * currentBite.GetComponent<Fragment_Bite>().shape.GetLength(1);
+        biteImage.sprite = fragmentScript.openBiteSprite;
+        biteRectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
 
         //Update sensory stats
         sensoryStatsText.text = 
