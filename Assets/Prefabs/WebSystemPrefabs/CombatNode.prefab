@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.97619045, g: 1, b: 0, a: 1}
+  m_Color: {r: 0.9764706, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -199,8 +199,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: -1433474760988545236}
-        m_TargetAssemblyTypeName: Node_Combat, Assembly-CSharp
+      - m_Target: {fileID: 1494023831875050245, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
+        m_TargetAssemblyTypeName: Node_Empty, Assembly-CSharp
         m_MethodName: VisitNode
         m_Mode: 1
         m_Arguments:
@@ -227,7 +227,7 @@ MonoBehaviour:
   nodeType: 0
   isRevealed: 0
   nodeTypeImage: {fileID: 2475087763584208679}
-  revealedSprite: {fileID: 21300000, guid: 08cc01b93685e4bc8bbc8d833a0b0409, type: 3}
+  revealedSprite: {fileID: 21300000, guid: 7bfa4437b18d544808f25d7bbb4cafef, type: 3}
   bugSpawningOdds: 01000000
 --- !u!114 &8277718912705011392
 MonoBehaviour:

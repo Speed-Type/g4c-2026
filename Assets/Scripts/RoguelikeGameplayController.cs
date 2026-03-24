@@ -292,6 +292,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         dialogueSystemController.HideDialogueBox();
         statSystemGO.SetActive(true);
         StatDisplay.UpdateAllFleshFillBars_Static();
+        StatDisplay.UpdateStats_Static();
 
         //Update camera
         cameraController.ShiftFreecamFocusToCaterpillar();
