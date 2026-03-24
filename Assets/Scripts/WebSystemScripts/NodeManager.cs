@@ -301,6 +301,9 @@ public class NodeManager : MonoBehaviour
         {
             Node checkingNode = adjacentNodes[(firstIndex + i) % totalNodes];
 
+            //Skip any "adjacent" nodes that are really just the node the player is already going to
+            if(checkingNode == playerNode) continue;
+
             //Check if this node itself hits all conditions
             if(checkingNode.nodeType == nodeType && !checkingNode.isRevealed)
             {

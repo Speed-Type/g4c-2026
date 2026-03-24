@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CaterpillarBreatheAnim : MonoBehaviour
+public class BugIdleBreatheAnim : MonoBehaviour
 {
     public float sizeMultiplier = 1.1f;
     public float animLength = 3f;
