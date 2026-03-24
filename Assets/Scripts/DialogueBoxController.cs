@@ -21,6 +21,8 @@ public class DialogueBoxController : MonoBehaviour
     [Header("Spider Alertness Bar")]
     [SerializeField] private RectTransform alertnessFillBar;
     [SerializeField] private Color alertnessBarFlashColor;
+    [SerializeField] private Image spiderImage;
+    [SerializeField] private Sprite[] spiderSprites;
 
     //Internal Variables
     private float defaultBoxHeight;
@@ -105,6 +107,9 @@ public class DialogueBoxController : MonoBehaviour
         //Also update spider alertness bar
         float percentToFill = RoguelikeGameplayController.ChanceForSpiderToPursue();
         StatDisplay.UpdateFillBar(alertnessFillBar, percentToFill, alertnessBarMaxWidth, alertnessBarFlashColor, alertnessBarOriginalColor);
+    
+        //Also update spider image
+        spiderImage.sprite = spiderSprites[(int)(percentToFill * (spiderSprites.Length - 1))];
     }
 
     IEnumerator TypewriterCoroutine()

@@ -463,7 +463,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
         else
         {
-            dialogueBoxController.SetText(new List<string> {"Test text"});
+            dialogueBoxController.SetText(new List<string> {"Press again to confirm level end."});
             doubleCheckInstar = true;
         }
     }
