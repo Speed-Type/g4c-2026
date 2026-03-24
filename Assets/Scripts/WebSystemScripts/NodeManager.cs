@@ -319,7 +319,6 @@ public class NodeManager : MonoBehaviour
     private bool hasAttackedPlayer = false;
     private void DoSpiderTurn(int currentMoveNum = 0)
     {
-        Debug.Log("Current move: " + currentMoveNum);
         spiderMarkerGO.transform.SetAsLastSibling();
         if(spiderNode == playerNode && !hasAttackedPlayer) //TODO: CASE 1: SPIDER AND PLAYER ON SAME NODE
         {
@@ -335,7 +334,7 @@ public class NodeManager : MonoBehaviour
                     //Player lives, spider moves on (and moves off of player node)
                     //We give the spider an extra turn (by not incrementing currentMoveNum)
                     //This way the spider gets to move one more square, and it stops moving afterwards because hasAttackedPlayer == true
-                    DoSpiderTurn(currentMoveNum);
+                    DoSpiderTurn(currentMoveNum - 1);
                 }
                 else
                 {
@@ -358,27 +357,57 @@ public class NodeManager : MonoBehaviour
         else //TODO: CASE 3: SPIDER JUST MOVES A NODE
         {
             //Calculate which node spider should move to
-            if(UnityEngine.Random.Range(0f,1f) < RoguelikeGameplayController.instance.stealthChance)
+            if(UnityEngine.Random.Range(0f,1f) > (float)RoguelikeGameplayController.instance.currentSpiderAlertness / RoguelikeGameplayController.instance.maxSpiderAlertness)
             {
                 //Just a random node
                 spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
-                Debug.Log("Random node");
             }
             else
             {
                 //A node specifically toward the player
-                spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
-                Debug.Log("Towards player");
+                
+                List<Node> neighborNodes = spiderNode.GetNodeList();
+                Node bestNode = neighborNodes[0];
+                float bestDistance = float.MaxValue;
+
+                //Algorithm literally just finds the smallest screen distance between two nodes
+                foreach(Node n in neighborNodes)
+                {
+                    float dist = Vector2.Distance(
+                        n.GetComponent<RectTransform>().localPosition,
+                        playerNode.GetComponent<RectTransform>().localPosition
+                    );
+
+                    if(dist < bestDistance)
+                    {
+                        bestDistance = dist;
+                        bestNode = n;
+                    }
+                }
+
+                spiderNode = bestNode;
             }
 
             //Actually move spider
-            Debug.Log("Starting move");
             LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
             .setEase(LeanTweenType.easeInOutSine)
             .setOnComplete(() =>
             {
-                Debug.Log("Done moving");
-                if(!hasAttackedPlayer) DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
+                if(!hasAttackedPlayer)
+                {
+                    DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
+                }
+                else //IN THIS CASE, SPIDER HAS JUST MOVED AWAY FROM PLAYER
+                {
+                    //Call to hide map
+                    RoguelikeGameplayController.instance.HideMap(true);
+
+                    //Call method for playerNode to its their thing
+                    playerNode.DoNodeEffects();
+
+                    //Set player attackable again
+                    hasAttackedPlayer = false;
+                }
             });
         }
     }
