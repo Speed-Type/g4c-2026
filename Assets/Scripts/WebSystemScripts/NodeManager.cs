@@ -320,7 +320,7 @@ public class NodeManager : MonoBehaviour
     private void DoSpiderTurn(int currentMoveNum = 0)
     {
         spiderMarkerGO.transform.SetAsLastSibling();
-        if(spiderNode == playerNode && !hasAttackedPlayer) //TODO: CASE 1: SPIDER AND PLAYER ON SAME NODE
+        if(spiderNode == playerNode && !hasAttackedPlayer) //CASE 1: SPIDER AND PLAYER ON SAME NODE
         {
             hasAttackedPlayer = true;
 
@@ -354,7 +354,7 @@ public class NodeManager : MonoBehaviour
             //Set player attackable again
             hasAttackedPlayer = false;
         }
-        else //TODO: CASE 3: SPIDER JUST MOVES A NODE
+        else //CASE 3: SPIDER JUST MOVES A NODE
         {
             //Calculate which node spider should move to
             if(UnityEngine.Random.Range(0f,1f) > (float)RoguelikeGameplayController.instance.currentSpiderAlertness / RoguelikeGameplayController.instance.maxSpiderAlertness)
