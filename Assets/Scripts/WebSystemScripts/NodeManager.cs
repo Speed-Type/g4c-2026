@@ -25,8 +25,9 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private float[] nodePositionRandomization;
 
     [Header("Web Animations Timing")]
-    [SerializeField] private float playerTravelAnimTime = 1.25f;
-    [SerializeField] private float spiderTravelAnimTime = 1f;
+    [SerializeField] private float playerTravelAnimTime = .75f;
+    [SerializeField] private float spiderTravelAnimTime = .5f;
+    [SerializeField] private float spiderRotateAnimTime = .2f;
 
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
@@ -317,6 +318,7 @@ public class NodeManager : MonoBehaviour
 
     //Method that handles the spider's turn
     private bool hasAttackedPlayer = false;
+    private Node lastSpiderNode;
     private void DoSpiderTurn(int currentMoveNum = 0)
     {
         spiderMarkerGO.transform.SetAsLastSibling();
@@ -360,7 +362,11 @@ public class NodeManager : MonoBehaviour
             if(UnityEngine.Random.Range(0f,1f) > (float)RoguelikeGameplayController.instance.currentSpiderAlertness / RoguelikeGameplayController.instance.maxSpiderAlertness)
             {
                 //Just a random node
-                spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+                do
+                {
+                    spiderNode = spiderNode.GetNodeList()[UnityEngine.Random.Range(0, spiderNode.GetNodeList().Count)];
+                }
+                while(spiderNode == lastSpiderNode);
             }
             else
             {
@@ -373,6 +379,8 @@ public class NodeManager : MonoBehaviour
                 //Algorithm literally just finds the smallest screen distance between two nodes
                 foreach(Node n in neighborNodes)
                 {
+                    if(n == lastSpiderNode) continue; //Avoid backtracking to the most directly previous node
+
                     float dist = Vector2.Distance(
                         n.GetComponent<RectTransform>().localPosition,
                         playerNode.GetComponent<RectTransform>().localPosition
@@ -387,27 +395,41 @@ public class NodeManager : MonoBehaviour
 
                 spiderNode = bestNode;
             }
+            
+            lastSpiderNode = spiderNode; //Update the previous node for the next call
 
-            //Actually move spider
-            LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
-            .setEase(LeanTweenType.easeInOutSine)
+            //Do the math to calculate new rotation
+            RectTransform spiderRect = spiderMarkerGO.GetComponent<RectTransform>();
+            RectTransform targetRect = spiderNode.GetComponent<RectTransform>();
+            Vector2 dir = targetRect.localPosition - spiderRect.localPosition;
+            float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg + 90f;
+
+            //Tween spider's rotation to face the new spiderNode's RectTransform
+            LeanTween.rotateZ(spiderMarkerGO, angle, spiderRotateAnimTime)
+            .setEaseInOutSine()
             .setOnComplete(() =>
             {
-                if(!hasAttackedPlayer)
+                //Actually move spider
+                LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
+                .setEase(LeanTweenType.easeInOutSine)
+                .setOnComplete(() =>
                 {
-                    DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
-                }
-                else //IN THIS CASE, SPIDER HAS JUST MOVED AWAY FROM PLAYER
-                {
-                    //Call to hide map
-                    RoguelikeGameplayController.instance.HideMap(true);
+                    if(!hasAttackedPlayer)
+                    {
+                        DoSpiderTurn(currentMoveNum + 1); //Keep moving only if the spider has not just attacked
+                    }
+                    else //IN THIS CASE, SPIDER HAS JUST MOVED AWAY FROM PLAYER
+                    {
+                        //Call to hide map
+                        RoguelikeGameplayController.instance.HideMap(true);
 
-                    //Call method for playerNode to its their thing
-                    playerNode.DoNodeEffects();
+                        //Call method for playerNode to its their thing
+                        playerNode.DoNodeEffects();
 
-                    //Set player attackable again
-                    hasAttackedPlayer = false;
-                }
+                        //Set player attackable again
+                        hasAttackedPlayer = false;
+                    }
+                });
             });
         }
     }
