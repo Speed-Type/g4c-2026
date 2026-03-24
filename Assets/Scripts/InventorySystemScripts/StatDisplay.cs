@@ -118,11 +118,12 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void OpenDisplay()
     {
         //Update stealth stats
+        bool isCritical = RoguelikeGameplayController.instance.currentSpiderAlertness >= RoguelikeGameplayController.instance.maxSpiderAlertness;
         stealthStatsText.text = 
-            "Spider Alertness: " + RoguelikeGameplayController.instance.currentSpiderAlertness + "\n" +
+            "Spider Alertness: " + RoguelikeGameplayController.instance.currentSpiderAlertness + (isCritical ? " (!!!)" : "") + "\n" +
             "Critical Spider Alertness: " + RoguelikeGameplayController.instance.maxSpiderAlertness + "\n" +
-            "Chance for Spider to pursue bone collector: " + RoguelikeGameplayController.ChanceForSpiderToPursue().ToString("P2") + "\n" +
-            "Chance to avoid combat on Spider encounter: " + RoguelikeGameplayController.instance.stealthChance.ToString("P2");
+            "Chance for Spider to pursue: " + RoguelikeGameplayController.ChanceForSpiderToPursue().ToString("P2") + "\n" +
+            "Camouflage Chance: " + (isCritical ? "0.00% (Instakill)" : RoguelikeGameplayController.instance.stealthChance.ToString("P2"));
 
         //Store current bite's fragment script for sake of speed
         GameObject currentBite = RoguelikeGameplayController.GetCurrentBiteGO_Static();

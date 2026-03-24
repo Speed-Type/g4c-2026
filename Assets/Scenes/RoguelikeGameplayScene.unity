@@ -7519,7 +7519,6 @@ RectTransform:
   - {fileID: 1660329150}
   - {fileID: 1890375035}
   - {fileID: 1934821514}
-  - {fileID: 1299448072}
   - {fileID: 1403448137}
   - {fileID: 1968131225}
   - {fileID: 1696413891}
@@ -8563,8 +8562,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 590.312, y: 0}
+  m_AnchoredPosition: {x: 0, y: -46.147034}
+  m_SizeDelta: {x: 590.312, y: -46.147}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1026023535
 MonoBehaviour:
@@ -9723,13 +9722,13 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 850402383}
+  m_Father: {fileID: 1403448137}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 290.156, y: 0}
+  m_SizeDelta: {x: 580.312, y: -107.852936}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1299448073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10359,6 +10358,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1299448072}
   - {fileID: 1026023534}
   - {fileID: 1051418021}
   m_Father: {fileID: 850402383}
@@ -11374,7 +11374,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 70.95
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -13322,7 +13322,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Spider Alertness:\nCritical-Level Spider Alertness: \nChance for Spider
-    to pursue bone collector:\nChance to avoid combat on Spider encounter:"
+    to pursue\nCamouflage Chance:"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 82c8f386d2a5a4615ab191a307e08e6f, type: 2}
   m_sharedMaterial: {fileID: -7558081632217087334, guid: 82c8f386d2a5a4615ab191a307e08e6f, type: 2}
