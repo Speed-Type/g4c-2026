@@ -416,7 +416,7 @@ GameObject:
   m_Component:
   - component: {fileID: 45881614}
   m_Layer: 0
-  m_Name: DoubleBugPosition (bug)
+  m_Name: ScavengePosition (bug)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1317,6 +1317,7 @@ Transform:
   - {fileID: 1849130982}
   - {fileID: 2106849937}
   - {fileID: 45881614}
+  - {fileID: 1853656627}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &321606535
@@ -1553,6 +1554,7 @@ MonoBehaviour:
   savedFreeCamTransform: {fileID: 345559258}
   mapCamTransform: {fileID: 1080935106}
   inventoryFocusTransform: {fileID: 2033165042}
+  enemyCloseupTransform: {fileID: 0}
   cloudTransitionGO: {fileID: 1974897838}
   cloudTransitionLength: 0.6
   yawDragSensitivity: 20
@@ -1569,6 +1571,8 @@ MonoBehaviour:
   inventoryCamHorizontalOffset: 5
   inventoryCamVerticalOffset: 4
   inventoryCamTransitionAnimTime: 0.5
+  enemyCloseupTransitionTiming: 0.5
+  enemyCloseupPauseLength: 3
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0
@@ -10516,6 +10520,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1272783954}
   m_CullTransparentMesh: 1
+--- !u!1 &1289632314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289632316}
+  - component: {fileID: 1289632315}
+  m_Layer: 0
+  m_Name: SnakeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1289632315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289632314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fec9047987e849849bacf51d101565f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SnakeGameplayController
+--- !u!4 &1289632316
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289632314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1299448071
 GameObject:
   m_ObjectHideFlags: 0
@@ -12272,7 +12320,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1619248906}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1880359810}
+        m_TargetAssemblyTypeName: RoguelikeGameplayController, Assembly-CSharp
+        m_MethodName: StartCombat
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1619248906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13798,7 +13858,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1849130982}
   m_Layer: 0
-  m_Name: SingleBugPosition
+  m_Name: IdlePosition (caterpillar)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13814,6 +13874,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.04, y: 0.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 321082789}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1853656626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1853656627}
+  m_Layer: 0
+  m_Name: CombatPosition (bug)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1853656627
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1853656626}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.04, y: -0, z: -6.43}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14087,6 +14178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoguelikeGameplayController
   dialogueBoxController: {fileID: 859266379}
+  snakeGameplayController: {fileID: 1289632315}
   currentFlesh: 0
   goalFlesh: 10
   maxBites: 3
@@ -15436,7 +15528,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2106849937}
   m_Layer: 0
-  m_Name: DoubleBugPosition (caterpillar)
+  m_Name: ScavengePosition (caterpillar)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15796,6 +15888,7 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 109019099}
   - {fileID: 647211180}
+  - {fileID: 1289632316}
   - {fileID: 1880359811}
   - {fileID: 1866246698}
   - {fileID: 355174380}

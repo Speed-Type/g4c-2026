@@ -6,6 +6,7 @@ using System;
 public class RoguelikeGameplayController : MonoBehaviour
 {
     public DialogueBoxController dialogueBoxController;
+    public SnakeGameplayController snakeGameplayController;
 
     //Variables in Inspector
 
@@ -233,6 +234,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
 
         doubleCheckInstar = false;
+        doubleCheckCombat = false;
     }
 
     //Called from DialogueBoxController
@@ -363,6 +365,87 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Idle;
     }
 
+    public static bool CanInstar()
+    {
+        return instance.currentFlesh >= instance.goalFlesh;
+    }
+
+    private bool doubleCheckCombat = false;
+    public void StartCombat()
+    {
+        //Make sure the player can actually make choices
+        if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
+        //Make sure this option is actually one of the open ones
+        if(!openButtons.Contains(PlayerOptionButtons.Combat))
+        {
+            return;
+        }
+
+        if(doubleCheckCombat) //TODO: BATTLE HERE
+        {
+            Debug.Log("Battle");
+
+            gameState = GameState.Combat;
+
+            //Switch camera
+            cameraController.SwitchToBattleCam(snakeGameplayController.PlayGame);
+
+            //Hide all UI
+            TogglePlayerOptionButtons(false);
+            dialogueSystemController.HideDialogueBox();
+        }
+        else
+        {
+            dialogueBoxController.SetText(new List<string> {"Press again to confirm battle start."});
+            doubleCheckCombat = true;
+        }
+    }
+
+    public void EndCombat(bool playerWon)
+    {
+        //TODO: Code that runs regardless of win or lose
+
+        if(playerWon)
+        {
+            //TODO: Code that runs specifically when player wins
+        }
+        else
+        {
+            //TODO: Code that runs specifically when player loses
+        }
+    }
+
+    private bool doubleCheckInstar = false;
+    public void Instar()
+    {
+        //Make sure the player can actually make choices
+        if(!playerCanMakeChoices)
+        {
+            return;
+        }
+
+        //Make sure this option is actually one of the open ones
+        if(!openButtons.Contains(PlayerOptionButtons.Instar))
+        {
+            return;
+        }
+
+        if(doubleCheckInstar)
+        {
+            //TODO: INSTAR HERE
+            Debug.Log("Instar");
+        }
+        else
+        {
+            dialogueBoxController.SetText(new List<string> {"Press again to confirm level end."});
+            doubleCheckInstar = true;
+        }
+    }
+
     //Static method to add flesh
     public static void AddFlesh(int amount)
     {
@@ -447,25 +530,6 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static float ChanceForSpiderToPursue()
     {
         return Math.Min((float)instance.currentSpiderAlertness / instance.maxSpiderAlertness, 1f);
-    }
-
-    public static bool CanInstar()
-    {
-        return instance.currentFlesh >= instance.goalFlesh;
-    }
-
-    private bool doubleCheckInstar = false;
-    public void Instar()
-    {
-        if(doubleCheckInstar)
-        {
-            //TODO: INSTAR HERE
-        }
-        else
-        {
-            dialogueBoxController.SetText(new List<string> {"Press again to confirm level end."});
-            doubleCheckInstar = true;
-        }
     }
 }
 

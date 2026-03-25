@@ -40,9 +40,10 @@ public class NodeManager : MonoBehaviour
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
     private GameObject enemyBugGO;
-    [SerializeField] private Transform singleBugCaterpillarPositionTransform;
-    [SerializeField] private Transform doubleBugCaterpillarPositionTransform;
-    [SerializeField] private Transform enemyBugPositionTransform;
+    [SerializeField] private Transform idleCaterpillarPositionTransform;
+    [SerializeField] private Transform scavengeCaterpillarPositionTransform;
+    [SerializeField] private Transform scavengeEnemyPositionTransform;
+    [SerializeField] private Transform combatEnemyPositionTransform;
 
 
     public static bool isMovingNodes = false;
@@ -502,14 +503,22 @@ public class NodeManager : MonoBehaviour
         //Determine caterpillar's position based on current node's type
         if(playerNode.nodeType == NodeTypes.Scavenge || playerNode.nodeType == NodeTypes.Combat)
         {
-            caterpillarGO.transform.position = doubleBugCaterpillarPositionTransform.position;
+            caterpillarGO.transform.position = scavengeCaterpillarPositionTransform.position;
 
             //Then spawn the right bug
-            enemyBugGO = Instantiate(playerNode.GetBug(), enemyBugPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), enemyBugPositionTransform);
+            if(playerNode.nodeType == NodeTypes.Scavenge)
+            {
+                //Enemy should be in scavenge position with randomized rotation
+                enemyBugGO = Instantiate(playerNode.GetBug(), scavengeEnemyPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), scavengeEnemyPositionTransform);
+            }
+            else
+            {
+                enemyBugGO = Instantiate(playerNode.GetBug(), combatEnemyPositionTransform.position, combatEnemyPositionTransform.rotation, combatEnemyPositionTransform);
+            }
         }
         else
         {
-            caterpillarGO.transform.position = singleBugCaterpillarPositionTransform.position;
+            caterpillarGO.transform.position = idleCaterpillarPositionTransform.position;
         }
     }
 }

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class RoguelikeCameraController : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class RoguelikeCameraController : MonoBehaviour
     [SerializeField] private Transform savedFreeCamTransform;
     [SerializeField] private Transform mapCamTransform;
     [SerializeField] private Transform inventoryFocusTransform;
+    [SerializeField] private Transform enemyCloseupTransform;
 
     [Header("Transition Settings")]
     [SerializeField] private GameObject cloudTransitionGO;
@@ -45,6 +47,8 @@ public class RoguelikeCameraController : MonoBehaviour
     [Header("Camera Transitions Timing")]
     public static float freeCamTransitionTiming = 1f;
     public static float generalDelayBetweenTransitions = 0.25f;
+    public float enemyCloseupTransitionTiming = .5f;
+    public float enemyCloseupPauseLength = 3f;
 
     //Internal logic variables
     private static Canvas canvas;
@@ -112,8 +116,10 @@ public class RoguelikeCameraController : MonoBehaviour
         isFreeCam = false;
 
         //Smooth transition to overhead map view
-        LeanTween.move(this.gameObject, mapCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
-        LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), freeCamTransitionTiming).setEase(LeanTweenType.easeOutExpo);
+        LeanTween.move(this.gameObject, mapCamTransform, freeCamTransitionTiming)
+            .setEase(LeanTweenType.easeOutExpo);
+        LeanTween.rotate(this.gameObject, new Vector3(90, transform.localEulerAngles.y, 0), freeCamTransitionTiming)
+            .setEase(LeanTweenType.easeOutExpo);
     
         //Also do fog transition
         CloudTransitionOut();
@@ -180,6 +186,34 @@ public class RoguelikeCameraController : MonoBehaviour
         targetZoom = 17.5f;
         idleRotationSpeed /= 2f;
         maxPitch /= 2f;
+    }
+
+    public void SwitchToBattleCam(Action onCompleteAction) //TODO: Add cool visual effects like fallen knight
+    {
+        //Tween to close up view of enemy
+        LeanTween.move(this.gameObject, enemyCloseupTransform, enemyCloseupTransitionTiming)
+            .setEase(LeanTweenType.easeOutExpo);
+        LeanTween.rotate(this.gameObject, enemyCloseupTransform.eulerAngles, enemyCloseupTransitionTiming)
+            .setEase(LeanTweenType.easeOutExpo)
+            .setOnComplete(() =>
+            {
+                //Delay a bit in that close up view
+                LeanTween.delayedCall(enemyCloseupPauseLength, () =>
+                {
+                    //TODO: Do some sort of screen transition before calling to start snake gameplay
+
+                    //On finish, call the PlayGame function (that's what's passed in as the onCompleteAction)
+                    onCompleteAction();
+                });
+            });
+    }
+
+    public void SwitchBackFromBattleCam(bool playerWon)
+    {
+        //TODO: Do some sort of transition on game over
+
+        //On finish, call back to rg controller
+        RoguelikeGameplayController.instance.EndCombat(playerWon);
     }
 
     private void CloudTransitionOut()
