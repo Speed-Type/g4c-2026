@@ -133,9 +133,14 @@ public class DialogueBoxController : MonoBehaviour
     //Method to set the strings for the text buffer (CLEARS BUFFER)
     public void SetText(List<string> newText)
     {
-        textBuffer.Clear();
-        if(!rgController.playerCanMakeChoices) SetDialogueBoxHeight(defaultBoxHeight); //reset sizing
-        AddText(newText);
+        textBuffer.Clear(); //Clear text content
+
+        if(!rgController.playerCanMakeChoices) SetDialogueBoxHeight(defaultBoxHeight); //Reset sizing
+
+        AddText(newText); //Update text buffer
+
+        if(textGraphic.maxVisibleCharacters != textGraphic.text.Length) ContinueText(); //In case we aren't at max text length yet
+        if(typewriterCoroutine != null) StopCoroutine(typewriterCoroutine); //In case we were in the middle of a text write
         ContinueText();
     }
 }
