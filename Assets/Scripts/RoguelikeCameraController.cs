@@ -68,8 +68,13 @@ public class RoguelikeCameraController : MonoBehaviour
     private int horizontalOffsetTransitionTween;
     private int verticalOffsetTransitionTween;
 
+    private static RoguelikeCameraController instance;
+
     void Awake()
     {
+        //Set static instance
+        instance = this;
+
         //Setup input actions
         input = new PlayerInputActions();
 
@@ -190,6 +195,12 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public void SwitchToBattleCam(Action onCompleteAction) //TODO: Add cool visual effects like fallen knight
     {
+        //Save necessary positions
+        savedFreeCamTransform.position = transform.position;
+        savedFreeCamTransform.rotation = transform.rotation;
+        input.Disable();
+        isFreeCam = false;
+
         //Tween to close up view of enemy
         LeanTween.move(this.gameObject, enemyCloseupTransform, enemyCloseupTransitionTiming)
             .setEase(LeanTweenType.easeOutExpo);
@@ -211,6 +222,8 @@ public class RoguelikeCameraController : MonoBehaviour
     public void SwitchBackFromBattleCam(bool playerWon)
     {
         //TODO: Do some sort of transition on game over
+
+        //TODO: Tween camera back to saved position
 
         //On finish, call back to rg controller
         RoguelikeGameplayController.instance.EndCombat(playerWon);
@@ -292,55 +305,54 @@ public class RoguelikeCameraController : MonoBehaviour
 
     void LateUpdate()
     {
-        if(isFreeCam)
+        if(!isFreeCam) return; //Only move the camera around when it's freecam
+        
+        isOverUI = EventSystem.current.IsPointerOverGameObject();
+
+        //Rotation when not dragging
+        if (!pressing || isOverUI)
         {
-            isOverUI = EventSystem.current.IsPointerOverGameObject();
-
-            //Rotation when not dragging
-            if (!pressing || isOverUI)
-            {
-                //Smoothly transition yaw speed to idle speed
-                yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
-                
-                //Smoothly transition pitch speed to 0
-                pitchVelocity = Mathf.Lerp(pitchVelocity, 0, Time.deltaTime * pitchSmoothTime);
-            }
-
-            //Smoothly transition zoom
-            currentZoom = Mathf.SmoothDamp(currentZoom, targetZoom, ref zoomVelocity, zoomSmoothTime);
-
-            //Rotate around the target by yaw
-            transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
-
-            //---------SCREW THIS MATH---------//
-            //Update pitch value
-            currentPitch -= pitchVelocity * Time.deltaTime;
-            currentPitch = Mathf.Clamp(currentPitch, minPitch, maxPitch); //Clamp
-
-            //Get direction from target to camera, set distance to the current distance
-            Vector3 offset = transform.position - targetTransform.position;
-            float radius = currentZoom;
-
-            //Calculate yaw direction (horizontal plane)
-            Vector3 flatDir = new Vector3(offset.x, 0, offset.z).normalized;
-
-            //Apply pitch vertically
-            float pitchRad = currentPitch * Mathf.Deg2Rad;
-
-            //Calculate offset for where camera should be
-            Vector3 newOffset = new Vector3(
-                flatDir.x * Mathf.Cos(pitchRad),
-                Mathf.Sin(pitchRad),
-                flatDir.z * Mathf.Cos(pitchRad)
-            ) * radius; //Multiplied by the total distance from target
-
-            //Apply the offset
-            transform.position = targetTransform.position + newOffset;
-            //---------SCREW THIS MATH---------//
-
-            //Always look at the target
-            transform.LookAt(targetTransform.position - transform.right * currentHorizontalOffset - transform.up * currentVerticalOffset);
+            //Smoothly transition yaw speed to idle speed
+            yawVelocity = Mathf.Lerp(yawVelocity, freeCamIdleRotationDirection * idleRotationSpeed, Time.deltaTime * yawSmoothTime);
+            
+            //Smoothly transition pitch speed to 0
+            pitchVelocity = Mathf.Lerp(pitchVelocity, 0, Time.deltaTime * pitchSmoothTime);
         }
+
+        //Smoothly transition zoom
+        currentZoom = Mathf.SmoothDamp(currentZoom, targetZoom, ref zoomVelocity, zoomSmoothTime);
+
+        //Rotate around the target by yaw
+        transform.RotateAround(targetTransform.position, Vector3.up, yawVelocity * Time.deltaTime);
+
+        //---------SCREW THIS MATH---------//
+        //Update pitch value
+        currentPitch -= pitchVelocity * Time.deltaTime;
+        currentPitch = Mathf.Clamp(currentPitch, minPitch, maxPitch); //Clamp
+
+        //Get direction from target to camera, set distance to the current distance
+        Vector3 offset = transform.position - targetTransform.position;
+        float radius = currentZoom;
+
+        //Calculate yaw direction (horizontal plane)
+        Vector3 flatDir = new Vector3(offset.x, 0, offset.z).normalized;
+
+        //Apply pitch vertically
+        float pitchRad = currentPitch * Mathf.Deg2Rad;
+
+        //Calculate offset for where camera should be
+        Vector3 newOffset = new Vector3(
+            flatDir.x * Mathf.Cos(pitchRad),
+            Mathf.Sin(pitchRad),
+            flatDir.z * Mathf.Cos(pitchRad)
+        ) * radius; //Multiplied by the total distance from target
+
+        //Apply the offset
+        transform.position = targetTransform.position + newOffset;
+        //---------SCREW THIS MATH---------//
+
+        //Always look at the target
+        transform.LookAt(targetTransform.position - transform.right * currentHorizontalOffset - transform.up * currentVerticalOffset);
     }
 
     public static GameObject SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)

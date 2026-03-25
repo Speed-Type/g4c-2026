@@ -199,8 +199,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1494023831875050245, guid: 328bf0d82701e4591bef2386c4f7b719, type: 3}
-        m_TargetAssemblyTypeName: Node_Empty, Assembly-CSharp
+      - m_Target: {fileID: -1433474760988545236}
+        m_TargetAssemblyTypeName: Node_Combat, Assembly-CSharp
         m_MethodName: VisitNode
         m_Mode: 1
         m_Arguments:
