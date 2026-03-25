@@ -253,6 +253,11 @@ public class RoguelikeCameraController : MonoBehaviour
             });
     }
 
+    public void EndBattleCam()
+    {
+        
+    }
+
     public void CloudTransitionOut(Action middleAction = null, Action onCompleteAction = null)
     {
         cloudTransitionGO.SetActive(true);

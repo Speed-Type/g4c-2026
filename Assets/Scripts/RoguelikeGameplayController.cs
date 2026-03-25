@@ -380,6 +380,8 @@ public class RoguelikeGameplayController : MonoBehaviour
             return;
         }
 
+        playerCanMakeChoices = false;
+
         //Make sure this option is actually one of the open ones
         if(!openButtons.Contains(PlayerOptionButtons.Combat))
         {
@@ -408,6 +410,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void EndCombat(bool playerWon)
     {
+        List<string> outputText;
         //TODO: Code that runs regardless of win or lose
         
         if(playerWon) //Case 1: Player wins
@@ -420,6 +423,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             //TODO: Upgrade rare loot odds for this scavenge node
 
             //TODO: Set text for battle
+            outputText = new List<string> {"TEST", "..."};
         }
         else //Case 2: Player loses
         {
@@ -432,16 +436,17 @@ public class RoguelikeGameplayController : MonoBehaviour
             NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Empty);
 
             //TODO: Set text for battle
+            outputText = new List<string> {"TEST", "..."};
         }
+
+        //Visit the current node
+        NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it
+        NodeManager.instance.playerNode.VisitNode();
 
         //TODO: transition out
         cameraController.CloudTransitionOut(() =>
         {
             //NOTE: The following code is run in the middle of the cloud transition
-
-            //Visit the current node
-            NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it
-            NodeManager.instance.playerNode.VisitNode();
             
             //Switch cam to freecam
             cameraController.TransitionToFreeCam(true);
@@ -449,11 +454,17 @@ public class RoguelikeGameplayController : MonoBehaviour
         {
             //NOTE: The following code is run at the end of the cloud transition
 
-            //Show other open buttons
-            TogglePlayerOptionButtons(true);
+            gameState = GameState.Idle;
+
+            LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
+            {
+                //Show other open buttons
+                TogglePlayerOptionButtons(true);
             
-            //Show dialogue box
-            dialogueSystemController.ShowDialogueBox();
+                //Show dialogue box
+                dialogueSystemController.SetText(outputText);
+                dialogueSystemController.ShowDialogueBox();
+            });
         });
     }
 
