@@ -340,6 +340,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 25254660}
+  - component: {fileID: 25254661}
   m_Layer: 5
   m_Name: BattleStartEffect
   m_TagString: Untagged
@@ -370,6 +371,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &25254661
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 25254659}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &29423138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1640,6 +1653,7 @@ MonoBehaviour:
   enemyCloseupTransform: {fileID: 1881902799}
   cloudTransitionGO: {fileID: 1974897838}
   cloudTransitionLength: 0.6
+  battleTransitionCanvasGroup: {fileID: 25254661}
   yawDragSensitivity: 20
   pitchDragSensitivity: 12.5
   yawSmoothTime: 3

@@ -8,7 +8,7 @@ public class SnakeGameplayController : MonoBehaviour
         isPlaying = true;
 
         //TEMP
-        LeanTween.delayedCall(1f, () =>
+        LeanTween.delayedCall(3f, () =>
         {
             EndGame(true);
         });

@@ -21,6 +21,7 @@ public class RoguelikeCameraController : MonoBehaviour
     [SerializeField] private GameObject cloudTransitionGO;
     [SerializeField] private float cloudTransitionLength;
     private Color defaultCloudColor;
+    [SerializeField] private CanvasGroup battleTransitionCanvasGroup;
 
     [Header("Free Cam Rotation Parameters")]
     [SerializeField] private float yawDragSensitivity = 20f;
@@ -94,9 +95,12 @@ public class RoguelikeCameraController : MonoBehaviour
 
         //Initialize cloud transition color
         defaultCloudColor = cloudTransitionGO.GetComponent<Image>().color;
+
+        //Hide battle transition
+        battleTransitionCanvasGroup.gameObject.SetActive(false);
     }
 
-    public void TransitionToFreeCam()
+    public void TransitionToFreeCam(Action onCompleteAction = null)
     {
         //Smooth transition to freecam view
         LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
@@ -106,7 +110,7 @@ public class RoguelikeCameraController : MonoBehaviour
         LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo);
     
         //Also do cloud transition
-        CloudTransitionIn();
+        CloudTransitionIn(onCompleteAction);
 
         //Set target transform position
         targetTransform.position = freeCamIdleTransform.position;
@@ -193,13 +197,24 @@ public class RoguelikeCameraController : MonoBehaviour
         maxPitch /= 2f;
     }
 
-    public void SwitchToBattleCam(Action onCompleteAction) //TODO: Add cool visual effects like fallen knight
+    public void SwitchToBattleCam(Action onCompleteAction)
     {
         //Save necessary positions
         savedFreeCamTransform.position = transform.position;
         savedFreeCamTransform.rotation = transform.rotation;
         input.Disable();
         isFreeCam = false;
+
+        //Do cool visual effects like fallen knight
+        int totalLoops = 7;
+        battleTransitionCanvasGroup.gameObject.SetActive(true);
+        int battleStartEffectTween = LeanTween.value(0f, 1f, (enemyCloseupTransitionTiming + enemyCloseupPauseLength)  / totalLoops)
+            .setLoopPingPong(totalLoops)
+            .setOnUpdate((float val) =>
+            {
+                battleTransitionCanvasGroup.alpha = val;
+            })
+            .id;
 
         //Tween to close up view of enemy
         LeanTween.move(this.gameObject, enemyCloseupTransform, enemyCloseupTransitionTiming)
@@ -211,25 +226,51 @@ public class RoguelikeCameraController : MonoBehaviour
                 //Delay a bit in that close up view
                 LeanTween.delayedCall(enemyCloseupPauseLength, () =>
                 {
-                    //TODO: Do some sort of screen transition before calling to start snake gameplay
+                    //Do cloud transition out
+                    CloudTransitionOut(() =>
+                    {
+                        //NOTE: The following code is called in the middle of the cloud transition
 
-                    //On finish, call the PlayGame function (that's what's passed in as the onCompleteAction)
-                    onCompleteAction();
+                        //Stop battle effect
+                        LeanTween.cancel(battleStartEffectTween);
+                        battleTransitionCanvasGroup.gameObject.SetActive(false);
+
+                        //TODO: CHANGE CAM POSITION TO BATTLE CAM STUFF
+                    }, () =>
+                    {
+                        //NOTE: The following code is called at the end of the cloud transition
+                        onCompleteAction();
+                    });
                 });
             });
     }
 
     public void SwitchBackFromBattleCam(bool playerWon)
     {
-        //TODO: Do some sort of transition on game over
+        //Transition back to freecam
+        CloudTransitionOut(() =>
+        {
+            //NOTE: The following code is called in the middle of the cloud transition
 
-        //TODO: Tween camera back to saved position
+            //Reset cam position to freecam position
+            transform.position = savedFreeCamTransform.position;
+            transform.rotation = savedFreeCamTransform.rotation;
+            targetTransform.position = freeCamIdleTransform.position;
 
-        //On finish, call back to rg controller
-        RoguelikeGameplayController.instance.EndCombat(playerWon);
+            //Re-enable freecam
+            input.Enable();
+            isFreeCam = true;
+
+        }, () =>
+        {
+            //NOTE: The following code is called at the end of the cloud transition
+
+            //On finish, call back to rg controller
+            RoguelikeGameplayController.instance.EndCombat(playerWon);
+        });
     }
 
-    private void CloudTransitionOut()
+    private void CloudTransitionOut(Action middleAction = null, Action onCompleteAction = null)
     {
         cloudTransitionGO.SetActive(true);
         Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
@@ -238,6 +279,12 @@ public class RoguelikeCameraController : MonoBehaviour
             cloudTransitionImage.color = color;
         }, new Color(0, 0, 0, 0), defaultCloudColor, freeCamTransitionTiming).setEaseOutQuad().setOnComplete(() =>
         {
+            //Do middle action
+            if(middleAction != null)
+            {
+                middleAction();
+            }
+
             LeanTween.delayedCall(generalDelayBetweenTransitions, () =>
             {
                 LeanTween.value(this.gameObject, (Color color) =>
@@ -246,12 +293,17 @@ public class RoguelikeCameraController : MonoBehaviour
                 }, defaultCloudColor, new Color(0, 0, 0, 0), cloudTransitionLength).setEaseOutQuad().setOnComplete(() =>
                 {
                     cloudTransitionGO.SetActive(false);
+
+                    if(onCompleteAction != null)
+                    {
+                        onCompleteAction();
+                    }
                 });
             });
         });
     }
 
-    private void CloudTransitionIn()
+    private void CloudTransitionIn(Action onCompleteAction = null)
     {
         cloudTransitionGO.SetActive(true);
         Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
@@ -267,6 +319,11 @@ public class RoguelikeCameraController : MonoBehaviour
             {
                 cloudTransitionGO.SetActive(false);
                 NodeManager.isMovingNodes = false;
+
+                if(onCompleteAction != null)
+                {
+                    onCompleteAction();
+                }
             });
         });
     }
