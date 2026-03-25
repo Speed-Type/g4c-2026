@@ -7,7 +7,6 @@ public class Node_Scavenge : Node
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
     private Bugs spawnedBug;
-    private LootManager lootManager;
 
     private List<string> flavorText = new List<string> //USE [BugName] (CASE-SENSITIVE) AS PLACEHOLDER FOR THE BUG'S NAME
     {
@@ -27,8 +26,6 @@ public class Node_Scavenge : Node
         base.Awake();
 
         nodeType = NodeTypes.Scavenge;
-
-        lootManager = FindFirstObjectByType<LootManager>();
 
         //Set the spawned bug
 
@@ -65,7 +62,7 @@ public class Node_Scavenge : Node
         RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
         //Generate loot
-        lootManager.GenerateLoot(spawnedBug);
+        LootManager.instance.GenerateLoot(spawnedBug);
     }
 
     public override void DoNodeEffects()
@@ -88,6 +85,6 @@ public class Node_Scavenge : Node
     public override GameObject GetBug()
     {
         //RETURN BUG MODEL CORRESPONDING TO THIS BUG LOOT OBJECT
-        return lootManager.BugEnumToScavengeModel(spawnedBug);
+        return LootManager.instance.BugEnumToScavengeModel(spawnedBug);
     }
 }

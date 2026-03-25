@@ -19,7 +19,7 @@ public class SnakeGameplayController : MonoBehaviour
         isPlaying = false;
         
         //On finish, call switch camera in cam controller
-        RoguelikeGameplayController.instance.cameraController.SwitchBackFromBattleCam(playerWon);
+        RoguelikeGameplayController.instance.EndCombat(playerWon);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

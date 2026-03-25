@@ -10,8 +10,8 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private GameObject playerMarkerGO;
     [SerializeField] private GameObject spiderMarkerGO;
     [SerializeField] private GameObject threadGO;
-    [SerializeField] private Node playerNode;
-    [SerializeField] private Node spiderNode;
+    public Node playerNode;
+    public Node spiderNode;
 
     [Header("Web Generation Parameters")]
     [Tooltip("Number of Web Radii must be >= 3")]
@@ -45,8 +45,14 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private Transform scavengeEnemyPositionTransform;
     [SerializeField] private Transform combatEnemyPositionTransform;
 
-
+    public static NodeManager instance;
     public static bool isMovingNodes = false;
+    public static bool overrideVisitConditions = false;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
@@ -225,7 +231,22 @@ public class NodeManager : MonoBehaviour
     private bool isFirstNode = true;
     public bool TryVisitNode(Node nodeToVisit)
     {
-        if(isFirstNode || playerNode.HasNode(nodeToVisit))
+        if(overrideVisitConditions)
+        {
+            overrideVisitConditions = false; //Reset override
+
+            //Activate node real quick
+            UIParentGO.SetActive(true);
+            UIParentGO.SetActive(false);
+
+            SetBugModelsPosition();
+
+            //Skip spider turn and go straight to node effects
+            nodeToVisit.DoNodeEffects();
+
+            return true;
+        }
+        else if(isFirstNode || playerNode.HasNode(nodeToVisit))
         {
             if(isMovingNodes) return false; //If already mid-node move, set it so that a node can't be selected
             isMovingNodes = true;

@@ -100,17 +100,25 @@ public class RoguelikeCameraController : MonoBehaviour
         battleTransitionCanvasGroup.gameObject.SetActive(false);
     }
 
-    public void TransitionToFreeCam(Action onCompleteAction = null)
+    public void TransitionToFreeCam(bool immediate = false)
     {
-        //Smooth transition to freecam view
-        LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
+        if(immediate)
+        {
+            //Immediate transition to freecam view
+            transform.position = savedFreeCamTransform.position;
+            transform.rotation = savedFreeCamTransform.rotation;
             input.Enable();
             isFreeCam = true;
-        });
-        LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo);
-    
-        //Also do cloud transition
-        CloudTransitionIn(onCompleteAction);
+        }
+        else
+        {
+            //Smooth transition to freecam view
+            LeanTween.move(this.gameObject, savedFreeCamTransform, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo).setOnComplete(() => {
+                input.Enable();
+                isFreeCam = true;
+            });
+            LeanTween.rotate(this.gameObject, savedFreeCamTransform.rotation.eulerAngles, freeCamTransitionTiming).setEase(LeanTweenType.easeInExpo);
+        }
 
         //Set target transform position
         targetTransform.position = freeCamIdleTransform.position;
@@ -245,32 +253,7 @@ public class RoguelikeCameraController : MonoBehaviour
             });
     }
 
-    public void SwitchBackFromBattleCam(bool playerWon)
-    {
-        //Transition back to freecam
-        CloudTransitionOut(() =>
-        {
-            //NOTE: The following code is called in the middle of the cloud transition
-
-            //Reset cam position to freecam position
-            transform.position = savedFreeCamTransform.position;
-            transform.rotation = savedFreeCamTransform.rotation;
-            targetTransform.position = freeCamIdleTransform.position;
-
-            //Re-enable freecam
-            input.Enable();
-            isFreeCam = true;
-
-        }, () =>
-        {
-            //NOTE: The following code is called at the end of the cloud transition
-
-            //On finish, call back to rg controller
-            RoguelikeGameplayController.instance.EndCombat(playerWon);
-        });
-    }
-
-    private void CloudTransitionOut(Action middleAction = null, Action onCompleteAction = null)
+    public void CloudTransitionOut(Action middleAction = null, Action onCompleteAction = null)
     {
         cloudTransitionGO.SetActive(true);
         Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
@@ -303,7 +286,7 @@ public class RoguelikeCameraController : MonoBehaviour
         });
     }
 
-    private void CloudTransitionIn(Action onCompleteAction = null)
+    public void CloudTransitionIn()
     {
         cloudTransitionGO.SetActive(true);
         Image cloudTransitionImage = cloudTransitionGO.GetComponent<Image>();
@@ -319,11 +302,6 @@ public class RoguelikeCameraController : MonoBehaviour
             {
                 cloudTransitionGO.SetActive(false);
                 NodeManager.isMovingNodes = false;
-
-                if(onCompleteAction != null)
-                {
-                    onCompleteAction();
-                }
             });
         });
     }

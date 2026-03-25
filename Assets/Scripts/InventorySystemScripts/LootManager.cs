@@ -18,6 +18,7 @@ public class LootManager : GeneralInventoryStructure
 
     //Private variables for internal logic
     private InventoryManager inventoryManager;
+    public static LootManager instance;
 
     //Private helper class to hold data for a loot table
     private class BugLoot
@@ -91,6 +92,8 @@ public class LootManager : GeneralInventoryStructure
     protected override void Awake()
     {
         base.Awake();
+
+        instance = this;
 
         //Initialize inventory manager
         inventoryManager = FindFirstObjectByType<InventoryManager>();

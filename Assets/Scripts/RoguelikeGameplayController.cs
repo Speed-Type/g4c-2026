@@ -206,6 +206,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
             //Update camera
             cameraController.TransitionToFreeCam();
+            cameraController.CloudTransitionIn();
 
             //The following code runs after camera has transitioned back to free cam and paused the general delay amount
             LeanTween.delayedCall(RoguelikeCameraController.freeCamTransitionTiming + RoguelikeCameraController.generalDelayBetweenTransitions, () =>
@@ -408,15 +409,52 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void EndCombat(bool playerWon)
     {
         //TODO: Code that runs regardless of win or lose
-
-        if(playerWon)
+        
+        if(playerWon) //Case 1: Player wins
         {
             //TODO: Code that runs specifically when player wins
+
+            //Change node to scavenge node
+            NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Scavenge);
+
+            //TODO: Upgrade rare loot odds for this scavenge node
+
+            //TODO: Set text for battle
         }
-        else
+        else //Case 2: Player loses
         {
             //TODO: Code that runs specifically when player loses
+
+            //Increase spider alertness
+            currentSpiderAlertness += 10;
+
+            //Change node to empty node
+            NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Empty);
+
+            //TODO: Set text for battle
         }
+
+        //TODO: transition out
+        cameraController.CloudTransitionOut(() =>
+        {
+            //NOTE: The following code is run in the middle of the cloud transition
+
+            //Visit the current node
+            NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it
+            NodeManager.instance.playerNode.VisitNode();
+            
+            //Switch cam to freecam
+            cameraController.TransitionToFreeCam(true);
+        }, () =>
+        {
+            //NOTE: The following code is run at the end of the cloud transition
+
+            //Show other open buttons
+            TogglePlayerOptionButtons(true);
+            
+            //Show dialogue box
+            dialogueSystemController.ShowDialogueBox();
+        });
     }
 
     private bool doubleCheckInstar = false;
