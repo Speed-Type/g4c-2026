@@ -287,6 +287,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         statSystemGO.SetActive(true);
         StatDisplay.UpdateAllFleshFillBars_Static();
         StatDisplay.UpdateStats_Static();
+        NodeManager.instance.HideEnemyBug();
 
         //Update camera
         cameraController.ShiftFreecamFocusToCaterpillar();
@@ -302,6 +303,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         dialogueSystemController.ShowDialogueBox();
         statSystemGO.SetActive(false);
+        NodeManager.instance.ShowEnemyBug();
 
         //Update camera
         cameraController.ShiftFreecamFocusToIdle();

@@ -549,6 +549,24 @@ public class NodeManager : MonoBehaviour
             caterpillarGO.transform.position = idleCaterpillarPositionTransform.position;
         }
     }
+
+    //Method to hide the enemy bug, called from RGController when switching to inventory view
+    public void HideEnemyBug()
+    {
+        if(enemyBugGO != null)
+        {
+            enemyBugGO.SetActive(false);
+        }
+    }
+
+    //Method to show the enemy bug, called from RGController when switching back from inventory view
+    public void ShowEnemyBug()
+    {
+        if(enemyBugGO != null)
+        {
+            enemyBugGO.SetActive(true);
+        }
+    }
 }
 
 //NOTE: The values in this enum must line up with the order of entries in nodeTypes array
