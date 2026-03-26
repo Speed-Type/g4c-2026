@@ -14035,7 +14035,7 @@ MonoBehaviour:
   graphicGO: {fileID: 1546563455}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
   healthIndicator: {fileID: 683426828}
-  deathParticles: {fileID: 6540945806359403633, guid: 8d3a09e99332a44e1a87b216f9e9368d, type: 3}
+  deathParticles: {fileID: 4289815770117926727, guid: afdcf7b154e8549fcb5cae0976a34aa0, type: 3}
   fragmentModel: {fileID: 0}
   existingFragmentModel: {fileID: 0}
   isOnEdge: 0
@@ -15600,7 +15600,7 @@ MonoBehaviour:
   biteList:
   - {fileID: 7732393482049450751}
   - {fileID: 1713356628}
-  currentBite: 0
+  equippedBites: 
   biteHomePosition: {fileID: 1218308484}
   biteBackgroundRectTransform: {fileID: 1876415591}
   biteBackgroundPopupAnimLength: 0.5
