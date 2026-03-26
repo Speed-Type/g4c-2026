@@ -35,7 +35,7 @@ public class GeneralInventoryStructure : MonoBehaviour
         //Initialize size of background graphic
         backgroundGraphicGO.sizeDelta = new Vector2(gridBorderHorizontalPadding + pNumCols * inventorySlotSize, gridBorderVerticalPadding + pNumRows * inventorySlotSize);
 
-        //Delete any previous inventory slot objects
+        //Delete any previous inventory slot objects (NOTE: This is different than fragments; those are destroyed in Fragment.FilterFragments() static method)
         if(inventorySlotArray != null)
         {
             for(int i = 0; i < inventorySlotArray.GetLength(0); i++)

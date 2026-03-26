@@ -61,7 +61,6 @@ public class Node_Scavenge : Node
         
         RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
-        Debug.Log("Generated loot");
         //Generate loot
         LootManager.instance.GenerateLoot(spawnedBug);
     }

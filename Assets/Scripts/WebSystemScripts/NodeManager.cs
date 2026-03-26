@@ -239,7 +239,8 @@ public class NodeManager : MonoBehaviour
             UIParentGO.SetActive(true);
             UIParentGO.SetActive(false);
 
-            SetBugModelsPosition();
+            SetBugModelsPosition(); //Set proper 3d bug models in scene
+            playerMarkerGO.transform.SetAsLastSibling(); //Make sure player icon stays on top
 
             //Skip spider turn and go straight to node effects
             nodeToVisit.DoNodeEffects();

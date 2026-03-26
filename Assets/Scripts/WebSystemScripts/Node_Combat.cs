@@ -60,9 +60,6 @@ public class Node_Combat : Node
         }
         
         RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Combat});
-        
-        //Generate loot
-        LootManager.instance.GenerateLoot(spawnedBug);
     }
 
     public override void DoNodeEffects()
