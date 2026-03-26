@@ -20,53 +20,11 @@ public class LootManager : GeneralInventoryStructure
     private InventoryManager inventoryManager;
     public static LootManager instance;
 
-    //Private helper class to hold data for a loot table
-    private class BugLoot
-    {
-        public int numRows;
-        public int numCols;
-        public int minLoot, maxLoot;
-        public float scavengeFleshChance;
-        public int[] ratioList;
-
-        private int totalRatio;
-
-        public BugLoot(int ratioListLength)
-        {
-            ratioList = new int[ratioListLength];
-        }
-
-        public void SetChances(Fragments fragmentEnum, int ratio)
-        {
-            ratioList[(int)fragmentEnum] = ratio;
-            totalRatio += ratio;
-        }
-
-        public int GetRandomFragmentIndex()
-        {
-            //Generate random number from [0, totalWeights]
-            float rand = Random.Range(0f, totalRatio);
-            float current = 0;
-
-            for(int j = 0; j < ratioList.Length; j++)
-            {
-                current += ratioList[j];
-                if(current >= rand)
-                {
-                    //This is the correct gameobject
-                    return j;
-                }
-            }
-
-            return 0; //This does nothing
-        }
-    }
-
     //Method to convert enumerator Bugs to struct of bug loot
-    private BugLoot LootEnumToBugLoot(Bugs val)
+    public static BugLoot LootEnumToBugLoot(Bugs bug)
     {
-        BugLoot bugLoot = new BugLoot(fragmentList.Length);
-        switch(val)
+        BugLoot bugLoot = new BugLoot(instance.fragmentList.Length);
+        switch(bug)
         {
             case Bugs.AfricanBigHeadedAnt:
                 bugLoot.numRows = 3;
@@ -103,11 +61,8 @@ public class LootManager : GeneralInventoryStructure
     }
 
     //Method to generate new loot
-    public void GenerateLoot(Bugs lootEnum)
+    public void GenerateLoot(BugLoot bugLoot)
     {
-        //Get actual loot info and probabilities
-        BugLoot bugLoot = LootEnumToBugLoot(lootEnum);
-
         //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
 
@@ -236,6 +191,73 @@ public class LootManager : GeneralInventoryStructure
         return combatBugModelList[(int)bug];
     }
 }
+
+//Helper class to hold data for a loot table
+    public class BugLoot
+    {
+        public int numRows;
+        public int numCols;
+        public int minLoot, maxLoot;
+        public float scavengeFleshChance;
+        public int[] ratioList;
+
+        private int totalRatio;
+
+        public BugLoot(int ratioListLength)
+        {
+            ratioList = new int[ratioListLength];
+        }
+
+        public void SetChances(Fragments fragmentEnum, int ratio)
+        {
+            ratioList[(int)fragmentEnum] = ratio;
+            totalRatio += ratio;
+        }
+
+        public void AddChances(Fragments fragmentEnum, int ratio)
+        {
+            ratioList[(int)fragmentEnum] += ratio;
+            totalRatio += ratio;
+        }
+
+        public int GetRandomFragmentIndex()
+        {
+            //Generate random number from [0, totalWeights]
+            float rand = Random.Range(0f, totalRatio);
+            float current = 0;
+
+            for(int j = 0; j < ratioList.Length; j++)
+            {
+                current += ratioList[j];
+                if(current >= rand)
+                {
+                    //This is the correct gameobject
+                    return j;
+                }
+            }
+
+            return 0; //This does nothing
+        }
+
+        //METHOD TO UPGRADE LOOT TABLES; JUST ADD ODDS TO THE RARE FRAGMENTS AND INCREASE LOOT GRID SIZE
+        public void UpgradeLoot(Bugs bug)
+        {
+            switch(bug)
+            {
+                case Bugs.AfricanBigHeadedAnt:
+                    numRows++;
+                    numCols++;
+                    minLoot+=2;
+                    maxLoot+=2;
+                    scavengeFleshChance = 1f;
+                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 4);
+                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 4);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
 //Enumerator for loot tables
 public enum Bugs

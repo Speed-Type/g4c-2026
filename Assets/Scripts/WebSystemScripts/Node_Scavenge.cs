@@ -7,6 +7,8 @@ public class Node_Scavenge : Node
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugLootOdds;
     private Bugs spawnedBug;
+    private BugLoot lootTable;
+    private bool upgradeLoot = false;
 
     private List<string> flavorText = new List<string> //USE [BugName] (CASE-SENSITIVE) AS PLACEHOLDER FOR THE BUG'S NAME
     {
@@ -49,6 +51,12 @@ public class Node_Scavenge : Node
                 spawnedBug = (Bugs)j;
             }
         }
+
+        //Get odds for this bug
+        lootTable = LootManager.LootEnumToBugLoot(spawnedBug);
+
+        //Upgrade if necessary
+        if(upgradeLoot) lootTable.UpgradeLoot(spawnedBug);
     }
 
     public override void VisitNode()
@@ -64,7 +72,7 @@ public class Node_Scavenge : Node
         RoguelikeGameplayController.instance.SetOpenButtons(new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot});
         
         //Generate loot
-        LootManager.instance.GenerateLoot(spawnedBug);
+        LootManager.instance.GenerateLoot(lootTable);
     }
 
     public override void DoNodeEffects()
@@ -84,9 +92,14 @@ public class Node_Scavenge : Node
         });
     }
 
-    public override GameObject GetBug()
+    public override GameObject GetBugModel()
     {
         //RETURN BUG MODEL CORRESPONDING TO THIS BUG LOOT OBJECT
         return LootManager.instance.BugEnumToScavengeModel(spawnedBug);
+    }
+
+    public override void UpgradeLoot()
+    {
+        upgradeLoot = true;
     }
 }

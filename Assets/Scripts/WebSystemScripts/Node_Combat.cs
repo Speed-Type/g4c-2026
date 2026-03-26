@@ -81,7 +81,7 @@ public class Node_Combat : Node
         });
     }
 
-    public override GameObject GetBug()
+    public override GameObject GetBugModel()
     {
         //RETURN BUG MODEL CORRESPONDING TO THIS BUG LOOT OBJECT
         return LootManager.instance.BugEnumToCombatModel(spawnedBug);

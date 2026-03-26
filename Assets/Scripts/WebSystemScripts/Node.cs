@@ -102,8 +102,13 @@ public class Node : MonoBehaviour
         RevealNode(); //If the player has visited a node it should also reveal its type
     }
 
-    public virtual GameObject GetBug()
+    public virtual GameObject GetBugModel()
     {
         return null;
+    }
+
+    public virtual void UpgradeLoot()
+    {
+        //TO be implemented in child class Node_Scavenge
     }
 }

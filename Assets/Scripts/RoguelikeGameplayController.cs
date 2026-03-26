@@ -395,24 +395,20 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void EndCombat(bool playerWon)
     {
         List<string> outputText;
-        //TODO: Code that runs regardless of win or lose
         
         if(playerWon) //Case 1: Player wins
         {
-            //TODO: Code that runs specifically when player wins
-
             //Change node to scavenge node
             NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Scavenge);
 
             //TODO: Upgrade rare loot odds for this scavenge node
+            NodeManager.instance.playerNode.UpgradeLoot();
 
             //TODO: Set text for battle
             outputText = new List<string> {"TEST", "..."};
         }
         else //Case 2: Player loses
         {
-            //TODO: Code that runs specifically when player loses
-
             //Increase spider alertness
             currentSpiderAlertness += 10;
 
@@ -427,7 +423,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it
         NodeManager.instance.playerNode.VisitNode();
 
-        //TODO: transition out
+        //Transition out
         cameraController.CloudTransitionOut(() =>
         {
             //NOTE: The following code is run in the middle of the cloud transition

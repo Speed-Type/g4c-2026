@@ -537,11 +537,11 @@ public class NodeManager : MonoBehaviour
             if(playerNode.nodeType == NodeTypes.Scavenge)
             {
                 //Enemy should be in scavenge position with randomized rotation
-                enemyBugGO = Instantiate(playerNode.GetBug(), scavengeEnemyPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), scavengeEnemyPositionTransform);
+                enemyBugGO = Instantiate(playerNode.GetBugModel(), scavengeEnemyPositionTransform.position, Quaternion.Euler(0, UnityEngine.Random.Range(0,360), 0), scavengeEnemyPositionTransform);
             }
             else
             {
-                enemyBugGO = Instantiate(playerNode.GetBug(), combatEnemyPositionTransform.position, combatEnemyPositionTransform.rotation, combatEnemyPositionTransform);
+                enemyBugGO = Instantiate(playerNode.GetBugModel(), combatEnemyPositionTransform.position, combatEnemyPositionTransform.rotation, combatEnemyPositionTransform);
             }
         }
         else
