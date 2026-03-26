@@ -376,7 +376,7 @@ public class NodeManager : MonoBehaviour
             LeanTween.value(spiderMarkerGO, 0f, 1f, spiderAnticipationAnimTime)
             .setOnUpdate((float t) =>
             {
-                //t is the parameter that goes from 0 → 1 over duration
+                //t is the parameter that goes from 0 to 1 over duration
 
                 //Strength increases over time
                 float strength = Mathf.Lerp(0f, spiderAnticipationAnimMaxStrength, t);
@@ -499,7 +499,7 @@ public class NodeManager : MonoBehaviour
 
                 //Actually move spider
                 LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
-                .setEase(LeanTweenType.easeInOutSine)
+                .setEaseOutExpo()
                 .setOnComplete(() =>
                 {
                     if(!hasAttackedPlayer)
