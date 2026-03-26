@@ -430,7 +430,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
         Shake(); //Animate this fragment GO
 
-        ScreenShake.instance.AddTrauma(0.05f); //Screenshake
+        ScreenShake.instance.AddTrauma(0.05f); //Screenshake, on top of bite screenshake
 
         //Spawn Particles
         GameObject spawnedParticles = RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);

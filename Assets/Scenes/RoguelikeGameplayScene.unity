@@ -13979,7 +13979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScreenShake
   cameraTransform: {fileID: 1747252681}
   uiRoot: {fileID: 754933036}
-  maxTranslation3D: 200
+  maxTranslation3D: 175
   maxRotation: 3
   maxTranslationUI: 100
   traumaDecay: 1.55

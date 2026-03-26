@@ -140,10 +140,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void ShowMap()
     {
         //Make sure player can actually open the map
-        if(!playerCanMakeChoices)
-        {
-            return;
-        }
+        if(!playerCanMakeChoices) return;
 
         //Update game state
         gameState = GameState.Map;
@@ -278,16 +275,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void ShowInventory()
     {
         //Make sure the player can actually make choices
-        if(!playerCanMakeChoices)
-        {
-            return;
-        }
+        if(!playerCanMakeChoices) return;
         
         //Make sure this option is actually one of the open ones
-        if(!openButtons.Contains(PlayerOptionButtons.Inventory))
-        {
-            return;
-        }
+        if(!openButtons.Contains(PlayerOptionButtons.Inventory)) return;
 
         //Update graphics
         TogglePlayerOptionButtons(false);
@@ -322,16 +313,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void ShowLoot()
     {
         //Make sure the player can actually make choices
-        if(!playerCanMakeChoices)
-        {
-            return;
-        }
+        if(!playerCanMakeChoices) return;
 
         //Make sure this option is actually one of the open ones
-        if(!openButtons.Contains(PlayerOptionButtons.Loot))
-        {
-            return;
-        }
+        if(!openButtons.Contains(PlayerOptionButtons.Loot)) return;
 
         //Update graphics
         TogglePlayerOptionButtons(false);
@@ -375,18 +360,12 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void StartCombat()
     {
         //Make sure the player can actually make choices
-        if(!playerCanMakeChoices)
-        {
-            return;
-        }
+        if(!playerCanMakeChoices) return;
 
         playerCanMakeChoices = false;
 
         //Make sure this option is actually one of the open ones
-        if(!openButtons.Contains(PlayerOptionButtons.Combat))
-        {
-            return;
-        }
+        if(!openButtons.Contains(PlayerOptionButtons.Combat)) return;
 
         if(doubleCheckCombat) //TODO: BATTLE HERE
         {
@@ -395,7 +374,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             gameState = GameState.Combat;
 
             //Switch camera
-            cameraController.SwitchToBattleCam(snakeGameplayController.PlayGame);
+            cameraController.SwitchToCombatCam(snakeGameplayController.PlayGame);
 
             //Hide all UI
             TogglePlayerOptionButtons(false);
@@ -472,16 +451,10 @@ public class RoguelikeGameplayController : MonoBehaviour
     public void Instar()
     {
         //Make sure the player can actually make choices
-        if(!playerCanMakeChoices)
-        {
-            return;
-        }
+        if(!playerCanMakeChoices) return;
 
         //Make sure this option is actually one of the open ones
-        if(!openButtons.Contains(PlayerOptionButtons.Instar))
-        {
-            return;
-        }
+        if(!openButtons.Contains(PlayerOptionButtons.Instar)) return;
 
         if(doubleCheckInstar)
         {

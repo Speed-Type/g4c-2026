@@ -392,6 +392,9 @@ public class NodeManager : MonoBehaviour
                 ) * strength;
 
                 spiderRect.anchoredPosition = originalPos + offset;
+
+                //Screenshake
+                ScreenShake.instance.SetTrauma(t / 10f); //So, 0 to .10f intensity
             })
             .setOnComplete(() =>
             {
@@ -432,9 +435,8 @@ public class NodeManager : MonoBehaviour
             Node previousNode = spiderNode; //Save the previous node to set it later
 
             //Calculate which node spider should move to
-            if(UnityEngine.Random.Range(0f,1f) > RoguelikeGameplayController.ChanceForSpiderToPursue())
+            if(UnityEngine.Random.Range(0f,1f) > RoguelikeGameplayController.ChanceForSpiderToPursue()) //Just a random node
             {
-                //Just a random node
                 Node newNode;
                 do
                 {
@@ -444,9 +446,10 @@ public class NodeManager : MonoBehaviour
 
                 spiderNode = newNode;
             }
-            else
+            else //A node specifically toward the player
             {
-                //A node specifically toward the player
+                //Screenshake
+                ScreenShake.instance.AddTrauma(0.10f);
                 
                 List<Node> neighborNodes = spiderNode.GetNodeList();
                 Node bestNode = neighborNodes[0];
@@ -491,6 +494,9 @@ public class NodeManager : MonoBehaviour
             .setEaseInOutSine()
             .setOnComplete(() =>
             {
+                //Screenshake
+                ScreenShake.instance.AddTrauma(0.06f);
+
                 //Actually move spider
                 LeanTween.move(spiderMarkerGO.GetComponent<RectTransform>(), spiderNode.GetComponent<RectTransform>().localPosition, spiderTravelAnimTime)
                 .setEase(LeanTweenType.easeInOutSine)

@@ -205,7 +205,7 @@ public class RoguelikeCameraController : MonoBehaviour
         maxPitch /= 2f;
     }
 
-    public void SwitchToBattleCam(Action onCompleteAction)
+    public void SwitchToCombatCam(Action onCompleteAction)
     {
         //Save necessary positions
         savedFreeCamTransform.position = transform.position;
@@ -226,9 +226,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
         //Tween to close up view of enemy
         LeanTween.move(this.gameObject, enemyCloseupTransform, enemyCloseupTransitionTiming)
-            .setEase(LeanTweenType.easeOutExpo);
+            .setEaseOutExpo();
         LeanTween.rotate(this.gameObject, enemyCloseupTransform.eulerAngles, enemyCloseupTransitionTiming)
-            .setEase(LeanTweenType.easeOutExpo)
+            .setEaseOutExpo()
             .setOnComplete(() =>
             {
                 //Delay a bit in that close up view
@@ -249,13 +249,16 @@ public class RoguelikeCameraController : MonoBehaviour
                         //NOTE: The following code is called at the end of the cloud transition
                         onCompleteAction();
                     });
+                })
+                .setOnUpdate((float val) =>
+                {
+                    ScreenShake.instance.SetTrauma(0.03f); //Continuous screenshake
                 });
-            });
-    }
-
-    public void EndBattleCam()
-    {
-        
+            })
+            .setOnUpdate((float val) =>
+                {
+                    ScreenShake.instance.SetTrauma(0.03f); //Continuous screenshake while moving into combat closeup position too
+                });
     }
 
     public void CloudTransitionOut(Action middleAction = null, Action onCompleteAction = null)
