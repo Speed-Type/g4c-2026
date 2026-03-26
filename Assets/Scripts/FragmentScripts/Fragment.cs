@@ -315,6 +315,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Update stat display
         StatDisplay.UpdateStats_Static();
 
+        //Do small screenshake
+        ScreenShake.instance.AddTrauma(0.08f);
+
         return true;
     }
 
@@ -425,7 +428,9 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         //Graphically update
         graphicGO.GetComponent<Image>().color = destroyedFragmentColor;
 
-        Shake(); //Animate
+        Shake(); //Animate this fragment GO
+
+        ScreenShake.instance.AddTrauma(0.05f); //Screenshake
 
         //Spawn Particles
         GameObject spawnedParticles = RoguelikeCameraController.SpawnParticle(transform.position + new Vector3(shape.GetLength(1) * belongedInventory.inventorySlotSize / 2f, -shape.GetLength(0) * belongedInventory.inventorySlotSize / 2f, 0), deathParticles);

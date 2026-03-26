@@ -139,6 +139,9 @@ public class Fragment_Bite : Fragment
                 graphicImage.sprite = openBiteSprite;
                 isBiting = false;
             });
+
+        //Screenshake
+        ScreenShake.instance.AddTrauma(0.11f);
     }
 
     public override void Rotate()

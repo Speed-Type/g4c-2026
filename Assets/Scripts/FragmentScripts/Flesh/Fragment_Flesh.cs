@@ -57,6 +57,9 @@ public class Fragment_Flesh : Fragment
         //Add flesh to player
         RoguelikeGameplayController.AddFlesh(fleshValue);
 
+        //Do shake
+        ScreenShake.instance.AddTrauma(0.02f); //A smaller amount, because there's already shake from the bite
+
         //Do graphical effect
         LeanTween.scale(gameObject, Vector3.one * 1.3f, 0.20f)
         .setEaseOutElastic()
