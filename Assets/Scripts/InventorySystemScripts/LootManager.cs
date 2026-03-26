@@ -63,6 +63,9 @@ public class LootManager : GeneralInventoryStructure
     //Method to generate new loot
     public void GenerateLoot(BugLoot bugLoot)
     {
+        //Set var in rgcontroller
+        RoguelikeGameplayController.playerHasStartedLooting = false;
+
         //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
 

@@ -49,7 +49,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     [Header("References for Bite System")]
     [SerializeField] private GameObject[] biteList;
-    [SerializeField] private int currentBite;
+    public List<int> equippedBites;
     [SerializeField] private RectTransform biteHomePosition;
     [SerializeField] private RectTransform biteBackgroundRectTransform;
     [SerializeField] private float biteBackgroundPopupAnimLength = .2f;
@@ -68,7 +68,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
     private GeneralInventoryStructure inventoryManager;
-    public bool playerCanMakeChoices;
+    [HideInInspector] public bool playerCanMakeChoices;
+    [HideInInspector] public static bool playerHasStartedLooting;
 
     //Static variable for current game state
     public static GameState gameState;
@@ -89,6 +90,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot, PlayerOptionButtons.Combat, PlayerOptionButtons.Instar};
         inventoryManager = GetComponent<InventoryManager>();
         biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
+        playerHasStartedLooting = false;
+        equippedBites = new List<int> {0};
     }
 
     void Start()
@@ -500,6 +503,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         instance.remainingBites--;
         instance.currentSpiderAlertness++;
+
+        playerHasStartedLooting = true;
     }
 
     public static void ReloadBite_Static()
@@ -521,17 +526,15 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         if(remainingBites > 0)
         {
-            RectTransform tempTransform = biteList[currentBite].GetComponent<Fragment>().graphicGO.GetComponent<RectTransform>();
-            float scaleFactor = biteList[currentBite].GetComponent<Fragment_Bite>().scaleFactor;
-            Vector3 offset = new Vector3(-tempTransform.sizeDelta.x / 2f / scaleFactor, tempTransform.sizeDelta.y / 2f / scaleFactor, 0);
-            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
+            Vector3 offset = biteList[equippedBites[^1]].GetComponent<Fragment_Bite>().GetBiteOffset();
+            biteList[equippedBites[^1]].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
 
             //Move into view
             biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos, biteBackgroundPopupAnimLength)
                 .setEaseOutElastic()
                 .setOnComplete(() =>
                 {
-                    biteList[currentBite].SetActive(true); //Show after the popup is done
+                    biteList[equippedBites[^1]].SetActive(true); //Show after the popup is done
                 })
                 .id;
         }
@@ -544,6 +547,18 @@ public class RoguelikeGameplayController : MonoBehaviour
                 .setEaseInElastic()
                 .id;
         }
+    }
+
+    //Called in fragments that change the current bite
+    public void UpdateBite()
+    {
+        if(remainingBites <= 0) return;
+
+        HideBites();
+
+        biteList[equippedBites[^1]].SetActive(true);
+        Vector3 offset = biteList[equippedBites[^1]].GetComponent<Fragment_Bite>().GetBiteOffset();
+        biteList[equippedBites[^1]].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
     }
 
     //Method to calculate whether the caterpillar survives
@@ -568,7 +583,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public static GameObject GetCurrentBiteGO_Static()
     {
-        return instance.biteList[instance.currentBite];
+        return instance.biteList[instance.equippedBites[^1]];
     }
 
     public static float ChanceForSpiderToPursue()

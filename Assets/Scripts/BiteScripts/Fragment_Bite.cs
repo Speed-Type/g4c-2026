@@ -136,7 +136,7 @@ public class Fragment_Bite : Fragment
                 graphicGO.transform.localScale = Vector3.one / scaleFactor; //Shrink graphic size again
                 rectTransform.rotation = Quaternion.identity; //Reset rotation
                 graphicImage.sprite = openBiteSprite;
-                
+
                 isBiting = false;
 
                 //And then reposition
@@ -186,5 +186,10 @@ public class Fragment_Bite : Fragment
         {
             StartCoroutine(TimedBiteHighlightCoroutine());
         }
+    }
+
+    public Vector3 GetBiteOffset()
+    {
+        return new Vector3(-graphicGO.GetComponent<RectTransform>().sizeDelta.x / 2f / scaleFactor, graphicGO.GetComponent<RectTransform>().sizeDelta.y / 2f / scaleFactor, 0);
     }
 }
