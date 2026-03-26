@@ -77,6 +77,9 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             OpenDisplay();
             displayState = DisplayState.Open;
         }
+
+        //Screenshake
+        ScreenShake.instance.UIClickShake();
     }
 
     //Method called on hover

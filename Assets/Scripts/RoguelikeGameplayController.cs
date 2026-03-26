@@ -362,6 +362,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Make sure the player can actually make choices
         if(!playerCanMakeChoices) return;
 
+        //Make sure this option is actually one of the open ones
+        if(!openButtons.Contains(PlayerOptionButtons.Combat)) return;
+
         playerCanMakeChoices = false;
 
         //Make sure this option is actually one of the open ones

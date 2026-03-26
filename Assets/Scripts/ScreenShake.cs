@@ -88,4 +88,9 @@ public class ScreenShake : MonoBehaviour
     {
         trauma = Mathf.Clamp01(amount);
     }
+
+    public void UIClickShake()
+    {
+        instance.AddTrauma(0.05f);
+    }
 }

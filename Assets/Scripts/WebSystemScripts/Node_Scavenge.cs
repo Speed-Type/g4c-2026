@@ -53,6 +53,8 @@ public class Node_Scavenge : Node
 
     public override void VisitNode()
     {
+        base.VisitNode();
+        
         //Send request to NodeManager; if this node is not accessible, the rest of the function won't run
         if(!nodeManager.TryVisitNode(this))
         {

@@ -80,6 +80,9 @@ public class Node : MonoBehaviour
     public virtual void VisitNode()
     {
         //This method is called using super in subclasses
+
+        //Screenshake
+        ScreenShake.instance.UIClickShake();
     }
 
     //Method that holds the actual node effects

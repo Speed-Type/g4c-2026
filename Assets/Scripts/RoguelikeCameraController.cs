@@ -234,6 +234,13 @@ public class RoguelikeCameraController : MonoBehaviour
                 //Delay a bit in that close up view
                 LeanTween.delayedCall(enemyCloseupPauseLength, () =>
                 {
+                    //Continuous screenshake (there has to be a better way to do this bro...)
+                    LeanTween.delayedCall(freeCamTransitionTiming, () => {})
+                    .setOnUpdate((float val) =>
+                        {
+                            ScreenShake.instance.SetTrauma(0.03f); //Continuous screenshake while moving into combat closeup position too
+                        });
+
                     //Do cloud transition out
                     CloudTransitionOut(() =>
                     {
@@ -251,9 +258,9 @@ public class RoguelikeCameraController : MonoBehaviour
                     });
                 })
                 .setOnUpdate((float val) =>
-                {
-                    ScreenShake.instance.SetTrauma(0.03f); //Continuous screenshake
-                });
+                    {
+                        ScreenShake.instance.SetTrauma(0.03f); //Continuous screenshake
+                    });
             })
             .setOnUpdate((float val) =>
                 {
