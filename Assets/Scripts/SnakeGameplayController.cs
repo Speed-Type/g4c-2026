@@ -3,9 +3,14 @@ using UnityEngine;
 public class SnakeGameplayController : MonoBehaviour
 {
     private bool isPlaying = false;
+    public int totalHits;
+
     public void PlayGame()
     {
         isPlaying = true;
+
+        //Reset variables
+        totalHits = 0;
 
         //TEMP
         LeanTween.delayedCall(3f, () =>

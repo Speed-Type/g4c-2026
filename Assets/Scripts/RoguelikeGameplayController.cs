@@ -394,30 +394,40 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void EndCombat(bool playerWon)
     {
-        List<string> outputText;
+        //Set results text as returned from Node_Combat method
+        List<string> outputText = NodeManager.instance.playerNode.gameObject.GetComponent<Node_Combat>().GetResultsText(playerWon);
         
+        //Add results for hits
+        if(snakeGameplayController.totalHits > 0)
+        {
+            outputText.Add("You took " + snakeGameplayController.totalHits + " hits. You may want to check your case.");
+        }
+        else
+        {
+            outputText.Add("You finished that encounter without taking any hits!");
+        }
+
         if(playerWon) //Case 1: Player wins
         {
             //Change node to scavenge node
             NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Scavenge);
 
-            //TODO: Upgrade rare loot odds for this scavenge node
+            //Upgrade to rare loot odds for this scavenge node
             NodeManager.instance.playerNode.UpgradeLoot();
-
-            //TODO: Set text for battle
-            outputText = new List<string> {"TEST", "..."};
         }
         else //Case 2: Player loses
         {
             //Increase spider alertness
             currentSpiderAlertness += 10;
 
+            //Add to results text
+            outputText.Add("The Spider gained 10 alertness.");
+
             //Change node to empty node
             NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Empty);
-
-            //TODO: Set text for battle
-            outputText = new List<string> {"TEST", "..."};
         }
+
+        outputText.Add("...");
 
         //Visit the current node
         NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it

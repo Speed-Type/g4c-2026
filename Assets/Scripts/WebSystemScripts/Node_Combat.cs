@@ -21,6 +21,17 @@ public class Node_Combat : Node
         "A challenger approaches. Will you fight the [BugName]?"
     };
 
+    private List<string> victoryText = new List<string>
+    {
+        "You defeated the [BugName]!"
+    };
+
+    private List<string> defeatText = new List<string>
+    {
+        "The [BugName] fled successfully...",
+        "The [BugName] managed to escape the web..."
+    };
+
     protected override void Awake()
     {
         base.Awake();
@@ -85,5 +96,19 @@ public class Node_Combat : Node
     {
         //RETURN BUG MODEL CORRESPONDING TO THIS BUG LOOT OBJECT
         return LootManager.instance.BugEnumToCombatModel(spawnedBug);
+    }
+
+    public List<string> GetResultsText(bool playerWon)
+    {
+        if(playerWon)
+        {
+            //Victory text
+            return new List<string> {victoryText[Random.Range(0, victoryText.Count)].Replace("[BugName]", LootManager.BugEnumToBugName(spawnedBug))};
+        }
+        else
+        {
+            //Defeat text
+            return new List<string> {defeatText[Random.Range(0, defeatText.Count)].Replace("[BugName]", LootManager.BugEnumToBugName(spawnedBug))};
+        }
     }
 }
