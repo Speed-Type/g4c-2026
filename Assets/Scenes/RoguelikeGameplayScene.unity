@@ -1682,7 +1682,7 @@ MonoBehaviour:
   inventoryCamHorizontalOffset: 5
   inventoryCamVerticalOffset: 3
   inventoryCamTransitionAnimTime: 0.5
-  enemyCloseupTransitionTiming: 0.5
+  enemyCloseupTransitionTiming: 0.4
   enemyCloseupPauseLength: 3
 --- !u!1 &345559257
 GameObject:
@@ -9992,7 +9992,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_SizeDelta: {x: 500, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1021360045
 MonoBehaviour:
@@ -15443,8 +15443,8 @@ MonoBehaviour:
   nodeWeights:
   - 0
   - 1
-  - 1
   - 10
+  - 1
   nodePositionRandomization:
   - 10
   - 15

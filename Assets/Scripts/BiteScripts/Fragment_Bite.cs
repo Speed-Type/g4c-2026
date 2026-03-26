@@ -132,16 +132,16 @@ public class Fragment_Bite : Fragment
             .setLoopPingPong(2)
             .setOnComplete(() =>
             {
-                //And then reposition
-                RoguelikeGameplayController.ReloadBite_Static();
+                //Reset scale, rotation, sprite
                 graphicGO.transform.localScale = Vector3.one / scaleFactor; //Shrink graphic size again
                 rectTransform.rotation = Quaternion.identity; //Reset rotation
                 graphicImage.sprite = openBiteSprite;
+                
                 isBiting = false;
-            });
 
-        //Screenshake
-        ScreenShake.instance.AddTrauma(0.11f);
+                //And then reposition
+                RoguelikeGameplayController.ReloadBite_Static();
+            });
     }
 
     public override void Rotate()

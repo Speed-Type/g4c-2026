@@ -98,13 +98,13 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         statSystemGO.SetActive(false);
+        HideBites();
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
 
         //Set number of bites
         ResetBites();
-        biteList[currentBite].SetActive(false);
     }
 
     //Method to update the buttons that should be open; called primarily by nodes
@@ -345,7 +345,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
-        biteList[currentBite].SetActive(false);
+        HideBites();
 
         LeanTween.cancel(biteBackgroundPopupTween); //cancel current tween to avoid overlap
 
@@ -487,6 +487,14 @@ public class RoguelikeGameplayController : MonoBehaviour
         StatDisplay.UpdateAllFleshFillBars_Static(); //Also update flesh bars
     }
 
+    private void HideBites()
+    {
+        foreach(GameObject bite in biteList)
+        {
+            bite.SetActive(false);
+        }
+    }
+    
     //Static method to do a bite and decrease number of bites remaining
     public static void ReduceBites()
     {
@@ -513,7 +521,10 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         if(remainingBites > 0)
         {
-            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + new Vector3(-inventoryManager.inventorySlotSize / 2f, inventoryManager.inventorySlotSize / 2f, 0); //Reset position
+            RectTransform tempTransform = biteList[currentBite].GetComponent<Fragment>().graphicGO.GetComponent<RectTransform>();
+            float scaleFactor = biteList[currentBite].GetComponent<Fragment_Bite>().scaleFactor;
+            Vector3 offset = new Vector3(-tempTransform.sizeDelta.x / 2f / scaleFactor, tempTransform.sizeDelta.y / 2f / scaleFactor, 0);
+            biteList[currentBite].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
 
             //Move into view
             biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos, biteBackgroundPopupAnimLength)
@@ -526,7 +537,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
         else
         {
-            biteList[currentBite].SetActive(false); //immediately hide the bite
+            HideBites(); //immediately hide the bite
 
             //Hide background
             biteBackgroundPopupTween = LeanTween.move(biteBackgroundRectTransform, biteBackgroundOriginalPos - new Vector2(0, biteBackgroundRectTransform.sizeDelta.y), biteBackgroundPopupAnimLength)
