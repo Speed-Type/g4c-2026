@@ -9852,12 +9852,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 26
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
-  m_fontSizeMax: 24
+  m_fontSizeMax: 26
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -11557,12 +11557,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 26
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
-  m_fontSizeMax: 24
+  m_fontSizeMax: 26
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
@@ -13153,8 +13153,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 930676958}
-  - {fileID: 1438980339}
   - {fileID: 874105472}
+  - {fileID: 1438980339}
   m_Father: {fileID: 859266378}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -13494,12 +13494,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
+  m_fontSize: 22
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
-  m_fontSizeMax: 20
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -15559,11 +15559,12 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Spider Alertness: X/X
 
+    [Instakill mode details here]
 
-    Chance for Spider to pursue
+    Chance for
+    Spider to pursue
 
-    Camouflage
-    Chance:'
+    Camouflage Chance:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 82c8f386d2a5a4615ab191a307e08e6f, type: 2}
   m_sharedMaterial: {fileID: -7558081632217087334, guid: 82c8f386d2a5a4615ab191a307e08e6f, type: 2}
@@ -15590,12 +15591,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 26
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
   m_fontSizeMin: 0
-  m_fontSizeMax: 24
+  m_fontSizeMax: 26
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256

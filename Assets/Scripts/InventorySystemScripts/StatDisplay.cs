@@ -16,7 +16,7 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private float statWindowAnimLength;
 
     [Header("Flesh Fill Bar Anim Params")]
-    [SerializeField] private float flashAnimLength;
+    [SerializeField] private float globalFlashAnimLength = 0.3f;
     [SerializeField] private Color fleshBarFlashColor;
 
     [Header("Flesh Text Displays")]
@@ -164,17 +164,20 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     //Method to update a single flesh fill bar
     public static void UpdateFillBar(RectTransform fillBar, float desiredPercentage, float maxWidth, Color flashColor, Color originalColor)
     {
+        //Check that the size needs to update to begin with
+        if(Mathf.Approximately(fillBar.sizeDelta.x, desiredPercentage * maxWidth)) return;
+
         //Update the fill bar size
         fillBar.gameObject.GetComponent<Image>().color = flashColor; //set color to flashed
-        LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, instance.flashAnimLength)
-            .setEaseOutElastic()
+        LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, instance.globalFlashAnimLength)
+            .setEaseOutBounce()
             .setOnUpdate((float val) =>
             {
                 fillBar.sizeDelta = new Vector2(val, fillBar.sizeDelta.y);
             })
             .setOnComplete(() =>
             {
-                if(desiredPercentage < 1)
+                if(!Mathf.Approximately(desiredPercentage, 1))
                 {
                     fillBar.gameObject.GetComponent<Image>().color = originalColor; //reset color when done, unless of course we've hit the goal
                 }
