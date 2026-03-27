@@ -5,6 +5,7 @@ using System;
 
 public class RoguelikeGameplayController : MonoBehaviour
 {
+    [Header("Important Controllers and Parents")]
     public DialogueBoxController dialogueBoxController;
     public SnakeGameplayController snakeGameplayController;
 
@@ -375,7 +376,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Make sure this option is actually one of the open ones
         if(!openButtons.Contains(PlayerOptionButtons.Combat)) return;
 
-        if(doubleCheckCombat) //TODO: BATTLE HERE
+        if(doubleCheckCombat)
         {
             Debug.Log("Battle");
 
@@ -443,6 +444,11 @@ public class RoguelikeGameplayController : MonoBehaviour
             
             //Switch cam to freecam
             cameraController.TransitionToFreeCam(true);
+            cameraController.snakeCameraController.enabled = false;
+
+            //Show idle environment
+            cameraController.battleEnvironmentParent.SetActive(false);
+            cameraController.idleEnvironmentParent.SetActive(true);
         }, () =>
         {
             //NOTE: The following code is run at the end of the cloud transition

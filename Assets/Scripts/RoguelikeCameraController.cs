@@ -7,8 +7,13 @@ using System;
 public class RoguelikeCameraController : MonoBehaviour
 {
     private PlayerInputActions input; //input action controller
+    public SnakeCameraController snakeCameraController;
 
     //Variables in inspector
+    [Header("Environment Parents")]
+    public GameObject idleEnvironmentParent;
+    public GameObject battleEnvironmentParent;
+
     [Header("Reference Transforms")]
     [SerializeField] private Transform targetTransform;
     [SerializeField] Transform freeCamIdleTransform;
@@ -98,6 +103,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
         //Hide battle transition
         battleTransitionCanvasGroup.gameObject.SetActive(false);
+
+        //Hide battle environment
+        battleEnvironmentParent.SetActive(false);
     }
 
     public void TransitionToFreeCam(bool immediate = false)
@@ -250,7 +258,11 @@ public class RoguelikeCameraController : MonoBehaviour
                         LeanTween.cancel(battleStartEffectTween);
                         battleTransitionCanvasGroup.gameObject.SetActive(false);
 
-                        //TODO: CHANGE CAM POSITION TO BATTLE CAM STUFF
+                        battleEnvironmentParent.SetActive(true);
+                        idleEnvironmentParent.SetActive(false);
+
+                        //Activate snake cam controls
+                        snakeCameraController.enabled = true;
                     }, () =>
                     {
                         //NOTE: The following code is called at the end of the cloud transition
