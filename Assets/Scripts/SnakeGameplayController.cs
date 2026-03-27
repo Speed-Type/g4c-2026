@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -45,6 +47,12 @@ public class SnakeGameplayController : MonoBehaviour
 
     [Header("Camera")]
     public SnakeCameraController cameraController;
+
+    [Header("UI References")]
+    public TMP_Text enemyNameText;
+    public RectTransform enemyHealthBarFill;
+    private float healthBarMaxWidth;
+    public TMP_Text timerText;
 
     [Header("Misc Variables for Resetting Game")]
     public Transform snakeStartTransform;
@@ -93,6 +101,7 @@ public class SnakeGameplayController : MonoBehaviour
 
     //For integration with rg controller
     private bool isPlaying = false;
+    public float currentFightTime;
     [HideInInspector] public int totalHits;
 
     //----------------------------------------------------------------------------------------------------------------
@@ -113,26 +122,26 @@ public class SnakeGameplayController : MonoBehaviour
         shrinkAction.performed += _ => BeginShrink(1);
 
         toggleCamAction.performed += _ => ToggleCameraMode();
-    }
 
-    void Start()
-    {
-        groundY = transform.position.y;
-        currentYaw = transform.eulerAngles.y;
-        desiredYaw = currentYaw;
-
-        targetSegmentCount = initialSegmentCount;
-
-        SeedPositionHistory();
-        for (int i = 0; i < initialSegmentCount; i++)
-            SpawnSegment();
-
-        ApplyCameraMode(camMode);
+        //Initialize necessary variables
+        healthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
     }
 
     void Update()
     {
         if(!isPlaying) return;
+
+        //Handle fight timer
+        currentFightTime -= Time.deltaTime;
+        //Update fight timer display
+        timerText.text = TimeSpan.FromSeconds(Math.Max(currentFightTime, 0f)).ToString(@"mm\:ss\.fff");
+        timerText.color = (currentFightTime < 15f) ? Color.red : Color.white;
+        if(currentFightTime < 0)
+        {
+            //End fight
+            EndGame(false);
+            return;
+        }
 
         if(!isStunned)
         {

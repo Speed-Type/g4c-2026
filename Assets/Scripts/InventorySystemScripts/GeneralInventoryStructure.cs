@@ -415,4 +415,14 @@ public class GeneralInventoryStructure : MonoBehaviour
         //Un-show the values of would-be health drain
         Fragment.HideWouldBeDamage();
     }
+
+    //Method to take damage from battle
+    public void TakeBattleDamage()
+    {
+        //Pick a random inventory slot
+        int randomRow = UnityEngine.Random.Range(0, gridNumRows);
+        int randomCol = UnityEngine.Random.Range(0, gridNumCols);
+
+        inventorySlotArray[randomRow, randomCol].GetFragment().TakeDamage(1);
+    }
 }

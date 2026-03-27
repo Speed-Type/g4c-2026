@@ -35,6 +35,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public GameObject lootSystemGO;
     public GameObject statSystemGO;
     [SerializeField] private GameObject nodeMapGO;
+    [SerializeField] private GameObject combatUI;
     
     [Header("Player Option Buttons")]
     [SerializeField] private GameObject showMapButton;
@@ -103,6 +104,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
         statSystemGO.SetActive(false);
         HideBites();
+        combatUI.SetActive(false);
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
@@ -382,8 +384,11 @@ public class RoguelikeGameplayController : MonoBehaviour
 
             gameState = GameState.Combat;
 
+            //Set combat time TODO: SET ENEMY BUG INSTEAD, AND HAVE FIGHT TIME BE SET IN THE SNAKE GAMEPLAY CONTROLLER ON RESET
+            snakeGameplayController.currentFightTime = 30f;
+
             //Switch camera
-            cameraController.SwitchToCombatCam(snakeGameplayController.PlayGame);
+            cameraController.SwitchToCombatCam(() => {snakeGameplayController.PlayGame(); combatUI.SetActive(true);});
 
             //Hide all UI
             TogglePlayerOptionButtons(false);
@@ -446,9 +451,18 @@ public class RoguelikeGameplayController : MonoBehaviour
             cameraController.TransitionToFreeCam(true);
             cameraController.snakeCameraController.enabled = false;
 
+            //Hide combat UI
+            combatUI.SetActive(false);
+
             //Show idle environment
             cameraController.battleEnvironmentParent.SetActive(false);
             cameraController.idleEnvironmentParent.SetActive(true);
+
+            //Take all the damage from the combat (Must call it here so that the screenshake doesn't just go crazy)
+            for(int i = 0; i < snakeGameplayController.totalHits; i++)
+            {
+                inventoryManager.TakeBattleDamage();
+            }
         }, () =>
         {
             //NOTE: The following code is run at the end of the cloud transition
