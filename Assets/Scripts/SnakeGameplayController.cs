@@ -574,6 +574,9 @@ public class SnakeGameplayController : MonoBehaviour
         currentYaw = rotation.eulerAngles.y;
         desiredYaw = currentYaw;
 
+        //Pull data from bug
+        ExtractBugEnumData(enemyBugEnum);
+
         //Respawn initial segments
         targetSegmentCount = initialSegmentCount;
         SeedPositionHistory();
@@ -581,6 +584,16 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Setup camera
         ApplyCameraMode(camMode);
+    }
+
+    private void ExtractBugEnumData(Bugs bugEnum)
+    {
+        switch(bugEnum)
+        {
+            case Bugs.AfricanBigHeadedAnt:
+                currentFightTime = 30f;
+                break;
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------

@@ -409,7 +409,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Add results for hits
         if(snakeGameplayController.totalHits > 0)
         {
-            outputText.Add("You took " + snakeGameplayController.totalHits + " hits. You may want to check your case.");
+            outputText.Add("You took " + snakeGameplayController.totalHits + " hit" + ((snakeGameplayController.totalHits > 1) ? "s" : "") + ". You may want to check your case.");
         }
         else
         {
