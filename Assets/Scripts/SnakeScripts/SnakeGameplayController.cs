@@ -59,6 +59,12 @@ public class SnakeGameplayController : MonoBehaviour
 
     [Header("Misc Variables for Resetting Game")]
     public Transform snakeStartTransform;
+    public RectTransform gameOverGraphicRT;
+    [Tooltip("Time it takes for the game over graphic to appear")]
+    public float gameOverGraphicAppearT;
+    private float gameOverGraphicWidth;
+    [Tooltip("Delay before calling the EndGame function and switching back to roguelike gameplay")]
+    public float endGameDelay;
 
     //----------------------------------------------------------------------------------------------------------------
 
@@ -128,6 +134,7 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Initialize necessary variables
         healthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
+        gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
     }
 
     void Update()
@@ -563,6 +570,7 @@ public class SnakeGameplayController : MonoBehaviour
         jumpConsumed = false;
         isStunned = false;
         totalHits = 0;
+        gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
 
         //Clear segments
         foreach(var s in segments) Destroy(s);
@@ -647,8 +655,18 @@ public class SnakeGameplayController : MonoBehaviour
         //End inputs
         DisableInput();
         ReleaseCursor();
-        
-        //On finish, call switch camera in cam controller
-        RoguelikeGameplayController.instance.EndCombat(playerWon);
+
+        //Display game over graphic
+        LeanTween.value(0, gameOverGraphicWidth, gameOverGraphicAppearT).setEaseOutElastic()
+        .setOnUpdate((float val) =>
+        {
+            gameOverGraphicRT.sizeDelta = new Vector2(val, gameOverGraphicRT.sizeDelta.y);
+        });
+
+        //End game after a delay
+        LeanTween.delayedCall(endGameDelay, () =>
+        {
+            RoguelikeGameplayController.instance.EndCombat(playerWon);
+        });
     }
 }
