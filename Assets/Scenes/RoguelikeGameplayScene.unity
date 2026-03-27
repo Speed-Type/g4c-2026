@@ -2119,11 +2119,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SnakeCameraController
   snakeHead: {fileID: 153027887}
   topDownHeight: 20
-  topDownLerpSpeed: 5
+  topDownTransitionLerpSpeed: 5
   chaseOffset: {x: 0, y: 4, z: -8}
   chasePosLerpSpeed: 8
-  chaseRotLerpSpeed: 6
+  chaseRotLerpSpeed: 8
+  topDownZoomSensitivity: 1.5
+  chaseCamZoomSensitivity: 0.5
+  topDownZoomLerpSpeed: 60
+  chaseCamZoomLerpSpeed: 7
+  topDownZoomRange: {x: 8, y: 40}
+  chaseZoomRange: {x: 0.5, y: 2.5}
   transitionDuration: 0.5
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &345559257
 GameObject:
   m_ObjectHideFlags: 0

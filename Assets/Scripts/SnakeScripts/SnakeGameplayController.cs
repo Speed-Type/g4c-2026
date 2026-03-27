@@ -435,7 +435,7 @@ public class SnakeGameplayController : MonoBehaviour
         {
             targetSegmentCount = Mathf.Max(1, targetSegmentCount - 1);
             //Small visual pause between each popped segment
-            yield return new WaitForSeconds(0.12f);
+            yield return new WaitForSeconds(0.09f);
         }
 
         if(isStunned) isStunned = false; //Un-stun player if they were previously (like when damaged)
@@ -594,6 +594,8 @@ public class SnakeGameplayController : MonoBehaviour
         {
             case Bugs.AfricanBigHeadedAnt:
                 currentFightTime = 30f;
+                enemyNameText.text = "Pheidole Megacephala";
+                //TODO: SPAWN THE RIGHT ENEMY BUG
                 break;
         }
     }
