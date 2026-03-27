@@ -423,6 +423,16 @@ public class GeneralInventoryStructure : MonoBehaviour
         int randomRow = UnityEngine.Random.Range(0, gridNumRows);
         int randomCol = UnityEngine.Random.Range(0, gridNumCols);
 
-        inventorySlotArray[randomRow, randomCol].GetFragment()?.TakeDamage(1);
+        Fragment fragment = inventorySlotArray[randomRow, randomCol].GetFragment();
+        if(fragment != null && fragment.currentHealth > 0)
+        {
+            //Damage fragment
+            fragment.TakeDamage(1);
+        }
+        else
+        {
+            //Reduce flesh if there is no fragment protecting this spot
+            RoguelikeGameplayController.AddFlesh(-1);
+        }
     }
 }

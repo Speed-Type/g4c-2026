@@ -460,6 +460,8 @@ public class SnakeGameplayController : MonoBehaviour
 
         GameObject seg = Instantiate(segmentPrefab, spawnPos, Quaternion.identity, transform.parent); //Parented under same transform as snake head
         seg.name = $"Segment_{segments.Count}"; //Set name
+        seg.GetComponent<CaterpillarFootAnim>().phaseOffset = idx * 0.6f;
+        seg.GetComponent<CaterpillarFootAnim>().speed = moveSpeed * 3f;
 
         //Disable physics collider on segments
         if(seg.TryGetComponent<Collider>(out var col))
@@ -538,11 +540,11 @@ public class SnakeGameplayController : MonoBehaviour
     {
         Debug.Log($"[SnakeController] Took damage — {reason}");
 
-        //Remove all of snake segments
+        //Remove all of snake segments aside from initial ones
         if(!isStunned)
         {
             isStunned = true;
-            BeginShrink(targetSegmentCount);
+            BeginShrink(targetSegmentCount - initialSegmentCount);
         }
 
         totalHits+=3;

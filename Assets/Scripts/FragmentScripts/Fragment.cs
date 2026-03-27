@@ -20,7 +20,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     [Header("Fragment Data")]
     protected int maxHealth;
-    protected int currentHealth;
+    public int currentHealth;
 
     [Header("GameObject with Sprite for this fragment's graphics")]
     public GameObject graphicGO;
