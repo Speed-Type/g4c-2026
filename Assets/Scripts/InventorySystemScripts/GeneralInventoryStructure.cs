@@ -423,6 +423,6 @@ public class GeneralInventoryStructure : MonoBehaviour
         int randomRow = UnityEngine.Random.Range(0, gridNumRows);
         int randomCol = UnityEngine.Random.Range(0, gridNumCols);
 
-        inventorySlotArray[randomRow, randomCol].GetFragment().TakeDamage(1);
+        inventorySlotArray[randomRow, randomCol].GetFragment()?.TakeDamage(1);
     }
 }

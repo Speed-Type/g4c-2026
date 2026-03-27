@@ -384,8 +384,8 @@ public class RoguelikeGameplayController : MonoBehaviour
 
             gameState = GameState.Combat;
 
-            //Set combat time TODO: SET ENEMY BUG INSTEAD, AND HAVE FIGHT TIME BE SET IN THE SNAKE GAMEPLAY CONTROLLER ON RESET
-            snakeGameplayController.currentFightTime = 30f;
+            //Set enemy bug
+            snakeGameplayController.enemyBugEnum = NodeManager.instance.playerNode.GetComponent<Node_Combat>().spawnedBug;
 
             //Switch camera
             cameraController.SwitchToCombatCam(() => {snakeGameplayController.PlayGame(); combatUI.SetActive(true);});

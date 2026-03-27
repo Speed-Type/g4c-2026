@@ -213,7 +213,7 @@ public class RoguelikeCameraController : MonoBehaviour
         maxPitch /= 2f;
     }
 
-    public void SwitchToCombatCam(Action onCompleteAction)
+    public void SwitchToCombatCam(Action onPauseAction)
     {
         //Save necessary positions
         savedFreeCamTransform.position = transform.position;
@@ -263,10 +263,9 @@ public class RoguelikeCameraController : MonoBehaviour
 
                         //Activate snake cam controls
                         snakeCameraController.enabled = true;
-                    }, () =>
-                    {
-                        //NOTE: The following code is called at the end of the cloud transition
-                        onCompleteAction();
+
+                        //Do the inputted action
+                        onPauseAction();
                     });
                 })
                 .setOnUpdate((float val) =>

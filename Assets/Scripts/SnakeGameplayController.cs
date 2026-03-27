@@ -8,6 +8,9 @@ using UnityEngine.InputSystem;
 public class SnakeGameplayController : MonoBehaviour
 {
     //PUBLIC VARIABLES
+    [Header("Enemy")]
+    public Bugs enemyBugEnum;
+
     [Header("Segments")]
     public GameObject segmentPrefab;
     public int initialSegmentCount = 5;
@@ -542,12 +545,7 @@ public class SnakeGameplayController : MonoBehaviour
             BeginShrink(targetSegmentCount);
         }
 
-        totalHits++;
-
-        //TODO: ADD STUFF FOR PLAYER TAKING DAMAGE
-
-        //TEMP
-        //EndGame(false);
+        totalHits+=3;
     }
 
     //----------------------------------------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ public class Node_Combat : Node
 
     [Header("Odds Corresponding to BugLoot Enum")]
     public int[] bugSpawningOdds;
-    private Bugs spawnedBug;
+    public Bugs spawnedBug;
 
     private List<string> flavorText = new List<string> //USE [BugName] (CASE-SENSITIVE) AS PLACEHOLDER FOR THE BUG'S NAME
     {

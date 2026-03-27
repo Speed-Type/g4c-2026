@@ -78,6 +78,9 @@ public class NodeManager : MonoBehaviour
         //Set spider position at center
         spiderNode = centerNode;
 
+        //Upgrade center
+        centerNode.UpgradeLoot();
+
         //Setup array for circling node generation logic
         Node[] previousCircle = new Node[webNumRadii];
         for(int i = 0; i < webNumRadii; i++)
