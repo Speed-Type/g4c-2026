@@ -10,6 +10,7 @@ public class SnakeGameplayController : MonoBehaviour
     //PUBLIC VARIABLES
     [Header("Enemy")]
     public Bugs enemyBugEnum;
+    public SnakeEnemy snakeEnemy;
 
     [Header("Segments")]
     public GameObject segmentPrefab;
@@ -55,10 +56,11 @@ public class SnakeGameplayController : MonoBehaviour
     public SnakeCameraController cameraController;
 
     [Header("UI References")]
-    public TMP_Text enemyNameText;
-    public RectTransform enemyHealthBarFill;
-    private float healthBarMaxWidth;
-    public TMP_Text timerText;
+    [SerializeField] private TMP_Text enemyNameText;
+    [SerializeField] private RectTransform enemyHealthBarFill;
+    private float enemyHealthBarMaxWidth;
+    [SerializeField] private Color enemyHealthBarFlashColor;
+    [SerializeField] private TMP_Text timerText;
 
     [Header("Misc Variables for Resetting Game")]
     public Transform snakeStartTransform;
@@ -135,8 +137,8 @@ public class SnakeGameplayController : MonoBehaviour
 
         toggleCamAction.performed += _ => ToggleCameraMode();
 
-        //Initialize necessary variables
-        healthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
+        //Initialize health bar variables
+        enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
     }
 
@@ -506,7 +508,7 @@ public class SnakeGameplayController : MonoBehaviour
             obstacleContactTimer += Time.deltaTime;
             if(obstacleContactTimer >= collisionGracePeriod)
             {
-                OnDamage("Obstacle: " + hits[0].name);
+                OnPlayerDamage(3, true);
                 return;
             }
         }
@@ -528,7 +530,7 @@ public class SnakeGameplayController : MonoBehaviour
                 selfContactTimer += Time.deltaTime;
                 if(selfContactTimer >= collisionGracePeriod)
                 {
-                    OnDamage($"Self-collision at segment {i}");
+                    OnPlayerDamage(3, true);
                     return;
                 }
                 break;
@@ -546,18 +548,16 @@ public class SnakeGameplayController : MonoBehaviour
         //TODO: ADD STUFF FOR ITEM COLLECT
     }
 
-    private void OnDamage(string reason)
+    private void OnPlayerDamage(int damage, bool removeSegments)
     {
-        Debug.Log($"[SnakeController] Took damage — {reason}");
-
         //Remove all of snake segments aside from initial ones
-        if(!isStunned)
+        if(removeSegments && !isStunned)
         {
             isStunned = true;
             BeginShrink(targetSegmentCount - initialSegmentCount);
         }
 
-        totalHits+=3;
+        totalHits += damage;
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -587,17 +587,20 @@ public class SnakeGameplayController : MonoBehaviour
         currentYaw = rotation.eulerAngles.y;
         desiredYaw = currentYaw;
 
-        //Pull data from bug
-        ExtractBugEnumData(enemyBugEnum);
-
         //Spawn bug
         GameObject enemyGOToInstantiate = LootManager.instance.BugEnumToSnakeEnemy(enemyBugEnum);
-        Debug.Log(enemyGOToInstantiate);
-        SnakeEnemy snakeEnemy = Instantiate(enemyGOToInstantiate, transform.parent).GetComponent<SnakeEnemy>();
+        snakeEnemy = Instantiate(enemyGOToInstantiate, transform.parent).GetComponent<SnakeEnemy>();
         snakeEnemy.snakeController = this;
         snakeEnemy.snakeHead = transform;
         float randomAngle = UnityEngine.Random.Range(0, (float)Math.PI * 2); //Set at random position at specified radius
-        snakeEnemy.ResetOpponent(new Vector3((float)Math.Sin(randomAngle) * enemySpawnRange, (float)Math.Cos(randomAngle) * enemySpawnRange, snakeStartTransform.position.z));
+        snakeEnemy.ResetOpponent(new Vector3((float)Math.Sin(randomAngle) * enemySpawnRange, snakeStartTransform.position.y, (float)Math.Cos(randomAngle) * enemySpawnRange));
+
+        //Pull data from bug
+        currentFightTime = snakeEnemy.battleLength;
+        enemyNameText.text = snakeEnemy.enemyName;
+
+        //Update health bar
+        UpdateEnemyHealthBar(1);
 
         //Respawn initial segments
         targetSegmentCount = initialSegmentCount;
@@ -606,17 +609,6 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Setup camera
         ApplyCameraMode(camMode);
-    }
-
-    private void ExtractBugEnumData(Bugs bugEnum)
-    {
-        switch(bugEnum)
-        {
-            case Bugs.AfricanBigHeadedAnt:
-                currentFightTime = 30f;
-                enemyNameText.text = "Pheidole Megacephala";
-                break;
-        }
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -628,6 +620,15 @@ public class SnakeGameplayController : MonoBehaviour
         int count = (initialSegmentCount + 12) * Mathf.CeilToInt(segmentSpacing / positionSampleInterval);
         for(int i = 0; i <= count; i++)
             posHistory.Add(transform.position + back * (i * positionSampleInterval));
+    }
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //Misc
+
+    public void UpdateEnemyHealthBar(float desiredPercentage)
+    {
+        StatDisplay.UpdateFillBar(enemyHealthBarFill, desiredPercentage, enemyHealthBarMaxWidth, enemyHealthBarFlashColor, Color.white);
     }
 
     //----------------------------------------------------------------------------------------------------------------

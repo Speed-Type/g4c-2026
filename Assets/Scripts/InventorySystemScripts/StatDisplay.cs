@@ -48,10 +48,14 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         //Initialize variables
         openHeight = statWindow.sizeDelta.y;
         displayState = DisplayState.Closed;
-        inventoryBarMaxWidth = fleshFillBarInventory.sizeDelta.x;
-        lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x;
         fleshBarOriginalColor = fleshFillBarInventory.gameObject.GetComponent<Image>().color;
         biteRectTransform = biteImage.GetComponent<RectTransform>();
+
+        //For flesh bars specifically
+        inventoryBarMaxWidth = fleshFillBarInventory.sizeDelta.x;
+        lootBarMaxWidth = fleshFillBarLooting.sizeDelta.x;
+        fleshFillBarInventory.sizeDelta = new Vector2(0, fleshFillBarInventory.sizeDelta.y);
+        fleshFillBarLooting.sizeDelta = new Vector2(0, fleshFillBarLooting.sizeDelta.y);
 
         //Close stat window
         statWindow.sizeDelta = new Vector2(statWindow.sizeDelta.x, 0);
@@ -168,23 +172,25 @@ public class StatDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public static void UpdateFillBar(RectTransform fillBar, float desiredPercentage, float maxWidth, Color flashColor, Color originalColor)
     {
         //Check that the size needs to update to begin with
-        if(Mathf.Approximately(fillBar.sizeDelta.x, desiredPercentage * maxWidth)) return;
+        if(Mathf.Abs(fillBar.sizeDelta.x - desiredPercentage * maxWidth) < 1) return;
 
         //Update the fill bar size
-        fillBar.gameObject.GetComponent<Image>().color = flashColor; //set color to flashed
         LeanTween.value(fillBar.sizeDelta.x, desiredPercentage * maxWidth, instance.globalFlashAnimLength)
-            .setEaseOutBounce()
-            .setOnUpdate((float val) =>
+        .setEaseOutExpo()
+        .setOnUpdate((float val) =>
+        {
+            fillBar.sizeDelta = new Vector2(val, fillBar.sizeDelta.y);
+        });
+
+        //Update the fill bar color        
+        fillBar.gameObject.GetComponent<Image>().color = flashColor; //set color to flashed
+        LeanTween.delayedCall(instance.globalFlashAnimLength / 2f, () =>
+        {
+            if(!Mathf.Approximately(desiredPercentage, 1))
             {
-                fillBar.sizeDelta = new Vector2(val, fillBar.sizeDelta.y);
-            })
-            .setOnComplete(() =>
-            {
-                if(!Mathf.Approximately(desiredPercentage, 1))
-                {
-                    fillBar.gameObject.GetComponent<Image>().color = originalColor; //reset color when done, unless of course we've hit the goal
-                }
-            });
+                fillBar.gameObject.GetComponent<Image>().color = originalColor; //reset color when done, unless of course we've hit the goal
+            }
+        });
     }
 
     private void UpdateAllFleshFillBars()

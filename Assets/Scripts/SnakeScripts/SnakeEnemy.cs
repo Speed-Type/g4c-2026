@@ -9,6 +9,10 @@ public class SnakeEnemy : MonoBehaviour
     public SnakeGameplayController snakeController;
     public Transform snakeHead;
 
+    [Header("Battle Parameters")]
+    public float battleLength = 30f;
+    public string enemyName;
+
     [Header("Movement (General)")]
     public float moveSpeed    = 3.5f;
     public float turnSpeed    = 90f;
@@ -73,6 +77,7 @@ public class SnakeEnemy : MonoBehaviour
     [Header("Health")]
     public int maxHealth;
     public int currentHealth;
+    public float maxInvincibility;
 
     //----------------------------------------------------------------------------------------------------------------
     
@@ -118,9 +123,16 @@ public class SnakeEnemy : MonoBehaviour
 
     //Misc
     [HideInInspector] public bool isActive = true;
+    private InvincibilityFlash invincibilityFlash;
+    private float invincibilityTimer;
 
     //----------------------------------------------------------------------------------------------------------------
     
+    void Awake()
+    {
+        invincibilityFlash = GetComponent<InvincibilityFlash>();
+    }
+
     void Start()
     {
         groundY = transform.position.y;
@@ -133,12 +145,13 @@ public class SnakeEnemy : MonoBehaviour
     void Update()
     {
         if(!isActive) return;
-        if(snakeController.isPlaying) return;
+        if(!snakeController.isPlaying) return;
 
+        //Update timers
         attackCooldownTimer -= Time.deltaTime;
         fleeJumpTimer -= Time.deltaTime;
+        invincibilityTimer -= Time.deltaTime;
 
-        Debug.Log("Snake running");
         UpdateState();
         ApplyGravity();
         ClampToGround();
@@ -549,15 +562,15 @@ public class SnakeEnemy : MonoBehaviour
     private void CheckBodyContact()
     {
         var segs = snakeController.segments;
-        if (segs == null) return;
+        if(segs == null) return;
 
         Vector3 myPos = transform.position;
-        foreach (var seg in segs)
+        foreach(var seg in segs)
         {
-            if (seg == null) continue;
+            if(seg == null) continue;
             Vector3 segFlat = seg.transform.position;
             segFlat.y = myPos.y;
-            if (Vector3.Distance(myPos, segFlat) < contactRadius)
+            if(Vector3.Distance(myPos, segFlat) < contactRadius)
             {
                 OnCaught();
                 return;
@@ -568,15 +581,28 @@ public class SnakeEnemy : MonoBehaviour
     //IMPORTANT: This is the method that is called when the enemy hits the player
     private void OnCaught()
     {
-        //TODO: Add i-frames for enemy after being hit
+        //Check iframes
+        if(invincibilityTimer > 0) return;
+        
+        //Do screenshake
+        ScreenShake.instance.AddTrauma(0.25f);
 
+        //Do health changes
         currentHealth--;
         if(currentHealth <= 0)
         {
             isActive = false;
             snakeController.EndGame(true);
         }
-        Debug.Log("[SnakeOpponent] Caught — player wins.");
+        else
+        {
+            //Add iframes
+            invincibilityTimer = maxInvincibility;
+            invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
+        }
+
+        //Update healthbar
+        snakeController.UpdateEnemyHealthBar((float)currentHealth / maxHealth);
     }
 
     //----------------------------------------------------------------------------------------------------------------

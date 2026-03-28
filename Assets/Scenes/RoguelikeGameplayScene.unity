@@ -1284,6 +1284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnakeGameplayController
   enemyBugEnum: 0
+  snakeEnemy: {fileID: 0}
   segmentPrefab: {fileID: 5731172278428971843, guid: d1a3043ee0e5b43aeb44c2b6d9510f35, type: 3}
   initialSegmentCount: 5
   segmentSpacing: 3.25
@@ -1309,6 +1310,7 @@ MonoBehaviour:
   cameraController: {fileID: 330585549}
   enemyNameText: {fileID: 1309434078}
   enemyHealthBarFill: {fileID: 923324699}
+  enemyHealthBarFlashColor: {r: 1, g: 0, b: 0.8392157, a: 1}
   timerText: {fileID: 1824747055}
   snakeStartTransform: {fileID: 680038839}
   gameOverGraphicRT: {fileID: 1316875544}
@@ -9995,7 +9997,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: 600, y: -20}
+  m_SizeDelta: {x: 1300, y: -20}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &923324700
 MonoBehaviour:
@@ -18232,7 +18234,7 @@ MonoBehaviour:
   fleshFillBarLooting: {fileID: 50146096}
   peekHeight: 57
   statWindowAnimLength: 0.5
-  globalFlashAnimLength: 0.3
+  globalFlashAnimLength: 0.4
   fleshBarFlashColor: {r: 1, g: 0, b: 0.8392157, a: 1}
   inventoryFleshText: {fileID: 1363165444}
   lootFleshText: {fileID: 1767184183}

@@ -370,6 +370,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Make sure the player can actually make choices
         if(!playerCanMakeChoices) return;
 
+        doubleCheckInstar = false;
+
         //Make sure this option is actually one of the open ones
         if(!openButtons.Contains(PlayerOptionButtons.Combat)) return;
 
@@ -458,6 +460,9 @@ public class RoguelikeGameplayController : MonoBehaviour
             cameraController.battleEnvironmentParent.SetActive(false);
             cameraController.idleEnvironmentParent.SetActive(true);
 
+            //Destroy enemy bug
+            Destroy(snakeGameplayController.snakeEnemy.gameObject);
+
             //Take all the damage from the combat (Must call it here so that the screenshake doesn't just go crazy)
             for(int i = 0; i < snakeGameplayController.totalHits; i++)
             {
@@ -487,6 +492,8 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Make sure the player can actually make choices
         if(!playerCanMakeChoices) return;
 
+        doubleCheckCombat = false;
+
         //Make sure this option is actually one of the open ones
         if(!openButtons.Contains(PlayerOptionButtons.Instar)) return;
 
@@ -506,6 +513,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static void AddFlesh(int amount)
     {
         instance.currentFlesh += amount;
+        instance.currentFlesh = Math.Max(instance.currentFlesh, 0); //Keep it nonneg
 
         StatDisplay.UpdateAllFleshFillBars_Static(); //Also update flesh bars
     }
