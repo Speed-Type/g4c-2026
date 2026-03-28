@@ -45,6 +45,9 @@ public class SnakeGameplayController : MonoBehaviour
     [Tooltip("Number of tail segments near the head to skip for self-collision, preventing false positives on the neck.")]
     public int selfCollisionIgnoredTailSegments = 3;
 
+    [Header("Enemy")]
+    public float enemySpawnRange;
+
     [Header("Input")]
     public InputActionAsset inputActions;
 
@@ -79,7 +82,7 @@ public class SnakeGameplayController : MonoBehaviour
     private InputAction toggleCamAction;
 
     //Saved segment data
-    private readonly List<GameObject> segments = new();
+    public readonly List<GameObject> segments = new();
     private readonly List<Vector3> posHistory = new();
     private int targetSegmentCount;
     private float distSinceSample;
@@ -109,7 +112,7 @@ public class SnakeGameplayController : MonoBehaviour
     private CameraMode camMode = CameraMode.TopDown; //For now, default to top down
 
     //For integration with rg controller
-    private bool isPlaying = false;
+    public bool isPlaying = false;
     public float currentFightTime;
     [HideInInspector] public int totalHits;
 
@@ -587,6 +590,15 @@ public class SnakeGameplayController : MonoBehaviour
         //Pull data from bug
         ExtractBugEnumData(enemyBugEnum);
 
+        //Spawn bug
+        GameObject enemyGOToInstantiate = LootManager.instance.BugEnumToSnakeEnemy(enemyBugEnum);
+        Debug.Log(enemyGOToInstantiate);
+        SnakeEnemy snakeEnemy = Instantiate(enemyGOToInstantiate, transform.parent).GetComponent<SnakeEnemy>();
+        snakeEnemy.snakeController = this;
+        snakeEnemy.snakeHead = transform;
+        float randomAngle = UnityEngine.Random.Range(0, (float)Math.PI * 2); //Set at random position at specified radius
+        snakeEnemy.ResetOpponent(new Vector3((float)Math.Sin(randomAngle) * enemySpawnRange, (float)Math.Cos(randomAngle) * enemySpawnRange, snakeStartTransform.position.z));
+
         //Respawn initial segments
         targetSegmentCount = initialSegmentCount;
         SeedPositionHistory();
@@ -603,7 +615,6 @@ public class SnakeGameplayController : MonoBehaviour
             case Bugs.AfricanBigHeadedAnt:
                 currentFightTime = 30f;
                 enemyNameText.text = "Pheidole Megacephala";
-                //TODO: SPAWN THE RIGHT ENEMY BUG
                 break;
         }
     }
@@ -618,23 +629,6 @@ public class SnakeGameplayController : MonoBehaviour
         for(int i = 0; i <= count; i++)
             posHistory.Add(transform.position + back * (i * positionSampleInterval));
     }
-
-    //----------------------------------------------------------------------------------------------------------------
-    
-    //Nice editor gizmo to help visualize everything
-
-    #if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, collisionRadius);
-
-        if(posHistory == null) return;
-        Gizmos.color = new Color(0f, 1f, 1f, 0.5f);
-        for(int i = 0; i < Mathf.Min(posHistory.Count, 150); i++)
-            Gizmos.DrawWireSphere(posHistory[i], 0.04f);
-    }
-    #endif
 
     //----------------------------------------------------------------------------------------------------------------
     
@@ -656,12 +650,19 @@ public class SnakeGameplayController : MonoBehaviour
         DisableInput();
         ReleaseCursor();
 
-        //Display game over graphic
-        LeanTween.value(0, gameOverGraphicWidth, gameOverGraphicAppearT).setEaseOutElastic()
-        .setOnUpdate((float val) =>
+        if(playerWon) //Case 1: Player wins
         {
-            gameOverGraphicRT.sizeDelta = new Vector2(val, gameOverGraphicRT.sizeDelta.y);
-        });
+            //TODO: MAKE COOL GRAPHIC ON WIN
+        }
+        else //Case 2: Player loses
+        {
+            //Display game over graphic
+            LeanTween.value(0, gameOverGraphicWidth, gameOverGraphicAppearT).setEaseOutElastic()
+            .setOnUpdate((float val) =>
+            {
+                gameOverGraphicRT.sizeDelta = new Vector2(val, gameOverGraphicRT.sizeDelta.y);
+            });
+        }
 
         //End game after a delay
         LeanTween.delayedCall(endGameDelay, () =>
@@ -669,4 +670,21 @@ public class SnakeGameplayController : MonoBehaviour
             RoguelikeGameplayController.instance.EndCombat(playerWon);
         });
     }
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //Nice editor gizmo to help visualize everything
+
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, collisionRadius);
+
+        if(posHistory == null) return;
+        Gizmos.color = new Color(0f, 1f, 1f, 0.5f);
+        for(int i = 0; i < Mathf.Min(posHistory.Count, 150); i++)
+            Gizmos.DrawWireSphere(posHistory[i], 0.04f);
+    }
+#endif
 }

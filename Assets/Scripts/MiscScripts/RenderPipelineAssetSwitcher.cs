@@ -5,10 +5,10 @@ public class RenderPipelineAssetSwitcher : MonoBehaviour
 {
     public RenderPipelineAsset specificRenderPipelineAsset;
 
-    void OnEnable()
+    void Awake()
     {
         //Switch to the scene-specific asset
-        if (specificRenderPipelineAsset != null)
+        if(QualitySettings.renderPipeline != specificRenderPipelineAsset)
         {
             QualitySettings.renderPipeline = specificRenderPipelineAsset;
         }

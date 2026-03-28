@@ -13,6 +13,7 @@ public class LootManager : GeneralInventoryStructure
     public GameObject[] fragmentList; //List to hold all the different fragments
     public GameObject[] scavengeBugModelList; //List to hold all the different bug models for scavenge nodes
     public GameObject[] combatBugModelList; //List to hold all the different bug models for combat nodes
+    public GameObject[] snakeEnemyBugList; //List to hold all the different bug enemies for actual snake combat
     [Tooltip("Should be placed in order of priority to spawn (Largest in grid size to smallest)")]
     public GameObject[] fleshList; //List of fleshes to attempt to spawn
 
@@ -192,6 +193,11 @@ public class LootManager : GeneralInventoryStructure
     public GameObject BugEnumToCombatModel(Bugs bug)
     {
         return combatBugModelList[(int)bug];
+    }
+
+    public GameObject BugEnumToSnakeEnemy(Bugs bug)
+    {
+        return snakeEnemyBugList[(int)bug];
     }
 }
 
