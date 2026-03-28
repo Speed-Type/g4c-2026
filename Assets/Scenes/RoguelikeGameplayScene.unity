@@ -2154,7 +2154,7 @@ MonoBehaviour:
   topDownTransitionLerpSpeed: 5
   chaseOffset: {x: 0, y: 4, z: -8}
   chasePosLerpSpeed: 8
-  chaseRotLerpSpeed: 10
+  chaseRotLerpSpeed: 9
   topDownZoomSensitivity: 1.5
   chaseCamZoomSensitivity: 0.5
   topDownZoomLerpSpeed: 60

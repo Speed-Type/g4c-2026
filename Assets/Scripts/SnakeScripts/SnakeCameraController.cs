@@ -140,6 +140,8 @@ public class SnakeCameraController : MonoBehaviour
 
     public void ResetCameraTarget()
     {
+        chaseZoom = (chaseZoomRange.x + chaseZoomRange.y) / 2f;
+        topDownZoom = (topDownZoomRange.x + topDownZoomRange.y) / 2f;
         cameraTarget = snakeHead;
     }
 

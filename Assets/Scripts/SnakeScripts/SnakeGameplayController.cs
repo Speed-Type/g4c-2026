@@ -192,7 +192,7 @@ public class SnakeGameplayController : MonoBehaviour
         stunTimer -= Time.deltaTime;
         
         //Update fight timer display
-        timerText.text = TimeSpan.FromSeconds(Math.Max(currentFightTime, 0f)).ToString(@"mm\:ss\.fff");
+        timerText.text = TimeSpan.FromSeconds(Math.Max(currentFightTime, 0f)).ToString(@"mm\:ss\.ff");
         timerText.color = (currentFightTime < 15f) ? Color.red : Color.white;
         if(currentFightTime < 0)
         {
@@ -421,25 +421,27 @@ public class SnakeGameplayController : MonoBehaviour
     private void SamplePosition()
     {
         //Use horizontal distance only, so vertical movement doesn't trigger extra samples and stretch the segments oddly mid-jump
+        Vector3 currentFlat = new Vector3(transform.position.x, 0f, transform.position.z);
+ 
         if(posHistory.Count > 0)
         {
-            Vector3 last = posHistory[0];
-            float hDist = Vector3.Distance(
-                new Vector3(transform.position.x, 0, transform.position.z),
-                new Vector3(last.x, 0, last.z));
-            distSinceSample += hDist;
+            Vector3 lastFlat = new Vector3(posHistory[0].x, 0f, posHistory[0].z);
+            distSinceSample += Vector3.Distance(currentFlat, lastFlat);
         }
         else
         {
             distSinceSample = positionSampleInterval; //Force first sample to avoid errors with other methods
         }
-
+ 
+        //Insert as many samples as the distance warrants this frame.
+        //At low FPS the snake may travel multiple intervals in one step
+        //Without this, a single sample leaves a gap in history and segments visibly stretch apart which is annoying
         while(distSinceSample >= positionSampleInterval)
         {
-            posHistory.Insert(0, transform.position); //Full 3D, captures jump arc
-            distSinceSample = 0f;
+            posHistory.Insert(0, transform.position);
+            distSinceSample -= positionSampleInterval;
         }
-
+ 
         TrimHistory();
     }
 
@@ -535,7 +537,7 @@ public class SnakeGameplayController : MonoBehaviour
         //Opponent's overlap queries need to find the trigger
         //Self-collision is still handled manually via distance checks
         if(seg.TryGetComponent<Collider>(out var col))
-            col.isTrigger = true;
+            col.isTrigger = segments.Count > 0; //WE WANT ALL OF THEM TRIGGERS EXCEPT INDEX 0
 
         segments.Add(seg);
     }
@@ -557,10 +559,15 @@ public class SnakeGameplayController : MonoBehaviour
     {
         Vector3 head = transform.position;
  
-        //World obstacle collisions with near-miss timer
+        //World obstacle collisions for both head and first segmentwith near-miss timer
         bool touchingObstacle = false;
-        Collider[] hits = Physics.OverlapSphere(head, collisionRadius, obstacleLayerMask);
-        if(hits.Length > 0)
+
+        bool headHit = Physics.OverlapSphere(head, collisionRadius, obstacleLayerMask).Length > 0;
+        bool seg0Hit = false;
+        if(segments.Count > 0 && segments[0] != null)
+            seg0Hit = Physics.OverlapSphere(segments[0].transform.position, collisionRadius, obstacleLayerMask).Length > 0;
+
+        if(headHit || seg0Hit)
         {
             touchingObstacle = true;
             obstacleContactTimer += Time.deltaTime;
@@ -570,7 +577,8 @@ public class SnakeGameplayController : MonoBehaviour
                 return;
             }
         }
-        if(!touchingObstacle)
+
+        if(!touchingObstacle) //Reset near-miss timer
             obstacleContactTimer = 0f;
  
         //Items/pickups (no grace period, food collection is always instant)
@@ -579,11 +587,15 @@ public class SnakeGameplayController : MonoBehaviour
             OnItemCollected(f.gameObject);
 
         //Enemies (no grace period here either)
-        hits = Physics.OverlapSphere(head, collisionRadius, enemyLayerMask);
-        if(hits.Length > 0)
+        headHit = Physics.OverlapSphere(head, collisionRadius, enemyLayerMask).Length > 0;
+        seg0Hit = false;
+        if(segments.Count > 0 && segments[0] != null)
+            seg0Hit = Physics.OverlapSphere(segments[0].transform.position, collisionRadius, enemyLayerMask).Length > 0;
+        
+        if(headHit || seg0Hit)
         {
-            Debug.Log("player has collided with enemy");
             OnPlayerDamage(3, shrinkTime, true);
+            return;
         }
  
         //Self-collision
