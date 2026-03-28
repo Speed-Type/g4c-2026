@@ -409,9 +409,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         List<string> outputText = NodeManager.instance.playerNode.gameObject.GetComponent<Node_Combat>().GetResultsText(playerWon);
         
         //Add results for hits
-        if(snakeGameplayController.totalHits > 0)
+        if(snakeGameplayController.totalDamage > 0)
         {
-            outputText.Add("You took " + snakeGameplayController.totalHits + " hit" + ((snakeGameplayController.totalHits > 1) ? "s" : "") + ". You may want to check your case.");
+            outputText.Add("You took " + snakeGameplayController.totalDamage + " hit" + ((snakeGameplayController.totalDamage > 1) ? "s" : "") + ". You may want to check your case.");
         }
         else
         {
@@ -464,7 +464,7 @@ public class RoguelikeGameplayController : MonoBehaviour
             Destroy(snakeGameplayController.snakeEnemy.gameObject);
 
             //Take all the damage from the combat (Must call it here so that the screenshake doesn't just go crazy)
-            for(int i = 0; i < snakeGameplayController.totalHits; i++)
+            for(int i = 0; i < snakeGameplayController.totalDamage; i++)
             {
                 inventoryManager.TakeBattleDamage();
             }

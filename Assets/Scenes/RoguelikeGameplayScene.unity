@@ -1240,6 +1240,7 @@ GameObject:
   - component: {fileID: 153027887}
   - component: {fileID: 153027890}
   - component: {fileID: 153027891}
+  - component: {fileID: 153027892}
   m_Layer: 0
   m_Name: SnakeHead (Has gameplay controller)
   m_TagString: Untagged
@@ -1283,8 +1284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fec9047987e849849bacf51d101565f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SnakeGameplayController
-  enemyBugEnum: 0
-  snakeEnemy: {fileID: 0}
   segmentPrefab: {fileID: 5731172278428971843, guid: d1a3043ee0e5b43aeb44c2b6d9510f35, type: 3}
   initialSegmentCount: 5
   segmentSpacing: 3.25
@@ -1305,7 +1304,10 @@ MonoBehaviour:
   collisionRadius: 0.4
   collisionGracePeriod: 0.175
   selfCollisionIgnoredTailSegments: 3
+  maxInvincibility: 3
   enemySpawnRange: 10
+  enemyBugEnum: 0
+  snakeEnemy: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraController: {fileID: 330585549}
   enemyNameText: {fileID: 1309434078}
@@ -1319,6 +1321,19 @@ MonoBehaviour:
   isPlaying: 0
   currentFightTime: 0
   totalHits: 0
+--- !u!114 &153027892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153027886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f65522ab537b401b9032c3602f6055b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InvincibilityFlash
+  target: {fileID: 794286613}
 --- !u!1 &172554460
 GameObject:
   m_ObjectHideFlags: 0
@@ -9033,6 +9048,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 776568480}
   m_CullTransparentMesh: 1
+--- !u!1 &794286613 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
+  m_PrefabInstance: {fileID: 2029836292}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

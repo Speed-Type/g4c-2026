@@ -8,9 +8,6 @@ using UnityEngine.InputSystem;
 public class SnakeGameplayController : MonoBehaviour
 {
     //PUBLIC VARIABLES
-    [Header("Enemy")]
-    public Bugs enemyBugEnum;
-    public SnakeEnemy snakeEnemy;
 
     [Header("Segments")]
     public GameObject segmentPrefab;
@@ -45,9 +42,15 @@ public class SnakeGameplayController : MonoBehaviour
     public float collisionGracePeriod = 0.2f;
     [Tooltip("Number of tail segments near the head to skip for self-collision, preventing false positives on the neck.")]
     public int selfCollisionIgnoredTailSegments = 3;
+    public float maxInvincibility;
+
+    [Header("Effects")]
+    public GameObject stunEffect;
 
     [Header("Enemy")]
     public float enemySpawnRange;
+    public Bugs enemyBugEnum;
+    public SnakeEnemy snakeEnemy;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -106,8 +109,12 @@ public class SnakeGameplayController : MonoBehaviour
     private float obstacleContactTimer = 0f;
     private float selfContactTimer = 0f;
 
+    //Invincibility logic
+    private float invincibilityTimer;
+    private InvincibilityFlash invincibilityFlash;
+
     //Status
-    private bool isStunned;
+    private float stunTimer;
     
     //Camera mode
     public enum CameraMode {TopDown, Chase}
@@ -116,7 +123,7 @@ public class SnakeGameplayController : MonoBehaviour
     //For integration with rg controller
     public bool isPlaying = false;
     public float currentFightTime;
-    [HideInInspector] public int totalHits;
+    [HideInInspector] public int totalDamage;
 
     //----------------------------------------------------------------------------------------------------------------
 
@@ -140,14 +147,20 @@ public class SnakeGameplayController : MonoBehaviour
         //Initialize health bar variables
         enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
+
+        //Initialize other references
+        invincibilityFlash = GetComponent<InvincibilityFlash>();
     }
 
     void Update()
     {
         if(!isPlaying) return;
 
-        //Handle fight timer
+        //Update timers
         currentFightTime -= Time.deltaTime;
+        invincibilityTimer -= Time.deltaTime;
+        stunTimer -= Time.deltaTime;
+        
         //Update fight timer display
         timerText.text = TimeSpan.FromSeconds(Math.Max(currentFightTime, 0f)).ToString(@"mm\:ss\.fff");
         timerText.color = (currentFightTime < 15f) ? Color.red : Color.white;
@@ -158,13 +171,18 @@ public class SnakeGameplayController : MonoBehaviour
             return;
         }
 
-        if(!isStunned)
+        if(stunTimer <= 0)
         {
             HandleTurning();
             HandleJump();
             MoveHead();
             UpdateSegmentPositions();
             CheckCollisions();
+
+            if(stunEffect.activeSelf)
+            {
+                stunEffect.SetActive(false);
+            }
         }
 
         AdjustSegmentCount();
@@ -441,16 +459,19 @@ public class SnakeGameplayController : MonoBehaviour
     public void BeginShrink(int count) => StartCoroutine(ShrinkCoroutine(count));
 
     //Coroutine for shrinking a segment
+    private bool isShrinking = false;
+    private float shrinkTime = 2f;
     private IEnumerator ShrinkCoroutine(int count)
     {
+        isShrinking = false;
         for(int i = 0; i < count; i++)
         {
             targetSegmentCount = Mathf.Max(1, targetSegmentCount - 1);
             //Small visual pause between each popped segment
-            yield return new WaitForSeconds(0.09f);
+            yield return new WaitForSeconds(shrinkTime / count);
         }
 
-        if(isStunned) isStunned = false; //Un-stun player if they were previously (like when damaged)
+        isShrinking = true; //Un-stun player if they were previously (like when damaged)
     }
 
     //Method to set length by setting the target segments
@@ -508,7 +529,7 @@ public class SnakeGameplayController : MonoBehaviour
             obstacleContactTimer += Time.deltaTime;
             if(obstacleContactTimer >= collisionGracePeriod)
             {
-                OnPlayerDamage(3, true);
+                OnPlayerDamage(3, 0, true);
                 return;
             }
         }
@@ -530,7 +551,7 @@ public class SnakeGameplayController : MonoBehaviour
                 selfContactTimer += Time.deltaTime;
                 if(selfContactTimer >= collisionGracePeriod)
                 {
-                    OnPlayerDamage(3, true);
+                    OnPlayerDamage(3, shrinkTime, true);
                     return;
                 }
                 break;
@@ -548,16 +569,29 @@ public class SnakeGameplayController : MonoBehaviour
         //TODO: ADD STUFF FOR ITEM COLLECT
     }
 
-    private void OnPlayerDamage(int damage, bool removeSegments)
+    private void OnPlayerDamage(int damage, float stunApplied, bool removeSegments)
     {
-        //Remove all of snake segments aside from initial ones
-        if(removeSegments && !isStunned)
+        if(invincibilityTimer > 0) return; //If i frames are active, no damage
+
+        //Add i frames
+        invincibilityTimer = maxInvincibility;
+        invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
+
+        //Apply stun
+        if(stunApplied > 0)
         {
-            isStunned = true;
+            stunTimer = Math.Max(0, stunTimer); //Reset to 0 if negative
+            stunTimer += stunApplied;
+        }
+
+        //Remove all of snake segments aside from initial ones
+        if(removeSegments && !isShrinking)
+        {
             BeginShrink(targetSegmentCount - initialSegmentCount);
         }
 
-        totalHits += damage;
+        //Add to total hits
+        totalDamage += damage;
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -571,8 +605,9 @@ public class SnakeGameplayController : MonoBehaviour
         verticalVelocity = 0f;
         isGrounded = true;
         jumpConsumed = false;
-        isStunned = false;
-        totalHits = 0;
+        stunTimer = 0;
+        isShrinking = false;
+        totalDamage = 0;
         gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
 
         //Clear segments
