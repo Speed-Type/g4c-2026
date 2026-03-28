@@ -1459,6 +1459,7 @@ MonoBehaviour:
   enemyHealthBarFill: {fileID: 923324699}
   enemyHealthBarFlashColor: {r: 1, g: 0, b: 0.8392157, a: 1}
   timerText: {fileID: 1824747055}
+  timerTextWarningSizeMultiplier: 0.5
   snakeStartTransform: {fileID: 680038839}
   gameOverGraphicRT: {fileID: 1316875544}
   gameOverGraphicAppearT: 0.5
@@ -15768,6 +15769,7 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0
+  isDead: 0
   damage: 3
   openBiteSprite: {fileID: 21300000, guid: 3217c2eb0294c4241a126f1168867962, type: 3}
   closedBiteSprite: {fileID: 21300000, guid: 0d6540c90727d42c3a6d29129f383771, type: 3}
@@ -20071,6 +20073,7 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0
+  isDead: 0
   damage: 1
   openBiteSprite: {fileID: 21300000, guid: 60ee43d83055c496988ae074da5273b3, type: 3}
   closedBiteSprite: {fileID: 21300000, guid: efb1e2416536041d6b03ad85b8b64725, type: 3}

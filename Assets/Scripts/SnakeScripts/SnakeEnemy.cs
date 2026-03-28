@@ -59,6 +59,13 @@ public class SnakeEnemy : MonoBehaviour
     [Tooltip("Particle effect for telegraphing an attack")]
     public GameObject attackTelegraphParticle;
 
+    [Header("Attack Weights")]
+    public float chargeChance;
+    public float jumpChance;
+    public float shootChance;
+    [Tooltip("How far away the bug should be to shoot, to avoid point-blanks")]
+    public float shootStartRange;
+
     [Header("Attack (Charge)")]
     public float chargeMoveSpeed = 14f;
     [Tooltip("How long the charge lasts (seconds)")]
@@ -298,6 +305,7 @@ public class SnakeEnemy : MonoBehaviour
 
     private void UpdateCharge()
     {
+        invincibilityTimer = 1f;
         stateTimer += Time.deltaTime;
 
         //Dash in the locked direction
@@ -308,12 +316,14 @@ public class SnakeEnemy : MonoBehaviour
         {
             OnPlayerHit?.Invoke(AttackType.Charge.ToString());
             EnterCooldown();
+
             return;
         }
 
-        //End charge after duration.
-        if (stateTimer >= chargeDuration)
+        //End charge after duration
+        if(stateTimer >= chargeDuration)
             EnterCooldown();
+            invincibilityTimer = 0f; //Stop invincibility
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -345,7 +355,7 @@ public class SnakeEnemy : MonoBehaviour
 
             Vector3 toTarget = predictedHeadPos - transform.position;
             toTarget.y = 0f;
-            if (toTarget.sqrMagnitude > 0.001f)
+            if(toTarget.sqrMagnitude > 0.001f)
                 heading = toTarget.normalized;
 
             verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
@@ -359,7 +369,10 @@ public class SnakeEnemy : MonoBehaviour
         if(isGrounded && stateTimer > 0.1f)
         {
             if(DistToHead() < jumpAtkHitRadius)
+            {
                 OnPlayerHit?.Invoke(AttackType.JumpAtk.ToString());
+                invincibilityTimer = 1f;
+            }
 
             EnterCooldown();
         }
@@ -491,13 +504,18 @@ public class SnakeEnemy : MonoBehaviour
         //Spawn particle to telegraph attack intent
         Instantiate(attackTelegraphParticle, transform.position, transform.rotation);
 
-        //TODO
-        // You can weight these however you like, or make them conditional
-        // (e.g. only JumpAtk if head is elevated, only Shoot beyond a range).
-        int roll = Random.Range(0, 3);
-        nextAttack = roll == 0 ? AttackType.Charge
-                   : roll == 1 ? AttackType.Shoot
-                   :             AttackType.JumpAtk;
+        //Default to charge
+        nextAttack = AttackType.Charge;
+
+        float rand = Random.Range(0f, 1f);
+        if(rand < shootChance && DistToHead() > shootStartRange)
+        {
+            nextAttack = AttackType.Shoot;
+        }
+        else if(rand < shootChance + jumpChance)
+        {
+            nextAttack = AttackType.JumpAtk;
+        }
     }
 
     //Lock onto a target
@@ -529,11 +547,7 @@ public class SnakeEnemy : MonoBehaviour
     //Firing projectiles
     private void FireProjectile()
     {
-        if(projectilePrefab == null)
-        {
-            Debug.LogWarning("[SnakeOpponent] projectilePrefab not assigned — Shoot attack skipped.");
-            return;
-        }
+        if(projectilePrefab == null) return;
 
         Vector3 predicted = PredictHeadPosition(projectileLeadFactor);
         Vector3 fireDir = (predicted - transform.position);
@@ -652,7 +666,6 @@ public class SnakeEnemy : MonoBehaviour
     //IMPORTANT: This is the method that is called when the enemy hits the player
     private void OnCaught()
     {
-        Debug.Log("Enemy has collided with player");
         //Check iframes
         if(invincibilityTimer > 0) return;
 

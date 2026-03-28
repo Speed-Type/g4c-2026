@@ -417,8 +417,11 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to take damage from battle
-    public void TakeBattleDamage()
+    //Returns a Vector3 with x representing a damaged fragment, y representing a shattered fragment, and z representing a flesh reduction
+    public Vector3Int TakeBattleDamage()
     {
+        Vector3Int returnVal = new Vector3Int();
+
         //Pick a random inventory slot
         int randomRow = UnityEngine.Random.Range(0, gridNumRows);
         int randomCol = UnityEngine.Random.Range(0, gridNumCols);
@@ -428,11 +431,16 @@ public class GeneralInventoryStructure : MonoBehaviour
         {
             //Damage fragment
             fragment.TakeDamage(1);
+            if(fragment.isDead) returnVal.y = 1;
+            returnVal.x = 1;
         }
         else
         {
             //Reduce flesh if there is no fragment protecting this spot
             RoguelikeGameplayController.AddFlesh(-1);
+            returnVal.z = 1;
         }
+
+        return returnVal;
     }
 }

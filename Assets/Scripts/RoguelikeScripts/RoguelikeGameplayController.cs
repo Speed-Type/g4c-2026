@@ -404,43 +404,9 @@ public class RoguelikeGameplayController : MonoBehaviour
         }
     }
 
+    private List<string> outputText;
     public void EndCombat(bool playerWon)
     {
-        //Set results text as returned from Node_Combat method
-        List<string> outputText = NodeManager.instance.playerNode.gameObject.GetComponent<Node_Combat>().GetResultsText(playerWon);
-        
-        //Add results for hits
-        if(snakeGameplayController.totalDamage > 0)
-        {
-            outputText.Add("You took " + snakeGameplayController.totalDamage + " point" + ((snakeGameplayController.totalDamage > 1) ? "s" : "") + " of damage. You may want to check your case.");
-        }
-        else
-        {
-            outputText.Add("You finished that encounter without taking any hits!");
-        }
-
-        if(playerWon) //Case 1: Player wins
-        {
-            //Change node to scavenge node
-            NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Scavenge);
-
-            //Upgrade to rare loot odds for this scavenge node
-            NodeManager.instance.playerNode.UpgradeLoot();
-        }
-        else //Case 2: Player loses
-        {
-            //Increase spider alertness
-            currentSpiderAlertness += 10;
-
-            //Add to results text
-            outputText.Add("The Spider gained 10 alertness.");
-
-            //Change node to empty node
-            NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Empty);
-        }
-
-        outputText.Add("...");
-
         //Visit the current node
         NodeManager.overrideVisitConditions = true; //Override so that we can access this node even as we're on it
         NodeManager.instance.playerNode.VisitNode();
@@ -465,10 +431,54 @@ public class RoguelikeGameplayController : MonoBehaviour
             Destroy(snakeGameplayController.snakeEnemy.gameObject);
 
             //Take all the damage from the combat (Must call it here so that the screenshake doesn't just go crazy)
+            int damagedFragments = 0;
+            int shatteredFragments = 0;
+            int fleshLost = 0;
             for(int i = 0; i < snakeGameplayController.totalDamage; i++)
             {
-                inventoryManager.TakeBattleDamage();
+                Vector3Int result = inventoryManager.TakeBattleDamage();
+                damagedFragments += result.x;
+                shatteredFragments += result.y;
+                fleshLost += result.z;
             }
+
+            //Set results text as returned from Node_Combat method
+            outputText = NodeManager.instance.playerNode.gameObject.GetComponent<Node_Combat>().GetResultsText(playerWon);
+            
+            //Add results for hits
+            if(snakeGameplayController.totalDamage > 0)
+            {
+                outputText.Add("You took " + snakeGameplayController.totalDamage + " point" + ((snakeGameplayController.totalDamage == 1) ? "" : "s") + " of damage.\n"
+                    + damagedFragments + " fragment" + ((damagedFragments == 1) ? "" : "s") + " were damaged.\n"
+                    + shatteredFragments + " fragment" + ((shatteredFragments == 1) ? "" : "s") + " were broken.\n"
+                    + fleshLost + " flesh was lost.");
+            }
+            else
+            {
+                outputText.Add("You finished that encounter without taking any hits!");
+            }
+
+            if(playerWon) //Case 1: Player wins
+            {
+                //Change node to scavenge node
+                NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Scavenge);
+
+                //Upgrade to rare loot odds for this scavenge node
+                NodeManager.instance.playerNode.UpgradeLoot();
+            }
+            else //Case 2: Player loses
+            {
+                //Increase spider alertness
+                currentSpiderAlertness += 10;
+
+                //Add to results text
+                outputText.Add("The Spider gained 10 alertness.");
+
+                //Change node to empty node
+                NodeManager.instance.ReplaceNode(NodeManager.instance.playerNode.gameObject, NodeTypes.Empty);
+            }
+
+            outputText.Add("...");
         }, () =>
         {
             //NOTE: The following code is run at the end of the cloud transition

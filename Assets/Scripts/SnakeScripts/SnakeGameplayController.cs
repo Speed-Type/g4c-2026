@@ -73,6 +73,7 @@ public class SnakeGameplayController : MonoBehaviour
     private float enemyHealthBarMaxWidth;
     [SerializeField] private Color enemyHealthBarFlashColor;
     [SerializeField] private TMP_Text timerText;
+    [SerializeField] private float timerTextWarningSizeMultiplier;
 
     [Header("Misc Variables for Resetting Game")]
     public Transform snakeStartTransform;
@@ -193,7 +194,18 @@ public class SnakeGameplayController : MonoBehaviour
         
         //Update fight timer display
         timerText.text = TimeSpan.FromSeconds(Math.Max(currentFightTime, 0f)).ToString(@"mm\:ss\.ff");
-        timerText.color = (currentFightTime < 15f) ? Color.red : Color.white;
+        if(currentFightTime < 15f)
+        {
+            timerText.color = Color.red;
+            float tempSize = 1 + timerTextWarningSizeMultiplier * ((15f - currentFightTime) / 15f);
+            timerText.gameObject.transform.localScale = new Vector3(tempSize, tempSize, 1);
+        }
+        else
+        {
+            timerText.color = Color.white;
+            timerText.gameObject.transform.localScale = new Vector3(1,1,1);
+        }
+
         if(currentFightTime < 0)
         {
             //End fight
