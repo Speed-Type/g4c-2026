@@ -782,13 +782,14 @@ MonoBehaviour:
   battleLength: 30
   enemyName: Pheidole Megacephala
   deathParticles: {fileID: 1873246491600875132, guid: f68f69434d5104fb4a83cce78c6c7861, type: 3}
+  damagedParticles: {fileID: 1873246491600875132, guid: 14f7874cc0497403f9925e0990be61b3, type: 3}
   moveSpeed: 3.5
   turnSpeed: 90
   wanderDistance: 2
   wanderRadius: 1.2
   wanderJitter: 40
   fleeRadius: 5
-  fleeWeight: 2.5
+  fleeWeight: 3
   fleeJumpTriggerDist: 2.5
   fleeJumpCooldown: 1.5
   jumpHeight: 3
@@ -801,6 +802,7 @@ MonoBehaviour:
   cooldownDuration: 1.2
   attackRange: 8
   attackInterval: 3
+  pressAdvantage: 1
   attackTelegraphParticle: {fileID: 7649109060383396268, guid: 1f5a82d3e88e6485da53c69c5489559c, type: 3}
   chargeMoveSpeed: 14
   chargeDuration: 0.5

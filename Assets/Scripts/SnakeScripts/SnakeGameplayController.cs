@@ -295,7 +295,7 @@ public class SnakeGameplayController : MonoBehaviour
     //Splits turning functions depending on cam mode
     private void HandleTurning()
     {
-        if (camMode == CameraMode.TopDown)
+        if(camMode == CameraMode.TopDown)
             TurnTopDown();
         else
             TurnMouseAim();
@@ -491,7 +491,7 @@ public class SnakeGameplayController : MonoBehaviour
 
     //Coroutine for shrinking a segment
     private bool isShrinking = false;
-    private float shrinkTime = 5f;
+    private float shrinkTime = 2f;
     private IEnumerator ShrinkCoroutine(int count)
     {
         isShrinking = false;
@@ -674,7 +674,7 @@ public class SnakeGameplayController : MonoBehaviour
         snakeEnemy.snakeController = this;
         snakeEnemy.snakeHead = transform;
         float randomAngle = UnityEngine.Random.Range(0, (float)Math.PI); //Set at random position at specified radius
-        snakeEnemy.ResetOpponent(new Vector3((float)Math.Sin(randomAngle) * enemySpawnRange, snakeStartTransform.position.y, (float)Math.Cos(randomAngle) * enemySpawnRange));
+        snakeEnemy.ResetOpponent(new Vector3((float)Math.Cos(randomAngle) * enemySpawnRange, snakeStartTransform.position.y, (float)Math.Sin(randomAngle) * enemySpawnRange));
 
         //Pull data from bug
         currentFightTime = snakeEnemy.battleLength;

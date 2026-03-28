@@ -1310,7 +1310,7 @@ MonoBehaviour:
   hitEffectLength: 3
   maxVignetteIntensity: 0.425
   stunEffect: {fileID: 1178688641}
-  enemySpawnRange: 8
+  enemySpawnRange: 10
   enemyBugEnum: 0
   snakeEnemy: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
@@ -1323,6 +1323,7 @@ MonoBehaviour:
   gameOverGraphicRT: {fileID: 1316875544}
   gameOverGraphicAppearT: 0.5
   endGameDelay: 3
+  stunTimer: 0
   isPlaying: 0
   currentFightTime: 0
   totalDamage: 0

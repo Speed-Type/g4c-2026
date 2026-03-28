@@ -15,6 +15,7 @@ public class SnakeEnemy : MonoBehaviour
 
     [Header("Effects")]
     public GameObject deathParticles;
+    public GameObject damagedParticles;
 
     [Header("Movement (General)")]
     public float moveSpeed    = 3.5f;
@@ -53,6 +54,8 @@ public class SnakeEnemy : MonoBehaviour
     public float attackRange = 8f;
     [Tooltip("Minimum seconds between attack attempts (across all attack types)")]
     public float attackInterval = 3f;
+    [Tooltip("Determines whether enemy will attack as soon as they're done fleeing")]
+    public bool pressAdvantage;
     [Tooltip("Particle effect for telegraphing an attack")]
     public GameObject attackTelegraphParticle;
 
@@ -162,7 +165,7 @@ public class SnakeEnemy : MonoBehaviour
         if(!snakeController.isPlaying) return;
 
         //Update timers
-        if(snakeController.stunTimer > 0)
+        if(snakeController.stunTimer <= 0)
             attackCooldownTimer -= Time.deltaTime;
         fleeJumpTimer -= Time.deltaTime;
         invincibilityTimer -= Time.deltaTime;
@@ -171,8 +174,6 @@ public class SnakeEnemy : MonoBehaviour
         ApplyGravity();
         ClampToGround();
         CheckBodyContact();
-
-        Debug.Log(state);
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -217,9 +218,6 @@ public class SnakeEnemy : MonoBehaviour
         //Check attack condition
         if(attackCooldownTimer <= 0f && DistToHead() < attackRange)
         {
-            //Spawn particle to telegraph attack intent
-            Instantiate(attackTelegraphParticle, transform.position, transform.rotation);
-
             PickNextAttack();
             LockTarget();
             TransitionTo(State.Windup);
@@ -239,11 +237,19 @@ public class SnakeEnemy : MonoBehaviour
     {
         float nearestDist = NearestSegmentDistance(out Vector3 nearestPos);
 
-        //Exit flee when clear
+        //Either exit flee or immediately attack when out of flee range
         if(nearestDist >= fleeRadius)
         {
-            TransitionTo(State.Wander);
-            return;
+            if(pressAdvantage && attackCooldownTimer <= 0f && DistToHead() < attackRange)
+            {
+                PickNextAttack();
+                LockTarget();
+                TransitionTo(State.Windup);
+            }
+            else
+            {
+                TransitionTo(State.Wander);
+            }
         }
 
         //Flee jump: if very close to a segment and grounded, leap away
@@ -258,7 +264,6 @@ public class SnakeEnemy : MonoBehaviour
         fleeDir.y = 0f;
         if(fleeDir.sqrMagnitude < 0.001f)
             fleeDir = new Vector3(Random.value - 0.5f, 0f, Random.value - 0.5f);
-        Debug.Log(fleeDir);
 
         float strength = 1f - Mathf.Clamp01(nearestDist / fleeRadius);
         Vector3 steer = fleeDir.normalized * strength * fleeWeight + WanderSteering() * (1f - strength) + WallSteering();
@@ -298,7 +303,7 @@ public class SnakeEnemy : MonoBehaviour
         //Dash in the locked direction
         transform.position += chargeDirection * chargeMoveSpeed * Time.deltaTime;
 
-        //Hit check against head.
+        //Hit check against head
         if(DistToHead() < chargeHitRadius)
         {
             OnPlayerHit?.Invoke(AttackType.Charge.ToString());
@@ -480,6 +485,9 @@ public class SnakeEnemy : MonoBehaviour
     //Randomly pick from the three attack types
     private void PickNextAttack()
     {
+        //Spawn particle to telegraph attack intent
+        Instantiate(attackTelegraphParticle, transform.position, transform.rotation);
+
         //TODO
         // You can weight these however you like, or make them conditional
         // (e.g. only JumpAtk if head is elevated, only Shoot beyond a range).
@@ -654,7 +662,7 @@ public class SnakeEnemy : MonoBehaviour
             isActive = false;
             snakeController.EndGame(true);
 
-            //Spawn particles
+            //Spawn death particles
             Instantiate(deathParticles, transform.position, Quaternion.Euler(-90, 0, 0));
         }
         else
@@ -662,6 +670,9 @@ public class SnakeEnemy : MonoBehaviour
             //Add iframes
             invincibilityTimer = maxInvincibility;
             invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
+
+            //Spawn damaged particles
+            Instantiate(damagedParticles, transform.position, Quaternion.Euler(-90, 0, 0));
         }
 
         //Update healthbar
