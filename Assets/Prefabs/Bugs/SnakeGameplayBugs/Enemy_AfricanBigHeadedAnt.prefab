@@ -786,8 +786,8 @@ MonoBehaviour:
   moveSpeed: 3.5
   turnSpeed: 90
   wanderDistance: 2
-  wanderRadius: 1.2
-  wanderJitter: 40
+  wanderRadius: 1.5
+  wanderJitter: 50
   fleeRadius: 5
   fleeWeight: 3
   fleeJumpTriggerDist: 2.5

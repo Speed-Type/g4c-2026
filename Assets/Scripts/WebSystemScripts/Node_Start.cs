@@ -6,6 +6,14 @@ public class Node_Start : Node
     //Start node is where the player starts
     private bool hasVisited = false; //note that this variable does not interfere/interact with the Node parent class's hasBeenVisited variable
 
+    private List<string> flavorText = new List<string>
+    {
+        "This is your start. There are plenty of places to go from here.",
+        "And so your journey begins.",
+        "New web, new food.",
+        "Life is dangerous for a little caterpillar. You should get going."
+    };
+
     protected override void Awake()
     {
         base.Awake();
@@ -40,7 +48,7 @@ public class Node_Start : Node
             if(hasVisited == false)
             {
                 hasVisited = true;
-                RoguelikeGameplayController.instance.dialogueBoxController.SetText(new List<string> {"Must feed.", "You should search for food."});
+                RoguelikeGameplayController.instance.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
             }
             else
             {

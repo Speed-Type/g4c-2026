@@ -48,12 +48,13 @@ public class SnakeCameraController : MonoBehaviour
     private CameraMode targetMode = CameraMode.TopDown;
     private float transitionT = 1f; // 0 = start of transition, 1 = done
 
-    // Snapshot of camera state at the START of a transition (for blending).
+    //Snapshot of camera state at the START of a transition (for blending)
     private Vector3 transitionFromPos;
     private Quaternion transitionFromRot;
 
     private Camera cam;
     private InputAction zoomAction;
+    [HideInInspector] public Transform cameraTarget;
 
     //Zoom: one value per mode, each in its own range
     //topDownZoom = current camera height  (within topDownZoomRange)
@@ -129,6 +130,19 @@ public class SnakeCameraController : MonoBehaviour
         }
     }
 
+    public void VictoryZoom(Transform enemyTransform)
+    {
+        chaseZoom = chaseZoomRange.x;
+        topDownZoom = topDownZoomRange.x;
+
+        cameraTarget = enemyTransform;
+    }
+
+    public void ResetCameraTarget()
+    {
+        cameraTarget = snakeHead;
+    }
+
     //----------------------------------------------------------------------------------------------------------------
 
     //Method to set mode as called in SnakeGameplayController
@@ -168,14 +182,14 @@ public class SnakeCameraController : MonoBehaviour
         {
             //topDownZoom drives height; lerped smoothly so scroll feels fluid
             float currentHeight = Mathf.Lerp(
-                transform.position.y - snakeHead.position.y,
+                transform.position.y - cameraTarget.position.y,
                 topDownZoom,
                 topDownZoomLerpSpeed * Time.deltaTime);
 
             return new Vector3(
-                snakeHead.position.x,
-                snakeHead.position.y + currentHeight,
-                snakeHead.position.z);
+                cameraTarget.position.x,
+                cameraTarget.position.y + currentHeight,
+                cameraTarget.position.z);
         }
         else
         {
@@ -200,7 +214,16 @@ public class SnakeCameraController : MonoBehaviour
         else
         {
             //Look at a point slightly ahead of and above the head so the camera doesn't stare at the ground during jumps
-            Vector3 lookTarget = snakeHead.position + snakeHead.forward * 4f + Vector3.up * 1f;
+            Vector3 lookTarget;
+            if(cameraTarget == snakeHead)
+            {
+                lookTarget = cameraTarget.position + cameraTarget.forward * 4f + Vector3.up * 1f;
+            }
+            else
+            {
+                lookTarget = cameraTarget.position;
+            }
+            
             Vector3 dir = lookTarget - transform.position;
             if(dir.sqrMagnitude < 0.001f) return transform.rotation;
             return Quaternion.LookRotation(dir);

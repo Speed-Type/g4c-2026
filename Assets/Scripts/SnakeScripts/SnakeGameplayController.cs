@@ -434,12 +434,13 @@ public class SnakeGameplayController : MonoBehaviour
             distSinceSample = positionSampleInterval; //Force first sample to avoid errors with other methods
         }
 
-        if(distSinceSample >= positionSampleInterval)
+        while(distSinceSample >= positionSampleInterval)
         {
             posHistory.Insert(0, transform.position); //Full 3D, captures jump arc
             distSinceSample = 0f;
-            TrimHistory();
         }
+
+        TrimHistory();
     }
 
     //Method to remove any no longer necessary saved position snapshots
@@ -703,6 +704,7 @@ public class SnakeGameplayController : MonoBehaviour
         for(int i = 0; i < initialSegmentCount; i++) SpawnSegment();
 
         //Setup camera
+        cameraController.ResetCameraTarget();
         ApplyCameraMode(camMode);
 
         //Make [title card]
@@ -770,6 +772,9 @@ public class SnakeGameplayController : MonoBehaviour
         if(playerWon) //Case 1: Player wins
         {
             //TODO: MAKE COOL GRAPHIC ON WIN
+
+            //Zoom in fully
+            cameraController.VictoryZoom(snakeEnemy.transform);
         }
         else //Case 2: Player loses
         {

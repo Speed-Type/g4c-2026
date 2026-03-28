@@ -392,7 +392,10 @@ public class SnakeEnemy : MonoBehaviour
     //Steering with random wander
     private Vector3 WanderSteering()
     {
-        wanderAngle += Random.Range(-wanderJitter, wanderJitter) * Time.deltaTime;
+        float headingAngle = Mathf.Atan2(heading.x, heading.z) * Mathf.Rad2Deg;
+        float drift = Random.Range(-wanderJitter, wanderJitter) * Time.deltaTime;
+        wanderAngle = Mathf.LerpAngle(wanderAngle + drift, headingAngle, 0.8f * Time.deltaTime);
+ 
         Vector3 circleCenter = transform.position + heading * wanderDistance;
         float rad = wanderAngle * Mathf.Deg2Rad;
         Vector3 target = circleCenter + new Vector3(Mathf.Cos(rad), 0f, Mathf.Sin(rad)) * wanderRadius;
