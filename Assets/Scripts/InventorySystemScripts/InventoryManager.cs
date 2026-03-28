@@ -39,7 +39,7 @@ public class InventoryManager : GeneralInventoryStructure
         float t = (float)newY / (inventoryNumCols - 1);
         float angle = Mathf.Lerp(0f, Mathf.PI, t);
 
-        float heightOffset = (newX + 1 - inventoryNumRows * 0.5f) * (caterpillarLength / inventoryNumRows);
+        float heightOffset = (newX - inventoryNumRows * 0.5f) * (caterpillarLength / inventoryNumRows);
 
         Vector3 localPos = new Vector3(
             Mathf.Cos(angle) * caterpillarRadius,

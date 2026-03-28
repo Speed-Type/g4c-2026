@@ -17499,7 +17499,7 @@ MonoBehaviour:
   playerModelTransform: {fileID: 2033165042}
   silkTuftGO: {fileID: 2079226398102025746, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
   caterpillarRadius: 0.7
-  caterpillarLength: 8
+  caterpillarLength: 10
 --- !u!114 &1880359813
 MonoBehaviour:
   m_ObjectHideFlags: 0
