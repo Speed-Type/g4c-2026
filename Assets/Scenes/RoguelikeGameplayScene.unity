@@ -1302,10 +1302,13 @@ MonoBehaviour:
   collectibleLayerMask:
     serializedVersion: 2
     m_Bits: 512
-  collisionRadius: 0.5
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  collisionRadius: 0.6
   collisionGracePeriod: 0.175
   selfCollisionIgnoredTailSegments: 3
-  maxInvincibility: 3
+  maxInvincibility: 2.5
   volume: {fileID: 832575518}
   hitEffectLength: 3
   maxVignetteIntensity: 0.425
@@ -18953,7 +18956,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.028
+      value: 0.061
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
       propertyPath: m_LocalRotation.w

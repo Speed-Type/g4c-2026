@@ -649,8 +649,14 @@ public class SnakeEnemy : MonoBehaviour
     //IMPORTANT: This is the method that is called when the enemy hits the player
     private void OnCaught()
     {
+        Debug.Log("Enemy has collided with player");
         //Check iframes
         if(invincibilityTimer > 0) return;
+
+        //Check if player is stunned, such that if the player is stunned the enemy won't take damage
+        if(snakeController.stunTimer > 0) return;
+
+        Debug.Log("Enemy took damage");
         
         //Do screenshake
         ScreenShake.instance.AddTrauma(0.25f);
@@ -668,8 +674,7 @@ public class SnakeEnemy : MonoBehaviour
         else
         {
             //Add iframes
-            invincibilityTimer = maxInvincibility;
-            invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
+            ActivateInvincibility();
 
             //Spawn damaged particles
             Instantiate(damagedParticles, transform.position, Quaternion.Euler(-90, 0, 0));
@@ -677,6 +682,12 @@ public class SnakeEnemy : MonoBehaviour
 
         //Update healthbar
         snakeController.UpdateEnemyHealthBar((float)currentHealth / maxHealth);
+    }
+
+    private void ActivateInvincibility()
+    {
+        invincibilityTimer = maxInvincibility;
+        invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -705,6 +716,8 @@ public class SnakeEnemy : MonoBehaviour
         heading = heading.normalized;
         currentHealth = maxHealth;
         TransitionTo(State.Wander);
+
+        ActivateInvincibility();
     }
 
     //----------------------------------------------------------------------------------------------------------------

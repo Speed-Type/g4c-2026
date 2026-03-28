@@ -39,6 +39,7 @@ public class SnakeGameplayController : MonoBehaviour
     [Header("Collision")]
     public LayerMask obstacleLayerMask;
     public LayerMask collectibleLayerMask;
+    public LayerMask enemyLayerMask;
     public float collisionRadius = 0.4f;
     [Tooltip("Seconds the player has to escape after first touching an obstacle before dying")]
     public float collisionGracePeriod = 0.2f;
@@ -494,7 +495,7 @@ public class SnakeGameplayController : MonoBehaviour
     private float shrinkTime = 2f;
     private IEnumerator ShrinkCoroutine(int count)
     {
-        isShrinking = false;
+        isShrinking = true;
         for(int i = 0; i < count; i++)
         {
             targetSegmentCount = Mathf.Max(1, targetSegmentCount - 1);
@@ -502,7 +503,7 @@ public class SnakeGameplayController : MonoBehaviour
             yield return new WaitForSeconds(shrinkTime / count);
         }
 
-        isShrinking = true; //Un-stun player if they were previously (like when damaged)
+        isShrinking = false;
     }
 
     //Method to set length by setting the target segments
@@ -575,6 +576,14 @@ public class SnakeGameplayController : MonoBehaviour
         Collider[] food = Physics.OverlapSphere(head, collisionRadius, collectibleLayerMask);
         foreach(var f in food)
             OnItemCollected(f.gameObject);
+
+        //Enemies (no grace period here either)
+        hits = Physics.OverlapSphere(head, collisionRadius, enemyLayerMask);
+        if(hits.Length > 0)
+        {
+            Debug.Log("player has collided with enemy");
+            OnPlayerDamage(3, shrinkTime, true);
+        }
  
         //Self-collision
         bool touchingSelf = false;
@@ -609,8 +618,7 @@ public class SnakeGameplayController : MonoBehaviour
         if(invincibilityTimer > 0) return; //If i frames are active, no damage
 
         //Add i frames
-        invincibilityTimer = maxInvincibility;
-        invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
+        ActivateInvincibility();
 
         //Apply stun
         if(stunApplied > 0)
@@ -637,6 +645,12 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Add to total hits
         totalDamage += damage;
+    }
+
+    private void ActivateInvincibility()
+    {
+        invincibilityTimer = maxInvincibility;
+        invincibilityFlash.StartInvincibilityFlash(maxInvincibility, 0.25f, 0.05f);
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -690,6 +704,9 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Setup camera
         ApplyCameraMode(camMode);
+
+        //Make [title card]
+        ActivateInvincibility();
     }
 
     //----------------------------------------------------------------------------------------------------------------
