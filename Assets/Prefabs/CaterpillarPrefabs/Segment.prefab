@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3837112521795782486}
   - component: {fileID: 9196836283853676591}
   - component: {fileID: 5385071556362289691}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Segment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,12 +109,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.43, y: 0.79019356, z: 1.2032044}
+  m_Center: {x: 0, y: -0.16490322, z: -0.026602149}
 --- !u!114 &5385071556362289691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +208,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FootPair
       objectReference: {fileID: 0}
+    - target: {fileID: 5210559724326151560, guid: 9fa07bbda8312417495ce99463c420ec, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484789540188643826, guid: 9fa07bbda8312417495ce99463c420ec, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6979616493042108595, guid: 9fa07bbda8312417495ce99463c420ec, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.416
@@ -235,6 +243,10 @@ PrefabInstance:
     - target: {fileID: 6979616493042108595, guid: 9fa07bbda8312417495ce99463c420ec, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752740686298599945, guid: 9fa07bbda8312417495ce99463c420ec, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -319,6 +331,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: f3b79b53f7a3f4797a9ac09cc4e5d7b7, type: 3}
       propertyPath: m_Name
       value: Segment
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: f3b79b53f7a3f4797a9ac09cc4e5d7b7, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

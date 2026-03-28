@@ -13,6 +13,9 @@ public class SnakeEnemy : MonoBehaviour
     public float battleLength = 30f;
     public string enemyName;
 
+    [Header("Effects")]
+    public GameObject deathParticles;
+
     [Header("Movement (General)")]
     public float moveSpeed    = 3.5f;
     public float turnSpeed    = 90f;
@@ -50,6 +53,8 @@ public class SnakeEnemy : MonoBehaviour
     public float attackRange = 8f;
     [Tooltip("Minimum seconds between attack attempts (across all attack types)")]
     public float attackInterval = 3f;
+    [Tooltip("Particle effect for telegraphing an attack")]
+    public GameObject attackTelegraphParticle;
 
     [Header("Attack (Charge)")]
     public float chargeMoveSpeed = 14f;
@@ -71,7 +76,10 @@ public class SnakeEnemy : MonoBehaviour
     [Tooltip("Head must be within this radius on landing for a hit")]
     public float jumpAtkHitRadius = 1.5f;
 
-    [Header("Collision detection (Body contact)")]
+    [Header("Collision detection (body contact)")]
+    [Tooltip("Layer that snake body segments are on. Used to filter overlap queries")]
+    public LayerMask segmentLayerMask;
+    [Tooltip("Fallback sphere radius if the opponent has no collider attached")]
     public float contactRadius = 0.6f;
 
     [Header("Health")]
@@ -126,6 +134,10 @@ public class SnakeEnemy : MonoBehaviour
     private InvincibilityFlash invincibilityFlash;
     private float invincibilityTimer;
 
+    //Cached reference to whatever collider shape is on this GameObject
+    //Read once in Start and used every frame in CheckBodyContact
+    private Collider hitCollider;
+
     //----------------------------------------------------------------------------------------------------------------
     
     void Awake()
@@ -140,6 +152,8 @@ public class SnakeEnemy : MonoBehaviour
         heading.y = 0f;
         heading = heading.sqrMagnitude < 0.01f ? Vector3.forward : heading.normalized;
         wanderAngle = Random.Range(0f, 360f);
+
+        hitCollider = GetComponent<Collider>();
     }
 
     void Update()
@@ -148,7 +162,8 @@ public class SnakeEnemy : MonoBehaviour
         if(!snakeController.isPlaying) return;
 
         //Update timers
-        attackCooldownTimer -= Time.deltaTime;
+        if(snakeController.stunTimer > 0)
+            attackCooldownTimer -= Time.deltaTime;
         fleeJumpTimer -= Time.deltaTime;
         invincibilityTimer -= Time.deltaTime;
 
@@ -156,6 +171,8 @@ public class SnakeEnemy : MonoBehaviour
         ApplyGravity();
         ClampToGround();
         CheckBodyContact();
+
+        Debug.Log(state);
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -200,6 +217,9 @@ public class SnakeEnemy : MonoBehaviour
         //Check attack condition
         if(attackCooldownTimer <= 0f && DistToHead() < attackRange)
         {
+            //Spawn particle to telegraph attack intent
+            Instantiate(attackTelegraphParticle, transform.position, transform.rotation);
+
             PickNextAttack();
             LockTarget();
             TransitionTo(State.Windup);
@@ -219,7 +239,7 @@ public class SnakeEnemy : MonoBehaviour
     {
         float nearestDist = NearestSegmentDistance(out Vector3 nearestPos);
 
-        // Exit flee when clear.
+        //Exit flee when clear
         if(nearestDist >= fleeRadius)
         {
             TransitionTo(State.Wander);
@@ -230,17 +250,18 @@ public class SnakeEnemy : MonoBehaviour
         if(nearestDist < fleeJumpTriggerDist && isGrounded && fleeJumpTimer <= 0f)
         {
             verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
-            isGrounded       = false;
-            fleeJumpTimer    = fleeJumpCooldown;
+            isGrounded = false;
+            fleeJumpTimer = fleeJumpCooldown;
         }
 
         Vector3 fleeDir = (transform.position - nearestPos);
         fleeDir.y = 0f;
         if(fleeDir.sqrMagnitude < 0.001f)
             fleeDir = new Vector3(Random.value - 0.5f, 0f, Random.value - 0.5f);
+        Debug.Log(fleeDir);
 
         float strength = 1f - Mathf.Clamp01(nearestDist / fleeRadius);
-        Vector3 steer = fleeDir.normalized * strength * fleeWeight + WallSteering();
+        Vector3 steer = fleeDir.normalized * strength * fleeWeight + WanderSteering() * (1f - strength) + WallSteering();
         MoveWithSteering(steer);
     }
 
@@ -255,7 +276,7 @@ public class SnakeEnemy : MonoBehaviour
         //Face the locked target during windup so the player can read intent
         Vector3 toTarget = lockedTarget - transform.position;
         toTarget.y = 0f;
-        if (toTarget.sqrMagnitude > 0.001f)
+        if(toTarget.sqrMagnitude > 0.001f)
             FaceDirection(toTarget.normalized, turnSpeed * 2f);
 
         if(stateTimer >= windupDuration)
@@ -561,22 +582,61 @@ public class SnakeEnemy : MonoBehaviour
 
     private void CheckBodyContact()
     {
-        var segs = snakeController.segments;
-        if(segs == null) return;
-
-        Vector3 myPos = transform.position;
-        foreach(var seg in segs)
+        //Dispatch to the right overlap query based on whatever collider shape is attached to this GameObject
+        //If there's no collider, fall back to a sphere using contactRadius.
+        bool hit = hitCollider switch
         {
-            if(seg == null) continue;
-            Vector3 segFlat = seg.transform.position;
-            segFlat.y = myPos.y;
-            if(Vector3.Distance(myPos, segFlat) < contactRadius)
-            {
-                OnCaught();
-                return;
-            }
-        }
+            BoxCollider box => CheckBox(box),
+            CapsuleCollider cap => CheckCapsule(cap),
+            SphereCollider sph => CheckSphere(sph),
+            null => CheckFallbackSphere(),
+            _ => CheckFallbackSphere(),
+        };
+ 
+        if(hit) OnCaught();
     }
+
+    private bool CheckBox(BoxCollider box)
+    {
+        //World-space centre and half-extents, accounting for scale and rotation.
+        Vector3 worldCenter = box.transform.TransformPoint(box.center);
+        Vector3 halfExtents = Vector3.Scale(box.size * 0.5f, box.transform.lossyScale);
+        Quaternion orientation = box.transform.rotation;
+ 
+        return Physics.OverlapBox(worldCenter, halfExtents, orientation, segmentLayerMask).Length > 0;
+    }
+ 
+    private bool CheckCapsule(CapsuleCollider cap)
+    {
+        //Reconstruct the two sphere centres of the capsule in world space.
+        float worldRadius = cap.radius * Mathf.Max(cap.transform.lossyScale.x, cap.transform.lossyScale.z);
+        float halfHeight = Mathf.Max(0f, cap.height * 0.5f * cap.transform.lossyScale.y - worldRadius);
+ 
+        //Capsule direction: 0=X, 1=Y, 2=Z
+        Vector3 axis = cap.direction switch
+        {
+            0 => cap.transform.right,
+            2 => cap.transform.forward,
+            _ => cap.transform.up,
+        };
+ 
+        Vector3 worldCenter = cap.transform.TransformPoint(cap.center);
+        Vector3 point1 = worldCenter + axis * halfHeight;
+        Vector3 point2 = worldCenter - axis * halfHeight;
+ 
+        return Physics.OverlapCapsule(point1, point2, worldRadius, segmentLayerMask).Length > 0;
+    }
+ 
+    private bool CheckSphere(SphereCollider sph)
+    {
+        Vector3 worldCenter = sph.transform.TransformPoint(sph.center);
+        float worldRadius = sph.radius * Mathf.Max(sph.transform.lossyScale.x, sph.transform.lossyScale.y, sph.transform.lossyScale.z);
+ 
+        return Physics.OverlapSphere(worldCenter, worldRadius, segmentLayerMask).Length > 0;
+    }
+
+    private bool CheckFallbackSphere() =>
+        Physics.OverlapSphere(transform.position, contactRadius, segmentLayerMask).Length > 0;
 
     //IMPORTANT: This is the method that is called when the enemy hits the player
     private void OnCaught()
@@ -593,6 +653,9 @@ public class SnakeEnemy : MonoBehaviour
         {
             isActive = false;
             snakeController.EndGame(true);
+
+            //Spawn particles
+            Instantiate(deathParticles, transform.position, Quaternion.Euler(-90, 0, 0));
         }
         else
         {
@@ -642,16 +705,20 @@ public class SnakeEnemy : MonoBehaviour
     {
         Gizmos.color = new Color(1f, 0.4f, 0.1f, 0.25f);
         Gizmos.DrawWireSphere(transform.position, fleeRadius);
-
+ 
+        //Contact shape mirrors whatever CheckBodyContact will use
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, contactRadius);
-
+        if (hitCollider != null)
+            Gizmos.DrawWireCube(hitCollider.bounds.center, hitCollider.bounds.size);
+        else
+            Gizmos.DrawWireSphere(transform.position, contactRadius);
+ 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-
+ 
         Gizmos.color = new Color(1f, 1f, 0f, 0.15f);
         Gizmos.DrawWireCube(arenaCenter, arenaHalfExtents * 2f);
-
+ 
         Gizmos.color = Color.cyan;
         Gizmos.DrawRay(transform.position, heading * 2f);
     }

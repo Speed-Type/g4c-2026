@@ -9,6 +9,7 @@ public class InvincibilityFlash : MonoBehaviour
     private float endInterval = 0.05f;
 
     private float elapsed;
+    private int flashTween;
 
     public void StartInvincibilityFlash(float invincibilityDuration, float startInterval, float endInterval)
     {
@@ -17,6 +18,9 @@ public class InvincibilityFlash : MonoBehaviour
         this.invincibilityDuration = invincibilityDuration;
         this.startInterval = startInterval;
         this.endInterval = endInterval;
+
+        //Stop current tween
+        LeanTween.cancel(flashTween);
 
         //Call first function call
         FlashStep();
@@ -38,10 +42,11 @@ public class InvincibilityFlash : MonoBehaviour
 
         target.SetActive(!target.activeSelf);
 
-        LeanTween.delayedCall(interval, () =>
+        flashTween = LeanTween.delayedCall(interval, () =>
         {
             elapsed += interval;
             FlashStep();
-        });
+        })
+        .id;
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1451314940431158383}
   - component: {fileID: 4671504109509808827}
   - component: {fileID: 1357017958689030181}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Thorax
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 6739824749239776282}
   - component: {fileID: 3872745808383962892}
   - component: {fileID: 6835517227098291990}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head_Minor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 581156656045001993}
   - component: {fileID: 2673066470887978806}
   - component: {fileID: 9196931012934686783}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Antenna (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 946366380276527004}
   - component: {fileID: 1157597084817238942}
   - component: {fileID: 5037513786159768311}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Antenna
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 7905152810593895385}
   - component: {fileID: 4711429476824871609}
   - component: {fileID: 6267699618077501717}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Abdomen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -465,7 +465,7 @@ GameObject:
   - component: {fileID: 5378701380823749293}
   - component: {fileID: 3226154882847071779}
   - component: {fileID: 853213570162831509}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -557,7 +557,7 @@ GameObject:
   - component: {fileID: 3109880012332408930}
   - component: {fileID: 3821847444326720789}
   - component: {fileID: 542886927370461803}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -649,7 +649,7 @@ GameObject:
   - component: {fileID: 6078254601739323814}
   - component: {fileID: 5611144551779479517}
   - component: {fileID: 2779168571775232282}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,7 +741,8 @@ GameObject:
   - component: {fileID: 4212571102583227297}
   - component: {fileID: 2278146632102574700}
   - component: {fileID: 672404525005778356}
-  m_Layer: 0
+  - component: {fileID: 5158669367291163627}
+  m_Layer: 8
   m_Name: Enemy_AfricanBigHeadedAnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -780,6 +781,7 @@ MonoBehaviour:
   snakeHead: {fileID: 0}
   battleLength: 30
   enemyName: Pheidole Megacephala
+  deathParticles: {fileID: 1873246491600875132, guid: f68f69434d5104fb4a83cce78c6c7861, type: 3}
   moveSpeed: 3.5
   turnSpeed: 90
   wanderDistance: 2
@@ -799,6 +801,7 @@ MonoBehaviour:
   cooldownDuration: 1.2
   attackRange: 8
   attackInterval: 3
+  attackTelegraphParticle: {fileID: 7649109060383396268, guid: 1f5a82d3e88e6485da53c69c5489559c, type: 3}
   chargeMoveSpeed: 14
   chargeDuration: 0.5
   chargeHitRadius: 1.2
@@ -807,6 +810,9 @@ MonoBehaviour:
   projectileLeadFactor: 0.4
   jumpAtkLeadFactor: 0.6
   jumpAtkHitRadius: 1.5
+  segmentLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
   contactRadius: 0.6
   maxHealth: 3
   currentHealth: 0
@@ -825,6 +831,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InvincibilityFlash
   target: {fileID: 7286916460917828699}
+--- !u!65 &5158669367291163627
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6951296289758646445}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7800001, y: 1.4262054, z: 5.3190393}
+  m_Center: {x: 0, y: 0.3196537, z: -0.25572222}
 --- !u!1 &7286916460917828699
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +861,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7859208149065628600}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -878,7 +905,7 @@ GameObject:
   - component: {fileID: 5817116186554347607}
   - component: {fileID: 750126744024713858}
   - component: {fileID: 2756628329194402763}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -970,7 +997,7 @@ GameObject:
   - component: {fileID: 717859578822468508}
   - component: {fileID: 185258988910116747}
   - component: {fileID: 1903289111057614926}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1062,7 +1089,7 @@ GameObject:
   - component: {fileID: 2220358249580712810}
   - component: {fileID: 7775457078141519844}
   - component: {fileID: 2936485105248251220}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Leg (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

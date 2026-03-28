@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class SnakeGameplayController : MonoBehaviour
 {
@@ -45,6 +47,12 @@ public class SnakeGameplayController : MonoBehaviour
     public float maxInvincibility;
 
     [Header("Effects")]
+    public Volume volume;
+    public float hitEffectLength;
+    private ChromaticAberration chromaticAberration;
+    private Vignette vignette;
+    public float maxVignetteIntensity;
+    private float originalVignetteIntensity;
     public GameObject stunEffect;
 
     [Header("Enemy")]
@@ -114,7 +122,8 @@ public class SnakeGameplayController : MonoBehaviour
     private InvincibilityFlash invincibilityFlash;
 
     //Status
-    private float stunTimer;
+    [HideInInspector] public float stunTimer;
+    private float hitEffectTimer;
     
     //Camera mode
     public enum CameraMode {TopDown, Chase}
@@ -147,6 +156,18 @@ public class SnakeGameplayController : MonoBehaviour
         //Initialize health bar variables
         enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
+        
+        //Initialize post-processing references
+        if(volume.profile.TryGet(out chromaticAberration))
+        {
+            chromaticAberration.intensity.value = 0f;
+        }
+
+        if(volume.profile.TryGet(out vignette))
+        {
+            originalVignetteIntensity = vignette.intensity.value;
+        }
+        
 
         //Initialize other references
         invincibilityFlash = GetComponent<InvincibilityFlash>();
@@ -154,6 +175,14 @@ public class SnakeGameplayController : MonoBehaviour
 
     void Update()
     {
+        hitEffectTimer -= Time.deltaTime;
+
+        if(hitEffectTimer > 0)
+        {
+            chromaticAberration.intensity.value = hitEffectTimer / hitEffectLength;
+            vignette.intensity.value = originalVignetteIntensity + (hitEffectTimer / hitEffectLength) * (maxVignetteIntensity - originalVignetteIntensity);
+        }
+
         if(!isPlaying) return;
 
         //Update timers
@@ -175,6 +204,7 @@ public class SnakeGameplayController : MonoBehaviour
         {
             if(stunEffect.activeSelf)
             {
+                SetLegMovement(true); //Reactivate legs
                 stunEffect.SetActive(false);
                 Debug.Log("stun hid");
             }
@@ -461,7 +491,7 @@ public class SnakeGameplayController : MonoBehaviour
 
     //Coroutine for shrinking a segment
     private bool isShrinking = false;
-    private float shrinkTime = 2f;
+    private float shrinkTime = 5f;
     private IEnumerator ShrinkCoroutine(int count)
     {
         isShrinking = false;
@@ -494,12 +524,16 @@ public class SnakeGameplayController : MonoBehaviour
 
         GameObject seg = Instantiate(segmentPrefab, spawnPos, Quaternion.identity, transform.parent); //Parented under same transform as snake head
         seg.name = $"Segment_{segments.Count}"; //Set name
+
+        //Set legs on this segment
         seg.GetComponent<CaterpillarFootAnim>().phaseOffset = idx * 0.6f;
         seg.GetComponent<CaterpillarFootAnim>().speed = moveSpeed * 3f;
 
-        //Disable physics collider on segments
+        //Keep the collider enabled but set it as a trigger so it doesn't interfere with physics
+        //Opponent's overlap queries need to find the trigger
+        //Self-collision is still handled manually via distance checks
         if(seg.TryGetComponent<Collider>(out var col))
-            col.enabled = false;
+            col.isTrigger = true;
 
         segments.Add(seg);
     }
@@ -530,7 +564,7 @@ public class SnakeGameplayController : MonoBehaviour
             obstacleContactTimer += Time.deltaTime;
             if(obstacleContactTimer >= collisionGracePeriod)
             {
-                OnPlayerDamage(3, 0, true);
+                OnPlayerDamage(3, shrinkTime, true);
                 return;
             }
         }
@@ -584,6 +618,7 @@ public class SnakeGameplayController : MonoBehaviour
             stunTimer = Math.Max(0, stunTimer); //Reset to 0 if negative
             stunTimer += stunApplied;
 
+            SetLegMovement(false); //Stop legs
             stunEffect.SetActive(true); //Display stun effect
             Debug.Log("stun shown");
         }
@@ -593,6 +628,12 @@ public class SnakeGameplayController : MonoBehaviour
         {
             BeginShrink(targetSegmentCount - initialSegmentCount);
         }
+
+        //Screenshake
+        ScreenShake.instance.AddTrauma(0.25f);
+
+        //Hit effects
+        hitEffectTimer = hitEffectLength;
 
         //Add to total hits
         totalDamage += damage;
@@ -613,6 +654,7 @@ public class SnakeGameplayController : MonoBehaviour
         isShrinking = false;
         totalDamage = 0;
         gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
+        ResetHitEffects();
 
         //Clear segments
         foreach(var s in segments) Destroy(s);
@@ -631,7 +673,7 @@ public class SnakeGameplayController : MonoBehaviour
         snakeEnemy = Instantiate(enemyGOToInstantiate, transform.parent).GetComponent<SnakeEnemy>();
         snakeEnemy.snakeController = this;
         snakeEnemy.snakeHead = transform;
-        float randomAngle = UnityEngine.Random.Range(0, (float)Math.PI * 2); //Set at random position at specified radius
+        float randomAngle = UnityEngine.Random.Range(0, (float)Math.PI); //Set at random position at specified radius
         snakeEnemy.ResetOpponent(new Vector3((float)Math.Sin(randomAngle) * enemySpawnRange, snakeStartTransform.position.y, (float)Math.Cos(randomAngle) * enemySpawnRange));
 
         //Pull data from bug
@@ -670,6 +712,21 @@ public class SnakeGameplayController : MonoBehaviour
         StatDisplay.UpdateFillBar(enemyHealthBarFill, desiredPercentage, enemyHealthBarMaxWidth, enemyHealthBarFlashColor, Color.white);
     }
 
+    //Method to set all legs' scripts active or inactive
+    private void SetLegMovement(bool enable)
+    {
+        foreach(GameObject segment in segments)
+        {
+            segment.GetComponent<CaterpillarFootAnim>().enabled = enable;
+        }
+    }
+
+    private void ResetHitEffects()
+    {
+        chromaticAberration.intensity.value = 0f;
+        vignette.intensity.value = originalVignetteIntensity;
+    }
+
     //----------------------------------------------------------------------------------------------------------------
     
     //Integration with rg gameplay
@@ -691,10 +748,7 @@ public class SnakeGameplayController : MonoBehaviour
         ReleaseCursor();
 
         //Stop feet movement
-        foreach(GameObject segment in segments)
-        {
-            segment.GetComponent<CaterpillarFootAnim>().enabled = false;
-        }
+        SetLegMovement(false);
 
         if(playerWon) //Case 1: Player wins
         {
@@ -714,6 +768,7 @@ public class SnakeGameplayController : MonoBehaviour
         LeanTween.delayedCall(endGameDelay, () =>
         {
             RoguelikeGameplayController.instance.EndCombat(playerWon);
+            ResetHitEffects(); //Reset any residual changes
         });
     }
 
