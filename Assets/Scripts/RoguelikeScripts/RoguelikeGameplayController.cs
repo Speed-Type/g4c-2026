@@ -58,6 +58,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     private Vector2 biteBackgroundOriginalPos;
     private int biteBackgroundPopupTween;
     [SerializeField] private TMP_Text bitesRemainingText;
+    [SerializeField] private TMP_Text canSwapBitesIndicator;
 
     [Header("References for Placement of Inventory and Loot Systems")]
     [SerializeField] private Transform hiddenPosition;
@@ -92,7 +93,6 @@ public class RoguelikeGameplayController : MonoBehaviour
         allButtons = new List<PlayerOptionButtons> {PlayerOptionButtons.Map, PlayerOptionButtons.Inventory, PlayerOptionButtons.Loot, PlayerOptionButtons.Combat, PlayerOptionButtons.Instar};
         inventoryManager = GetComponent<InventoryManager>();
         biteBackgroundOriginalPos = biteBackgroundRectTransform.localPosition;
-        playerHasStartedLooting = false;
         equippedBites = new List<int> {0};
     }
 
@@ -105,6 +105,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         statSystemGO.SetActive(false);
         HideBites();
         combatUI.SetActive(false);
+        SetPlayerHasStartedLooting(false);
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
@@ -532,7 +533,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         instance.remainingBites--;
         instance.currentSpiderAlertness++;
 
-        playerHasStartedLooting = true;
+        SetPlayerHasStartedLooting(true);
     }
 
     public static void ReloadBite_Static()
@@ -587,6 +588,12 @@ public class RoguelikeGameplayController : MonoBehaviour
         biteList[equippedBites[^1]].SetActive(true);
         Vector3 offset = biteList[equippedBites[^1]].GetComponent<Fragment_Bite>().GetBiteOffset();
         biteList[equippedBites[^1]].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
+    }
+
+    public static void SetPlayerHasStartedLooting(bool val)
+    {
+        playerHasStartedLooting = val;
+        instance.canSwapBitesIndicator.text = val ? "[Bite locked]" : "[Bite unlocked]";
     }
 
     //Method to calculate whether the caterpillar survives

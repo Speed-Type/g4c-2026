@@ -65,7 +65,7 @@ public class LootManager : GeneralInventoryStructure
     public void GenerateLoot(BugLoot bugLoot)
     {
         //Set var in rgcontroller
-        RoguelikeGameplayController.playerHasStartedLooting = false;
+        RoguelikeGameplayController.SetPlayerHasStartedLooting(false);
 
         //Generate inventory slots
         GenerateInventory(bugLoot.numRows, bugLoot.numCols);
