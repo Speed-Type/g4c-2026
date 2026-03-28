@@ -173,16 +173,17 @@ public class SnakeGameplayController : MonoBehaviour
 
         if(stunTimer <= 0)
         {
+            if(stunEffect.activeSelf)
+            {
+                stunEffect.SetActive(false);
+                Debug.Log("stun hid");
+            }
+
             HandleTurning();
             HandleJump();
             MoveHead();
             UpdateSegmentPositions();
             CheckCollisions();
-
-            if(stunEffect.activeSelf)
-            {
-                stunEffect.SetActive(false);
-            }
         }
 
         AdjustSegmentCount();
@@ -582,6 +583,9 @@ public class SnakeGameplayController : MonoBehaviour
         {
             stunTimer = Math.Max(0, stunTimer); //Reset to 0 if negative
             stunTimer += stunApplied;
+
+            stunEffect.SetActive(true); //Display stun effect
+            Debug.Log("stun shown");
         }
 
         //Remove all of snake segments aside from initial ones
@@ -685,6 +689,12 @@ public class SnakeGameplayController : MonoBehaviour
         //End inputs
         DisableInput();
         ReleaseCursor();
+
+        //Stop feet movement
+        foreach(GameObject segment in segments)
+        {
+            segment.GetComponent<CaterpillarFootAnim>().enabled = false;
+        }
 
         if(playerWon) //Case 1: Player wins
         {

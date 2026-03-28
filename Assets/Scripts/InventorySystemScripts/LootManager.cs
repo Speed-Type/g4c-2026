@@ -113,17 +113,8 @@ public class LootManager : GeneralInventoryStructure
                 numTriesSoFar++;
             }
 
-            if(placementSuccessful)
-            {
-                //If placement successful, TBD
-                
-            }
-            else
-            {
-                //If unsuccessful, destroy that fragment
-                
-                Destroy(newFragmentGO);
-            }
+            //If unsuccessful, destroy that fragment
+            if(!placementSuccessful) Destroy(newFragmentGO);
         }
 
         //Loop through inventory slots
@@ -135,7 +126,6 @@ public class LootManager : GeneralInventoryStructure
                 if(inventorySlotArray[row,col].GetFragment() == null)
                 {
                     //Random chance to make it a flesh
-                    //TODO: Make battle loot better than scavenge loot
                     if(Random.Range(0f,1f) < bugLoot.scavengeFleshChance)
                     {
                         //Loop through possible fleshes to spawn and spawn the first one possible
