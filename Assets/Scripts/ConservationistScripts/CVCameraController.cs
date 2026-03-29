@@ -36,7 +36,7 @@ public class CVCameraController : MonoBehaviour
         rotateLeftAction = map.FindAction("Left");
         rotateRightAction = map.FindAction("Right");
 
-        rotateLeftAction.performed   += _ => StartPan(-1);
+        rotateLeftAction.performed += _ => StartPan(-1);
         rotateRightAction.performed += _ => StartPan(1);
     }
     
@@ -49,7 +49,7 @@ public class CVCameraController : MonoBehaviour
     //------------------------------------------------------------------------------------------
 
     public void PanRight() => StartPan(+1);
-    public void PanLeft()  => StartPan(-1);
+    public void PanLeft() => StartPan(-1);
 
     public void JumpToWall(int wallIndex)
     {

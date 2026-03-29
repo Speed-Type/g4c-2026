@@ -96,9 +96,11 @@ public class InteractableObject : MonoBehaviour, IPointerClickHandler, IPointerE
 
     //------------------------------------------------------------------------------------------
 
+    //Methods to trigger interactions directly from script
+
     public void TriggerInteraction()
     {
-        if (!IsInteractable()) return;
+        if(!IsInteractable()) return;
         OnPointerClick(null);
     }
 

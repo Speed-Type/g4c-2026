@@ -1483,6 +1483,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""037bbf6c-fa05-4251-9b45-c0abc10c4ca1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1527,6 +1536,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""92abbebe-8688-4d77-9a42-55876fd833be"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Escape"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1635,6 +1655,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Conservationist = asset.FindActionMap("Conservationist", throwIfNotFound: true);
         m_Conservationist_Left = m_Conservationist.FindAction("Left", throwIfNotFound: true);
         m_Conservationist_Right = m_Conservationist.FindAction("Right", throwIfNotFound: true);
+        m_Conservationist_Escape = m_Conservationist.FindAction("Escape", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -2294,6 +2315,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IConservationistActions> m_ConservationistActionsCallbackInterfaces = new List<IConservationistActions>();
     private readonly InputAction m_Conservationist_Left;
     private readonly InputAction m_Conservationist_Right;
+    private readonly InputAction m_Conservationist_Escape;
     /// <summary>
     /// Provides access to input actions defined in input action map "Conservationist".
     /// </summary>
@@ -2313,6 +2335,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Conservationist/Right".
         /// </summary>
         public InputAction @Right => m_Wrapper.m_Conservationist_Right;
+        /// <summary>
+        /// Provides access to the underlying input action "Conservationist/Escape".
+        /// </summary>
+        public InputAction @Escape => m_Wrapper.m_Conservationist_Escape;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2345,6 +2371,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
+            @Escape.started += instance.OnEscape;
+            @Escape.performed += instance.OnEscape;
+            @Escape.canceled += instance.OnEscape;
         }
 
         /// <summary>
@@ -2362,6 +2391,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
+            @Escape.started -= instance.OnEscape;
+            @Escape.performed -= instance.OnEscape;
+            @Escape.canceled -= instance.OnEscape;
         }
 
         /// <summary>
@@ -2708,5 +2740,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Escape" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnEscape(InputAction.CallbackContext context);
     }
 }

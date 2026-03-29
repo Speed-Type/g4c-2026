@@ -101,14 +101,14 @@ public class ComputerOS : MonoBehaviour
     // Unity lifecycle
     // ──────────────────────────────────────────────────────────────────────
 
-    private void Awake()
+    void Awake()
     {
         SetGroup(bootScreen, false, instant: true);
         SetGroup(desktop, false, instant: true);
         SetGroup(taskbar, false, instant: true);
     }
 
-    private void Update()
+    void Update()
     {
         //Fun little clock label
         if(isPowered) clockLabel.text = System.DateTime.Now.ToString("HH:mm");
