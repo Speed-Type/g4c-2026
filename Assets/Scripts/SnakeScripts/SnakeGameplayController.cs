@@ -20,6 +20,7 @@ public class SnakeGameplayController : MonoBehaviour
     public float positionSampleInterval = 0.4f;
 
     [Header("Movement")]
+    public float startingMoveSpeed = 6f;
     public float moveSpeed = 6f;
 
     [Header("Chase Cam / Mouse-Aim")]
@@ -66,6 +67,7 @@ public class SnakeGameplayController : MonoBehaviour
     public float currentCharge;
     public Card currentCard;
     public Image chargeFillIndicator;
+    public CardUI cardUI;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -288,6 +290,7 @@ public class SnakeGameplayController : MonoBehaviour
         //Play card
         currentCard.ActivateCard();
         currentCard = Deck.instance.DrawCard();
+        cardUI.UpdateCardDisplay(currentCard);
         currentCharge = 0;
     }
 
@@ -776,6 +779,7 @@ public class SnakeGameplayController : MonoBehaviour
         totalDamage = 0;
         odometer = 0f;
         jumpQueued = false;
+        moveSpeed = startingMoveSpeed;
         gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
         ResetHitEffects();
 
@@ -821,6 +825,7 @@ public class SnakeGameplayController : MonoBehaviour
         //Draw first card
         Deck.instance.ResetDeck();
         currentCard = Deck.instance.DrawCard();
+        cardUI.UpdateCardDisplay(currentCard);
     }
 
     //----------------------------------------------------------------------------------------------------------------

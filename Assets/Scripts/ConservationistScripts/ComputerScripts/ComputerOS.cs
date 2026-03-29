@@ -4,36 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// The desktop "operating system" living on the world-space monitor canvas.
-///
-/// Manages:
-///   • Boot / shutdown sequence
-///   • Desktop icons that open registered apps
-///   • A taskbar showing open apps and a clock
-///   • App window layering (bring-to-front on click)
-///
-/// ── Canvas hierarchy expected ───────────────────────────────────────────
-///
-///   ScreenCanvas  (World Space Canvas, ComputerOS here)
-///     ├── BootScreen          (CanvasGroup)  — loading bar + logo
-///     ├── Desktop             (CanvasGroup)
-///     │     ├── Wallpaper     (Image)
-///     │     ├── IconGrid      (GridLayoutGroup)  ← desktop icons spawn here
-///     │     └── WindowLayer   (RectTransform)    ← app windows spawn here
-///     └── Taskbar             (CanvasGroup)
-///           ├── StartLabel    (TMP_Text)
-///           ├── OpenAppList   (HorizontalLayoutGroup) ← taskbar buttons
-///           └── ClockLabel    (TMP_Text)
-///
-/// ── App prefab expected ─────────────────────────────────────────────────
-///
-///   AppWindow  (RectTransform, CanvasGroup)
-///     ├── TitleBar  (Image, draggable)
-///     │     ├── TitleLabel  (TMP_Text)
-///     │     └── CloseButton (Button)
-///     └── ContentArea (the AppBase subclass goes here)
-///
-
 public class ComputerOS : MonoBehaviour
 {
     //------------------------------------------------------------------------------------------

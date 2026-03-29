@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f65b568e4a34d6c9fcdd272955fd6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fragment_AfricanBigHeadedAnt_Thorax
+  currentHealth: 0
   graphicGO: {fileID: 5873005190610393758}
   destroyedFragmentColor: {r: 0.6039216, g: 0.19607843, b: 0.19607843, a: 0.7647059}
   healthIndicator: {fileID: 4498893449156508615}
@@ -174,6 +175,8 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   isEquipped: 0
+  isDead: 0
+  cardIcon: {fileID: 21300000, guid: 2d94ef0aff6924748a3a5109616c4e79, type: 3}
 --- !u!1 &5873005190610393758
 GameObject:
   m_ObjectHideFlags: 0

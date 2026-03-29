@@ -7,12 +7,17 @@ public class Card
     public string cardName;
     public Sprite cardSprite;
     public string cardDescription;
-    private Action cardEffect;
+    public Action cardEffect;
 
-    public void SetEffect(Action action)
+    public enum Rarity
     {
-        cardEffect = action;
+        Common,
+        Uncommon,
+        Rare,
+        Epic,
+        Legendary
     }
+    public Rarity rarity;
     
     //Method to activate this card's effects
     public void ActivateCard()

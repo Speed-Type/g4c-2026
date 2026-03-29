@@ -12,15 +12,8 @@ public class Deck : MonoBehaviour
     public List<Card> drawPile = new();
     public List<Card> discardPile = new();
 
-    [Header("Card UI")]
-    public TMP_Text cardTitleText;
-    public Image cardIconImage;
-    public TMP_Text cardDescriptionText;
-
     [Header("Default card")]
-    public string defaultCardName;
     public Sprite defaultCardSprite;
-    public string defaultCardDescription;
     private Card defaultCard;
 
     void Awake()
@@ -31,14 +24,12 @@ public class Deck : MonoBehaviour
         defaultCard = new Card
         {
             cooldown = 5f,
-            cardName = defaultCardName,
+            cardName = "Resilient Growth",
             cardSprite = defaultCardSprite,
-            cardDescription = defaultCardDescription
+            cardDescription = "Immediately ncrease length by 1",
+            rarity = Card.Rarity.Common,
+            cardEffect = () => {SnakeGameplayController.instance.AddSegments(1);}
         };
-        defaultCard.SetEffect(() =>
-        {
-            SnakeGameplayController.instance.AddSegments(1);
-        });
     }
 
     //Resets deck so as to update drawPile and discardPile with cards
@@ -96,12 +87,7 @@ public class Deck : MonoBehaviour
             cardToReturn = drawPile[0];
             discardPile.Add(cardToReturn);
             drawPile.RemoveAt(0);
-        }
-
-        //Update card display
-        cardTitleText.text = cardToReturn.cardName;
-        cardIconImage.sprite = cardToReturn.cardSprite;
-        cardDescriptionText.text = cardToReturn.cardDescription;
+        }        
 
         return cardToReturn;
     }

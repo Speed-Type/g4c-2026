@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
 {
+    public Sprite cardIcon;
+    private Card card;
     public Fragment_AfricanBigHeadedAnt_Abdomen()
     {
         shape = new bool[,]
@@ -16,12 +18,29 @@ public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
         displayBodyPart = "Abdomen";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "[Fun flavor text; this fragment's effect also here; just gonna put a bunch of words for now to test out text wrapping n stuff]";
+        displayDescription = "Uncommon combat card: Crop Stomach\n-Increase length by 3";
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        card = new Card
+        {
+            cooldown = 12f,
+            cardName = "Crop Stomach",
+            cardSprite = cardIcon,
+            cardDescription = "Instantly increase length by 3",
+            rarity = Card.Rarity.Uncommon,
+            cardEffect = () => {SnakeGameplayController.instance.AddSegments(3);}
+        };
     }
 
     public override bool ActivateEffects()
     {
         if(base.ActivateEffects() == false) return false;
+
+        Deck.instance.AddCard(card);
         
         return true;
     }
@@ -29,6 +48,8 @@ public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
     public override bool DeactivateEffects()
     {
         if(base.DeactivateEffects() == false) return false;
+
+        Deck.instance.RemoveCard(card);
 
         return true;
     }

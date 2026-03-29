@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
 {
+    public Sprite cardIcon;
+    private Card card;
+
     public Fragment_AfricanBigHeadedAnt_Leg()
     {
         shape = new bool[,]
@@ -15,12 +18,29 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
         displayBodyPart = "Leg";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "[Fun flavor text; this fragment's effect also here; just gonna put a bunch of words for now to test out text wrapping n stuff]";
+        displayDescription = "Built for scavenging and carrying.\nCommon combat card: Robust Legs\n-Increase move speed slightly";
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        card = new Card
+        {
+            cooldown = 7.5f,
+            cardName = "Robust Legs",
+            cardSprite = cardIcon,
+            cardDescription = "Slightly increase speed until the end of this combat",
+            rarity = Card.Rarity.Common,
+            cardEffect = () => {SnakeGameplayController.instance.moveSpeed+=0.1f;}
+        };
     }
 
     public override bool ActivateEffects()
     {
         if(base.ActivateEffects() == false) return false;
+
+        Deck.instance.AddCard(card);
         
         return true;
     }
@@ -28,6 +48,8 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
     public override bool DeactivateEffects()
     {
         if(base.DeactivateEffects() == false) return false;
+
+        Deck.instance.RemoveCard(card);
 
         return true;
     }

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Fragment_AfricanBigHeadedAnt_HeadMajor : Fragment
 {
+    public Sprite cardIcon;
+    private Card card;
+    
     public Fragment_AfricanBigHeadedAnt_HeadMajor()
     {
         shape = new bool[,]
@@ -18,6 +21,21 @@ public class Fragment_AfricanBigHeadedAnt_HeadMajor : Fragment
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
         displayDescription = "Major worker ants of this species have abnormally large heads.\nChanges bite to one with larger area and greater damage.";
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        card = new Card
+        {
+            cooldown = 12f,
+            cardName = "Crop Stomach",
+            cardSprite = cardIcon,
+            cardDescription = "Instantly increase length by 3",
+            rarity = Card.Rarity.Uncommon,
+            cardEffect = () => {SnakeGameplayController.instance.AddSegments(3);}
+        };
     }
 
     public override bool ActivateEffects()

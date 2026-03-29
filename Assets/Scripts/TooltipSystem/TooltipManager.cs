@@ -15,6 +15,8 @@ public class TooltipManager : MonoBehaviour
     [SerializeField] private RectTransform tooltipBackground; //Background of the tooltip
     [SerializeField] private RectTransform tooltipParentRectTransform;
     [SerializeField] private CanvasGroup tooltipCanvasGroup;
+    [SerializeField] private GameObject cardHolder;
+    [SerializeField] private CardUI cardUI;
 
     [Header("Other Settings")]
     [SerializeField] private float mouseOffset = 14f;
@@ -101,6 +103,9 @@ public class TooltipManager : MonoBehaviour
     //Shows tooltip with set text for title, subtitle, and description
     private void ShowTooltip(string title, string subtitle1, string subtitle2, string durability, string description)
     {
+        //Keep card UI hidden unless explicitly called to show it
+        if(cardHolder != null) cardHolder.gameObject.SetActive(false);
+
         //Necessary for grace period between shows/hides
         if(hideTooltipCoroutine != null)
         {
@@ -150,6 +155,12 @@ public class TooltipManager : MonoBehaviour
         hideTooltipCoroutine = StartCoroutine(HideTooltipDelayed());
     }
 
+    private void ShowCard(Card card)
+    {
+        if(cardUI != null) cardUI.UpdateCardDisplay(card);
+        if(cardHolder != null) cardHolder.gameObject.SetActive(true);
+    }
+
     //Coroutine to give a bit of grace period before hiding
     IEnumerator HideTooltipDelayed()
     {
@@ -168,6 +179,11 @@ public class TooltipManager : MonoBehaviour
     public static void ShowTooltip_Static(string simpleText)
     {
         instance.ShowTooltip(simpleText);
+    }
+
+    public static void ShowCard_Static(Card card)
+    {
+        instance.ShowCard(card);
     }
 
     public static void HideTooltip_Static()

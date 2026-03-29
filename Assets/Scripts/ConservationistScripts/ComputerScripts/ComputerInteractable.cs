@@ -5,14 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-/// Attach to the computer mesh (alongside a Collider).
-/// Clicking zooms the camera to a close-up view-point and "turns on"
-/// the world-space monitor canvas.  Pressing Escape (or the back button)
-/// reverses the whole sequence.
-///
-/// Works alongside CameraController: it temporarily overrides the camera
-/// transform and suppresses panning, then restores everything on exit.
-
 [RequireComponent(typeof(Collider))]
 public class ComputerInteractable : MonoBehaviour
 {
