@@ -222,7 +222,7 @@ public class ComputerInteractable : MonoBehaviour
     private IEnumerator FadeEmission(bool on)
     {
         //Requires "_EmissionColor" property on the material (Standard / URP Lit)
-        Material mat = monitorRenderer.material; //instance copy
+        Material mat = monitorRenderer.materials[3]; //instance copy
         Color target = on ? screenOnEmission : Color.black;
         Color current = mat.GetColor(EmissionColor);
 
@@ -237,6 +237,6 @@ public class ComputerInteractable : MonoBehaviour
         }
 
         mat.SetColor(EmissionColor, target);
-        if (!on) mat.DisableKeyword("_EMISSION");
+        if(!on) mat.DisableKeyword("_EMISSION");
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
 /// The desktop "operating system" living on the world-space monitor canvas.
 ///
 /// Manages:
@@ -34,7 +33,7 @@ using TMPro;
 ///     │     └── CloseButton (Button)
 ///     └── ContentArea (the AppBase subclass goes here)
 ///
-/// </summary>
+
 public class ComputerOS : MonoBehaviour
 {
     //------------------------------------------------------------------------------------------
@@ -67,6 +66,10 @@ public class ComputerOS : MonoBehaviour
     public CanvasGroup desktop;
     public CanvasGroup taskbar;
 
+    [Header("Boot Screen")]
+    public RectTransform progressBar;
+    private float progressBarOriginalWidth;
+
     [Header("Desktop")]
     public Transform iconGrid; //GridLayoutGroup parent for desktop icons
     public Transform windowLayer; //RectTransform parent for app windows
@@ -92,26 +95,26 @@ public class ComputerOS : MonoBehaviour
 
     //appName to live window instance
     private Dictionary<string, GameObject> openWindows = new();
-    // appName → taskbar button
+    //appName to taskbar button
     private Dictionary<string, GameObject>  taskbarButtons = new();
 
     private bool isPowered = false;
 
-    // ──────────────────────────────────────────────────────────────────────
-    // Unity lifecycle
-    // ──────────────────────────────────────────────────────────────────────
+    //------------------------------------------------------------------------------------------
 
     void Awake()
     {
         SetGroup(bootScreen, false, instant: true);
         SetGroup(desktop, false, instant: true);
         SetGroup(taskbar, false, instant: true);
+
+        progressBarOriginalWidth = progressBar.sizeDelta.x;
     }
 
     void Update()
     {
         //Fun little clock label
-        if(isPowered) clockLabel.text = System.DateTime.Now.ToString("HH:mm");
+        if(isPowered) clockLabel.text = System.DateTime.Now.ToString("HH:mm tt");
     }
 
     //------------------------------------------------------------------------------------------
@@ -158,6 +161,11 @@ public class ComputerOS : MonoBehaviour
         yield return StartCoroutine(FadeGroup(bootScreen, 1f, 0.3f));
 
         //Simulate loading
+        LeanTween.value(0, 1, bootDuration - 0.5f)
+        .setOnUpdate((float val) =>
+        {
+            progressBar.sizeDelta = new Vector2(val * progressBarOriginalWidth, progressBar.sizeDelta.y);
+        });
         yield return new WaitForSeconds(bootDuration);
 
         yield return StartCoroutine(FadeGroup(bootScreen, 0f, 0.3f));
