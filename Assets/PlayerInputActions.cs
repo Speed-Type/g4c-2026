@@ -1461,6 +1461,76 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Conservationist"",
+            ""id"": ""17475b65-d349-4c1b-a2dd-c828e7c72b4d"",
+            ""actions"": [
+                {
+                    ""name"": ""Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""ff8c3045-f53f-4854-9fb1-0627287c90ff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Right"",
+                    ""type"": ""Button"",
+                    ""id"": ""28b3e02a-78f7-4ce2-a0a2-727b0530a1f3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""297b0f9f-d50d-4468-9e13-e6a2d5485740"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ad33a02-1ae0-4145-9ff0-f2b9840e39d8"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9672b972-c1d1-4862-816e-44c56c42133e"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""73d7bb04-e509-4ebf-8ff2-b36f832cd7ff"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1561,6 +1631,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Snake_Grow = m_Snake.FindAction("Grow", throwIfNotFound: true);
         m_Snake_Shrink = m_Snake.FindAction("Shrink", throwIfNotFound: true);
         m_Snake_ToggleCam = m_Snake.FindAction("ToggleCam", throwIfNotFound: true);
+        // Conservationist
+        m_Conservationist = asset.FindActionMap("Conservationist", throwIfNotFound: true);
+        m_Conservationist_Left = m_Conservationist.FindAction("Left", throwIfNotFound: true);
+        m_Conservationist_Right = m_Conservationist.FindAction("Right", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -1568,6 +1642,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, PlayerInputActions.Player.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_UI.enabled, "This will cause a leak and performance issues, PlayerInputActions.UI.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_Snake.enabled, "This will cause a leak and performance issues, PlayerInputActions.Snake.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Conservationist.enabled, "This will cause a leak and performance issues, PlayerInputActions.Conservationist.Disable() has not been called.");
     }
 
     /// <summary>
@@ -2213,6 +2288,113 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="SnakeActions" /> instance referencing this action map.
     /// </summary>
     public SnakeActions @Snake => new SnakeActions(this);
+
+    // Conservationist
+    private readonly InputActionMap m_Conservationist;
+    private List<IConservationistActions> m_ConservationistActionsCallbackInterfaces = new List<IConservationistActions>();
+    private readonly InputAction m_Conservationist_Left;
+    private readonly InputAction m_Conservationist_Right;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Conservationist".
+    /// </summary>
+    public struct ConservationistActions
+    {
+        private @PlayerInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public ConservationistActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Conservationist/Left".
+        /// </summary>
+        public InputAction @Left => m_Wrapper.m_Conservationist_Left;
+        /// <summary>
+        /// Provides access to the underlying input action "Conservationist/Right".
+        /// </summary>
+        public InputAction @Right => m_Wrapper.m_Conservationist_Right;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Conservationist; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="ConservationistActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(ConservationistActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="ConservationistActions" />
+        public void AddCallbacks(IConservationistActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ConservationistActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ConservationistActionsCallbackInterfaces.Add(instance);
+            @Left.started += instance.OnLeft;
+            @Left.performed += instance.OnLeft;
+            @Left.canceled += instance.OnLeft;
+            @Right.started += instance.OnRight;
+            @Right.performed += instance.OnRight;
+            @Right.canceled += instance.OnRight;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="ConservationistActions" />
+        private void UnregisterCallbacks(IConservationistActions instance)
+        {
+            @Left.started -= instance.OnLeft;
+            @Left.performed -= instance.OnLeft;
+            @Left.canceled -= instance.OnLeft;
+            @Right.started -= instance.OnRight;
+            @Right.performed -= instance.OnRight;
+            @Right.canceled -= instance.OnRight;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ConservationistActions.UnregisterCallbacks(IConservationistActions)" />.
+        /// </summary>
+        /// <seealso cref="ConservationistActions.UnregisterCallbacks(IConservationistActions)" />
+        public void RemoveCallbacks(IConservationistActions instance)
+        {
+            if (m_Wrapper.m_ConservationistActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="ConservationistActions.AddCallbacks(IConservationistActions)" />
+        /// <seealso cref="ConservationistActions.RemoveCallbacks(IConservationistActions)" />
+        /// <seealso cref="ConservationistActions.UnregisterCallbacks(IConservationistActions)" />
+        public void SetCallbacks(IConservationistActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ConservationistActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ConservationistActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="ConservationistActions" /> instance referencing this action map.
+    /// </summary>
+    public ConservationistActions @Conservationist => new ConservationistActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -2504,5 +2686,27 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleCam(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Conservationist" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="ConservationistActions.AddCallbacks(IConservationistActions)" />
+    /// <seealso cref="ConservationistActions.RemoveCallbacks(IConservationistActions)" />
+    public interface IConservationistActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Right" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRight(InputAction.CallbackContext context);
     }
 }

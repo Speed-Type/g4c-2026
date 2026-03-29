@@ -804,6 +804,10 @@ MonoBehaviour:
   attackInterval: 2.5
   pressAdvantage: 1
   attackTelegraphParticle: {fileID: 7649109060383396268, guid: 1f5a82d3e88e6485da53c69c5489559c, type: 3}
+  chargeChance: 1
+  jumpChance: 0
+  shootChance: 0
+  shootStartRange: 0
   chargeMoveSpeed: 20
   chargeDuration: 0.5
   chargeHitRadius: 1.2
