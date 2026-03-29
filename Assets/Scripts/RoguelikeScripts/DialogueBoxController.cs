@@ -39,6 +39,7 @@ public class DialogueBoxController : MonoBehaviour
         textBoxRectTransform = textBoxGO.GetComponent<RectTransform>();
         defaultBoxHeight = textBoxRectTransform.sizeDelta.y;
         alertnessBarMaxWidth = alertnessFillBar.sizeDelta.x;
+        alertnessFillBar.sizeDelta = new Vector2(0, alertnessFillBar.sizeDelta.y);
         alertnessBarOriginalColor = alertnessFillBar.gameObject.GetComponent<Image>().color;
 
         ContinueText();

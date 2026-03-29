@@ -788,7 +788,7 @@ MonoBehaviour:
   wanderDistance: 2
   wanderRadius: 1.5
   wanderJitter: 50
-  fleeRadius: 5
+  fleeRadius: 4
   fleeWeight: 3
   fleeJumpTriggerDist: 0
   fleeJumpCooldown: 99999
@@ -814,11 +814,15 @@ MonoBehaviour:
   chargeMoveSpeed: 20
   chargeDuration: 0.75
   chargeHitRadius: 1.2
+  chargeDamage: 3
+  chargeStunLength: 1
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
   projectileLeadFactor: 0.4
   jumpAtkLeadFactor: 0.6
   jumpAtkHitRadius: 1.5
+  jumpAtkDamage: 0
+  jumpAtkStunLength: 0
   harmfulLayerMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -826,6 +830,7 @@ MonoBehaviour:
   maxHealth: 3
   currentHealth: 0
   maxInvincibility: 3
+  state: 0
   isActive: 1
 --- !u!114 &672404525005778356
 MonoBehaviour:

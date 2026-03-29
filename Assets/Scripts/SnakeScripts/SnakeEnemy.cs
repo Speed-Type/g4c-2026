@@ -18,8 +18,8 @@ public class SnakeEnemy : MonoBehaviour
     public GameObject damagedParticles;
 
     [Header("Movement (General)")]
-    public float moveSpeed    = 3.5f;
-    public float turnSpeed    = 90f;
+    public float moveSpeed = 3.5f;
+    public float turnSpeed = 90f;
 
     [Header("Movement (Wander)")]
     public float wanderDistance = 2f;
@@ -73,6 +73,8 @@ public class SnakeEnemy : MonoBehaviour
     public float chargeDuration = 0.5f;
     [Tooltip("Head must be within this radius during charge for a hit")]
     public float chargeHitRadius = 1.2f;
+    public int chargeDamage;
+    public float chargeStunLength;
 
     [Header("Attack (Projectile)")]
     public GameObject projectilePrefab;
@@ -86,6 +88,8 @@ public class SnakeEnemy : MonoBehaviour
     public float jumpAtkLeadFactor = 0.6f;
     [Tooltip("Head must be within this radius on landing for a hit")]
     public float jumpAtkHitRadius = 1.5f;
+    public int jumpAtkDamage;
+    public float jumpAtkStunLength;
 
     [Header("Collision detection (body contact)")]
     [Tooltip("Layer that snake body segments are on. Used to filter overlap queries")]
@@ -102,7 +106,7 @@ public class SnakeEnemy : MonoBehaviour
     
     //State machine
 
-    private enum State
+    public enum State
     {
         Wander,
         Flee,
@@ -115,7 +119,7 @@ public class SnakeEnemy : MonoBehaviour
 
     private enum AttackType {Charge, Shoot, JumpAtk}
 
-    private State state = State.Wander;
+    public State state = State.Wander;
     private AttackType nextAttack = AttackType.Charge;
 
     //----------------------------------------------------------------------------------------------------------------
@@ -165,6 +169,9 @@ public class SnakeEnemy : MonoBehaviour
         wanderAngle = Random.Range(0f, 360f);
 
         hitCollider = GetComponent<Collider>();
+
+        //Subscribe to damage
+        OnPlayerHit += snakeController.OnPlayerDamage;
     }
 
     void Update()
@@ -312,13 +319,13 @@ public class SnakeEnemy : MonoBehaviour
         transform.position += chargeDirection * chargeMoveSpeed * Time.deltaTime;
 
         //Hit check against head
-        if(DistToHead() < chargeHitRadius)
+        if(CheckCollisionsForLayer(caterpillarHeadLayerMask))
         {
-            OnPlayerHit?.Invoke(AttackType.Charge.ToString());
+            invincibilityTimer = chargeStunLength; //Give invincibility
+            OnPlayerHit?.Invoke(chargeDamage, chargeStunLength, false);
             EnterCooldown();
 
-            invincibilityTimer = 1f; //Give invincibility
-
+            Debug.Log("Enemy charged player.");
             return;
         }
 
@@ -368,15 +375,18 @@ public class SnakeEnemy : MonoBehaviour
         //Move horizontally toward target while in the air
         MoveWithSteering(heading);
 
-        //On landing, check if head is within hit radius
+        //Check continuously if we've hit the player
+        if(CheckCollisionsForLayer(caterpillarHeadLayerMask))
+        {
+            OnPlayerHit?.Invoke(jumpAtkDamage, jumpAtkStunLength, false);
+            invincibilityTimer = jumpAtkStunLength;
+
+            Debug.Log("Enemy jumped player.");
+        }
+
+        //On landing, enter cooldown
         if(isGrounded && stateTimer > 0.1f)
         {
-            if(CheckCollisionsForLayer(caterpillarHeadLayerMask))
-            {
-                OnPlayerHit?.Invoke(AttackType.JumpAtk.ToString());
-                invincibilityTimer = 1f;
-            }
-
             EnterCooldown();
         }
     }
@@ -429,10 +439,10 @@ public class SnakeEnemy : MonoBehaviour
         float distPosZ = (arenaCenter.z + arenaHalfExtents.z) - pos.z;
         float distNegZ = pos.z - (arenaCenter.z - arenaHalfExtents.z);
 
-        if (distPosX < wallMargin) result.x -= (1f - distPosX / wallMargin);
-        if (distNegX < wallMargin) result.x += (1f - distNegX / wallMargin);
-        if (distPosZ < wallMargin) result.z -= (1f - distPosZ / wallMargin);
-        if (distNegZ < wallMargin) result.z += (1f - distNegZ / wallMargin);
+        if(distPosX < wallMargin) result.x -= (1f - distPosX / wallMargin);
+        if(distNegX < wallMargin) result.x += (1f - distNegX / wallMargin);
+        if(distPosZ < wallMargin) result.z -= (1f - distPosZ / wallMargin);
+        if(distNegZ < wallMargin) result.z += (1f - distNegZ / wallMargin);
 
         return result * wallWeight;
     }
@@ -627,7 +637,11 @@ public class SnakeEnemy : MonoBehaviour
 
     private void CheckBodyContact()
     {
-        if(CheckCollisionsForLayer(harmfulLayerMask)) OnCaught();
+        if(CheckCollisionsForLayer(harmfulLayerMask))
+        {
+            OnCaught();
+            Debug.Log("Enemy bumped into player and will try to take damage");
+        }
     }
 
     private bool CheckBox(BoxCollider box, LayerMask layerMask)
@@ -705,6 +719,12 @@ public class SnakeEnemy : MonoBehaviour
 
         //Update healthbar
         snakeController.UpdateEnemyHealthBar((float)currentHealth / maxHealth);
+
+        //If this is a charge attack, interrupt
+        if(state == State.Charge)
+        {
+            EnterCooldown();
+        }
     }
 
     private void ActivateInvincibility()
@@ -720,9 +740,9 @@ public class SnakeEnemy : MonoBehaviour
     //Fired when an attack hits the snake head
     //Arg is the attack type name ("Charge", "Shoot", "JumpAtk")
     //Subscribe here and apply damage / effects as needed
-    public event System.Action<string> OnPlayerHit;
+    public event System.Action<int, float, bool> OnPlayerHit;
     
-    public void NotifyProjectileHit(int damage) => OnPlayerHit?.Invoke(AttackType.Shoot.ToString());
+    public void NotifyProjectileHit(int damage, float stunLength) => OnPlayerHit?.Invoke(damage, stunLength, false);
 
     public void ResetOpponent(Vector3 position)
     {

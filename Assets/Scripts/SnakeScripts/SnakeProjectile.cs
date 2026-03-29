@@ -15,6 +15,7 @@ public class SnakeProjectile : MonoBehaviour
 
     [Header("Damage")]
     public int damage;
+    public float stunLength;
 
     //----------------------------------------------------------------------------------------------------------------
 
@@ -66,7 +67,8 @@ public class SnakeProjectile : MonoBehaviour
 
         if(Vector3.Distance(projFlat, headFlat) < hitRadius)
         {
-            owner.NotifyProjectileHit(damage);
+            owner.NotifyProjectileHit(damage, stunLength);
+            Debug.Log("Enemy shot player.");
             Destroy(gameObject);
         }
     }

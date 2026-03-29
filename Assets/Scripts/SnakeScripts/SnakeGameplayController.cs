@@ -600,7 +600,10 @@ public class SnakeGameplayController : MonoBehaviour
         //Opponent's overlap queries need to find the trigger
         //Self-collision is still handled manually via distance checks
         if(seg.TryGetComponent<Collider>(out var col))
+        {
             col.isTrigger = segments.Count > 0; //WE WANT ALL OF THEM TRIGGERS EXCEPT INDEX 0
+            if(segments.Count == 0) col.gameObject.layer = gameObject.layer; //Make the first segment the same layer as the head
+        }
 
         segments.Add(seg);
     }
@@ -636,6 +639,7 @@ public class SnakeGameplayController : MonoBehaviour
             obstacleContactTimer += Time.deltaTime;
             if(obstacleContactTimer >= collisionGracePeriod)
             {
+                Debug.Log("Player hit obstacle.");
                 OnPlayerDamage(3, shrinkTime, true);
                 return;
             }
@@ -650,15 +654,21 @@ public class SnakeGameplayController : MonoBehaviour
             OnItemCollected(f.gameObject);
 
         //Enemies (no grace period here either)
-        headHit = Physics.OverlapSphere(head, collisionRadius, enemyLayerMask).Length > 0;
-        seg0Hit = false;
-        if(segments.Count > 0 && segments[0] != null)
-            seg0Hit = Physics.OverlapSphere(segments[0].transform.position, collisionRadius, enemyLayerMask).Length > 0;
-        
-        if(headHit || seg0Hit)
+        //Note that we only want to handle these collisions for when the enemy isn't doing a special attack
+        //In the cases of special attacks, the snake enemy should handle it itself
+        if(snakeEnemy.state != SnakeEnemy.State.JumpAtk && snakeEnemy.state != SnakeEnemy.State.Charge)
         {
-            OnPlayerDamage(3, shrinkTime, true);
-            return;
+            headHit = Physics.OverlapSphere(head, collisionRadius, enemyLayerMask).Length > 0;
+            seg0Hit = false;
+            if(segments.Count > 0 && segments[0] != null)
+                seg0Hit = Physics.OverlapSphere(segments[0].transform.position, collisionRadius, enemyLayerMask).Length > 0;
+            
+            if(headHit || seg0Hit)
+            {
+                Debug.Log("Player hit enemy in non-special attack.");
+                OnPlayerDamage(3, shrinkTime, true);
+                return;
+            }
         }
  
         //Self-collision
@@ -671,6 +681,7 @@ public class SnakeGameplayController : MonoBehaviour
                 selfContactTimer += Time.deltaTime;
                 if(selfContactTimer >= collisionGracePeriod)
                 {
+                    Debug.Log("Player hit self.");
                     OnPlayerDamage(3, shrinkTime, true);
                     return;
                 }
@@ -689,7 +700,7 @@ public class SnakeGameplayController : MonoBehaviour
         //TODO: ADD STUFF FOR ITEM COLLECT
     }
 
-    private void OnPlayerDamage(int damage, float stunApplied, bool removeSegments)
+    public void OnPlayerDamage(int damage, float stunApplied, bool removeSegments)
     {
         if(invincibilityTimer > 0) return; //If i frames are active, no damage
 
