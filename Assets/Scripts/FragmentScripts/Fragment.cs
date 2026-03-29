@@ -55,6 +55,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private int undulateTween;
     private int rotateTween;
 
+    protected Card card;
+
     //Static list for all fragments
     private static List<Fragment> fragmentList;
 
@@ -206,6 +208,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         }
 
         TooltipManager.ShowTooltip_Static(displayBugGroup + " " + displayBodyPart, displayScientificName, displayCommonName, durabilityDescription, displayDescription);
+
+        if(card != null) TooltipManager.ShowCard_Static(card);
     }
 
     //Method for stopping tooltip hovering

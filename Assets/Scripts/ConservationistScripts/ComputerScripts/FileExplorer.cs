@@ -27,9 +27,9 @@ public class FileExplorer : AppBase
     public class FileEntry
     {
         public string name = "file.txt";
-        public bool isFolder  = false;
+        public bool isFolder = false;
         [TextArea(3, 8)]
-        public string content = "";  //shown when opened (files only)
+        public string content = ""; //shown when opened (files only)
         [Tooltip("Objective ID completed when this file is opened; Leave blank to skip")]
         public string completesObjective = "";
         public List<FileEntry> children = new(); //populated for folders only
@@ -66,8 +66,7 @@ public class FileExplorer : AppBase
 
         SetGroup(viewerPanel, false);
 
-        if(closeViewerButton != null)
-            closeViewerButton.onClick.AddListener(() => SetGroup(viewerPanel, false));
+        closeViewerButton.onClick.AddListener(() => SetGroup(viewerPanel, false));
 
         Navigate(rootEntries, "C:\\");
     }
@@ -75,8 +74,7 @@ public class FileExplorer : AppBase
     public override void OnAppClose()
     {
         history.Clear();
-        if(closeViewerButton != null)
-            closeViewerButton.onClick.RemoveAllListeners();
+        closeViewerButton.onClick.RemoveAllListeners();
     }
 
     //------------------------------------------------------------------------------------------
@@ -88,38 +86,35 @@ public class FileExplorer : AppBase
         current = entries;
         currentPath = path;
 
-        if(pathLabel != null) pathLabel.text = path;
+        pathLabel.text = path;
         BuildFileList();
     }
 
     private void BuildFileList()
     {
-        if(fileList == null) return;
         foreach(Transform child in fileList) Destroy(child.gameObject);
+
+        int parity = 0;
 
         //Back button if we've navigated inside a folder
         if(history.Count > 0)
         {
-            var backRow = CreateFileRow("← Back", isFolder: true, fileList);
-            var backBtn = backRow.GetComponent<Button>();
-            if(backBtn == null) backBtn = backRow.AddComponent<Button>();
-            backBtn.onClick.AddListener(GoBack);
+            FileRow backRow = CreateFileRow("Back", isFolder: true, parity, fileList);
+
+            backRow.AddButtonListener(GoBack);
+
+            parity++;
         }
 
         foreach(var entry in current)
         {
             var e = entry;
-            var row = CreateFileRow(
-                (e.isFolder ? "📁 " : "📄 ") + e.name,
-                e.isFolder, fileList);
-
-            var btn = row.GetComponent<Button>();
-            if(btn == null) btn = row.AddComponent<Button>();
+            FileRow fileRow = CreateFileRow(e.name, e.isFolder, parity, fileList);
 
             //If it's a folder, go deeper
             if(e.isFolder)
             {
-                btn.onClick.AddListener(() =>
+                fileRow.AddButtonListener(() =>
                 {
                     history.Push((currentPath, current));
                     Navigate(e.children, currentPath + e.name + "\\");
@@ -127,22 +122,25 @@ public class FileExplorer : AppBase
             }
             else
             {
-                btn.onClick.AddListener(() => OpenFile(e));
+                //If it's a file just open it
+                fileRow.AddButtonListener(() => {OpenFile(e);});
             }
+
+            parity++;
         }
     }
 
     private void GoBack()
     {
         if(history.Count == 0) return;
-        var (path, entries) = history.Pop();
+        var(path, entries) = history.Pop();
         Navigate(entries, path);
     }
 
     private void OpenFile(FileEntry entry)
     {
-        if(viewerTitle != null) viewerTitle.text = entry.name;
-        if(viewerBody  != null) viewerBody.text  = entry.content;
+        viewerTitle.text = entry.name;
+        viewerBody.text = entry.content;
         SetGroup(viewerPanel, true);
 
         if(!string.IsNullOrEmpty(entry.completesObjective))
@@ -153,36 +151,20 @@ public class FileExplorer : AppBase
 
     //Helper methods
 
-    private GameObject CreateFileRow(string label, bool isFolder, Transform parent)
+    private FileRow CreateFileRow(string label, bool isFolder, int parity, Transform parent)
     {
-        GameObject row = fileRowPrefab != null
-            ? Instantiate(fileRowPrefab, parent)
-            : new GameObject("Row", typeof(RectTransform));
+        GameObject row = Instantiate(fileRowPrefab, parent);
+        FileRow fileRow = row.GetComponent<FileRow>();
 
-        if(fileRowPrefab == null)
-        {
-            row.transform.SetParent(parent, false);
-            row.AddComponent<LayoutElement>().minHeight = 30f;
-            var img = row.AddComponent<Image>();
-            img.color = new Color(0.1f, 0.12f, 0.16f);
-        }
+        fileRow.SetLabel(label);
+        fileRow.SetIcon(isFolder);
+        fileRow.SetShade(parity);
 
-        var txt = row.GetComponentInChildren<TMP_Text>();
-        if(txt == null)
-        {
-            txt = new GameObject("Label", typeof(RectTransform)).AddComponent<TMP_Text>();
-            txt.transform.SetParent(row.transform, false);
-            txt.fontSize = 13f;
-            txt.color    = isFolder ? new Color(0.6f, 0.85f, 1f) : Color.white;
-        }
-        txt.text = label;
-
-        return row;
+        return fileRow;
     }
 
     private void SetGroup(CanvasGroup g, bool on)
     {
-        if(g == null) return;
         g.alpha = on ? 1f : 0f;
         g.interactable = on;
         g.blocksRaycasts = on;

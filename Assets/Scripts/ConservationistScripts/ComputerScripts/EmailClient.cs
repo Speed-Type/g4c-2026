@@ -6,20 +6,6 @@ using TMPro;
 //App 1: EmailClient
 //Read-only, has trivia questions for the player
 
-/// Email client application.
-///
-/// ── ContentArea hierarchy ──────────────────────────────────────────────
-///
-///   ContentArea  (EmailClient.cs here)
-///     ├── InboxPanel
-///     │     └── EmailList  (VerticalLayoutGroup)  ← email rows spawn here
-///     └── ReaderPanel
-///           ├── SubjectLabel  (TMP_Text)
-///           ├── FromLabel     (TMP_Text)
-///           ├── BodyText      (TMP_Text, ScrollRect)
-///           └── BackButton    (Button)
-///
-
 public class EmailClient : AppBase
 {
     //Email datatypes

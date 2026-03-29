@@ -66,7 +66,7 @@ public class TooltipManager : MonoBehaviour
 
         tooltipParentRectTransform.gameObject.SetActive(true);
 
-        yield return FadeTooltip(start, 1f);
+        yield return FadeTooltip(start, 0.8f);
     }
 
     //Coroutine to fade in or out
@@ -166,7 +166,7 @@ public class TooltipManager : MonoBehaviour
     {
         yield return new WaitForSeconds(tooltipHideDelay);
 
-        yield return FadeTooltip(1f, 0f);
+        yield return FadeTooltip(0.8f, 0f);
 
         tooltipParentRectTransform.gameObject.SetActive(false);
     }

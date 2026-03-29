@@ -663,7 +663,7 @@ public class SnakeGameplayController : MonoBehaviour
             obstacleContactTimer += Time.deltaTime;
             if(obstacleContactTimer >= collisionGracePeriod)
             {
-                Debug.Log("Player hit obstacle.");
+                //Debug.Log("Player hit obstacle.");
                 OnPlayerDamage(3, shrinkTime, true);
                 return;
             }
@@ -689,7 +689,7 @@ public class SnakeGameplayController : MonoBehaviour
             
             if(headHit || seg0Hit)
             {
-                Debug.Log("Player hit enemy in non-special attack.");
+                //Debug.Log("Player hit enemy in non-special attack.");
                 OnPlayerDamage(3, shrinkTime, true);
                 return;
             }
@@ -705,7 +705,7 @@ public class SnakeGameplayController : MonoBehaviour
                 selfContactTimer += Time.deltaTime;
                 if(selfContactTimer >= collisionGracePeriod)
                 {
-                    Debug.Log("Player hit self.");
+                    //Debug.Log("Player hit self.");
                     OnPlayerDamage(3, shrinkTime, true);
                     return;
                 }

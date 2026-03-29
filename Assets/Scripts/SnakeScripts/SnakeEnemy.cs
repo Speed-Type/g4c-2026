@@ -325,7 +325,7 @@ public class SnakeEnemy : MonoBehaviour
             OnPlayerHit?.Invoke(chargeDamage, chargeStunLength, false);
             EnterCooldown();
 
-            Debug.Log("Enemy charged player.");
+            //Debug.Log("Enemy charged player.");
             return;
         }
 
@@ -381,7 +381,7 @@ public class SnakeEnemy : MonoBehaviour
             OnPlayerHit?.Invoke(jumpAtkDamage, jumpAtkStunLength, false);
             invincibilityTimer = jumpAtkStunLength;
 
-            Debug.Log("Enemy jumped player.");
+            //Debug.Log("Enemy jumped player.");
         }
 
         //On landing, enter cooldown
@@ -639,8 +639,8 @@ public class SnakeEnemy : MonoBehaviour
     {
         if(CheckCollisionsForLayer(harmfulLayerMask))
         {
-            OnCaught();
-            Debug.Log("Enemy bumped into player and will try to take damage");
+            OnCaught(1);
+            //Debug.Log("Enemy bumped into player and will try to take damage");
         }
     }
 
@@ -687,7 +687,7 @@ public class SnakeEnemy : MonoBehaviour
         Physics.OverlapSphere(transform.position, contactRadius, layerMask).Length > 0;
 
     //IMPORTANT: This is the method that is called when the enemy hits the player
-    private void OnCaught()
+    private void OnCaught(int damage)
     {
         //Check iframes
         if(invincibilityTimer > 0) return;

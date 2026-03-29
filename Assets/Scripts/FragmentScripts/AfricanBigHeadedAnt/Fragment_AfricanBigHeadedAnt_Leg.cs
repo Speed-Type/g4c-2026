@@ -3,7 +3,6 @@ using UnityEngine;
 public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
 {
     public Sprite cardIcon;
-    private Card card;
 
     public Fragment_AfricanBigHeadedAnt_Leg()
     {
@@ -18,7 +17,7 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
         displayBodyPart = "Leg";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "Built for scavenging and carrying.\nCommon combat card: Robust Legs\n-Increase move speed slightly";
+        displayDescription = "Built for scavenging and scurrying.";
     }
 
     protected override void Awake()

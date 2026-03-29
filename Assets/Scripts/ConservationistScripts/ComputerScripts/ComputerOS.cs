@@ -83,7 +83,7 @@ public class ComputerOS : MonoBehaviour
     void Update()
     {
         //Fun little clock label
-        if(isPowered) clockLabel.text = System.DateTime.Now.ToString("HH:mm tt");
+        if(isPowered) clockLabel.text = System.DateTime.Now.ToString("hh:mm tt");
     }
 
     //------------------------------------------------------------------------------------------

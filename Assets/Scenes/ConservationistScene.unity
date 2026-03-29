@@ -1085,6 +1085,8 @@ MonoBehaviour:
   tooltipBackground: {fileID: 126816591}
   tooltipParentRectTransform: {fileID: 1768893347}
   tooltipCanvasGroup: {fileID: 1768893348}
+  cardHolder: {fileID: 0}
+  cardUI: {fileID: 0}
   mouseOffset: 14
   tooltipShowDelay: 0.55
   tooltipHideDelay: 0.1
@@ -1444,7 +1446,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 10, y: -10}
+  m_AnchoredPosition: {x: 20, y: -20}
   m_SizeDelta: {x: 401.7838, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &446485052
@@ -2537,8 +2539,8 @@ MonoBehaviour:
     windowPrefab: {fileID: 2347178085118039360, guid: 74028fca7137a4dbf9bda1ebef808f98, type: 3}
     openOnBoot: 0
   - appName: Files
-    icon: {fileID: 0}
-    windowPrefab: {fileID: 1015041741950162155, guid: e0d47e568ab4a41aeb9963b91a20420c, type: 3}
+    icon: {fileID: 21300000, guid: e0c37bf7ba37644a4b6d2921360ada50, type: 3}
+    windowPrefab: {fileID: 7537493260807640357, guid: 793855744dc73441bbd5ac9254149980, type: 3}
     openOnBoot: 0
   - appName: Web
     icon: {fileID: 0}

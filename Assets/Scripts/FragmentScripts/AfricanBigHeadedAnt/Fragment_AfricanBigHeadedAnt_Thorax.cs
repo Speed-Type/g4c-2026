@@ -3,7 +3,6 @@ using UnityEngine;
 public class Fragment_AfricanBigHeadedAnt_Thorax : Fragment
 {
     public Sprite cardIcon;
-    private Card card;
 
     public Fragment_AfricanBigHeadedAnt_Thorax()
     {
@@ -18,7 +17,7 @@ public class Fragment_AfricanBigHeadedAnt_Thorax : Fragment
         displayBodyPart = "Thorax";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "Built for scavenging and carrying.\nUncommon combat card: Sturdy Frame\n-Increase length by 1";
+        displayDescription = "Built for scavenging and carrying.";
     }
 
     protected override void Awake()

@@ -3,7 +3,6 @@ using UnityEngine;
 public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
 {
     public Sprite cardIcon;
-    private Card card;
     public Fragment_AfricanBigHeadedAnt_Abdomen()
     {
         shape = new bool[,]
@@ -18,7 +17,7 @@ public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
         displayBodyPart = "Abdomen";
         displayCommonName = "African Big-Headed Ant";
         displayScientificName = "Pheidole megacephala";
-        displayDescription = "Uncommon combat card: Crop Stomach\n-Increase length by 3";
+        displayDescription = "These kinds of ants have crop stomachs for carrying lots of goodies.";
     }
 
     protected override void Awake()
