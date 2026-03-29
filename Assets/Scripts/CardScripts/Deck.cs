@@ -1,17 +1,44 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class Deck : MonoBehaviour
 {
     public static Deck instance;
-    public List<Card> allCards; //List containing all cards
-    public List<Card> drawPile;
-    public List<Card> discardPile;
 
+    [Header("Card Lists")]
+    public List<Card> allCards = new(); //List containing all cards
+    public List<Card> drawPile = new();
+    public List<Card> discardPile = new();
+
+    [Header("Card UI")]
+    public TMP_Text cardTitleText;
+    public Image cardIconImage;
+    public TMP_Text cardDescriptionText;
+
+    [Header("Default card")]
+    public string defaultCardName;
+    public Sprite defaultCardSprite;
+    public string defaultCardDescription;
+    private Card defaultCard;
 
     void Awake()
     {
         instance = this;
+
+        //Create default card
+        defaultCard = new Card
+        {
+            cooldown = 5f,
+            cardName = defaultCardName,
+            cardSprite = defaultCardSprite,
+            cardDescription = defaultCardDescription
+        };
+        defaultCard.SetEffect(() =>
+        {
+            SnakeGameplayController.instance.AddSegments(1);
+        });
     }
 
     //Resets deck so as to update drawPile and discardPile with cards
@@ -51,17 +78,32 @@ public class Deck : MonoBehaviour
     //Method that returns the first card of the deck
     public Card DrawCard()
     {
-        //Check if draw pile is empty, in which case shuffle first
-        if(drawPile.Count == 0)
+        Card cardToReturn;
+
+        if(allCards.Count == 0) //Draw default if there are no cards remaining
         {
-            ShuffleDeck();
+            cardToReturn = defaultCard;
+        }
+        else
+        {
+            //Check if draw pile is empty, in which case shuffle first
+            if(drawPile.Count == 0)
+            {
+                ShuffleDeck();
+            }
+
+            //Return and remove the first card in the drawPile
+            cardToReturn = drawPile[0];
+            discardPile.Add(cardToReturn);
+            drawPile.RemoveAt(0);
         }
 
-        //Return and remove the first card in the drawPile
-        Card temp = drawPile[0];
-        discardPile.Add(temp);
-        drawPile.RemoveAt(0);
-        return temp;
+        //Update card display
+        cardTitleText.text = cardToReturn.cardName;
+        cardIconImage.sprite = cardToReturn.cardSprite;
+        cardDescriptionText.text = cardToReturn.cardDescription;
+
+        return cardToReturn;
     }
 
     //Method to add a card to the complete deck

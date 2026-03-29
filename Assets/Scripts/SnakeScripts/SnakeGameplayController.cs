@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.UI;
 
 public class SnakeGameplayController : MonoBehaviour
 {
@@ -64,8 +65,7 @@ public class SnakeGameplayController : MonoBehaviour
     [Header("Cards")]
     public float currentCharge;
     public Card currentCard;
-    public RectTransform chargeFillBar;
-    private float chargeFillBarOriginalHeight;
+    public Image chargeFillIndicator;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -180,9 +180,6 @@ public class SnakeGameplayController : MonoBehaviour
         enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
 
-        //Initialize charge bar variables
-        chargeFillBarOriginalHeight = chargeFillBar.sizeDelta.y;
-
         //Initialize post-processing references
         if(volume.profile.TryGet(out chromaticAberration))
         {
@@ -251,7 +248,7 @@ public class SnakeGameplayController : MonoBehaviour
             CheckCollisions();
 
             currentCharge += Time.deltaTime; //Only increase charge when not stunned
-            chargeFillBar.sizeDelta = new Vector2(chargeFillBar.sizeDelta.x, Math.Min(currentCharge / currentCard.cooldown * chargeFillBarOriginalHeight, chargeFillBarOriginalHeight));
+            chargeFillIndicator.fillAmount = Mathf.Clamp01((currentCard.cooldown - currentCharge) / currentCard.cooldown);
         }
 
         AdjustSegmentCount();
