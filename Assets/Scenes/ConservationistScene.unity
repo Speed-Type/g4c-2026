@@ -2635,7 +2635,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3477add2a36745a9964ccace97caa8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ComputerOS
-  apps: []
+  apps:
+  - appName: Email
+    icon: {fileID: 0}
+    windowPrefab: {fileID: 1015041741950162155, guid: e0d47e568ab4a41aeb9963b91a20420c, type: 3}
+    openOnBoot: 0
+  - appName: Web
+    icon: {fileID: 0}
+    windowPrefab: {fileID: 1015041741950162155, guid: e0d47e568ab4a41aeb9963b91a20420c, type: 3}
+    openOnBoot: 0
   bootScreen: {fileID: 1344809014}
   desktop: {fileID: 1974340273}
   taskbar: {fileID: 832189350}
