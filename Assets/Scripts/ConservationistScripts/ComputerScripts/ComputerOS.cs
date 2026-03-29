@@ -267,7 +267,7 @@ public class ComputerOS : MonoBehaviour
         openWindows[entry.appName] = win;
 
         //Notify the app's logic component
-        var appBase = win.GetComponentInChildren<AppBase>();
+        var appBase = appWindow.GetAppBase();
         appBase?.OnAppOpen(this);
 
         //Add taskbar button
@@ -278,8 +278,8 @@ public class ComputerOS : MonoBehaviour
 
     private void CloseWindow(string appName, GameObject win)
     {
-        var appBase = win.GetComponentInChildren<AppBase>();
-        appBase.OnAppClose();
+        var appBase = win.GetComponent<AppWindow>().GetAppBase();
+        appBase?.OnAppClose();
 
         Destroy(win);
         openWindows.Remove(appName);

@@ -8,6 +8,7 @@ public class AppWindow : MonoBehaviour
     [SerializeField] private TMP_Text label;
     [SerializeField] private Button closeButton;
     [SerializeField] private Button titleBarButton;
+    [SerializeField] private AppBase appBase;
     
     public void SetLabel(string pText)
     {
@@ -22,5 +23,10 @@ public class AppWindow : MonoBehaviour
     public void AddTitleBarButtonListener(Action action)
     {
         titleBarButton.onClick.AddListener(() => {action();});
+    }
+
+    public AppBase GetAppBase()
+    {
+        return appBase;
     }
 }

@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 61229535}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -0.0187, y: 0, z: 0.0124}
+  m_LocalPosition: {x: -0.01848, y: -0, z: 0.01255}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -737,7 +737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Outline
   outlineMode: 0
   outlineColor: {r: 1, g: 0.9864793, b: 0, a: 1}
-  outlineWidth: 2
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -2412,7 +2412,7 @@ MonoBehaviour:
   apps:
   - appName: Email
     icon: {fileID: 21300000, guid: 463b808b5e05b47c89eb4c701fb6186d, type: 3}
-    windowPrefab: {fileID: 1015041741950162155, guid: e0d47e568ab4a41aeb9963b91a20420c, type: 3}
+    windowPrefab: {fileID: 2347178085118039360, guid: 74028fca7137a4dbf9bda1ebef808f98, type: 3}
     openOnBoot: 0
   - appName: Files
     icon: {fileID: 0}
