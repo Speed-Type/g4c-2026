@@ -116,6 +116,7 @@ public class ComputerInteractable : MonoBehaviour
     {
         isAnimating = true;
         TooltipManager.HideTooltip_Static();
+        ObjectiveUI.instance.ToggleVisibility();
 
         //Disable room panning while we're at the computer
         cameraController.enabled = false;
@@ -125,23 +126,21 @@ public class ComputerInteractable : MonoBehaviour
         savedCamRot = targetCamera.transform.rotation;
 
         //Zoom in
-        if(zoomTarget != null)
+        TweenCamera(zoomTarget.position, zoomTarget.rotation, () => //On finish
         {
-            TweenCamera(zoomTarget.position, zoomTarget.rotation, () => //On finish
-            {
-                //Turn screen on
-                SetScreenActive(true, instant: false);
-                operatingSystem?.PowerOn();
+            //Turn screen on
+            SetScreenActive(true, instant: false);
+            operatingSystem?.PowerOn();
 
-                inUse = true;
-                isAnimating = false;
-            });
-        }
+            inUse = true;
+            isAnimating = false;
+        });
     }
 
     private void ExitSequence()
     {
         isAnimating = true;
+        ObjectiveUI.instance.ToggleVisibility();
 
         //Turn screen off
         operatingSystem?.PowerOff();
@@ -181,22 +180,18 @@ public class ComputerInteractable : MonoBehaviour
     private void SetScreenActive(bool on, bool instant)
     {
         //Toggle canvas interactability
-        if(screenCanvas != null)
-        {
-            var group = screenCanvas.GetComponent<CanvasGroup>();
-            if(group == null) group = screenCanvas.gameObject.AddComponent<CanvasGroup>();
+        var group = screenCanvas.GetComponent<CanvasGroup>();
 
-            if(instant)
-            {
-                group.alpha = on ? 1f : 0f;
-                group.interactable = on;
-                group.blocksRaycasts = on;
-            }
-            else
-            {
-                StopCoroutine(nameof(FadeCanvas));
-                StartCoroutine(FadeCanvas(group, on ? 1f : 0f, on));
-            }
+        if(instant)
+        {
+            group.alpha = on ? 1f : 0f;
+            group.interactable = on;
+            group.blocksRaycasts = on;
+        }
+        else
+        {
+            StopCoroutine(nameof(FadeCanvas));
+            StartCoroutine(FadeCanvas(group, on ? 1f : 0f, on));
         }
 
         //Animate monitor emission

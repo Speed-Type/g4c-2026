@@ -46,6 +46,18 @@ public class CVCameraController : MonoBehaviour
         SnapToAngle(currentAngleIndex, instant: true);
     }
 
+    void OnEnable()
+    {
+        rotateLeftAction.Enable();
+        rotateRightAction.Enable();
+    }
+
+    void OnDisable()
+    {
+        rotateLeftAction.Disable();
+        rotateRightAction.Disable();
+    }
+
     //------------------------------------------------------------------------------------------
 
     public void PanRight() => StartPan(+1);

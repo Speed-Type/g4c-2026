@@ -43,6 +43,10 @@ public class EmailClient : AppBase
     [Header("Emails")]
     public List<Email> emails = new();
 
+    [Header("Default State")]
+    public CanvasGroup readerGroup;
+    public GameObject hintText;
+
     [Header("Inbox")]
     public Transform emailList;
     public GameObject emailRowPrefab; //Button + TMP_Text (subject) + TMP_Text (from)
@@ -59,6 +63,9 @@ public class EmailClient : AppBase
     {
         base.OnAppOpen(os);
         BuildInbox();
+
+        SetGroup(readerGroup, false);
+        hintText.SetActive(true);
     }
 
     public override void OnAppClose()
@@ -109,6 +116,10 @@ public class EmailClient : AppBase
     private void OpenEmail(int index)
     {
         if(index < 0 || index >= emails.Count) return;
+
+        //Show the right things
+        SetGroup(readerGroup, true);
+        hintText.SetActive(false);
 
         Email mail = emails[index];
         mail.isRead = true;
