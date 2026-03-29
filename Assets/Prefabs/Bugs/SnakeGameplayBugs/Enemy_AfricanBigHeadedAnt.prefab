@@ -798,6 +798,9 @@ MonoBehaviour:
   arenaHalfExtents: {x: 20, y: 0, z: 20}
   wallMargin: 10
   wallWeight: 6
+  caterpillarHeadLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
   windupDuration: 0.75
   cooldownDuration: 1.2
   attackRange: 10
@@ -816,7 +819,7 @@ MonoBehaviour:
   projectileLeadFactor: 0.4
   jumpAtkLeadFactor: 0.6
   jumpAtkHitRadius: 1.5
-  segmentLayerMask:
+  harmfulLayerMask:
     serializedVersion: 2
     m_Bits: 1024
   contactRadius: 0.6

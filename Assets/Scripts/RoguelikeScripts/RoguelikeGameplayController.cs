@@ -383,8 +383,6 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         if(doubleCheckCombat)
         {
-            Debug.Log("Battle");
-
             gameState = GameState.Combat;
 
             //Set enemy bug

@@ -46,6 +46,7 @@ public class SnakeEnemy : MonoBehaviour
     public float wallWeight = 3f;
 
     [Header("Attack (General)")]
+    public LayerMask caterpillarHeadLayerMask;
     [Tooltip("Seconds the opponent idles in Windup before attacking")]
     public float windupDuration = 0.6f;
     [Tooltip("Seconds in Cooldown after any attack")]
@@ -88,7 +89,7 @@ public class SnakeEnemy : MonoBehaviour
 
     [Header("Collision detection (body contact)")]
     [Tooltip("Layer that snake body segments are on. Used to filter overlap queries")]
-    public LayerMask segmentLayerMask;
+    public LayerMask harmfulLayerMask;
     [Tooltip("Fallback sphere radius if the opponent has no collider attached")]
     public float contactRadius = 0.6f;
 
@@ -305,7 +306,6 @@ public class SnakeEnemy : MonoBehaviour
 
     private void UpdateCharge()
     {
-        invincibilityTimer = 1f;
         stateTimer += Time.deltaTime;
 
         //Dash in the locked direction
@@ -317,13 +317,16 @@ public class SnakeEnemy : MonoBehaviour
             OnPlayerHit?.Invoke(AttackType.Charge.ToString());
             EnterCooldown();
 
+            invincibilityTimer = 1f; //Give invincibility
+
             return;
         }
 
         //End charge after duration
         if(stateTimer >= chargeDuration)
+        {
             EnterCooldown();
-            invincibilityTimer = 0f; //Stop invincibility
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -368,7 +371,7 @@ public class SnakeEnemy : MonoBehaviour
         //On landing, check if head is within hit radius
         if(isGrounded && stateTimer > 0.1f)
         {
-            if(DistToHead() < jumpAtkHitRadius)
+            if(CheckCollisionsForLayer(caterpillarHeadLayerMask))
             {
                 OnPlayerHit?.Invoke(AttackType.JumpAtk.ToString());
                 invincibilityTimer = 1f;
@@ -605,33 +608,39 @@ public class SnakeEnemy : MonoBehaviour
 
     //Collision handling
 
-    private void CheckBodyContact()
+    private bool CheckCollisionsForLayer(LayerMask layerMask)
     {
         //Dispatch to the right overlap query based on whatever collider shape is attached to this GameObject
         //If there's no collider, fall back to a sphere using contactRadius.
         bool hit = hitCollider switch
         {
-            BoxCollider box => CheckBox(box),
-            CapsuleCollider cap => CheckCapsule(cap),
-            SphereCollider sph => CheckSphere(sph),
-            null => CheckFallbackSphere(),
-            _ => CheckFallbackSphere(),
+            BoxCollider box => CheckBox(box, layerMask),
+            CapsuleCollider cap => CheckCapsule(cap, layerMask),
+            SphereCollider sph => CheckSphere(sph, layerMask),
+            null => CheckFallbackSphere(layerMask),
+            _ => CheckFallbackSphere(layerMask),
         };
- 
-        if(hit) OnCaught();
+
+        if(hit) return true;
+        return false;
     }
 
-    private bool CheckBox(BoxCollider box)
+    private void CheckBodyContact()
+    {
+        if(CheckCollisionsForLayer(harmfulLayerMask)) OnCaught();
+    }
+
+    private bool CheckBox(BoxCollider box, LayerMask layerMask)
     {
         //World-space centre and half-extents, accounting for scale and rotation.
         Vector3 worldCenter = box.transform.TransformPoint(box.center);
         Vector3 halfExtents = Vector3.Scale(box.size * 0.5f, box.transform.lossyScale);
         Quaternion orientation = box.transform.rotation;
  
-        return Physics.OverlapBox(worldCenter, halfExtents, orientation, segmentLayerMask).Length > 0;
+        return Physics.OverlapBox(worldCenter, halfExtents, orientation, layerMask).Length > 0;
     }
  
-    private bool CheckCapsule(CapsuleCollider cap)
+    private bool CheckCapsule(CapsuleCollider cap, LayerMask layerMask)
     {
         //Reconstruct the two sphere centres of the capsule in world space.
         float worldRadius = cap.radius * Mathf.Max(cap.transform.lossyScale.x, cap.transform.lossyScale.z);
@@ -649,19 +658,19 @@ public class SnakeEnemy : MonoBehaviour
         Vector3 point1 = worldCenter + axis * halfHeight;
         Vector3 point2 = worldCenter - axis * halfHeight;
  
-        return Physics.OverlapCapsule(point1, point2, worldRadius, segmentLayerMask).Length > 0;
+        return Physics.OverlapCapsule(point1, point2, worldRadius, layerMask).Length > 0;
     }
  
-    private bool CheckSphere(SphereCollider sph)
+    private bool CheckSphere(SphereCollider sph, LayerMask layerMask)
     {
         Vector3 worldCenter = sph.transform.TransformPoint(sph.center);
         float worldRadius = sph.radius * Mathf.Max(sph.transform.lossyScale.x, sph.transform.lossyScale.y, sph.transform.lossyScale.z);
  
-        return Physics.OverlapSphere(worldCenter, worldRadius, segmentLayerMask).Length > 0;
+        return Physics.OverlapSphere(worldCenter, worldRadius, layerMask).Length > 0;
     }
 
-    private bool CheckFallbackSphere() =>
-        Physics.OverlapSphere(transform.position, contactRadius, segmentLayerMask).Length > 0;
+    private bool CheckFallbackSphere(LayerMask layerMask) =>
+        Physics.OverlapSphere(transform.position, contactRadius, layerMask).Length > 0;
 
     //IMPORTANT: This is the method that is called when the enemy hits the player
     private void OnCaught()
@@ -671,8 +680,6 @@ public class SnakeEnemy : MonoBehaviour
 
         //Check if player is stunned, such that if the player is stunned the enemy won't take damage
         if(snakeController.stunTimer > 0) return;
-
-        Debug.Log("Enemy took damage");
         
         //Do screenshake
         ScreenShake.instance.AddTrauma(0.25f);

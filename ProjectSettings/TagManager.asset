@@ -16,8 +16,8 @@ TagManager:
   - SnakeObstacle
   - SnakeCollectible
   - HarmsEnemy
-  - SnakeEnemy
-  - 
+  - Enemy
+  - SnakeHead
   - 
   - 
   - 

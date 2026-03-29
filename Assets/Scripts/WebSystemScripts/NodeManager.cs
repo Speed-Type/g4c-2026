@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class NodeManager : MonoBehaviour
 {
@@ -45,6 +47,12 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private Transform scavengeEnemyPositionTransform;
     [SerializeField] private Transform combatEnemyPositionTransform;
 
+    [Header("Effects")]
+    [SerializeField] private Volume volume;
+    private Vignette vignette;
+    public float maxVignetteIntensity;
+    private float originalVignetteIntensity;
+
     public static NodeManager instance;
     public static bool isMovingNodes = false;
     public static bool overrideVisitConditions = false;
@@ -52,6 +60,12 @@ public class NodeManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+
+        //Setup post processing effects
+        if(volume.profile.TryGet(out vignette))
+        {
+            originalVignetteIntensity = vignette.intensity.value;
+        }
     }
 
     void Start()
@@ -397,10 +411,14 @@ public class NodeManager : MonoBehaviour
                 spiderRect.anchoredPosition = originalPos + offset;
 
                 //Screenshake
-                ScreenShake.instance.SetTrauma(t / 10f); //So, 0 to .10f intensity
+                ScreenShake.instance.SetTrauma(t / 15f); //So, 0 to .067f intensity
+
+                //Vignette
+                vignette.intensity.value = originalVignetteIntensity + t * (maxVignetteIntensity - originalVignetteIntensity);
             })
             .setOnComplete(() =>
             {
+                vignette.intensity.value = originalVignetteIntensity;
                 spiderRect.anchoredPosition = originalPos;
 
                 LeanTween.delayedCall(spiderAnticipationAnimPause, () =>

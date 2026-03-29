@@ -234,7 +234,6 @@ public class SnakeGameplayController : MonoBehaviour
             {
                 SetLegMovement(true); //Reactivate legs
                 stunEffect.SetActive(false);
-                Debug.Log("stun hid");
             }
 
             HandleTurning();
@@ -623,7 +622,7 @@ public class SnakeGameplayController : MonoBehaviour
     {
         Vector3 head = transform.position;
  
-        //World obstacle collisions for both head and first segmentwith near-miss timer
+        //World obstacle collisions for both head and first segment with near-miss timer
         bool touchingObstacle = false;
 
         bool headHit = Physics.OverlapSphere(head, collisionRadius, obstacleLayerMask).Length > 0;
@@ -705,7 +704,6 @@ public class SnakeGameplayController : MonoBehaviour
 
             SetLegMovement(false); //Stop legs
             stunEffect.SetActive(true); //Display stun effect
-            Debug.Log("stun shown");
         }
 
         //Remove all of snake segments aside from initial ones

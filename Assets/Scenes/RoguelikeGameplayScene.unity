@@ -1378,7 +1378,8 @@ GameObject:
   - component: {fileID: 153027890}
   - component: {fileID: 153027891}
   - component: {fileID: 153027892}
-  m_Layer: 0
+  - component: {fileID: 153027893}
+  m_Layer: 12
   m_Name: SnakeHead (Has gameplay controller)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1481,6 +1482,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InvincibilityFlash
   target: {fileID: 794286613}
+--- !u!136 &153027893
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153027886}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &172554460
 GameObject:
   m_ObjectHideFlags: 0
@@ -11969,6 +11993,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7665826461265091268, guid: 6464f8e2bb0544904a737b011cb3a6f3, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: -2062223649520054469, guid: 6464f8e2bb0544904a737b011cb3a6f3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -11980,6 +12008,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6464f8e2bb0544904a737b011cb3a6f3, type: 3}
       propertyPath: m_Name
       value: StunEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6464f8e2bb0544904a737b011cb3a6f3, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6198155943423808377, guid: 6464f8e2bb0544904a737b011cb3a6f3, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17531,6 +17567,8 @@ MonoBehaviour:
   scavengeCaterpillarPositionTransform: {fileID: 2106849937}
   scavengeEnemyPositionTransform: {fileID: 45881614}
   combatEnemyPositionTransform: {fileID: 1087910751}
+  volume: {fileID: 832575518}
+  maxVignetteIntensity: 0.425
 --- !u!1 &1876415590
 GameObject:
   m_ObjectHideFlags: 0
@@ -19203,9 +19241,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: -2423723570599938229, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
       propertyPath: m_Name
       value: Head
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7884875706485726859, guid: eda2221497d1341bca1e64a1f3e2674a, type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
