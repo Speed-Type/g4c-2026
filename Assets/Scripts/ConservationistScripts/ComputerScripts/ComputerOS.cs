@@ -81,7 +81,6 @@ public class ComputerOS : MonoBehaviour
     [Header("Prefabs")]
     [Tooltip("Prefab for a desktop icon (Image + TMP_Text + Button)")]
     public GameObject desktopIconPrefab;
-
     [Tooltip("Prefab for a taskbar button (Button + TMP_Text)")]
     public GameObject taskbarButtonPrefab;
 
@@ -211,10 +210,8 @@ public class ComputerOS : MonoBehaviour
 
     private void BuildDesktopIcons()
     {
-        if(desktopIconPrefab == null || iconGrid == null) return;
-
         //Clear existing
-        foreach (Transform child in iconGrid) Destroy(child.gameObject);
+        foreach(Transform child in iconGrid) Destroy(child.gameObject);
 
         foreach(var app in apps)
         {
@@ -223,7 +220,7 @@ public class ComputerOS : MonoBehaviour
 
             //Icon image
             var img = icon.GetComponentInChildren<Image>();
-            if (img != null && app.icon != null) img.sprite = app.icon;
+            if(img != null && app.icon != null) img.sprite = app.icon;
 
             //Label
             var lbl = icon.GetComponentInChildren<TMP_Text>();
@@ -257,7 +254,7 @@ public class ComputerOS : MonoBehaviour
 
         //Set title bar label
         var titleLabel = win.transform.Find("TitleBar/TitleLabel")?.GetComponent<TMP_Text>();
-        if (titleLabel != null) titleLabel.text = entry.appName;
+        if(titleLabel != null) titleLabel.text = entry.appName;
 
         //Wire the close button
         var closeBtn = win.transform.Find("TitleBar/CloseButton")?.GetComponent<Button>();
@@ -278,7 +275,7 @@ public class ComputerOS : MonoBehaviour
         //Slight cascade offset so windows don't stack exactly
         int count = openWindows.Count;
         var rect = win.GetComponent<RectTransform>();
-        if (rect != null)
+        if(rect != null)
             rect.anchoredPosition += new Vector2(count * 20f, -count * 20f);
 
         openWindows[entry.appName] = win;
@@ -288,7 +285,7 @@ public class ComputerOS : MonoBehaviour
         appBase?.OnAppOpen(this);
 
         //Add taskbar button
-        AddTaskbarButton(entry.appName, win);
+        AddTaskbarButton(entry, win);
 
         BringToFront(win);
     }
@@ -296,13 +293,13 @@ public class ComputerOS : MonoBehaviour
     private void CloseWindow(string appName, GameObject win)
     {
         var appBase = win.GetComponentInChildren<AppBase>();
-        appBase?.OnAppClose();
+        appBase.OnAppClose();
 
         Destroy(win);
         openWindows.Remove(appName);
 
         //Remove taskbar button
-        if (taskbarButtons.TryGetValue(appName, out var btn))
+        if(taskbarButtons.TryGetValue(appName, out var btn))
         {
             Destroy(btn);
             taskbarButtons.Remove(appName);
@@ -318,19 +315,23 @@ public class ComputerOS : MonoBehaviour
 
     //Taskbar logic
 
-    private void AddTaskbarButton(string appName, GameObject win)
+    private void AddTaskbarButton(AppEntry app, GameObject win)
     {
-        if(taskbarButtonPrefab == null || openAppList == null) return;
-
         GameObject btnGO = Instantiate(taskbarButtonPrefab, openAppList);
+        string name = app.appName;
 
+        //Set image
+        var img = btnGO.GetComponentInChildren<Image>();
+        if(img != null && app.icon != null) img.sprite = app.icon;
+
+        //Set label
         var lbl = btnGO.GetComponentInChildren<TMP_Text>();
-        if(lbl != null) lbl.text = appName;
+        if(lbl != null) lbl.text = name;
 
+        //Set button
         var btn = btnGO.GetComponent<Button>();
         if(btn == null) btn = btnGO.AddComponent<Button>();
 
-        string name = appName;
         GameObject w = win;
         btn.onClick.AddListener(() =>
         {
@@ -338,7 +339,7 @@ public class ComputerOS : MonoBehaviour
                 BringToFront(w);
         });
 
-        taskbarButtons[appName] = btnGO;
+        taskbarButtons[name] = btnGO;
     }
 
     //------------------------------------------------------------------------------------------
@@ -349,7 +350,7 @@ public class ComputerOS : MonoBehaviour
     {
         if(group == null) return;
         if(instant) group.alpha = on ? 1f : 0f;
-        group.interactable   = on;
+        group.interactable = on;
         group.blocksRaycasts = on;
     }
 

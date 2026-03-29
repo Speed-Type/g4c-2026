@@ -96,6 +96,7 @@ public class ComputerInteractable : MonoBehaviour
     {
         if(inUse || isAnimating) return;
         EnterSequence();
+        GetComponent<InteractableObject>().OnPointerExit(null);
         GetComponent<InteractableObject>().enabled = false;
     }
 
@@ -104,7 +105,6 @@ public class ComputerInteractable : MonoBehaviour
     {
         if(!inUse || isAnimating) return;
         ExitSequence();
-        GetComponent<InteractableObject>().OnPointerExit(null);
         GetComponent<InteractableObject>().enabled = true;
     }
 
