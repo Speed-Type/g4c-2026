@@ -3,24 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Manages the on-screen objective list panel.
-///
-/// Hierarchy expected:
-///   ObjectivePanel (this script)
-///     ├── Header (TMP_Text)           — optional title
-///     ├── MandatorySection
-///     │     ├── SectionLabel (TMP_Text)
-///     │     └── MandatoryContainer (VerticalLayoutGroup)
-///     └── OptionalSection
-///           ├── SectionLabel (TMP_Text)
-///           └── OptionalContainer (VerticalLayoutGroup)
-///
-/// Assign ObjectiveRowPrefab — a prefab with:
-///   ├── CheckIcon  (Image)     — shown when complete
-///   ├── BulletIcon (Image)     — shown when incomplete
-///   └── Label      (TMP_Text)  — objective description
-/// </summary>
 public class ObjectiveUI : MonoBehaviour
 {
     //Static instance
