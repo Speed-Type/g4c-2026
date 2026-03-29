@@ -157,6 +157,7 @@ public class ComputerOS : MonoBehaviour
         //Show boot screen, fade in
         SetGroup(bootScreen, true, instant: true);
         bootScreen.alpha = 0f;
+        progressBar.sizeDelta = new Vector2(0, progressBar.sizeDelta.y);
         yield return StartCoroutine(FadeGroup(bootScreen, 1f, 0.3f));
 
         //Simulate loading
@@ -177,7 +178,7 @@ public class ComputerOS : MonoBehaviour
         SetGroup(taskbar, true, instant: true);
         taskbar.alpha = 0f;
 
-        yield return StartCoroutine(FadeGroup(desktop, 1f, 0.4f));
+        StartCoroutine(FadeGroup(desktop, 1f, 0.3f));
         yield return StartCoroutine(FadeGroup(taskbar, 1f, 0.3f));
 
         //Open any apps flagged as openOnBoot
@@ -217,19 +218,16 @@ public class ComputerOS : MonoBehaviour
         {
             var appCopy = app;
             GameObject icon = Instantiate(desktopIconPrefab, iconGrid);
+            DesktopIcon desktopIcon = icon.GetComponent<DesktopIcon>();
 
             //Icon image
-            var img = icon.GetComponentInChildren<Image>();
-            if(img != null && app.icon != null) img.sprite = app.icon;
+            if(app.icon != null) desktopIcon.SetIcon(app.icon);
 
             //Label
-            var lbl = icon.GetComponentInChildren<TMP_Text>();
-            if(lbl != null) lbl.text = app.appName;
+            desktopIcon.SetLabel(app.appName);
 
-            //Click
-            var btn = icon.GetComponent<Button>();
-            if(btn == null) btn = icon.AddComponent<Button>();
-            btn.onClick.AddListener(() => LaunchApp(appCopy));
+            //Add click event
+            desktopIcon.AddButtonListener(() => LaunchApp(appCopy));
         }
     }
 
@@ -246,31 +244,19 @@ public class ComputerOS : MonoBehaviour
             return;
         }
 
-        if(entry.windowPrefab == null || windowLayer == null) return;
-
         //Instantiate the window
         GameObject win = Instantiate(entry.windowPrefab, windowLayer);
+        AppWindow appWindow = win.GetComponent<AppWindow>();
         win.SetActive(true);
 
         //Set title bar label
-        var titleLabel = win.transform.Find("TitleBar/TitleLabel")?.GetComponent<TMP_Text>();
-        if(titleLabel != null) titleLabel.text = entry.appName;
+        appWindow.SetLabel(entry.appName);
 
         //Wire the close button
-        var closeBtn = win.transform.Find("TitleBar/CloseButton")?.GetComponent<Button>();
-        if(closeBtn != null)
-        {
-            string name = entry.appName;
-            closeBtn.onClick.AddListener(() => CloseApp(name));
-        }
+        appWindow.AddCloseButtonListener(() => CloseApp(entry.appName));
 
         //Wire title bar click to bring to front function
-        var titleBar = win.transform.Find("TitleBar")?.GetComponent<Button>();
-        if(titleBar != null)
-        {
-            GameObject winRef = win;
-            titleBar.onClick.AddListener(() => BringToFront(winRef));
-        }
+        appWindow.AddTitleBarButtonListener(() => BringToFront(win));
 
         //Slight cascade offset so windows don't stack exactly
         int count = openWindows.Count;
@@ -315,28 +301,23 @@ public class ComputerOS : MonoBehaviour
 
     //Taskbar logic
 
-    private void AddTaskbarButton(AppEntry app, GameObject win)
+    private void AddTaskbarButton(AppEntry app, GameObject window)
     {
         GameObject btnGO = Instantiate(taskbarButtonPrefab, openAppList);
+        TaskbarButton taskbarButton = btnGO.GetComponent<TaskbarButton>();
         string name = app.appName;
 
         //Set image
-        var img = btnGO.GetComponentInChildren<Image>();
-        if(img != null && app.icon != null) img.sprite = app.icon;
+        if(app.icon != null) taskbarButton.SetIcon(app.icon);
 
         //Set label
-        var lbl = btnGO.GetComponentInChildren<TMP_Text>();
-        if(lbl != null) lbl.text = name;
+        taskbarButton.SetLabel(name);
 
         //Set button
-        var btn = btnGO.GetComponent<Button>();
-        if(btn == null) btn = btnGO.AddComponent<Button>();
-
-        GameObject w = win;
-        btn.onClick.AddListener(() =>
+        taskbarButton.AddButtonListener(() =>
         {
             if(openWindows.ContainsKey(name))
-                BringToFront(w);
+                BringToFront(window);
         });
 
         taskbarButtons[name] = btnGO;

@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 8966326436793289147}
   - component: {fileID: 3821685722185709446}
   - component: {fileID: 5790671863802389500}
+  - component: {fileID: 679476164319003114}
   m_Layer: 5
   m_Name: DesktopIcon
   m_TagString: Untagged
@@ -334,3 +335,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &679476164319003114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132005232847376676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 061193abce2e64336a574afa8c547b39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DesktopIcon
+  icon: {fileID: 6202603852403142147}
+  label: {fileID: 7228983911976593376}
+  button: {fileID: 3821685722185709446}
