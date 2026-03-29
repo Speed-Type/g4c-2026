@@ -61,6 +61,12 @@ public class SnakeGameplayController : MonoBehaviour
     public Bugs enemyBugEnum;
     public SnakeEnemy snakeEnemy;
 
+    [Header("Cards")]
+    public float currentCharge;
+    public Card currentCard;
+    public RectTransform chargeFillBar;
+    private float chargeFillBarOriginalHeight;
+
     [Header("Input")]
     public InputActionAsset inputActions;
 
@@ -91,9 +97,7 @@ public class SnakeGameplayController : MonoBehaviour
     //Input action references
     private InputAction moveAction;
     private InputAction lookAction;
-    private InputAction jumpAction;
-    private InputAction growAction;
-    private InputAction shrinkAction;
+    private InputAction useCardAction;
     private InputAction toggleCamAction;
 
     //Saved segment data
@@ -127,6 +131,7 @@ public class SnakeGameplayController : MonoBehaviour
     private float groundY; // Y of the ground plane (set at Start)
     private float coyoteTimer;
     private bool jumpConsumed;
+    private bool jumpQueued;
 
     //Collision grace period: tracks how long the head has been in contact
     //Resets to 0 whenever contact clears
@@ -151,29 +156,33 @@ public class SnakeGameplayController : MonoBehaviour
     public float currentFightTime;
     [HideInInspector] public int totalDamage;
 
+    //Static instance
+    public static SnakeGameplayController instance;
+
     //----------------------------------------------------------------------------------------------------------------
 
     void Awake()
     {
+        instance = this;
+
         //Setup input
         var map = inputActions.FindActionMap("Snake");
 
         moveAction = map.FindAction("Move");
         lookAction = map.FindAction("Look");
-        jumpAction = map.FindAction("Jump");
-        growAction = map.FindAction("Grow");
-        shrinkAction = map.FindAction("Shrink");
+        useCardAction = map.FindAction("PlayCard");
         toggleCamAction = map.FindAction("ToggleCam");
 
-        growAction.performed   += _ => AddSegments(1);
-        shrinkAction.performed += _ => BeginShrink(1);
-
+        useCardAction.performed += _ => PlayCard();
         toggleCamAction.performed += _ => ToggleCameraMode();
 
         //Initialize health bar variables
         enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
-        
+
+        //Initialize charge bar variables
+        chargeFillBarOriginalHeight = chargeFillBar.sizeDelta.y;
+
         //Initialize post-processing references
         if(volume.profile.TryGet(out chromaticAberration))
         {
@@ -184,7 +193,6 @@ public class SnakeGameplayController : MonoBehaviour
         {
             originalVignetteIntensity = vignette.intensity.value;
         }
-        
 
         //Initialize other references
         invincibilityFlash = GetComponent<InvincibilityFlash>();
@@ -241,6 +249,9 @@ public class SnakeGameplayController : MonoBehaviour
             MoveHead();
             UpdateSegmentPositions();
             CheckCollisions();
+
+            currentCharge += Time.deltaTime; //Only increase charge when not stunned
+            chargeFillBar.sizeDelta = new Vector2(chargeFillBar.sizeDelta.x, Math.Min(currentCharge / currentCard.cooldown * chargeFillBarOriginalHeight, chargeFillBarOriginalHeight));
         }
 
         AdjustSegmentCount();
@@ -254,9 +265,7 @@ public class SnakeGameplayController : MonoBehaviour
     {
         moveAction.Enable();
         lookAction.Enable();
-        jumpAction.Enable();
-        growAction.Enable();
-        shrinkAction.Enable();
+        useCardAction.Enable();
         toggleCamAction.Enable();
     }
 
@@ -264,11 +273,25 @@ public class SnakeGameplayController : MonoBehaviour
     {
         moveAction.Disable();
         lookAction.Disable();
-        jumpAction.Disable();
-        growAction.Disable();
-        shrinkAction.Disable();
+        useCardAction.Disable();
         toggleCamAction.Disable();
         ReleaseCursor();
+    }
+
+    //----------------------------------------------------------------------------------------------------------------
+    
+    //Card logic
+
+    private void PlayCard()
+    {
+        if(currentCharge < currentCard.cooldown) return;
+        if(!isPlaying) return;
+        if(stunTimer > 0) return;
+
+        //Play card
+        currentCard.ActivateCard();
+        currentCard = Deck.instance.DrawCard();
+        currentCharge = 0;
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -401,13 +424,14 @@ public class SnakeGameplayController : MonoBehaviour
             coyoteTimer -= Time.deltaTime;
 
         //Actual jumping
-        if(jumpAction.IsPressed() && !jumpConsumed && coyoteTimer > 0f)
+        if(jumpQueued && !jumpConsumed && coyoteTimer > 0f)
         {
             //Formula is v = sqrt(2 * g * h); thanks AP physics
             verticalVelocity = Mathf.Sqrt(2f * gravity * jumpHeight);
             jumpConsumed = true;
             coyoteTimer = 0f;
             isGrounded  = false;
+            jumpQueued = false;
         }
 
         //Apply gravity when in the air
@@ -754,6 +778,7 @@ public class SnakeGameplayController : MonoBehaviour
         isShrinking = false;
         totalDamage = 0;
         odometer = 0f;
+        jumpQueued = false;
         gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
         ResetHitEffects();
 
@@ -795,6 +820,10 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Make [title card]
         ActivateInvincibility();
+
+        //Draw first card
+        Deck.instance.ResetDeck();
+        currentCard = Deck.instance.DrawCard();
     }
 
     //----------------------------------------------------------------------------------------------------------------

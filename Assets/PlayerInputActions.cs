@@ -1172,15 +1172,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""49df0ff4-80f5-491a-bc36-70c8a8bf1253"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Look"",
                     ""type"": ""Value"",
                     ""id"": ""ef057737-2a55-4ea6-bc62-7b32b3fc9376"",
@@ -1190,27 +1181,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Grow"",
-                    ""type"": ""Button"",
-                    ""id"": ""0fd4526c-1877-44aa-8b6a-7ef824d49370"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Shrink"",
-                    ""type"": ""Button"",
-                    ""id"": ""f8d55a59-ebc3-46db-8b5c-c3fd49952feb"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""ToggleCam"",
                     ""type"": ""Button"",
                     ""id"": ""1b5fe127-36a0-42f5-b0d3-58f38f400f76"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayCard"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0a09d30-346a-4640-b69f-caebf71165cc"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -1363,39 +1345,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3af3e338-a637-4b12-a35d-00e02df7ea7f"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""56dbab12-1722-4939-bc06-5e6ca0e12f82"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a34d0e8c-1cbf-41b3-92a9-824ace6c0e52"",
-                    ""path"": ""<XRController>/secondaryButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""XR"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""e5099588-6f97-495f-a907-942eb2e775db"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
@@ -1429,34 +1378,45 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""0bf62de1-4ae5-4f6e-afe4-fc72010886a9"",
-                    ""path"": ""<Keyboard>/g"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Grow"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""388b9c4d-68b0-4de8-a032-f4f51c7a0a89"",
-                    ""path"": ""<Keyboard>/h"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": "";Keyboard&Mouse"",
-                    ""action"": ""Shrink"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""701387dc-1440-4c32-9b67-89f67e40af60"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ToggleCam"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb987fbc-bc4f-4b5d-9277-31eee757cd49"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlayCard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2fd8954b-6394-4d9c-9964-1655738ab7fb"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlayCard"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""86a55ae2-60eb-46ba-b558-768279efb22d"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""PlayCard"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1646,11 +1606,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Snake = asset.FindActionMap("Snake", throwIfNotFound: true);
         m_Snake_Move = m_Snake.FindAction("Move", throwIfNotFound: true);
         m_Snake_Zoom = m_Snake.FindAction("Zoom", throwIfNotFound: true);
-        m_Snake_Jump = m_Snake.FindAction("Jump", throwIfNotFound: true);
         m_Snake_Look = m_Snake.FindAction("Look", throwIfNotFound: true);
-        m_Snake_Grow = m_Snake.FindAction("Grow", throwIfNotFound: true);
-        m_Snake_Shrink = m_Snake.FindAction("Shrink", throwIfNotFound: true);
         m_Snake_ToggleCam = m_Snake.FindAction("ToggleCam", throwIfNotFound: true);
+        m_Snake_PlayCard = m_Snake.FindAction("PlayCard", throwIfNotFound: true);
         // Conservationist
         m_Conservationist = asset.FindActionMap("Conservationist", throwIfNotFound: true);
         m_Conservationist_Left = m_Conservationist.FindAction("Left", throwIfNotFound: true);
@@ -2153,11 +2111,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<ISnakeActions> m_SnakeActionsCallbackInterfaces = new List<ISnakeActions>();
     private readonly InputAction m_Snake_Move;
     private readonly InputAction m_Snake_Zoom;
-    private readonly InputAction m_Snake_Jump;
     private readonly InputAction m_Snake_Look;
-    private readonly InputAction m_Snake_Grow;
-    private readonly InputAction m_Snake_Shrink;
     private readonly InputAction m_Snake_ToggleCam;
+    private readonly InputAction m_Snake_PlayCard;
     /// <summary>
     /// Provides access to input actions defined in input action map "Snake".
     /// </summary>
@@ -2178,25 +2134,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Zoom => m_Wrapper.m_Snake_Zoom;
         /// <summary>
-        /// Provides access to the underlying input action "Snake/Jump".
-        /// </summary>
-        public InputAction @Jump => m_Wrapper.m_Snake_Jump;
-        /// <summary>
         /// Provides access to the underlying input action "Snake/Look".
         /// </summary>
         public InputAction @Look => m_Wrapper.m_Snake_Look;
         /// <summary>
-        /// Provides access to the underlying input action "Snake/Grow".
-        /// </summary>
-        public InputAction @Grow => m_Wrapper.m_Snake_Grow;
-        /// <summary>
-        /// Provides access to the underlying input action "Snake/Shrink".
-        /// </summary>
-        public InputAction @Shrink => m_Wrapper.m_Snake_Shrink;
-        /// <summary>
         /// Provides access to the underlying input action "Snake/ToggleCam".
         /// </summary>
         public InputAction @ToggleCam => m_Wrapper.m_Snake_ToggleCam;
+        /// <summary>
+        /// Provides access to the underlying input action "Snake/PlayCard".
+        /// </summary>
+        public InputAction @PlayCard => m_Wrapper.m_Snake_PlayCard;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2229,21 +2177,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
             @Look.started += instance.OnLook;
             @Look.performed += instance.OnLook;
             @Look.canceled += instance.OnLook;
-            @Grow.started += instance.OnGrow;
-            @Grow.performed += instance.OnGrow;
-            @Grow.canceled += instance.OnGrow;
-            @Shrink.started += instance.OnShrink;
-            @Shrink.performed += instance.OnShrink;
-            @Shrink.canceled += instance.OnShrink;
             @ToggleCam.started += instance.OnToggleCam;
             @ToggleCam.performed += instance.OnToggleCam;
             @ToggleCam.canceled += instance.OnToggleCam;
+            @PlayCard.started += instance.OnPlayCard;
+            @PlayCard.performed += instance.OnPlayCard;
+            @PlayCard.canceled += instance.OnPlayCard;
         }
 
         /// <summary>
@@ -2261,21 +2203,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
             @Look.started -= instance.OnLook;
             @Look.performed -= instance.OnLook;
             @Look.canceled -= instance.OnLook;
-            @Grow.started -= instance.OnGrow;
-            @Grow.performed -= instance.OnGrow;
-            @Grow.canceled -= instance.OnGrow;
-            @Shrink.started -= instance.OnShrink;
-            @Shrink.performed -= instance.OnShrink;
-            @Shrink.canceled -= instance.OnShrink;
             @ToggleCam.started -= instance.OnToggleCam;
             @ToggleCam.performed -= instance.OnToggleCam;
             @ToggleCam.canceled -= instance.OnToggleCam;
+            @PlayCard.started -= instance.OnPlayCard;
+            @PlayCard.performed -= instance.OnPlayCard;
+            @PlayCard.canceled -= instance.OnPlayCard;
         }
 
         /// <summary>
@@ -2684,13 +2620,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnJump(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "Look" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
@@ -2698,26 +2627,19 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLook(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Grow" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnGrow(InputAction.CallbackContext context);
-        /// <summary>
-        /// Method invoked when associated input action "Shrink" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnShrink(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "ToggleCam" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnToggleCam(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PlayCard" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlayCard(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Conservationist" which allows adding and removing callbacks.
