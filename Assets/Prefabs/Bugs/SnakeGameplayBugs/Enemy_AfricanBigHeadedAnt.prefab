@@ -788,7 +788,7 @@ MonoBehaviour:
   wanderDistance: 2
   wanderRadius: 1.5
   wanderJitter: 50
-  fleeRadius: 54
+  fleeRadius: 5
   fleeWeight: 3
   fleeJumpTriggerDist: 0
   fleeJumpCooldown: 99999
@@ -800,7 +800,7 @@ MonoBehaviour:
   wallWeight: 6
   windupDuration: 0.75
   cooldownDuration: 1.2
-  attackRange: 8
+  attackRange: 10
   attackInterval: 2.5
   pressAdvantage: 1
   attackTelegraphParticle: {fileID: 7649109060383396268, guid: 1f5a82d3e88e6485da53c69c5489559c, type: 3}
@@ -809,7 +809,7 @@ MonoBehaviour:
   shootChance: 0
   shootStartRange: 0
   chargeMoveSpeed: 20
-  chargeDuration: 0.5
+  chargeDuration: 0.75
   chargeHitRadius: 1.2
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10

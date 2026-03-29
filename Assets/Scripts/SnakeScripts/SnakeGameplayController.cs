@@ -98,7 +98,22 @@ public class SnakeGameplayController : MonoBehaviour
 
     //Saved segment data
     public readonly List<GameObject> segments = new();
-    private readonly List<Vector3> posHistory = new();
+    /*
+    Each sample stores the head's world position and the total distance the head has traveled since the game started 
+    (Like an odometer reading). Segments look up their position by how far behind the head they should be in distance
+    making the whole system speed-agnostic. Speed boosts, slow effects, anything that changes moveSpeed wont't (I hope)
+    cause segments to drift out of position
+    */
+    private struct PosSnapshot
+    {
+        public Vector3 position;
+        public float odometer; //Total XZ distance traveled by the head
+    }
+    private readonly List<PosSnapshot> posHistory = new();
+ 
+    //Running odometer, incremented in SamplePosition every frame
+    private float odometer;
+
     private int targetSegmentCount;
     private float distSinceSample;
 
@@ -437,20 +452,26 @@ public class SnakeGameplayController : MonoBehaviour
  
         if(posHistory.Count > 0)
         {
-            Vector3 lastFlat = new Vector3(posHistory[0].x, 0f, posHistory[0].z);
-            distSinceSample += Vector3.Distance(currentFlat, lastFlat);
+            Vector3 lastFlat = new Vector3(posHistory[0].position.x, 0f, posHistory[0].position.z);
+            float moved = Vector3.Distance(currentFlat, lastFlat);
+            odometer += moved;
+            distSinceSample += moved;
         }
         else
         {
             distSinceSample = positionSampleInterval; //Force first sample to avoid errors with other methods
         }
  
-        //Insert as many samples as the distance warrants this frame.
+        //Slam as many samples as the distance warrants this frame
         //At low FPS the snake may travel multiple intervals in one step
         //Without this, a single sample leaves a gap in history and segments visibly stretch apart which is annoying
         while(distSinceSample >= positionSampleInterval)
         {
-            posHistory.Insert(0, transform.position);
+            posHistory.Insert(0, new PosSnapshot
+            {
+                position = transform.position,
+                odometer = odometer,
+            });
             distSinceSample -= positionSampleInterval;
         }
  
@@ -460,9 +481,16 @@ public class SnakeGameplayController : MonoBehaviour
     //Method to remove any no longer necessary saved position snapshots
     private void TrimHistory()
     {
-        int maxSamples = (segments.Count + 12) * Mathf.CeilToInt(segmentSpacing / positionSampleInterval);
-        if(posHistory.Count > maxSamples)
-            posHistory.RemoveRange(maxSamples, posHistory.Count - maxSamples);
+        //Keep enough history to cover the full snake length in distance
+        float keepDistance = (segments.Count + 4) * segmentSpacing;
+        float cutoff = odometer - keepDistance;
+ 
+        int last = posHistory.Count - 1;
+        while(last > 0 && posHistory[last].odometer < cutoff)
+        {
+            posHistory.RemoveAt(last);
+            last--;
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -472,22 +500,46 @@ public class SnakeGameplayController : MonoBehaviour
     //Method that updates every segment's position according to the snapshots in the posHistory
     private void UpdateSegmentPositions()
     {
-        int samplesPerSeg = Mathf.Max(1, Mathf.RoundToInt(segmentSpacing / positionSampleInterval));
-
-        for(int i = 0; i < segments.Count; i++)
+        //Each segment trails the head by (i+1) * segmentSpacing distance units
+        //We look up where the head was when it was that far behind its current odometer reading
+        //NOTE: Entirely independent of speed
+        for (int i = 0; i < segments.Count; i++)
         {
-            int histIdx = (i+1) * samplesPerSeg;
-            if(histIdx >= posHistory.Count) break;
-
-            Vector3 targetPos = posHistory[histIdx];
+            float targetOdometer = odometer - (i + 1) * segmentSpacing;
+            Vector3 targetPos = SampleAtOdometer(targetOdometer);
+ 
             segments[i].transform.position = targetPos;
 
-            //Face toward the segment ahead (or the head for segment 0)
+            //Face towrd the segment ahead (or the head)
             Vector3 lookAt = (i == 0) ? transform.position : segments[i - 1].transform.position;
             Vector3 dir = lookAt - targetPos;
             if(dir.sqrMagnitude > 0.001f)
                 segments[i].transform.rotation = Quaternion.LookRotation(dir);
         }
+    }
+
+    //Returns the interpolated head position at a given odometer reading by finding the two nearest samples and lerping between them.
+    private Vector3 SampleAtOdometer(float targetOdo)
+    {
+        if(posHistory.Count == 0) return transform.position;
+ 
+        //History is newest-first (highest odometer first)
+        for (int i = 0; i < posHistory.Count - 1; i++)
+        {
+            PosSnapshot newer = posHistory[i];
+            PosSnapshot older = posHistory[i + 1];
+ 
+            if (older.odometer <= targetOdo && targetOdo <= newer.odometer)
+            {
+                float span = newer.odometer - older.odometer;
+                if(span < 0.0001f) return newer.position;
+                float frac = (targetOdo - older.odometer) / span;
+                return Vector3.Lerp(older.position, newer.position, frac);
+            }
+        }
+ 
+        //Target is further back than all history, so return oldest sample.
+        return posHistory[posHistory.Count - 1].position;
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -536,7 +588,7 @@ public class SnakeGameplayController : MonoBehaviour
     {
         int sps = Mathf.Max(1, Mathf.RoundToInt(segmentSpacing / positionSampleInterval));
         int idx = segments.Count * sps;
-        Vector3 spawnPos = idx < posHistory.Count ? posHistory[idx] : transform.position;
+        Vector3 spawnPos = idx < posHistory.Count ? posHistory[idx].position : transform.position;
 
         GameObject seg = Instantiate(segmentPrefab, spawnPos, Quaternion.identity, transform.parent); //Parented under same transform as snake head
         seg.name = $"Segment_{segments.Count}"; //Set name
@@ -692,6 +744,7 @@ public class SnakeGameplayController : MonoBehaviour
         stunTimer = 0;
         isShrinking = false;
         totalDamage = 0;
+        odometer = 0f;
         gameOverGraphicRT.sizeDelta = new Vector2(0, gameOverGraphicRT.sizeDelta.y);
         ResetHitEffects();
 
@@ -742,8 +795,17 @@ public class SnakeGameplayController : MonoBehaviour
     {
         Vector3 back  = -transform.forward;
         int count = (initialSegmentCount + 12) * Mathf.CeilToInt(segmentSpacing / positionSampleInterval);
+ 
         for(int i = 0; i <= count; i++)
-            posHistory.Add(transform.position + back * (i * positionSampleInterval));
+        {
+            posHistory.Add(new PosSnapshot
+            {
+                position = transform.position + back * (i * positionSampleInterval),
+
+                //Seed odometer as if the head has already traveled backward, so segments start at the correct distance offsets immediately
+                odometer = odometer - i * positionSampleInterval,
+            });
+        }
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -795,8 +857,6 @@ public class SnakeGameplayController : MonoBehaviour
 
         if(playerWon) //Case 1: Player wins
         {
-            //TODO: MAKE COOL GRAPHIC ON WIN
-
             //Zoom in fully
             cameraController.VictoryZoom(snakeEnemy.transform);
         }
@@ -831,7 +891,7 @@ public class SnakeGameplayController : MonoBehaviour
         if(posHistory == null) return;
         Gizmos.color = new Color(0f, 1f, 1f, 0.5f);
         for(int i = 0; i < Mathf.Min(posHistory.Count, 150); i++)
-            Gizmos.DrawWireSphere(posHistory[i], 0.04f);
+            Gizmos.DrawWireSphere(posHistory[i].position, 0.04f);
     }
 #endif
 }

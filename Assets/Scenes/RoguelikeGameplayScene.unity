@@ -1424,8 +1424,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SnakeGameplayController
   segmentPrefab: {fileID: 5731172278428971843, guid: d1a3043ee0e5b43aeb44c2b6d9510f35, type: 3}
   initialSegmentCount: 5
-  segmentSpacing: 3.25
-  positionSampleInterval: 0.5
+  segmentSpacing: 3.5
+  positionSampleInterval: 0.6
   moveSpeed: 7
   mouseSensitivity: 0.15
   keyboardTurnSensitivity: 120
