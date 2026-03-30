@@ -14455,6 +14455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1423970773}
+  - component: {fileID: 1423970774}
   m_Layer: 5
   m_Name: LootingSystem
   m_TagString: Untagged
@@ -14486,6 +14487,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1423970774
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423970772}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1428007930
 GameObject:
   m_ObjectHideFlags: 0
@@ -16274,6 +16287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4212bedaf45f14625877463828f567c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bite_AfricanBigHeadedAnt
+  maxHealth: 0
   currentHealth: 0
   graphicGO: {fileID: 1546563455}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
@@ -16284,7 +16298,10 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  currentRotation: 0
+  isFree: 0
   isEquipped: 0
+  fragmentEnum: 0
   isDead: 0
   damage: 3
   openBiteSprite: {fileID: 21300000, guid: 3217c2eb0294c4241a126f1168867962, type: 3}
@@ -18096,8 +18113,8 @@ MonoBehaviour:
   maxSpiderAlertness: 50
   spiderMovesPerTurn: 2
   dialogueSystemController: {fileID: 859266379}
-  inventorySystemGO: {fileID: 2051013936}
-  lootSystemGO: {fileID: 1423970772}
+  inventorySystemCanvasGroup: {fileID: 2051013938}
+  lootSystemCanvasGroup: {fileID: 1423970774}
   statSystemGO: {fileID: 1946982346}
   nodeMapGO: {fileID: 194874353}
   combatUI: {fileID: 440218226}
@@ -18119,8 +18136,6 @@ MonoBehaviour:
   biteBackgroundPopupAnimLength: 0.5
   bitesRemainingText: {fileID: 1801756514}
   canSwapBitesIndicator: {fileID: 21982148}
-  hiddenPosition: {fileID: 2043729213}
-  shownPosition: {fileID: 1448716845}
   cameraController: {fileID: 330585548}
   inventoryManager: {fileID: 0}
   playerCanMakeChoices: 0
@@ -18158,6 +18173,8 @@ MonoBehaviour:
   fragmentSnapAnimLength: 0.25
   gridBorderHorizontalPadding: 125
   gridBorderVerticalPadding: 120
+  gridNumCols: 0
+  gridNumRows: 0
   inventorySlotSize: 100
   inventoryNumCols: 5
   inventoryNumRows: 7
@@ -18184,6 +18201,8 @@ MonoBehaviour:
   fragmentSnapAnimLength: 0.25
   gridBorderHorizontalPadding: 80
   gridBorderVerticalPadding: 80
+  gridNumCols: 0
+  gridNumRows: 0
   inventorySlotSize: 100
   lootSystemBackground: {fileID: 988952335}
   maxFragmentPositioningAttempts: 5
@@ -19794,6 +19813,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2051013937}
+  - component: {fileID: 2051013938}
   m_Layer: 5
   m_Name: InventorySystem
   m_TagString: Untagged
@@ -19822,6 +19842,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &2051013938
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2051013936}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2060764573
 GameObject:
   m_ObjectHideFlags: 0
@@ -20845,6 +20877,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1331a9c58f94b97abfef7522c3c7e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Bite_Default
+  maxHealth: 0
   currentHealth: 0
   graphicGO: {fileID: 3378642402841122374}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
@@ -20855,7 +20888,10 @@ MonoBehaviour:
   isOnEdge: 0
   belongedInventory: {fileID: 0}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  currentRotation: 0
+  isFree: 0
   isEquipped: 0
+  fragmentEnum: 0
   isDead: 0
   damage: 1
   openBiteSprite: {fileID: 21300000, guid: 60ee43d83055c496988ae074da5273b3, type: 3}

@@ -19,9 +19,9 @@ public class InventoryManager : GeneralInventoryStructure
     }
     
     //Overridden fragment placement
-    public override void PlaceFragment(Fragment fragment, int x, int y)
+    public override void PlaceFragment(Fragment fragment, int x, int y, bool instant = false)
     {
-        base.PlaceFragment(fragment, x, y);
+        base.PlaceFragment(fragment, x, y, instant);
 
         //Activate fragment's effects
         fragment.ActivateEffects();

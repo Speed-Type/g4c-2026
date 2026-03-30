@@ -14,8 +14,8 @@ public class GeneralInventoryStructure : MonoBehaviour
     [SerializeField] private float gridBorderHorizontalPadding;
     [SerializeField] private float gridBorderVerticalPadding;
 
-    protected int gridNumCols;
-    protected int gridNumRows;
+    public int gridNumCols;
+    public int gridNumRows;
     public float inventorySlotSize; //Note that this variable needs to be public for Fragment class access
 
     //Inventory logic
@@ -158,7 +158,7 @@ public class GeneralInventoryStructure : MonoBehaviour
     }
 
     //Method to update the array with a new fragment
-    public virtual void PlaceFragment(Fragment fragment, int x, int y)
+    public virtual void PlaceFragment(Fragment fragment, int x, int y, bool instant = false)
     {
         //Loop through necessary spots, relative to x and y, and assign fragments
         for(int i = 0; i < fragment.shape.GetLength(0); i++)
@@ -181,6 +181,12 @@ public class GeneralInventoryStructure : MonoBehaviour
         //Determine placement of actual graphic for the fragment
         Vector2 placePosition = inventorySlotArray[x, y].gameObject.GetComponent<RectTransform>().position;
         placePosition += new Vector2(-inventorySlotSize / 2f, inventorySlotSize / 2f);
+
+        if(instant)
+        {
+            fragment.gameObject.transform.position = placePosition;
+            return;
+        }
 
         //Snappily tween to position
         LeanTween.value(fragment.gameObject, (Vector2)fragment.gameObject.GetComponent<RectTransform>().position, placePosition, fragmentSnapAnimLength).setEaseOutElastic().setOnUpdate((Vector2 val) =>

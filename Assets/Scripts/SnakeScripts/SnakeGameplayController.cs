@@ -923,7 +923,6 @@ public class SnakeGameplayController : MonoBehaviour
         SetLegMovement(false);
 
         //Stop food spawning
-        foodSpawner.ClearAll();
         foodSpawner.gameObject.SetActive(false);
 
         if(playerWon) //Case 1: Player wins
@@ -944,8 +943,10 @@ public class SnakeGameplayController : MonoBehaviour
         //End game after a delay
         LeanTween.delayedCall(endGameDelay, () =>
         {
-            RoguelikeGameplayController.instance.EndCombat(playerWon);
+            foodSpawner.ClearAll(); //Delete all food
             ResetHitEffects(); //Reset any residual changes
+
+            RoguelikeGameplayController.instance.EndCombat(playerWon);
         });
     }
 

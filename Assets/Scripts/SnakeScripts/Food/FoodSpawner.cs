@@ -10,8 +10,8 @@ public class FoodSpawner : MonoBehaviour
 
     [Header("Spawn area")]
     public Vector3 spawnCenter = Vector3.zero;
-    [Tooltip("Half-extents of the spawn rectangle (x and z); y is ignored")]
-    public Vector3 spawnHalfExtents = new Vector3(18f, 0f, 18f);
+    [Tooltip("Radius of the circular spawn area")]
+    public float spawnRadius = 18f;
     [Tooltip("y position food spawns at")]
     public float groundY = 0f;
 
@@ -65,7 +65,7 @@ public class FoodSpawner : MonoBehaviour
 
     private void SpawnAt(Vector3 position)
     {
-        GameObject food = Instantiate(foodPrefab, position, Quaternion.identity, transform);
+        GameObject food = Instantiate(foodPrefab, position, Quaternion.identity, transform.parent);
 
         //Track count via the food object's destruction
         FoodItem item = food.GetComponent<FoodItem>();
@@ -81,10 +81,11 @@ public class FoodSpawner : MonoBehaviour
 
     private Vector3 RandomPosition()
     {
+        Vector2 circle = Random.insideUnitCircle * spawnRadius;
         return new Vector3(
-            spawnCenter.x + Random.Range(-spawnHalfExtents.x, spawnHalfExtents.x),
+            spawnCenter.x + circle.x,
             groundY,
-            spawnCenter.z + Random.Range(-spawnHalfExtents.z, spawnHalfExtents.z));
+            spawnCenter.z + circle.y);
     }
 
     private bool IsClearOfOtherFood(Vector3 candidate)
@@ -114,13 +115,11 @@ public class FoodSpawner : MonoBehaviour
 
     //Nice gizmo for visualization
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = new Color(0f, 1f, 0f, 0.2f);
-        Gizmos.DrawWireCube(
-            new Vector3(spawnCenter.x, groundY, spawnCenter.z),
-            new Vector3(spawnHalfExtents.x * 2f, 0.1f, spawnHalfExtents.z * 2f));
-    }
-#endif
+    #if UNITY_EDITOR
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = new Color(0f, 1f, 0f, 0.2f);
+            Gizmos.DrawWireSphere(new Vector3(spawnCenter.x, groundY, spawnCenter.z), spawnRadius);
+        }
+    #endif
 }

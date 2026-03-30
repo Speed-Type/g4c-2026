@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using System;
+using System.Collections;
 
 public class RoguelikeGameplayController : MonoBehaviour
 {
@@ -31,8 +32,8 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     [Header("System References")]
     [SerializeField] private DialogueBoxController dialogueSystemController;
-    public GameObject inventorySystemGO;
-    public GameObject lootSystemGO;
+    public CanvasGroup inventorySystemCanvasGroup;
+    public CanvasGroup lootSystemCanvasGroup;
     public GameObject statSystemGO;
     [SerializeField] private GameObject nodeMapGO;
     [SerializeField] private GameObject combatUI;
@@ -60,17 +61,13 @@ public class RoguelikeGameplayController : MonoBehaviour
     [SerializeField] private TMP_Text bitesRemainingText;
     [SerializeField] private TMP_Text canSwapBitesIndicator;
 
-    [Header("References for Placement of Inventory and Loot Systems")]
-    [SerializeField] private Transform hiddenPosition;
-    [SerializeField] private Transform shownPosition;
-
     [Header("Camera Stuff")]
     public RoguelikeCameraController cameraController;
     
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
-    public InventoryManager inventoryManager;
+    public GeneralInventoryStructure inventoryManager;
     [HideInInspector] public bool playerCanMakeChoices;
     [HideInInspector] public static bool playerHasStartedLooting;
 
@@ -100,8 +97,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Enable/disable necessary systems
         nodeMapGO.SetActive(true);
-        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        SetGroup(inventorySystemCanvasGroup, false);
+        SetGroup(lootSystemCanvasGroup, false);
         statSystemGO.SetActive(false);
         HideBites();
         combatUI.SetActive(false);
@@ -111,10 +108,19 @@ public class RoguelikeGameplayController : MonoBehaviour
         TogglePlayerOptionButtons(false);
 
         //Load in saved stuffs
-        SaveSystem.Load(inventoryManager);
+        StartCoroutine(LoadAfterLayout());
+    }
 
+    private IEnumerator LoadAfterLayout()
+    {
+        //Wait one frame so LayoutRebuilder has processed
+        yield return new WaitForEndOfFrame();
+
+        SaveSystem.Load(inventoryManager);
+        
         //Set number of bites
         ResetBites();
+        HideBites();
     }
 
     //Method to update the buttons that should be open; called primarily by nodes
@@ -295,7 +301,7 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
+        SetGroup(inventorySystemCanvasGroup, true);
         dialogueSystemController.HideDialogueBox();
         statSystemGO.SetActive(true);
         StatDisplay.UpdateAllFleshFillBars_Static();
@@ -313,7 +319,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        SetGroup(inventorySystemCanvasGroup, false);
         dialogueSystemController.ShowDialogueBox();
         statSystemGO.SetActive(false);
         NodeManager.instance.ShowEnemyBug();
@@ -335,10 +341,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update graphics
         TogglePlayerOptionButtons(false);
-        lootSystemGO.GetComponent<RectTransform>().position = shownPosition.position;
-        inventorySystemGO.GetComponent<RectTransform>().position = shownPosition.position;
+        SetGroup(lootSystemCanvasGroup, true);
+        SetGroup(inventorySystemCanvasGroup, true);
         hideInventorySystemButton.SetActive(false);
-        dialogueSystemController.HideDialogueBox();
         StatDisplay.UpdateAllFleshFillBars_Static();
 
         //Prepare bite system
@@ -354,8 +359,8 @@ public class RoguelikeGameplayController : MonoBehaviour
     {
         //Update graphics
         TogglePlayerOptionButtons(true);
-        lootSystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
-        inventorySystemGO.GetComponent<RectTransform>().position = hiddenPosition.position;
+        SetGroup(lootSystemCanvasGroup, false);
+        SetGroup(inventorySystemCanvasGroup, false);
         hideInventorySystemButton.SetActive(true);
         dialogueSystemController.ShowDialogueBox();
         HideBites();
@@ -643,6 +648,13 @@ public class RoguelikeGameplayController : MonoBehaviour
     public static float ChanceForSpiderToPursue()
     {
         return Math.Min((float)instance.currentSpiderAlertness / instance.maxSpiderAlertness, 1f);
+    }
+
+    private void SetGroup(CanvasGroup group, bool interactable)
+    {
+        group.alpha = interactable ? 1 : 0;
+        group.interactable = interactable;
+        group.blocksRaycasts = interactable;
     }
 }
 

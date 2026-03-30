@@ -81,7 +81,6 @@ public class LootManager : GeneralInventoryStructure
             Fragment newFragment = newFragmentGO.GetComponent<Fragment>();
 
             newFragment.belongedInventory = this;
-            newFragment.isFree = true;
 
             //Try to place it in the grid
             bool placementSuccessful = false;

@@ -29,6 +29,8 @@ public class FragmentSaveData
     //True if fragment.isDead at save time
     public bool isDead;
     
+    public int shapeRows;
+    public int shapeCols;
 }
 
 [Serializable]
@@ -47,7 +49,7 @@ public static class SaveSystem
     private const string SaveKey = "inventory_save"; //The player prefs key that will hold EVERYTHING
 
     //Scans the InventoryManager grid and writes every placed fragment to PlayerPrefs
-    public static void Save(InventoryManager inventoryManager)
+    public static void Save(GeneralInventoryStructure inventoryManager)
     {
         InventorySaveData saveData = BuildSaveData(inventoryManager);
 
@@ -68,7 +70,7 @@ public static class SaveSystem
     //
     //The InventoryManager grid must already be generated (Awake has run)
     //The FragmentPrefabRegistry singleton must be populated with prefabs for every fragment type expected
-    public static void Load(InventoryManager inventoryManager)
+    public static void Load(GeneralInventoryStructure inventoryManager)
     {
         if(!SaveExists())
         {
@@ -120,7 +122,7 @@ public static class SaveSystem
     //------------------------------------------------------------------------------------------
 
     //APCSA all over agin
-    private static InventorySaveData BuildSaveData(InventoryManager inventoryManager)
+    private static InventorySaveData BuildSaveData(GeneralInventoryStructure inventoryManager)
     {
         var saveData = new InventorySaveData();
 
@@ -128,8 +130,8 @@ public static class SaveSystem
         //using a HashSet to skip fragments we've already written
         var recorded = new HashSet<Fragment>();
 
-        int rows = inventoryManager.inventoryNumRows;
-        int cols = inventoryManager.inventoryNumCols;
+        int rows = inventoryManager.gridNumRows;
+        int cols = inventoryManager.gridNumCols;
 
         for(int row = 0; row < rows; row++)
         {
@@ -153,6 +155,8 @@ public static class SaveSystem
                     rotation = fragment.currentRotation,
                     currentHealth = fragment.currentHealth,
                     isDead = fragment.isDead,
+                    shapeRows = fragment.shape.GetLength(0),
+                    shapeCols = fragment.shape.GetLength(1),
                 });
             }
         }
@@ -160,7 +164,7 @@ public static class SaveSystem
         return saveData;
     }
 
-    private static bool TryRestoreFragment(FragmentSaveData fd, InventoryManager inventoryManager)
+    private static bool TryRestoreFragment(FragmentSaveData fd, GeneralInventoryStructure inventoryManager)
     {
         //Get the prefab from LootManager's fragment list
         Fragments fragmentEnum;
@@ -176,7 +180,9 @@ public static class SaveSystem
         //Instantiate under the inventory parent
         GameObject go = UnityEngine.Object.Instantiate(prefab, inventoryManager.inventorySystemParentTransform);
         Fragment fragment = go.GetComponent<Fragment>();
+
         fragment.belongedInventory = inventoryManager;
+        fragment.isFree = true;
 
         if(fragment == null)
         {
@@ -190,15 +196,22 @@ public static class SaveSystem
         for(int i = 0; i < targetRotation; i++)
             fragment.Rotate();
 
-        //Restore health state BEFORE PlaceFragment so ActivateEffects sees it
-        fragment.currentHealth = fd.currentHealth;
+        if (fd.row < 0 || fd.col < 0 ||
+            fd.row + fragment.shape.GetLength(0) > inventoryManager.gridNumRows ||
+            fd.col + fragment.shape.GetLength(1) > inventoryManager.gridNumCols)
+        {
+            Debug.LogError($"[SaveSystem] Fragment '{fd.typeName}' at ({fd.row},{fd.col}) " +
+                   $"with shape {fragment.shape.GetLength(0)}x{fragment.shape.GetLength(1)} " +
+                   $"doesn't fit in grid {inventoryManager.gridNumRows}x{inventoryManager.gridNumCols}. Skipping.");
+            UnityEngine.Object.Destroy(go);
+            return false;
+        }
 
         //Place on the grid (calls InventoryManager.PlaceFragment which spawns the 3D model, silk tuft, activates effects, etc.)
-        inventoryManager.PlaceFragment(fragment, fd.row, fd.col);
+        inventoryManager.PlaceFragment(fragment, fd.row, fd.col, true);
 
-        //Check dead state
-        if(fd.isDead && !fragment.isDead)
-            fragment.Die(); //Triggers visual dead state; Die() guards against double-calls
+        //Deal damage to bring it back to its normal health
+        fragment.TakeDamage(fragment.maxHealth - fd.currentHealth);
 
         return true;
     }

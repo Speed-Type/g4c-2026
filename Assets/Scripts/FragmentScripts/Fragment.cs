@@ -18,7 +18,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected string displayDescription;
 
     [Header("Fragment Data")]
-    protected int maxHealth;
+    public int maxHealth;
     public int currentHealth;
 
     [Header("GameObject with Sprite for this fragment's graphics")]
@@ -442,12 +442,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if(isFree)
         {
             //Parent the spawned particles under the inventory system
-            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.inventorySystemGO.transform);
+            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.inventorySystemCanvasGroup.gameObject.transform);
         }
         else
         {
             //Parent the spawned particles under the loot system
-            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.lootSystemGO.transform);
+            spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.lootSystemCanvasGroup.gameObject.transform);
         }
     }
 
