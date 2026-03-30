@@ -152,7 +152,7 @@ public class SnakeGameplayController : MonoBehaviour
     
     //Camera mode
     public enum CameraMode {TopDown, Chase}
-    private CameraMode camMode = CameraMode.TopDown; //For now, default to top down
+    public CameraMode camMode = CameraMode.TopDown; //For now, default to top down
 
     //For integration with rg controller
     public bool isPlaying = false;
@@ -285,6 +285,11 @@ public class SnakeGameplayController : MonoBehaviour
 
     public void PlayCard(InputAction.CallbackContext ctx)
     {
+        PlayCard();
+    }
+
+    public void PlayCard()
+    {
         if(currentCharge < currentCard.cooldown) return;
         if(!isPlaying) return;
         if(stunTimer > 0) return;
@@ -304,6 +309,8 @@ public class SnakeGameplayController : MonoBehaviour
     private void ToggleCameraMode(InputAction.CallbackContext ctx)
     {
         if(!isPlaying) return;
+        if(Mathf.Approximately(Time.timeScale, 0)) return;
+
         SetCameraMode(camMode == CameraMode.TopDown ? CameraMode.Chase : CameraMode.TopDown);
     }
 
@@ -335,7 +342,7 @@ public class SnakeGameplayController : MonoBehaviour
         cameraController.SetMode(mode);
     }
 
-    private static void ReleaseCursor()
+    public static void ReleaseCursor()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -378,7 +385,7 @@ public class SnakeGameplayController : MonoBehaviour
     //CurrentYaw turns toward desiredYaw at maxTurnRate (same as top down, just different input source)
     private void TurnMouseAim()
     {
-        Vector2 look = lookAction.ReadValue<Vector2>();
+        Vector2 look = lookAction.ReadValue<Vector2>() * SettingsManager.instance.MouseSensitivity;
         desiredYaw += look.x * mouseSensitivity;
 
         //A/D (or stick X) also contribute in chase cam, on top of mouse

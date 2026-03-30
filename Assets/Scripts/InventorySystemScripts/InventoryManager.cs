@@ -62,7 +62,7 @@ public class InventoryManager : GeneralInventoryStructure
 
         //Apply some randomness to rotation
         float tilt = Random.Range(-10f, 10f);
-        float twist = Random.Range(-180, 180);
+        float twist = Random.Range(-180f, 180f);
 
         Quaternion tiltRot = Quaternion.AngleAxis(tilt, playerModelTransform.forward);
         Quaternion twistRot = Quaternion.AngleAxis(twist, outward);

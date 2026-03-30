@@ -70,7 +70,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
-    private GeneralInventoryStructure inventoryManager;
+    public GeneralInventoryStructure inventoryManager;
     [HideInInspector] public bool playerCanMakeChoices;
     [HideInInspector] public static bool playerHasStartedLooting;
 

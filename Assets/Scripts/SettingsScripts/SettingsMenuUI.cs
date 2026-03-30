@@ -107,6 +107,11 @@ public class SettingsMenuUI : MonoBehaviour
         SetGroupState(true, instant: false);
         RefreshAllControls();
         if(pauseWhileOpen) Time.timeScale = 0f;
+
+        if(SnakeGameplayController.instance != null && SnakeGameplayController.instance.isPlaying && SnakeGameplayController.instance.camMode == SnakeGameplayController.CameraMode.Chase)
+        {
+            SnakeGameplayController.ReleaseCursor();
+        }
     }
 
     public void Close()
@@ -115,6 +120,13 @@ public class SettingsMenuUI : MonoBehaviour
         isOpen = false;
         SetGroupState(false, instant: false);
         if(pauseWhileOpen) Time.timeScale = 1f;
+
+        if(SnakeGameplayController.instance != null && SnakeGameplayController.instance.isPlaying && SnakeGameplayController.instance.camMode == SnakeGameplayController.CameraMode.Chase)
+        {
+            //For chase cam, lock cursor
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
     public void Toggle()

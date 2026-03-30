@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3837112521795782486}
   - component: {fileID: 9196836283853676591}
   - component: {fileID: 5385071556362289691}
+  - component: {fileID: 6383517610237871211}
   m_Layer: 10
   m_Name: Segment
   m_TagString: Untagged
@@ -34,8 +35,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6134729596441833652}
+  - {fileID: 1161654147091893138}
   - {fileID: 110798142911637311}
-  - {fileID: 8199250006168074534}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6895873438479149509
@@ -133,68 +134,51 @@ MonoBehaviour:
   rotationAngle: 25
   speed: 6
   phaseOffset: 0
---- !u!1001 &3156911796625494239
-PrefabInstance:
+--- !u!114 &6383517610237871211
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 6713335716124463646}
-    m_Modifications:
-    - target: {fileID: 2079226398102025746, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_Name
-      value: SilkTuft
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.07
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.09
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
---- !u!4 &8199250006168074534 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6486886598257289721, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
-  m_PrefabInstance: {fileID: 3156911796625494239}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5731172278428971843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665bbb72bac9c44e0b515fab4171d2b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SegmentFragmentEquipper
+  spawnPoint: {fileID: 1161654147091893138}
+  silkTuftGO: {fileID: 2079226398102025746, guid: 6dd53fd2632b444b59e3775752346224, type: 3}
+--- !u!1 &7535318537958842578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1161654147091893138}
+  m_Layer: 10
+  m_Name: FragmentSpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1161654147091893138
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7535318537958842578}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.35, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6713335716124463646}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1001 &4335545148383901605
 PrefabInstance:
   m_ObjectHideFlags: 0

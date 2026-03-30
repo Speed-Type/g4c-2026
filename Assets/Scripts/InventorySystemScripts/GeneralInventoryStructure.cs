@@ -350,8 +350,6 @@ public class GeneralInventoryStructure : MonoBehaviour
             }
         }
 
-        //TODO: Make pretty graphics here
-
         return true;
     }
 
@@ -416,17 +414,22 @@ public class GeneralInventoryStructure : MonoBehaviour
         Fragment.HideWouldBeDamage();
     }
 
+    public Fragment GetRandomEquippedFragment()
+    {
+        //Pick a random inventory slot
+        int randomRow = UnityEngine.Random.Range(0, gridNumRows);
+        int randomCol = UnityEngine.Random.Range(0, gridNumCols);
+
+        return inventorySlotArray[randomRow, randomCol].GetFragment();
+    }
+
     //Method to take damage from battle
     //Returns a Vector3 with x representing a damaged fragment, y representing a shattered fragment, and z representing a flesh reduction
     public Vector3Int TakeBattleDamage()
     {
         Vector3Int returnVal = new Vector3Int();
 
-        //Pick a random inventory slot
-        int randomRow = UnityEngine.Random.Range(0, gridNumRows);
-        int randomCol = UnityEngine.Random.Range(0, gridNumCols);
-
-        Fragment fragment = inventorySlotArray[randomRow, randomCol].GetFragment();
+        Fragment fragment = GetRandomEquippedFragment();
         if(fragment != null && fragment.currentHealth > 0)
         {
             //Damage fragment

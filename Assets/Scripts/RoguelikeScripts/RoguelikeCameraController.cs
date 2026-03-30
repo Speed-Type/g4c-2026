@@ -339,7 +339,7 @@ public class RoguelikeCameraController : MonoBehaviour
         if(!pressing) return;
         if(isOverUI) return; //only rotate when not hovered over UI
 
-        Vector2 delta = ctx.ReadValue<Vector2>();
+        Vector2 delta = ctx.ReadValue<Vector2>() * SettingsManager.instance.MouseSensitivity;
         yawVelocity = delta.x * yawDragSensitivity;
         pitchVelocity = delta.y * pitchDragSensitivity;
 

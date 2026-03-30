@@ -249,8 +249,8 @@ public class LootManager : GeneralInventoryStructure
                     minLoot+=2;
                     maxLoot+=2;
                     scavengeFleshChance = 1f;
-                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 4);
-                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 4);
+                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 3);
+                    AddChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 3);
                     break;
                 default:
                     break;

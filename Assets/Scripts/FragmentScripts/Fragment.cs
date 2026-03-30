@@ -235,11 +235,14 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Overridden method to be called by input system
     public void Rotate(InputAction.CallbackContext ctx)
     {
+        Debug.Log("rotating");
         if(!isBeingDragged)
         {
             return;
         }
 
+
+        Debug.Log("Still rotating");
         Rotate();
     }
 
