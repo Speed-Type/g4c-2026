@@ -1461,6 +1461,7 @@ MonoBehaviour:
   cardAnim: {fileID: 1099666848}
   currentChargeText: {fileID: 1264057602}
   foodSpawner: {fileID: 1456757826}
+  foodValue: 5
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraController: {fileID: 330585549}
   enemyNameText: {fileID: 1309434078}
@@ -17967,6 +17968,7 @@ MonoBehaviour:
   spiderAnticipationAnimPause: 1.5
   spiderPursueParticle: {fileID: 1418312096847119850, guid: e3535f911aa3d445fae01202804c5f03, type: 3}
   spiderConfusedParticle: {fileID: 5478109176984531571, guid: 18cbc6e7e4baf44c29ba479898c6c86c, type: 3}
+  chanceForNewBug: 1
   caterpillarGO: {fileID: 1907272274}
   idleCaterpillarPositionTransform: {fileID: 1849130982}
   scavengeCaterpillarPositionTransform: {fileID: 2106849937}

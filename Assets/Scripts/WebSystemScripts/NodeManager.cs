@@ -39,6 +39,9 @@ public class NodeManager : MonoBehaviour
     [SerializeField] private GameObject spiderPursueParticle;
     [SerializeField] private GameObject spiderConfusedParticle;
 
+    [Header("Catching New Bugs")]
+    [SerializeField] private float chanceForNewBug = 0.03f;
+
     [Header("Caterpillar Movement Reference Transforms")]
     [SerializeField] private GameObject caterpillarGO;
     private GameObject enemyBugGO;
@@ -56,10 +59,13 @@ public class NodeManager : MonoBehaviour
     public static NodeManager instance;
     public static bool isMovingNodes = false;
     public static bool overrideVisitConditions = false;
+    private List<Node> allNodes;
 
     void Awake()
     {
         instance = this;
+
+        allNodes = new List<Node>();
 
         //Setup post processing effects
         if(volume.profile.TryGet(out vignette))
@@ -88,6 +94,7 @@ public class NodeManager : MonoBehaviour
         Node centerNode = centerNodeGO.GetComponent<Node>();
         centerNode.GetComponent<RectTransform>().localPosition = Vector3.zero;
         centerNodeGO.name += "@Center"; //rename
+        allNodes.Add(centerNode);
 
         //Set spider position at center
         spiderNode = centerNode;
@@ -113,6 +120,7 @@ public class NodeManager : MonoBehaviour
                 GameObject newNodeGO = Instantiate(generatedNodeTypes[i * webNumRadii + j], UIParentGO.transform);
                 Node newNode = newNodeGO.GetComponent<Node>();
                 newNodeGO.name += "@Radius " + j + ", Circle " + i; //rename
+                allNodes.Add(newNode);
 
                 //Connect pointers, add to list
                 newNode.AddNode(previousCircle[j]);
@@ -216,13 +224,16 @@ public class NodeManager : MonoBehaviour
     }
 
     //Function to replace a node with another
-    public void ReplaceNode(GameObject nodeToReplace, NodeTypes newNodeType, bool setVisited = false)
+    public Node ReplaceNode(GameObject nodeToReplace, NodeTypes newNodeType, bool setVisited = false)
     {
         //Instantiate the new node, move it to the right position
         GameObject newNodeGO = Instantiate(nodeTypes[(int)newNodeType], UIParentGO.transform);
+        Node newNode = newNodeGO.GetComponent<Node>();
+        allNodes.Add(newNode);
+
         newNodeGO.GetComponent<RectTransform>().localPosition = nodeToReplace.GetComponent<RectTransform>().localPosition;
         newNodeGO.GetComponent<RectTransform>().SetSiblingIndex(newNodeGO.transform.parent.childCount - 2);
-
+        
         //Set the pointer values in the new node to the pointer values of the old node
         foreach(Node node in nodeToReplace.GetComponent<Node>().GetNodeList())
         {
@@ -234,14 +245,17 @@ public class NodeManager : MonoBehaviour
         //If the node to replace is also the current node, update current node pointer
         if(nodeToReplace.GetComponent<Node>() == playerNode)
         {
-            playerNode = newNodeGO.GetComponent<Node>();
+            playerNode = newNode;
         }
 
         //Delete the node to replace
+        allNodes.Remove(nodeToReplace.GetComponent<Node>());
         Destroy(nodeToReplace);
 
         //If setVisited is true, we want to set this new node to be already visited
-        if(setVisited) newNodeGO.GetComponent<Node>().SetNodeBGColorVisited();
+        if(setVisited) newNode.SetNodeBGColorVisited();
+
+        return newNode;
     }
 
     //Function to check if this node is reachable from the current node; note that the first node is auto allowed
@@ -442,14 +456,8 @@ public class NodeManager : MonoBehaviour
         }
         else if(currentMoveNum == RoguelikeGameplayController.instance.spiderMovesPerTurn) //CASE 2: SPIDER HAS NO MORE MOVES
         {
-            //Call to hide map
-            RoguelikeGameplayController.instance.HideMap(true);
-
-            //Call method for playerNode to its their thing
-            playerNode.DoNodeEffects();
-
-            //Set player attackable again
-            hasAttackedPlayer = false;
+            //Continue to next phase
+            AddNewBugs();
         }
         else //CASE 3: SPIDER JUST MOVES A NODE
         {
@@ -529,18 +537,63 @@ public class NodeManager : MonoBehaviour
                     }
                     else //IN THIS CASE, SPIDER HAS JUST MOVED AWAY FROM PLAYER
                     {
-                        //Call to hide map
-                        RoguelikeGameplayController.instance.HideMap(true);
-
-                        //Call method for playerNode to its their thing
-                        playerNode.DoNodeEffects();
-
-                        //Set player attackable again
-                        hasAttackedPlayer = false;
+                        AddNewBugs();
                     }
                 });
             });
         }
+    }
+
+    private void AddNewBugs()
+    {
+        //Spawn new bug
+        if(UnityEngine.Random.Range(0f, 1f) < chanceForNewBug)
+        {
+            //Calculate if there is a valid node
+            int counter = 0;
+            Node nodeToReplace = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
+            while(counter < 5 && (nodeToReplace == playerNode || nodeToReplace == spiderNode || nodeToReplace.nodeType != NodeTypes.Empty))
+            {
+                nodeToReplace = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
+                counter++;
+            }
+            
+            //If there is no valid node, cut the function here
+            if(counter == 5)
+            {
+                TransferControlBackToPlayer();
+                return;
+            }
+
+            LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions, () =>
+            {
+                //Replace a node with a bug
+                Node newNode = ReplaceNode(nodeToReplace.gameObject, NodeTypes.Combat);
+                newNode.RevealNode();
+
+                //Wait a bit again
+                LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions * 2f, () =>
+                {
+                    TransferControlBackToPlayer();
+                });
+            });
+        }
+        else
+        {
+            TransferControlBackToPlayer();
+        }
+    }
+
+    private void TransferControlBackToPlayer()
+    {
+        //Call to hide map
+        RoguelikeGameplayController.instance.HideMap(true);
+
+        //Call method for playerNode to its their thing
+        playerNode.DoNodeEffects();
+
+        //Set player attackable again
+        hasAttackedPlayer = false;
     }
 
     //Spawn/move 3d bugs in proper spots
