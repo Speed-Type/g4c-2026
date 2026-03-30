@@ -49,31 +49,33 @@ public class ScreenShake : MonoBehaviour
         //If there is shake left to do, do shake
         if(trauma > 0)
         {
-            float shake = trauma * trauma; //Nonlinear scaling for game juice
+            //Only if setting is should we move
+            if(SettingsManager.instance.ScreenShakeEnabled)
+            {
+                float shake = trauma * trauma; //Nonlinear scaling for game juice
 
-            float time = Time.time * noiseFrequency;
+                float time = Time.time * noiseFrequency;
 
-            //Get random perlin noise values
-            float x = Mathf.PerlinNoise(noiseSeed, time) * 2 - 1;
-            float y = Mathf.PerlinNoise(noiseSeed + 1, time) * 2 - 1;
-            float r = Mathf.PerlinNoise(noiseSeed + 2, time) * 2 - 1;
+                //Get random perlin noise values
+                float x = Mathf.PerlinNoise(noiseSeed, time) * 2 - 1;
+                float y = Mathf.PerlinNoise(noiseSeed + 1, time) * 2 - 1;
+                float r = Mathf.PerlinNoise(noiseSeed + 2, time) * 2 - 1;
 
-            //Set cam position and rotation offsets
-            currentCamOffset = new Vector3(x, y, 0) * maxTranslation3D * shake;
-            currentRotOffset = r * maxRotation * shake;
+                //Set cam position and rotation offsets
+                currentCamOffset = new Vector3(x, y, 0) * maxTranslation3D * shake;
+                currentRotOffset = r * maxRotation * shake;
 
-            //Set UI position offset
-            currentUIOffset = new Vector2(x, y) * maxTranslationUI * 40f * shake;
+                //Set UI position offset
+                currentUIOffset = new Vector2(x, y) * maxTranslationUI * 40f * shake;
 
-            //Apply these offsets
-            cameraTransform.localPosition += currentCamOffset;
-            cameraTransform.localRotation *= Quaternion.Euler(0, 0, currentRotOffset);
+                //Apply these offsets
+                cameraTransform.localPosition += currentCamOffset;
+                cameraTransform.localRotation *= Quaternion.Euler(0, 0, currentRotOffset);
 
-            if(uiRoot != null) uiRoot.anchoredPosition += currentUIOffset;
+                uiRoot.anchoredPosition += currentUIOffset;
+            }
 
-
-
-            //Decay trauma
+            //Decay trauma even when screenshake is off
             trauma -= traumaDecay * Time.deltaTime;
             trauma = Mathf.Clamp01(trauma);
         }

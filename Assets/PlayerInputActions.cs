@@ -715,6 +715,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""OpenSettings"",
+                    ""type"": ""Button"",
+                    ""id"": ""920b77fd-42b2-4545-b139-640ffe73283f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1144,6 +1153,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
                     ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce65d299-8778-4dac-bde3-98850d3af28e"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenSettings"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4733b1f2-9930-4c92-bd8a-177f305747bc"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenSettings"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1602,6 +1633,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_Rotate = m_UI.FindAction("Rotate", throwIfNotFound: true);
+        m_UI_OpenSettings = m_UI.FindAction("OpenSettings", throwIfNotFound: true);
         // Snake
         m_Snake = asset.FindActionMap("Snake", throwIfNotFound: true);
         m_Snake_Move = m_Snake.FindAction("Move", throwIfNotFound: true);
@@ -1914,6 +1946,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_Rotate;
+    private readonly InputAction m_UI_OpenSettings;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1969,6 +2002,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/Rotate".
         /// </summary>
         public InputAction @Rotate => m_Wrapper.m_UI_Rotate;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/OpenSettings".
+        /// </summary>
+        public InputAction @OpenSettings => m_Wrapper.m_UI_OpenSettings;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -2028,6 +2065,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Rotate.started += instance.OnRotate;
             @Rotate.performed += instance.OnRotate;
             @Rotate.canceled += instance.OnRotate;
+            @OpenSettings.started += instance.OnOpenSettings;
+            @OpenSettings.performed += instance.OnOpenSettings;
+            @OpenSettings.canceled += instance.OnOpenSettings;
         }
 
         /// <summary>
@@ -2072,6 +2112,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Rotate.started -= instance.OnRotate;
             @Rotate.performed -= instance.OnRotate;
             @Rotate.canceled -= instance.OnRotate;
+            @OpenSettings.started -= instance.OnOpenSettings;
+            @OpenSettings.performed -= instance.OnOpenSettings;
+            @OpenSettings.canceled -= instance.OnOpenSettings;
         }
 
         /// <summary>
@@ -2597,6 +2640,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRotate(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "OpenSettings" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnOpenSettings(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Snake" which allows adding and removing callbacks.

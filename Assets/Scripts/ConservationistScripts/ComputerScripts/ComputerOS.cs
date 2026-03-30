@@ -232,7 +232,7 @@ public class ComputerOS : MonoBehaviour
         int count = openWindows.Count;
         var rect = win.GetComponent<RectTransform>();
         if(rect != null)
-            rect.anchoredPosition += new Vector2(count * 20f, -count * 20f);
+            rect.anchoredPosition += new Vector2(count * 30f, -count * 30f);
 
         openWindows[entry.appName] = win;
 
