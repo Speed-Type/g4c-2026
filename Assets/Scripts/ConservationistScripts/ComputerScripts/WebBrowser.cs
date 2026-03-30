@@ -153,28 +153,21 @@ public class WebBrowser : AppBase
 
     private void BuildOptionList()
     {
-        if(optionList == null) return;
-
         foreach(Transform child in optionList) Destroy(child.gameObject);
         rows.Clear();
 
         for (int i = 0; i < options.Count; i++)
         {
-            int idx = i;   // capture
-            GameObject row = optionRowPrefab != null
-                ? Instantiate(optionRowPrefab, optionList)
-                : BuildFallbackRow(optionList);
+            GameObject row = Instantiate(optionRowPrefab, optionList);
+            VolunteerOptionRow volunteerOptionRow = row.GetComponent<VolunteerOptionRow>();
 
             rows.Add(row);
 
-            // Wire the button
-            var btn = row.GetComponent<Button>();
-            if (btn == null) btn = row.AddComponent<Button>();
-
-            btn.onClick.AddListener(() =>
+            //Wire the button
+            volunteerOptionRow.AddButtonListener(() =>
             {
-                if (!options[idx].disabled)
-                    ApplySelection(idx);
+                if (!options[i].disabled)
+                    ApplySelection(i);
             });
 
             ApplyRowVisual(row, i, selected: false);
@@ -220,58 +213,29 @@ public class WebBrowser : AppBase
     private void ApplyRowVisual(GameObject row, int index, bool selected)
     {
         var opt = options[index];
+        VolunteerOptionRow volunteerOptionRow = row.GetComponent<VolunteerOptionRow>();
 
         //Background colour
-        var bg = row.GetComponent<Image>();
-        if(bg != null)
-        {
-            bg.color = opt.disabled  ? colourDisabled
-                     : selected      ? colourSelected
-                     :                 colourNormal;
-        }
+        volunteerOptionRow.SetBackgroundImageColor(opt.disabled ? colourDisabled : selected ? colourSelected : colourNormal);
 
-        //Labels — find by name first, fall back to component order
-        var allTexts = row.GetComponentsInChildren<TMP_Text>();
+        //Label
+        volunteerOptionRow.SetLabelText(opt.label, opt.disabled ? colourTextDisabled : colourTextNormal, selected ? FontStyles.Bold : FontStyles.Normal);
 
-        TMP_Text labelText  = FindChildText(row, "OptionLabel")  ?? (allTexts.Length > 0 ? allTexts[0] : null);
-        TMP_Text detailText = FindChildText(row, "OptionDetail") ?? (allTexts.Length > 1 ? allTexts[1] : null);
+        //Detail
+        volunteerOptionRow.SetDetailText(opt.detail, opt.disabled ? colourTextDisabled : colourTextNormal * new Color(1, 1, 1, 0.7f));
 
-        Color textCol = opt.disabled ? colourTextDisabled : colourTextNormal;
+        //RadioIndicator
+        volunteerOptionRow.SetRadioButtonColor(selected && !opt.disabled ? colourSelected * 1.4f : colourNormal * 1.4f);
 
-        if (labelText != null)
-        {
-            labelText.text      = opt.label;
-            labelText.color     = textCol;
-            labelText.fontStyle = selected ? FontStyles.Bold : FontStyles.Normal;
-        }
-
-        if (detailText != null)
-        {
-            detailText.text    = opt.detail;
-            detailText.color   = textCol * new Color(1, 1, 1, 0.7f);
-            detailText.gameObject.SetActive(!string.IsNullOrEmpty(opt.detail));
-        }
-
-        // RadioIndicator — swap colour to show selected state
-        var radio = FindChildImage(row, "RadioIndicator");
-        if (radio != null)
-            radio.color = selected && !opt.disabled ? colourSelected * 1.4f : colourNormal * 1.4f;
-
-        // Button interactability
-        var btn = row.GetComponent<Button>();
-        if (btn != null)
-        {
-            var colors         = btn.colors;
-            colors.disabledColor = colourTextDisabled;
-            btn.colors         = colors;
-            btn.interactable   = !opt.disabled;
-        }
+        //Button interactability
+        var colors = volunteerOptionRow.button.colors;
+        colors.disabledColor = colourTextDisabled;
+        volunteerOptionRow.button.colors = colors;
+        volunteerOptionRow.button.interactable = !opt.disabled;
     }
 
     private void UpdateSelectionInfo()
     {
-        if (selectionInfoLabel == null) return;
-
         selectionInfoLabel.text = selectedIndex >= 0
             ? $"Selected: {options[selectedIndex].label}"
             : "No option selected.";
@@ -279,90 +243,10 @@ public class WebBrowser : AppBase
 
     private void SetConfirmButtonState(bool ready)
     {
-        if (confirmButton == null) return;
-
         var lbl = confirmButton.GetComponentInChildren<TMP_Text>();
-        if (lbl != null)
+        if(lbl != null)
             lbl.text = ready ? confirmLabelReady : confirmLabelIdle;
 
         confirmButton.interactable = ready;
-    }
-
-    //------------------------------------------------------------------------------------------
-
-    private GameObject BuildFallbackRow(Transform parent)
-    {
-        // Root
-        var row = new GameObject("OptionRow", typeof(RectTransform));
-        row.transform.SetParent(parent, false);
-
-        var le = row.AddComponent<LayoutElement>();
-        le.minHeight = 48f;
-
-        var bg = row.AddComponent<Image>();
-        bg.color = colourNormal;
-
-        // Horizontal layout for radio + text column
-        var hLayout = row.AddComponent<HorizontalLayoutGroup>();
-        hLayout.padding       = new RectOffset(12, 12, 8, 8);
-        hLayout.spacing       = 10f;
-        hLayout.childAlignment           = TextAnchor.MiddleLeft;
-        hLayout.childControlWidth        = false;
-        hLayout.childControlHeight       = true;
-        hLayout.childForceExpandWidth    = false;
-        hLayout.childForceExpandHeight   = true;
-
-        // Radio dot
-        var radioGO  = new GameObject("RadioIndicator", typeof(RectTransform));
-        radioGO.transform.SetParent(row.transform, false);
-        var radioImg = radioGO.AddComponent<Image>();
-        radioImg.color = colourNormal * 1.4f;
-        var radioLE = radioGO.AddComponent<LayoutElement>();
-        radioLE.minWidth  = 16f;
-        radioLE.minHeight = 16f;
-        radioLE.preferredWidth  = 16f;
-        radioLE.preferredHeight = 16f;
-
-        // Text column
-        var textCol = new GameObject("TextColumn", typeof(RectTransform));
-        textCol.transform.SetParent(row.transform, false);
-        var vLayout = textCol.AddComponent<VerticalLayoutGroup>();
-        vLayout.childControlHeight     = true;
-        vLayout.childForceExpandHeight = false;
-        vLayout.childAlignment         = TextAnchor.MiddleLeft;
-        var textColLE = textCol.AddComponent<LayoutElement>();
-        textColLE.flexibleWidth = 1f;
-
-        // Label
-        var labelGO  = new GameObject("OptionLabel", typeof(RectTransform));
-        labelGO.transform.SetParent(textCol.transform, false);
-        var label    = labelGO.AddComponent<TextMeshProUGUI>();
-        label.fontSize = 14f;
-        label.color    = colourTextNormal;
-
-        // Detail
-        var detailGO  = new GameObject("OptionDetail", typeof(RectTransform));
-        detailGO.transform.SetParent(textCol.transform, false);
-        var detail    = detailGO.AddComponent<TextMeshProUGUI>();
-        detail.fontSize = 11f;
-        detail.color    = colourTextNormal * new Color(1, 1, 1, 0.6f);
-
-        return row;
-    }
-
-    //------------------------------------------------------------------------------------------
-
-    //Helper methods
-
-    private TMP_Text FindChildText(GameObject root, string childName)
-    {
-        var t = root.transform.Find(childName);
-        return t != null ? t.GetComponent<TMP_Text>() : null;
-    }
-
-    private Image FindChildImage(GameObject root, string childName)
-    {
-        var t = root.transform.Find(childName);
-        return t != null ? t.GetComponent<Image>() : null;
     }
 }
