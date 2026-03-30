@@ -207,7 +207,7 @@ public static class SaveSystem
             return false;
         }
 
-        //Place on the grid (calls InventoryManager.PlaceFragment which spawns the 3D model, silk tuft, activates effects, etc.)
+        //Place on the grid (calls InventoryManager.PlaceFragment which spawns the 3D model, silk tuft, activates effects, etc)
         inventoryManager.PlaceFragment(fragment, fd.row, fd.col, true);
 
         //Deal damage to bring it back to its normal health

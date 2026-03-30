@@ -15,6 +15,7 @@ public class MainMenuController : MonoBehaviour
 
     [Header("Game Start")]
     public GameObject startButton;
+    public GameObject doubleCheckIndicator;
     public GameObject continueButton;
     public GameObject newGameButton;
 
@@ -23,6 +24,9 @@ public class MainMenuController : MonoBehaviour
 
     void Start()
     {
+        //Hide indicator
+        doubleCheckIndicator.SetActive(false);
+
         //Show the right start buttons
         if(PlayerPrefs.GetInt("HasStartedGame") == 0)
         {
@@ -54,8 +58,16 @@ public class MainMenuController : MonoBehaviour
         sceneTransitionHandler.SceneTransitionToScene("NextStage");
     }
 
+    private bool doubleCheckNewGame = false;
     public void NewGame()
     {
+        if(doubleCheckNewGame == false)
+        {
+            doubleCheckNewGame = true;
+            doubleCheckIndicator.SetActive(true);
+            return;
+        }
+        
         //TODO: Reset necessary playerprefs
 
         PlayerPrefs.DeleteKey("CurrentStage"); //Reset to first stage
@@ -81,6 +93,9 @@ public class MainMenuController : MonoBehaviour
 
     private void PanCamToTransform(Transform targetTransform, float timing, Action onCompleteAction = null)
     {
+        doubleCheckNewGame = false;
+        doubleCheckIndicator.SetActive(false);
+
         LeanTween.move(cam, targetTransform.position, timing)
             .setEase(LeanTweenType.easeOutCubic);
         LeanTween.rotate(cam, targetTransform.rotation.eulerAngles, timing)

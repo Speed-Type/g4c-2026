@@ -330,7 +330,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual bool DeactivateEffects()
     {
         if(!effectsActive) return false; //Just in case, so as to avoid re-deactivating effects
-        if(currentHealth <= 0) return false; //DeactivateEffects only handles effect things when not dead
+        if(isDead) return false; //DeactivateEffects only handles effect things when not dead
 
         effectsActive = false;
         //Debug.Log("Effects deactivated");
@@ -416,7 +416,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     public virtual void Die()
     {
         if(isDead) return; //only want to call this once
-        isDead = true;
 
         //If effects were already active, deactivate them
         if(effectsActive)
@@ -449,6 +448,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
             //Parent the spawned particles under the loot system
             spawnedParticles.transform.SetParent(RoguelikeGameplayController.instance.lootSystemCanvasGroup.gameObject.transform);
         }
+
+        isDead = true;
     }
 
     //Method to auto-delete all fragments that are either not free or not equipped
