@@ -32,10 +32,6 @@ public class ComputerInteractable : MonoBehaviour
     [Tooltip("How fast the emission fades in/out")]
     public float emissionFadeSpeed = 3f;
 
-    [Header("Input")]
-    public InputActionAsset inputActions;
-    private InputAction escapeAction;
-
     [Tooltip("Optional on-screen 'Exit' button")]
     public Button exitButton;
 
@@ -54,10 +50,7 @@ public class ComputerInteractable : MonoBehaviour
     //------------------------------------------------------------------------------------------
 
     void Awake()
-    {
-        //Setup input
-        escapeAction = inputActions.FindActionMap("Conservationist").FindAction("Escape");
-        
+    {        
         //Setup camera
         targetCamera = Camera.main;
         cameraController = targetCamera.GetComponent<CVCameraController>();
@@ -67,16 +60,6 @@ public class ComputerInteractable : MonoBehaviour
 
         if(exitButton != null)
             exitButton.onClick.AddListener(ExitComputer);
-    }
-
-    void OnEnable()
-    {
-        escapeAction.performed += ExitComputerFromAction;
-    }
-
-    void OnDisable()
-    {
-        escapeAction.performed -= ExitComputerFromAction;
     }
 
     //------------------------------------------------------------------------------------------
@@ -90,12 +73,7 @@ public class ComputerInteractable : MonoBehaviour
         GetComponent<InteractableObject>().OnPointerExit(null);
         GetComponent<InteractableObject>().enabled = false;
     }
-
-    public void ExitComputerFromAction(InputAction.CallbackContext ctx)
-    {
-        ExitComputer();
-    }
-
+    
     //Power off and zoom back out; Wire to UI exit button
     public void ExitComputer()
     {

@@ -21,6 +21,7 @@ public class RoguelikeCameraController : MonoBehaviour
     [SerializeField] private Transform mapCamTransform;
     [SerializeField] private Transform inventoryFocusTransform;
     [SerializeField] private Transform enemyCloseupTransform;
+    [SerializeField] private Transform screenshakeUIRoot;
 
     [Header("Transition Settings")]
     [SerializeField] private GameObject cloudTransitionGO;
@@ -418,6 +419,6 @@ public class RoguelikeCameraController : MonoBehaviour
 
     public static GameObject SpawnParticle(Vector3 positionToSpawnAt, GameObject particleGO)
     {
-        return Instantiate(particleGO, positionToSpawnAt, Quaternion.identity, canvas.transform);
+        return Instantiate(particleGO, positionToSpawnAt, Quaternion.identity, instance.screenshakeUIRoot);
     }
 }

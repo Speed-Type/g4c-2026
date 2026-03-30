@@ -2360,6 +2360,7 @@ MonoBehaviour:
   mapCamTransform: {fileID: 1080935106}
   inventoryFocusTransform: {fileID: 2033165042}
   enemyCloseupTransform: {fileID: 1881902799}
+  screenshakeUIRoot: {fileID: 754933036}
   cloudTransitionGO: {fileID: 1974897838}
   cloudTransitionLength: 0.6
   battleTransitionCanvasGroup: {fileID: 25254661}
