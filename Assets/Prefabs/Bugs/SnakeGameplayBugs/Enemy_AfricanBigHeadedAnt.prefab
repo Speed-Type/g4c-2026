@@ -784,7 +784,7 @@ MonoBehaviour:
   deathParticles: {fileID: 1873246491600875132, guid: f68f69434d5104fb4a83cce78c6c7861, type: 3}
   damagedParticles: {fileID: 1873246491600875132, guid: 14f7874cc0497403f9925e0990be61b3, type: 3}
   moveSpeed: 3.5
-  turnSpeed: 100
+  turnSpeed: 130
   wanderDistance: 2
   wanderRadius: 1.5
   wanderJitter: 50
@@ -801,10 +801,10 @@ MonoBehaviour:
   caterpillarHeadLayerMask:
     serializedVersion: 2
     m_Bits: 4096
-  windupDuration: 0.75
-  cooldownDuration: 1.2
-  attackRange: 10
-  attackInterval: 2.5
+  windupDuration: 0.7
+  cooldownDuration: 1.3
+  attackRange: 7.5
+  attackInterval: 2
   pressAdvantage: 1
   attackTelegraphParticle: {fileID: 7649109060383396268, guid: 1f5a82d3e88e6485da53c69c5489559c, type: 3}
   chargeChance: 1

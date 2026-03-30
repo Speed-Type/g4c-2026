@@ -68,6 +68,7 @@ public class SnakeGameplayController : MonoBehaviour
     public Card currentCard;
     public Image chargeFillIndicator;
     public CardUI cardUI;
+    public TMP_Text currentChargeText;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -251,6 +252,7 @@ public class SnakeGameplayController : MonoBehaviour
 
             currentCharge += Time.deltaTime; //Only increase charge when not stunned
             chargeFillIndicator.fillAmount = Mathf.Clamp01((currentCard.cooldown - currentCharge) / currentCard.cooldown);
+            currentChargeText.text = Math.Min(currentCharge, currentCard.cooldown).ToString("F2") + " / " + currentCard.cooldown.ToString("F2");
         }
 
         AdjustSegmentCount();
@@ -281,7 +283,7 @@ public class SnakeGameplayController : MonoBehaviour
     
     //Card logic
 
-    private void PlayCard()
+    public void PlayCard()
     {
         if(currentCharge < currentCard.cooldown) return;
         if(!isPlaying) return;

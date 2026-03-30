@@ -112,7 +112,7 @@ public class TooltipManager : MonoBehaviour
             StopCoroutine(hideTooltipCoroutine);
             hideTooltipCoroutine = null;
 
-            tooltipCanvasGroup.alpha = 1;
+            tooltipCanvasGroup.alpha = 0.8f;
         }
 
         //Set texts

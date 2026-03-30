@@ -31,6 +31,7 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
             cardSprite = cardIcon,
             cardDescription = "Slightly increase speed until the end of this combat",
             rarity = Card.Rarity.Common,
+            type = Card.Type.Speed,
             cardEffect = () => {SnakeGameplayController.instance.moveSpeed+=0.1f;}
         };
     }

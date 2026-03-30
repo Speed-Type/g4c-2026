@@ -1458,6 +1458,7 @@ MonoBehaviour:
   currentCharge: 0
   chargeFillIndicator: {fileID: 1018994137}
   cardUI: {fileID: 1099666843}
+  currentChargeText: {fileID: 1264057602}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraController: {fileID: 330585549}
   enemyNameText: {fileID: 1309434078}
@@ -12925,6 +12926,17 @@ MonoBehaviour:
   initialGrowthSpeed: 0.3
   undulatingGrowthSpeed: 0.45
   rectTransform: {fileID: 0}
+--- !u!114 &1264057602 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3090733987478938712, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+  m_PrefabInstance: {fileID: 8305799584322470462}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
 --- !u!1 &1272783954
 GameObject:
   m_ObjectHideFlags: 0
@@ -20559,11 +20571,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 736.84644
+      value: 732.5
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -383.74066
+      value: -300
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

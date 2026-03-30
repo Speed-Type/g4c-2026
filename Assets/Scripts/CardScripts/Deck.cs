@@ -26,8 +26,9 @@ public class Deck : MonoBehaviour
             cooldown = 5f,
             cardName = "Resilient Growth",
             cardSprite = defaultCardSprite,
-            cardDescription = "Immediately ncrease length by 1",
+            cardDescription = "Immediately increase length by 1",
             rarity = Card.Rarity.Common,
+            type = Card.Type.Growth,
             cardEffect = () => {SnakeGameplayController.instance.AddSegments(1);}
         };
     }

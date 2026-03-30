@@ -31,6 +31,7 @@ public class Fragment_AfricanBigHeadedAnt_Thorax : Fragment
             cardSprite = cardIcon,
             cardDescription = "Immediately increase length by 1",
             rarity = Card.Rarity.Uncommon,
+            type = Card.Type.Growth,
             cardEffect = () => {SnakeGameplayController.instance.AddSegments(1);}
         };
     }
