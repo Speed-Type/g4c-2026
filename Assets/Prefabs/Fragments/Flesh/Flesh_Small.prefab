@@ -90,13 +90,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d3779b9e89d4064aa00bdb90b73a6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fragment_Flesh_Small
+  currentHealth: 0
   graphicGO: {fileID: 8892160722126350888}
   destroyedFragmentColor: {r: 0, g: 0, b: 0, a: 0}
   healthIndicator: {fileID: 8081011339570634097}
   deathParticles: {fileID: 2407011753175084463, guid: 151d50237fa084a049c75a8a6bfc5a2f, type: 3}
+  fragmentModel: {fileID: 0}
+  existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   isEquipped: 0
+  isDead: 0
   connectorGO: {fileID: 2740457705585157438, guid: ccb2767bad0354980b68d4f94e042f0a, type: 3}
 --- !u!1 &5910623187273835874
 GameObject:

@@ -16212,6 +16212,7 @@ MonoBehaviour:
   existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   isEquipped: 0
   isDead: 0
   damage: 3
@@ -18049,6 +18050,7 @@ MonoBehaviour:
   hiddenPosition: {fileID: 2043729213}
   shownPosition: {fileID: 1448716845}
   cameraController: {fileID: 330585548}
+  inventoryManager: {fileID: 0}
   playerCanMakeChoices: 0
 --- !u!4 &1880359811
 Transform:
@@ -20780,6 +20782,7 @@ MonoBehaviour:
   existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   isEquipped: 0
   isDead: 0
   damage: 1

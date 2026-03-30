@@ -7,6 +7,8 @@ public class VolunteerOptionRow : MonoBehaviour
 {
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Image radioIndicator;
+    [SerializeField] private Sprite selectedRadioSprite;
+    [SerializeField] private Sprite deselectedRadioSprite;
     [SerializeField] private TMP_Text labelText;
     [SerializeField] private TMP_Text detailText;
     public Button button;
@@ -16,9 +18,9 @@ public class VolunteerOptionRow : MonoBehaviour
         backgroundImage.color = color;
     }
 
-    public void SetRadioButtonColor(Color color)
+    public void SetRadioButton(bool selected)
     {
-        radioIndicator.color = color;
+        radioIndicator.sprite = selected ? selectedRadioSprite : deselectedRadioSprite;
     }
 
     public void SetLabelText(string pText, FontStyles pFontStyle)

@@ -100,7 +100,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 5
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -513,7 +513,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -587,7 +587,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -53.2}
-  m_SizeDelta: {x: 845.2, y: 54.400005}
+  m_SizeDelta: {x: 845.2, y: 53.4834}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1131257857176296128
 CanvasRenderer:
@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.42745098}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.3254902}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -818,7 +818,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 1
-  m_Spacing: 10
+  m_Spacing: 0
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4412158781387863194}
   m_HandleRect: {fileID: 4135647415301353892}
   m_Direction: 2
-  m_Value: 1.0000001
+  m_Value: 0.99999994
   m_Size: 0.5199885
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1791,8 +1791,8 @@ MonoBehaviour:
   selectionInfoLabel: {fileID: 7591546415272927014}
   confirmButton: {fileID: 8294451217875805374}
   optionRowPrefab: {fileID: 1289126759814459387, guid: a0ee94f54c62b43b3b585a75f90053e9, type: 3}
-  colourNormal: {r: 0.15, g: 0.18, b: 0.24, a: 1}
-  colourSelected: {r: 0.15, g: 0.45, b: 0.9, a: 1}
+  colourNormal: {r: 0.7764706, g: 0.32156864, b: 0.3647059, a: 1}
+  colourSelected: {r: 0.627451, g: 0.2, b: 0.22745098, a: 1}
   confirmLabelIdle: Select an option
   confirmLabelReady: Confirm Selection
 --- !u!1 &6069249516052966671

@@ -39,10 +39,9 @@ public class Fragment_Bite : Fragment
         displayCommonName = "";
         displayScientificName = "";
         displayDescription = "";
-
+        
         //Setup input
-        input = new PlayerInputActions();
-        input.UI.Rotate.performed += Rotate;
+        rotationAction = inputActions.FindActionMap("UI").FindAction("Rotate");
 
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();

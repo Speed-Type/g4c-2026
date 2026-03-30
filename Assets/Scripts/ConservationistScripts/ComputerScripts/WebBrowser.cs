@@ -175,7 +175,7 @@ public class WebBrowser : AppBase
         volunteerOptionRow.SetDetailText(opt.detail);
 
         //RadioIndicator
-        volunteerOptionRow.SetRadioButtonColor(selected ? colourSelected * 1.4f : colourNormal * 1.4f);
+        volunteerOptionRow.SetRadioButton(selected);
     }
 
     private void UpdateSelectionInfo()

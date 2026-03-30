@@ -90,6 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563dc58235e7c4b4d976f29032e0ab81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fragment_AfricanBigHeadedAnt_HeadMajor
+  currentHealth: 0
   graphicGO: {fileID: 7511401535700150090}
   destroyedFragmentColor: {r: 0.6039216, g: 0.19607843, b: 0.19607843, a: 0.7647059}
   healthIndicator: {fileID: 5507297565713746370}
@@ -98,7 +99,11 @@ MonoBehaviour:
   existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   isEquipped: 0
+  isDead: 0
+  cardIcon: {fileID: 0}
+  cleaveObject: {fileID: 0}
 --- !u!1 &7511401535700150090
 GameObject:
   m_ObjectHideFlags: 0

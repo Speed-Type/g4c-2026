@@ -5,7 +5,7 @@ public class SegmentFragmentEquipper : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject silkTuftGO;
 
-    void Start()
+    public void EquipFragment()
     {
         Fragment fragment = RoguelikeGameplayController.instance.inventoryManager.GetRandomEquippedFragment();
 

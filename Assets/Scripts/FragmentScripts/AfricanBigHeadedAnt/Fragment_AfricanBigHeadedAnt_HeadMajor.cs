@@ -1,10 +1,7 @@
 using UnityEngine;
 
 public class Fragment_AfricanBigHeadedAnt_HeadMajor : Fragment
-{
-    public Sprite cardIcon;
-    public GameObject cleaveObject;
-    
+{    
     public Fragment_AfricanBigHeadedAnt_HeadMajor()
     {
         shape = new bool[,]

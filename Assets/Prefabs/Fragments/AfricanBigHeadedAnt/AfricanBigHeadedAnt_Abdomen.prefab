@@ -99,6 +99,7 @@ MonoBehaviour:
   existingFragmentModel: {fileID: 0}
   isOnEdge: 0
   belongedInventory: {fileID: 0}
+  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   isEquipped: 0
   isDead: 0
   cardIcon: {fileID: 21300000, guid: f57479be9f6864cf394845d4b7257264, type: 3}

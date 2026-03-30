@@ -43,7 +43,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected Canvas canvas;
     protected RectTransform canvasRectTransform;
     [HideInInspector] public GeneralInventoryStructure belongedInventory;
-    protected PlayerInputActions input; //input action controller
+    [SerializeField] protected InputActionAsset inputActions;
+    protected InputAction rotationAction;
     protected bool isBeingDragged = false;
     protected int currentRotation = 0;
     private bool isFree;
@@ -63,7 +64,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     protected virtual void Awake()
     {
         //Setup input
-        input = new PlayerInputActions();
+        rotationAction = inputActions.FindActionMap("UI").FindAction("Rotate");
 
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
@@ -85,12 +86,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     void OnEnable()
     {
-        input.UI.Rotate.performed += Rotate;
+        rotationAction.performed += Rotate;
     }
 
     void OnDisable()
     {
-        input.UI.Rotate.performed -= Rotate;
+        rotationAction.performed -= Rotate;
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)
@@ -235,14 +236,11 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     //Overridden method to be called by input system
     public void Rotate(InputAction.CallbackContext ctx)
     {
-        Debug.Log("rotating");
         if(!isBeingDragged)
         {
             return;
         }
 
-
-        Debug.Log("Still rotating");
         Rotate();
     }
 
@@ -316,7 +314,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if(currentHealth <= 0) return false; //ActivateEffects only handles effect things when not dead
         
         effectsActive = true;
-        Debug.Log("Effects activated");
+        //Debug.Log("Effects activated");
 
         //Update stat display
         StatDisplay.UpdateStats_Static();
@@ -335,7 +333,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         if(currentHealth <= 0) return false; //DeactivateEffects only handles effect things when not dead
 
         effectsActive = false;
-        Debug.Log("Effects deactivated");
+        //Debug.Log("Effects deactivated");
 
         //Update stat display
         StatDisplay.UpdateStats_Static();

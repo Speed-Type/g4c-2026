@@ -639,6 +639,9 @@ public class SnakeGameplayController : MonoBehaviour
             if(segments.Count == 0) col.gameObject.layer = gameObject.layer; //Make the first segment the same layer as the head
         }
 
+        //Spawn the segment's fragment only if we're past segment 3
+        if(segments.Count > 3) seg.GetComponent<SegmentFragmentEquipper>().EquipFragment();
+
         segments.Add(seg);
     }
 
