@@ -15686,6 +15686,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619248901}
   m_CullTransparentMesh: 1
+--- !u!1 &1638618672
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1638618674}
+  - component: {fileID: 1638618673}
+  m_Layer: 0
+  m_Name: SceneTransitionHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1638618673
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638618672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e0fba376eac04f319892b0f3122b75e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneTransitionHandler
+  sceneTransitionImage: {fileID: 172563379}
+  screenTransitionLength: 1
+  delayBeforeEnteringScene: 4
+  settingsMenu: {fileID: 1460407219069971433}
+--- !u!4 &1638618674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1638618672}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1640712426 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 62af0a38ee1da421bb0ae9fb485fd4fc, type: 3}
@@ -20461,6 +20509,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1eb9b71d64e3491da69f6e989c2d311, type: 3}
+--- !u!1 &1460407219069971433 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 565228782605511705, guid: e1eb9b71d64e3491da69f6e989c2d311, type: 3}
+  m_PrefabInstance: {fileID: 1460407219069971432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!222 &2021901359933435130
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20922,4 +20975,5 @@ SceneRoots:
   - {fileID: 355174380}
   - {fileID: 2060764577}
   - {fileID: 321606538}
+  - {fileID: 1638618674}
   - {fileID: 894903398}

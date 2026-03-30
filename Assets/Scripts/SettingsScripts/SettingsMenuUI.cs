@@ -70,20 +70,18 @@ public class SettingsMenuUI : MonoBehaviour
         var map = inputActions.FindActionMap("UI");
 
         toggleSettingsAction = map.FindAction("OpenSettings");
-
-        toggleSettingsAction.performed += _ => Toggle();
     }
 
     private void OnEnable()
     {
         SettingsManager.OnSettingsChanged += RefreshAllControls;
-        toggleSettingsAction.Enable();
+        toggleSettingsAction.performed += OnToggleAction;
     }
 
     private void OnDisable()
     {
         SettingsManager.OnSettingsChanged -= RefreshAllControls;
-        toggleSettingsAction.Disable();
+        toggleSettingsAction.performed -= OnToggleAction;
     }
 
     private void Start()
@@ -122,6 +120,11 @@ public class SettingsMenuUI : MonoBehaviour
     public void Toggle()
     {
         if(isOpen) Close(); else Open();
+    }
+
+    public void OnToggleAction(InputAction.CallbackContext ctx)
+    {
+        Toggle();
     }
 
     //------------------------------------------------------------------------------------------

@@ -73,7 +73,7 @@ public class SnakeCameraController : MonoBehaviour
         zoomAction = inputActions.FindActionMap("Snake").FindAction("Zoom");
     }
 
-    private void OnEnable()  => zoomAction?.Enable();
+    private void OnEnable() => zoomAction?.Enable();
     private void OnDisable() => zoomAction?.Disable();
 
     void LateUpdate()

@@ -456,8 +456,8 @@ public class RoguelikeGameplayController : MonoBehaviour
             if(snakeGameplayController.totalDamage > 0)
             {
                 string temp = "You took " + snakeGameplayController.totalDamage + " point" + ((snakeGameplayController.totalDamage == 1) ? "" : "s") + " of damage.\n";
-                if(damagedFragments != 0) temp += damagedFragments + " fragment" + ((damagedFragments == 1) ? "" : "s") + " were damaged.\n";
-                if(shatteredFragments != 0) temp += shatteredFragments + " fragment" + ((shatteredFragments == 1) ? "" : "s") + " were broken.\n";
+                if(damagedFragments != 0) temp += damagedFragments + " fragment" + ((damagedFragments == 1) ? " was" : "s were") + " damaged.\n";
+                if(shatteredFragments != 0) temp += shatteredFragments + " fragment" + ((shatteredFragments == 1) ? " was" : "s were") + " broken.\n";
                 if(fleshLost != 0) temp += fleshLost + " flesh was lost.";
 
                 outputText.Add(temp);

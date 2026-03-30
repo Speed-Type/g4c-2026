@@ -176,9 +176,6 @@ public class SnakeGameplayController : MonoBehaviour
         useCardAction = map.FindAction("PlayCard");
         toggleCamAction = map.FindAction("ToggleCam");
 
-        useCardAction.performed += _ => PlayCard();
-        toggleCamAction.performed += _ => ToggleCameraMode();
-
         //Initialize health bar variables
         enemyHealthBarMaxWidth = enemyHealthBarFill.sizeDelta.x;
         gameOverGraphicWidth = gameOverGraphicRT.sizeDelta.x;
@@ -266,16 +263,19 @@ public class SnakeGameplayController : MonoBehaviour
     {
         moveAction.Enable();
         lookAction.Enable();
-        useCardAction.Enable();
-        toggleCamAction.Enable();
+
+        useCardAction.performed += PlayCard;
+        toggleCamAction.performed += ToggleCameraMode;
     }
 
     private void DisableInput()
     {
         moveAction.Disable();
         lookAction.Disable();
-        useCardAction.Disable();
-        toggleCamAction.Disable();
+
+        useCardAction.performed -= PlayCard;
+        toggleCamAction.performed -= ToggleCameraMode;
+
         ReleaseCursor();
     }
 
@@ -283,7 +283,7 @@ public class SnakeGameplayController : MonoBehaviour
     
     //Card logic
 
-    public void PlayCard()
+    public void PlayCard(InputAction.CallbackContext ctx)
     {
         if(currentCharge < currentCard.cooldown) return;
         if(!isPlaying) return;
@@ -301,7 +301,7 @@ public class SnakeGameplayController : MonoBehaviour
     //Camera stuff
 
     //Method to toggle camera between modes
-    private void ToggleCameraMode()
+    private void ToggleCameraMode(InputAction.CallbackContext ctx)
     {
         if(!isPlaying) return;
         SetCameraMode(camMode == CameraMode.TopDown ? CameraMode.Chase : CameraMode.TopDown);

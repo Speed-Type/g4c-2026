@@ -57,7 +57,6 @@ public class ComputerInteractable : MonoBehaviour
     {
         //Setup input
         escapeAction = inputActions.FindActionMap("Conservationist").FindAction("Escape");
-        escapeAction.performed += _ => ExitComputer();
         
         //Setup camera
         targetCamera = Camera.main;
@@ -72,12 +71,12 @@ public class ComputerInteractable : MonoBehaviour
 
     void OnEnable()
     {
-        escapeAction.Enable();
+        escapeAction.performed += ExitComputerFromAction;
     }
 
     void OnDisable()
     {
-        escapeAction.Disable();
+        escapeAction.performed -= ExitComputerFromAction;
     }
 
     //------------------------------------------------------------------------------------------
@@ -90,6 +89,11 @@ public class ComputerInteractable : MonoBehaviour
         EnterSequence();
         GetComponent<InteractableObject>().OnPointerExit(null);
         GetComponent<InteractableObject>().enabled = false;
+    }
+
+    public void ExitComputerFromAction(InputAction.CallbackContext ctx)
+    {
+        ExitComputer();
     }
 
     //Power off and zoom back out; Wire to UI exit button

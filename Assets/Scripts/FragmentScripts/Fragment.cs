@@ -64,7 +64,6 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         //Setup input
         input = new PlayerInputActions();
-        input.UI.Rotate.performed += Rotate;
 
         //Initialize variables
         rectTransform = GetComponent<RectTransform>();
@@ -86,12 +85,12 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
 
     void OnEnable()
     {
-        input.Enable();
+        input.UI.Rotate.performed += Rotate;
     }
 
     void OnDisable()
     {
-        input.Disable();
+        input.UI.Rotate.performed -= Rotate;
     }
 
     public virtual void OnBeginDrag(PointerEventData eventData)
