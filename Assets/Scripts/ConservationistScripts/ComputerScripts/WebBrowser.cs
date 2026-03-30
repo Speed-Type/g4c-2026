@@ -11,20 +11,21 @@ public class WebBrowser : AppBase
     [System.Serializable]
     public class SiteOption
     {
+        [Tooltip("Unique identifier")]
+        public string id = "null";
+
         [Tooltip("Short label shown in the list row")]
         public string label = "Option";
 
+        [TextArea(3, 8)]
         [Tooltip("Optional secondary detail line (shown smaller beneath the label)")]
         public string detail = "";
 
-        [Tooltip("Fired immediately when this option is selected (single-click).")]
+        [Tooltip("Fired immediately when this option is selected (single-click)")]
         public UnityEvent onSelect = new UnityEvent();
 
-        [Tooltip("Fired when this option is selected AND the Confirm button is pressed.")]
+        [Tooltip("Fired when this option is selected AND the Confirm button is pressed")]
         public UnityEvent onConfirm = new UnityEvent();
-
-        [Tooltip("Objective ID completed on confirm. Leave blank to skip.")]
-        public string completesObjectiveOnConfirm = "";
     }
 
     //------------------------------------------------------------------------------------------
@@ -62,6 +63,9 @@ public class WebBrowser : AppBase
     {
         base.OnAppOpen(os);
 
+        //Load in today's volunteer opportunities from ConservationistUpgradeController
+        options = ConservationistUpgradeController.instance.dailyVolunteerOptions;
+
         //Confirm button
         if(confirmButton != null)
         {
@@ -70,6 +74,12 @@ public class WebBrowser : AppBase
         }
 
         BuildOptionList();
+
+        //Load in any saved selection
+        if(ConservationistUpgradeController.instance.selectedVolunteeringUpgradeID != "null")
+        {
+            SelectOption(ConservationistUpgradeController.instance.selectedVolunteeringUpgradeID);
+        }
     }
 
     public override void OnAppClose()
@@ -87,6 +97,19 @@ public class WebBrowser : AppBase
     {
         if(index < 0 || index >= options.Count) return;
         ApplySelection(index);
+    }
+
+    //Overload for select option
+    public void SelectOption(string id)
+    {
+        for(int i = 0; i < options.Count; i++)
+        {
+            if(options[i].id == id)
+            {
+                ApplySelection(i, true);
+                return;
+            }
+        }
     }
 
     //Deselect whatever is currently selected
@@ -126,8 +149,10 @@ public class WebBrowser : AppBase
 
     //------------------------------------------------------------------------------------------
 
-    private void ApplySelection(int index)
-    {
+    private void ApplySelection(int index, bool bypass = false)
+    {   
+        if(bypass == false && ConservationistUpgradeController.instance.selectedVolunteeringUpgradeID != "null") return;
+
         selectedIndex = index;
 
         RefreshRowVisuals();
@@ -147,8 +172,9 @@ public class WebBrowser : AppBase
 
         opt.onConfirm?.Invoke();
 
-        if(!string.IsNullOrEmpty(opt.completesObjectiveOnConfirm))
-            ObjectiveManager.instance.CompleteObjective(opt.completesObjectiveOnConfirm);
+        ConservationistUpgradeController.instance.ConfirmVolunteering(opt.id);
+
+        SetConfirmButtonState(true);
     }
 
     //------------------------------------------------------------------------------------------
@@ -186,6 +212,12 @@ public class WebBrowser : AppBase
 
     private void SetConfirmButtonState(bool ready)
     {
+        if(ConservationistUpgradeController.instance.selectedVolunteeringUpgradeID != "null")
+        {
+            confirmButton.GetComponentInChildren<TMP_Text>().text = "Confirmed";
+            return;
+        }
+
         var lbl = confirmButton.GetComponentInChildren<TMP_Text>();
         if(lbl != null)
             lbl.text = ready ? confirmLabelReady : confirmLabelIdle;

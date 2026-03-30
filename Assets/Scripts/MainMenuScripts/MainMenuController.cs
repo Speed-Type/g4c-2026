@@ -51,12 +51,14 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.SetInt("HasStartedGame", 1);
 
         //Start screen transition
-        sceneTransitionHandler.SceneTransitionToScene("RoguelikeGameplayScene");
+        sceneTransitionHandler.SceneTransitionToScene("NextStage");
     }
 
     public void NewGame()
     {
         //TODO: Reset necessary playerprefs
+
+        PlayerPrefs.DeleteKey("CurrentStage"); //Reset to first stage
 
         StartGame();
     }

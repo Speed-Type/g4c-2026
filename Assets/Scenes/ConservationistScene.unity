@@ -562,6 +562,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConservationistUpgradeController
   door: {fileID: 924610908}
+  totalDailyVolunteerOptions: 3
+  allVolunteerOptions:
+  - id: kiawe
+    label: Outplanting a Kiawe Forest
+    detail: A brush fire tore through a forest of invasive Kiawe trees, leaving an
+      opportunity to replant native species.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: netpatrol
+    label: Net Patrol
+    detail: Coastal cleanup of large fishing gear and other hazardous plastic pollution.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: botanical
+    label: Maui Nui Botanical Gardens
+    detail: Pot plants in the nursery facility.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: hilo
+    label: Coastal Wetland & Estuary Restoration in Hilo
+    detail: Remove invasive vegetation, replant native species, and revive the natural
+      flow of freshwater.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: reef
+    label: Reef Cleanup
+    detail: Snorkel a reef to gather trash and debris that harm the coral reefs of
+      the Maui coast and threaten marine life.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: diamond
+    label: Diamond Head Crater Cleanup
+    detail: Garden maintenance, invasive species removal, native species seed collecting.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: her
+    label: H.E.R. Crew
+    detail: "Assist with weekly Hawai'i Environmental Restoration Crew efforts in
+      Keau\u02BBohana State Forest Reserve"
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  - id: point
+    label: "Pu\u02BBuiki Point Coastal Restoration"
+    detail: Replant native species that build sand dunes, prevent erosion, and protect
+      against sea level rise.
+    onSelect:
+      m_PersistentCalls:
+        m_Calls: []
+    onConfirm:
+      m_PersistentCalls:
+        m_Calls: []
+  selectedVolunteeringUpgradeID: null
+  dailyVolunteerOptions: []
 --- !u!1 &152286217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1100,7 +1181,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!212 &322573263
 SpriteRenderer:
@@ -1312,6 +1393,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6570ec26de59f4b95ada0a54924c5f97, type: 3}
   m_PrefabInstance: {fileID: 352918440}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &382595551 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+  m_PrefabInstance: {fileID: 1911954799}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &402683449
 GameObject:
@@ -1579,7 +1665,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 401.7838, y: 0}
+  m_SizeDelta: {x: 447.0256, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &446485052
 MonoBehaviour:
@@ -1707,7 +1793,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &466687042
 Transform:
@@ -2035,7 +2121,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &662562661
 Transform:
@@ -3269,7 +3355,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &934571876
 Transform:
@@ -3528,6 +3614,7 @@ Transform:
   - {fileID: 1042117193}
   - {fileID: 1499336139}
   - {fileID: 322573264}
+  - {fileID: 382595551}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1036315585
@@ -3626,7 +3713,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1042117193
 Transform:
@@ -3995,8 +4082,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200.8919, y: -62.6}
-  m_SizeDelta: {x: 380, y: 0}
+  m_AnchoredPosition: {x: 223.5128, y: -62.6}
+  m_SizeDelta: {x: 413.51, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1338149045
 MonoBehaviour:
@@ -4239,7 +4326,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -4301,13 +4388,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379941966}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6116281, y: -0.7191519, z: 0.17744888, w: 0.27792704}
+  m_LocalRotation: {x: 0.6209072, y: -0.7641635, z: 0.034335416, w: 0.17131692}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 36.527, y: -166.86, z: -76.408}
+  m_LocalEulerAnglesHint: {x: 15.38, y: -166.86, z: -76.408}
 --- !u!114 &1379941969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4416,7 +4503,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1415478625
 Transform:
@@ -4548,8 +4635,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200.8919, y: -57.6}
-  m_SizeDelta: {x: 380, y: 0}
+  m_AnchoredPosition: {x: 223.5128, y: -57.6}
+  m_SizeDelta: {x: 413.51, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1443187797
 MonoBehaviour:
@@ -4681,7 +4768,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1499336139
 Transform:
@@ -5761,7 +5848,7 @@ Light:
   serializedVersion: 12
   m_Type: 0
   m_Color: {r: 0.9056604, g: 0.9031601, b: 0.7817729, a: 1}
-  m_Intensity: 35.7
+  m_Intensity: 5
   m_Range: 10
   m_SpotAngle: 179
   m_InnerSpotAngle: 179
@@ -5983,6 +6070,79 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903233619}
   m_CullTransparentMesh: 1
+--- !u!1001 &1911954799
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1017790079}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -3.66
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.7999999
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.43
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071067
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_Name
+      value: SmallTable
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1226e9cb929e74afcbd4e800d686fa85, type: 3}
 --- !u!1 &1974340271
 GameObject:
   m_ObjectHideFlags: 0

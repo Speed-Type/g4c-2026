@@ -774,6 +774,7 @@ GameObject:
   m_Component:
   - component: {fileID: 619095490793774528}
   - component: {fileID: 2192693806163618685}
+  - component: {fileID: 5128043805989879599}
   m_Layer: 5
   m_Name: OptionList
   m_TagString: Untagged
@@ -795,10 +796,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 988081149878338449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 471.06}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 422.6, y: -330.227}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2192693806163618685
 MonoBehaviour:
@@ -826,6 +827,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &5128043805989879599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775421933193148128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &2085028057926913076
 GameObject:
   m_ObjectHideFlags: 0
@@ -1038,7 +1053,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7019608}
+  m_Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1378,8 +1393,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4412158781387863194}
   m_HandleRect: {fileID: 4135647415301353892}
   m_Direction: 2
-  m_Value: 0.99999994
-  m_Size: 0.5199885
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1571,7 +1586,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "M\u0101lama Hawai\u02BBi"
+  m_text: "M\u0101lama \u02BB\u0100ina"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c6e768410244e45b38478228c0323047, type: 2}
   m_sharedMaterial: {fileID: -4644652670535718406, guid: c6e768410244e45b38478228c0323047, type: 2}
@@ -1742,7 +1757,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WebBrowser
   options:
-  - label: Clean up trash
+  - id: null
+    label: Clean up trash
     detail: On beach at XYZ
     onSelect:
       m_PersistentCalls:
@@ -1750,8 +1766,8 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
-    completesObjectiveOnConfirm: 
-  - label: Replanting
+  - id: null
+    label: Replanting
     detail: Replacing invasive species XYZ with ABC
     onSelect:
       m_PersistentCalls:
@@ -1759,8 +1775,8 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
-    completesObjectiveOnConfirm: 
-  - label: Fish
+  - id: null
+    label: Fish
     detail: Idk clean fish or smth
     onSelect:
       m_PersistentCalls:
@@ -1768,8 +1784,8 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
-    completesObjectiveOnConfirm: 
-  - label: Re the planting
+  - id: null
+    label: Re the planting
     detail: Again
     onSelect:
       m_PersistentCalls:
@@ -1777,8 +1793,8 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
-    completesObjectiveOnConfirm: 
-  - label: Replanting
+  - id: null
+    label: Replanting
     detail: Replacing invasive species XYZ with ABC
     onSelect:
       m_PersistentCalls:
@@ -1786,7 +1802,6 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
-    completesObjectiveOnConfirm: 
   optionList: {fileID: 619095490793774528}
   selectionInfoLabel: {fileID: 7591546415272927014}
   confirmButton: {fileID: 8294451217875805374}
@@ -2212,7 +2227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9246074, g: 0.9433962, b: 0.85884655, a: 1}
+  m_Color: {r: 0.72850454, g: 0.745283, b: 0.6714578, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2653,7 +2668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.8962264, g: 0.8962264, b: 0.8962264, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -771,7 +771,7 @@ public class SnakeGameplayController : MonoBehaviour
         }
 
         //Screenshake
-        ScreenShake.instance.AddTrauma(0.25f);
+        ScreenShake.instance.AddTrauma(0.20f);
 
         //Hit effects
         hitEffectTimer = hitEffectLength;

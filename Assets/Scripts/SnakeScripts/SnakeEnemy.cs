@@ -696,7 +696,7 @@ public class SnakeEnemy : MonoBehaviour
         if(snakeController.stunTimer > 0) return;
         
         //Do screenshake
-        ScreenShake.instance.AddTrauma(0.25f);
+        ScreenShake.instance.AddTrauma(0.20f);
 
         //Do health changes
         currentHealth--;
