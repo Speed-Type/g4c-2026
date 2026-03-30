@@ -39,7 +39,7 @@ public class EmailRow : MonoBehaviour
 
     public void SetUnread()
     {
-        subjectText.color = new Color(0.016f, 0.651f, 0.878f);
+        subjectText.color = new Color(0.09229262f, 0.233911f, 0.3207547f);
         subjectText.fontStyle = FontStyles.Bold;
         senderText.fontStyle = FontStyles.Bold;
     }

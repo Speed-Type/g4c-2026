@@ -18,20 +18,18 @@ public class VolunteerOptionRow : MonoBehaviour
 
     public void SetRadioButtonColor(Color color)
     {
-        
+        radioIndicator.color = color;
     }
 
-    public void SetLabelText(string pText, Color pColor, FontStyles pFontStyle)
+    public void SetLabelText(string pText, FontStyles pFontStyle)
     {
         labelText.text = pText;
-        labelText.color = pColor;
         labelText.fontStyle = pFontStyle;
     }
 
-    public void SetDetailText(string pText, Color pColor)
+    public void SetDetailText(string pText)
     {
         detailText.text = pText;
-        detailText.color = pColor;
     }
 
     public void AddButtonListener(Action action)

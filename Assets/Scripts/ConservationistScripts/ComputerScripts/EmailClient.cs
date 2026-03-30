@@ -3,9 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-//App 1: EmailClient
-//Read-only, has trivia questions for the player
-
 public class EmailClient : AppBase
 {
     //Email datatypes

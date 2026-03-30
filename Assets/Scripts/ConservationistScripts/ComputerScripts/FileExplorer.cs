@@ -3,22 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-//App 1: FileExplorer
-//Virtual tree of folders and files
-
-/// File explorer application.
-///
-/// ── ContentArea hierarchy ──────────────────────────────────────────────
-///
-///   ContentArea  (FileExplorer.cs here)
-///     ├── PathLabel     (TMP_Text)          — breadcrumb
-///     ├── FileList      (VerticalLayoutGroup) ← entries spawn here
-///     └── FileViewer    (CanvasGroup)
-///           ├── ViewerTitle  (TMP_Text)
-///           ├── ViewerBody   (TMP_Text)
-///           └── CloseViewer  (Button)
-///
-
 public class FileExplorer : AppBase
 {
     //File datatype

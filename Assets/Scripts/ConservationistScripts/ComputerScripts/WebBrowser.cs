@@ -4,37 +4,6 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 
-// ══════════════════════════════════════════════════════════════════════════
-//  WebBrowser — AppBase subclass
-//
-//  A single-page "website" rendered inside an app window.
-//  The page contains a scrollable list of options; exactly one can be
-//  selected at a time (radio-button style).  Selecting an option fires
-//  that option's UnityEvent and optionally completes an objective.
-//  A "Submit / Confirm" button fires a second event on the currently
-//  selected option, useful for two-step confirm flows.
-//
-//  ── ContentArea hierarchy ──────────────────────────────────────────────
-//
-//    ContentArea  (WebBrowser.cs here)
-//      ├── PageHeader
-//      │     ├── SiteTitle     (TMP_Text)   ← set from Inspector
-//      │     └── SiteSubtitle  (TMP_Text)   ← set from Inspector (optional)
-//      ├── OptionScrollView    (ScrollRect)
-//      │     └── Viewport
-//      │           └── OptionList  (VerticalLayoutGroup)  ← rows spawn here
-//      ├── SelectionInfo       (TMP_Text)   ← shows current selection label
-//      └── ConfirmButton       (Button)     ← optional two-step confirm
-//
-//  ── OptionRow prefab ───────────────────────────────────────────────────
-//
-//    OptionRow  (Button + CanvasGroup)
-//      ├── RadioIndicator  (Image)   ← swap sprite or colour to show selected
-//      ├── OptionLabel     (TMP_Text)
-//      └── OptionDetail    (TMP_Text, optional sub-label)
-//
-// ══════════════════════════════════════════════════════════════════════════
-
 public class WebBrowser : AppBase
 {
     //Data struct for site options
@@ -56,9 +25,6 @@ public class WebBrowser : AppBase
 
         [Tooltip("Objective ID completed on confirm. Leave blank to skip.")]
         public string completesObjectiveOnConfirm = "";
-
-        [Tooltip("If true this option appears greyed-out and cannot be selected.")]
-        public bool disabled = false;
     }
 
     //------------------------------------------------------------------------------------------
@@ -79,9 +45,6 @@ public class WebBrowser : AppBase
     [Header("Colours")]
     public Color colourNormal = new Color(0.15f, 0.18f, 0.24f);
     public Color colourSelected = new Color(0.15f, 0.45f, 0.90f);
-    public Color colourDisabled = new Color(0.25f, 0.25f, 0.28f);
-    public Color colourTextNormal = Color.white;
-    public Color colourTextDisabled = new Color(0.5f, 0.5f, 0.5f);
 
     [Header("Confirm Button")]
     [Tooltip("Text on the confirm button when nothing is selected")]
@@ -124,7 +87,6 @@ public class WebBrowser : AppBase
     public void SelectOption(int index)
     {
         if(index < 0 || index >= options.Count) return;
-        if(options[index].disabled) return;
         ApplySelection(index);
     }
 
@@ -137,18 +99,6 @@ public class WebBrowser : AppBase
         SetConfirmButtonState(false);
     }
 
-    //Enable or disable a specific option at runtime
-    public void SetOptionDisabled(int index, bool disabled)
-    {
-        if(index < 0 || index >= options.Count) return;
-        options[index].disabled = disabled;
-
-        if(disabled && selectedIndex == index)
-            ClearSelection();
-
-        RefreshRowVisuals();
-    }
-
     //------------------------------------------------------------------------------------------
 
     private void BuildOptionList()
@@ -156,8 +106,10 @@ public class WebBrowser : AppBase
         foreach(Transform child in optionList) Destroy(child.gameObject);
         rows.Clear();
 
-        for (int i = 0; i < options.Count; i++)
+        for(int i = 0; i < options.Count; i++)
         {
+            int idx = i;
+
             GameObject row = Instantiate(optionRowPrefab, optionList);
             VolunteerOptionRow volunteerOptionRow = row.GetComponent<VolunteerOptionRow>();
 
@@ -166,8 +118,7 @@ public class WebBrowser : AppBase
             //Wire the button
             volunteerOptionRow.AddButtonListener(() =>
             {
-                if (!options[i].disabled)
-                    ApplySelection(i);
+                ApplySelection(idx);
             });
 
             ApplyRowVisual(row, i, selected: false);
@@ -194,7 +145,6 @@ public class WebBrowser : AppBase
         if(selectedIndex < 0 || selectedIndex >= options.Count) return;
 
         var opt = options[selectedIndex];
-        if (opt.disabled) return;
 
         opt.onConfirm?.Invoke();
 
@@ -216,22 +166,16 @@ public class WebBrowser : AppBase
         VolunteerOptionRow volunteerOptionRow = row.GetComponent<VolunteerOptionRow>();
 
         //Background colour
-        volunteerOptionRow.SetBackgroundImageColor(opt.disabled ? colourDisabled : selected ? colourSelected : colourNormal);
+        volunteerOptionRow.SetBackgroundImageColor(selected ? colourSelected : colourNormal);
 
         //Label
-        volunteerOptionRow.SetLabelText(opt.label, opt.disabled ? colourTextDisabled : colourTextNormal, selected ? FontStyles.Bold : FontStyles.Normal);
+        volunteerOptionRow.SetLabelText(opt.label, selected ? FontStyles.Bold : FontStyles.Normal);
 
         //Detail
-        volunteerOptionRow.SetDetailText(opt.detail, opt.disabled ? colourTextDisabled : colourTextNormal * new Color(1, 1, 1, 0.7f));
+        volunteerOptionRow.SetDetailText(opt.detail);
 
         //RadioIndicator
-        volunteerOptionRow.SetRadioButtonColor(selected && !opt.disabled ? colourSelected * 1.4f : colourNormal * 1.4f);
-
-        //Button interactability
-        var colors = volunteerOptionRow.button.colors;
-        colors.disabledColor = colourTextDisabled;
-        volunteerOptionRow.button.colors = colors;
-        volunteerOptionRow.button.interactable = !opt.disabled;
+        volunteerOptionRow.SetRadioButtonColor(selected ? colourSelected * 1.4f : colourNormal * 1.4f);
     }
 
     private void UpdateSelectionInfo()
