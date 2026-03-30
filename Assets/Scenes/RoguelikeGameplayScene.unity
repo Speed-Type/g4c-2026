@@ -3209,6 +3209,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2033165042}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &452275546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 68097213098200608, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+  m_PrefabInstance: {fileID: 8305799584322470462}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &496114804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11863,12 +11868,79 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6578812660239703640, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
   m_PrefabInstance: {fileID: 8305799584322470462}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 452275546}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ce28ec5fb1024455ba1069069e9b010, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CardUI
+--- !u!114 &1099666844 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2659001585243980241, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+  m_PrefabInstance: {fileID: 8305799584322470462}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452275546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!114 &1099666846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452275546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 0
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1099666844}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 153027891}
+        m_TargetAssemblyTypeName: SnakeGameplayController, Assembly-CSharp
+        m_MethodName: PlayCard
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1160437950
 GameObject:
   m_ObjectHideFlags: 0
@@ -20509,6 +20581,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CardUI
       objectReference: {fileID: 0}
+    - target: {fileID: 2659001585243980241, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -20596,7 +20672,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 68097213098200608, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1099666846}
   m_SourcePrefab: {fileID: 100100000, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
 --- !u!222 &8364890019426568603
 CanvasRenderer:
