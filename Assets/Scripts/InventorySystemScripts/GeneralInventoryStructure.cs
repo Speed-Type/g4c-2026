@@ -446,4 +446,29 @@ public class GeneralInventoryStructure : MonoBehaviour
 
         return returnVal;
     }
+
+    public Fragment GetFragmentAt(int row, int col)
+    {
+        return inventorySlotArray[row, col].GetFragment();
+    }
+
+    public Vector2Int GetAnchorPosition(Fragment fragment)
+    {
+        int minRow = int.MaxValue;
+        int minCol = int.MaxValue;
+
+        for (int row = 0; row < gridNumRows; row++)
+        {
+            for (int col = 0; col < gridNumCols; col++)
+            {
+                if (inventorySlotArray[row, col].GetFragment() == fragment)
+                {
+                    if (row < minRow) minRow = row;
+                    if (col < minCol) minCol = col;
+                }
+            }
+        }
+
+        return new Vector2Int(minRow, minCol);
+    }
 }

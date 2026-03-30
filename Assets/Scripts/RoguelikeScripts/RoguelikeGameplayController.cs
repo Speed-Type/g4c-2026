@@ -70,7 +70,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     //Hidden variables
     private List<PlayerOptionButtons> openButtons = new List<PlayerOptionButtons>();
     private List<PlayerOptionButtons> allButtons = new List<PlayerOptionButtons>();
-    public GeneralInventoryStructure inventoryManager;
+    public InventoryManager inventoryManager;
     [HideInInspector] public bool playerCanMakeChoices;
     [HideInInspector] public static bool playerHasStartedLooting;
 
@@ -109,6 +109,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Disable all buttons
         TogglePlayerOptionButtons(false);
+
+        //Load in saved stuffs
+        SaveSystem.Load(inventoryManager);
 
         //Set number of bites
         ResetBites();
@@ -281,6 +284,9 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void ShowInventory()
     {
+        //TEMP: Save with every inventory open/close
+        SaveSystem.Save(inventoryManager);
+
         //Make sure the player can actually make choices
         if(!playerCanMakeChoices) return;
         

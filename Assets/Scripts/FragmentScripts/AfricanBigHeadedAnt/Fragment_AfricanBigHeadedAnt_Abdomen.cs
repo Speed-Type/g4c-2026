@@ -11,6 +11,8 @@ public class Fragment_AfricanBigHeadedAnt_Abdomen : Fragment
             {true, true}
         };
 
+        fragmentEnum = Fragments.AfricanBigHeadedAnt_Abdomen;
+
         maxHealth = 3;
 
         displayBugGroup = "Ant";

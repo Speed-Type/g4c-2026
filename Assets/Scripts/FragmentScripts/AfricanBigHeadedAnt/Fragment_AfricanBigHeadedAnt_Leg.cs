@@ -13,6 +13,8 @@ public class Fragment_AfricanBigHeadedAnt_Leg : Fragment
 
         maxHealth = 2;
 
+        fragmentEnum = Fragments.AfricanBigHeadedAnt_Leg;
+
         displayBugGroup = "Ant";
         displayBodyPart = "Leg";
         displayCommonName = "African Big-Headed Ant";

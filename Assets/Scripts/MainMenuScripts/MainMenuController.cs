@@ -59,6 +59,7 @@ public class MainMenuController : MonoBehaviour
         //TODO: Reset necessary playerprefs
 
         PlayerPrefs.DeleteKey("CurrentStage"); //Reset to first stage
+        SaveSystem.DeleteSave(); //Delete any fragment data
 
         StartGame();
     }

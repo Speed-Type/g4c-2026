@@ -81,6 +81,7 @@ public class LootManager : GeneralInventoryStructure
             Fragment newFragment = newFragmentGO.GetComponent<Fragment>();
 
             newFragment.belongedInventory = this;
+            newFragment.isFree = true;
 
             //Try to place it in the grid
             bool placementSuccessful = false;
@@ -188,6 +189,11 @@ public class LootManager : GeneralInventoryStructure
     public GameObject BugEnumToSnakeEnemy(Bugs bug)
     {
         return snakeEnemyBugList[(int)bug];
+    }
+
+    public GameObject FragmentEnumToFragmentPrefab(Fragments fragmentEnum)
+    {
+        return fragmentList[(int)fragmentEnum];
     }
 }
 

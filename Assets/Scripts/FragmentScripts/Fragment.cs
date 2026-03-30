@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -46,8 +45,8 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     [SerializeField] protected InputActionAsset inputActions;
     protected InputAction rotationAction;
     protected bool isBeingDragged = false;
-    protected int currentRotation = 0;
-    private bool isFree;
+    public int currentRotation = 0;
+    [HideInInspector] public bool isFree;
     private bool effectsActive; //Used for effect logic
     [HideInInspector] public bool isEquipped; //Used for equipped/fragment filtering logic
     
@@ -57,6 +56,7 @@ public class Fragment : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     private int rotateTween;
 
     protected Card card;
+    public Fragments fragmentEnum;
 
     //Static list for all fragments
     private static List<Fragment> fragmentList;

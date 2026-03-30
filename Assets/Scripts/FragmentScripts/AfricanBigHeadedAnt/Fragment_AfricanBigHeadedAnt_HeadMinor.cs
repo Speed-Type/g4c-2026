@@ -12,6 +12,8 @@ public class Fragment_AfricanBigHeadedAnt_HeadMinor : Fragment
 
         maxHealth = 4;
 
+        fragmentEnum = Fragments.AfricanBigHeadedAnt_HeadMinor;
+
         displayBugGroup = "Ant";
         displayBodyPart = "Head (Minor)";
         displayCommonName = "African Big-Headed Ant";

@@ -923,7 +923,8 @@ public class SnakeGameplayController : MonoBehaviour
         SetLegMovement(false);
 
         //Stop food spawning
-        foodSpawner.gameObject.SetActive(true);
+        foodSpawner.ClearAll();
+        foodSpawner.gameObject.SetActive(false);
 
         if(playerWon) //Case 1: Player wins
         {
