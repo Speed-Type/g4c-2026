@@ -38,6 +38,7 @@ public class InteractableObject : MonoBehaviour, IPointerClickHandler, IPointerE
     public UnityEvent onHoverExit;
 
     //State
+    public bool canBeInteracted = true;
     private bool hasBeenInteracted = false;
     private Outline highlight;
     private Vector3 originalScale;
@@ -87,8 +88,7 @@ public class InteractableObject : MonoBehaviour, IPointerClickHandler, IPointerE
         onInteract?.Invoke();
 
         //Notify the objective system
-        //TODO
-        //ObjectiveManager.Instance?.NotifyInteraction(objectID);
+        ObjectiveManager.instance?.NotifyInteraction(objectID);
 
         if(!repeatable)
             ApplyHighlight(false);
@@ -114,6 +114,7 @@ public class InteractableObject : MonoBehaviour, IPointerClickHandler, IPointerE
 
     private bool IsInteractable()
     {
+        if(!canBeInteracted) return false;
         if(!repeatable && hasBeenInteracted) return false;
         if(requiredWallIndex >= 0 && currentWall != requiredWallIndex) return false;
         return true;
