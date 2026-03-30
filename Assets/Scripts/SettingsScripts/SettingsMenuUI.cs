@@ -63,6 +63,7 @@ public class SettingsMenuUI : MonoBehaviour
     private void Awake()
     {
         //Start hidden
+        group = GetComponent<CanvasGroup>();
         SetGroupState(false, instant: true);
 
         //Setup input
@@ -227,7 +228,7 @@ public class SettingsMenuUI : MonoBehaviour
     private static void SetLabel(TMP_Text label, string name, float value, string format)
     {
         if(label == null) return;
-        
+
         if(format == "percent")
         {
             label.text = $"{name}   {Mathf.RoundToInt(value * 100f)}%";

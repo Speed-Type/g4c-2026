@@ -19,26 +19,10 @@ public class MainMenuController : MonoBehaviour
     public GameObject newGameButton;
 
     [Header("Screen Transition")]
-    public CanvasRenderer sceneTransitionImage;
-    public float screenTransitionLength;
+    public SceneTransitionHandler sceneTransitionHandler;
 
     void Start()
     {
-        //Scene transition in
-        sceneTransitionImage.gameObject.SetActive(true);
-        LeanTween.delayedCall(0.5f, () =>
-        {
-            LeanTween.value(1, 0, screenTransitionLength)
-            .setOnUpdate((float val) =>
-            {
-                sceneTransitionImage.SetAlpha(val);
-            })
-            .setOnComplete(() =>
-            {
-                sceneTransitionImage.gameObject.SetActive(false);
-            });
-        });
-
         //Show the right start buttons
         if(PlayerPrefs.GetInt("HasStartedGame") == 0)
         {
@@ -67,16 +51,7 @@ public class MainMenuController : MonoBehaviour
         PlayerPrefs.SetInt("HasStartedGame", 1);
 
         //Start screen transition
-        sceneTransitionImage.gameObject.SetActive(true);
-        LeanTween.value(0, 1, screenTransitionLength)
-        .setOnUpdate((float val) =>
-        {
-            sceneTransitionImage.SetAlpha(val);
-        })
-        .setOnComplete(() =>
-        {
-            SceneManager.LoadScene("RoguelikeGameplayScene");
-        });
+        sceneTransitionHandler.SceneTransitionToScene("RoguelikeGameplayScene");
     }
 
     public void NewGame()

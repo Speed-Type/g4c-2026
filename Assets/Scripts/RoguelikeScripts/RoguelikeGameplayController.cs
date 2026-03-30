@@ -360,11 +360,6 @@ public class RoguelikeGameplayController : MonoBehaviour
         gameState = GameState.Idle;
     }
 
-    public static bool CanInstar()
-    {
-        return instance.currentFlesh >= instance.goalFlesh;
-    }
-
     private bool doubleCheckCombat = false;
     public void StartCombat()
     {
@@ -498,6 +493,11 @@ public class RoguelikeGameplayController : MonoBehaviour
                 dialogueSystemController.ShowDialogueBox();
             });
         });
+    }
+
+    public static bool CanInstar()
+    {
+        return instance.currentFlesh >= instance.goalFlesh;
     }
 
     private bool doubleCheckInstar = false;

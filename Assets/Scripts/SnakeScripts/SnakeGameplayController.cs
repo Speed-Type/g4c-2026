@@ -303,6 +303,7 @@ public class SnakeGameplayController : MonoBehaviour
     //Method to toggle camera between modes
     private void ToggleCameraMode()
     {
+        if(!isPlaying) return;
         SetCameraMode(camMode == CameraMode.TopDown ? CameraMode.Chase : CameraMode.TopDown);
     }
 
@@ -320,7 +321,7 @@ public class SnakeGameplayController : MonoBehaviour
         {
             //For chase cam, lock cursor
             Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible   = false;
+            Cursor.visible = false;
 
             //Sync desired yaw to current so there's no weird jitter
             desiredYaw = currentYaw;
@@ -337,7 +338,7 @@ public class SnakeGameplayController : MonoBehaviour
     private static void ReleaseCursor()
     {
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible   = true;
+        Cursor.visible = true;
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -363,7 +364,7 @@ public class SnakeGameplayController : MonoBehaviour
 
         if(input.sqrMagnitude >= 0.01f) //Check that there is any input at all
         {
-            //W = north (0), D = east (90), S = south (180), A = west (270).
+            //W = north (0), D = east (90), S = south (180), A = west (270)
             desiredYaw = Mathf.Atan2(input.x, input.y) * Mathf.Rad2Deg;
         }
 
@@ -380,8 +381,8 @@ public class SnakeGameplayController : MonoBehaviour
         Vector2 look = lookAction.ReadValue<Vector2>();
         desiredYaw += look.x * mouseSensitivity;
 
-        //A/D (or stick X) also contribute in chase cam, on top of mouse.
-        //Uses a separate sensitivity so keyboard feel can be tuned independently.
+        //A/D (or stick X) also contribute in chase cam, on top of mouse
+        //Uses a separate sensitivity so keyboard feel can be tuned independently
         float keyboardX = moveAction.ReadValue<Vector2>().x;
         desiredYaw += keyboardX * keyboardTurnSensitivity * Time.deltaTime;
 
