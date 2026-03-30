@@ -39,7 +39,6 @@ public class WebBrowser : AppBase
     public Button confirmButton;
 
     [Header("Option Row Prefab")]
-    [Tooltip("Leave blank to use a built-in fallback row (fine for prototyping)")]
     public GameObject optionRowPrefab;
 
     [Header("Colours")]
