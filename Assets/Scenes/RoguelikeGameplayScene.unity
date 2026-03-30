@@ -1458,7 +1458,9 @@ MonoBehaviour:
   currentCharge: 0
   chargeFillIndicator: {fileID: 1018994137}
   cardUI: {fileID: 1099666843}
+  cardAnim: {fileID: 1099666848}
   currentChargeText: {fileID: 1264057602}
+  foodSpawner: {fileID: 1456757826}
   inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   cameraController: {fileID: 330585549}
   enemyNameText: {fileID: 1309434078}
@@ -11943,6 +11945,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1099666848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452275546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cf9cb6c659d94613866d8cf80abd53d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CardAnim
+  floatRotationAmount: 1
+  floatSpeed: 1.5
+  floatPositionAmount: 10
+  floatScaleAmount: 0.03
 --- !u!1 &1160437950
 GameObject:
   m_ObjectHideFlags: 0
@@ -14817,6 +14835,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Deck
   defaultCardSprite: {fileID: 21300000, guid: e34ec9418deb7494f9dd4b935cafdd80, type: 3}
+--- !u!1 &1456757825
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1456757827}
+  - component: {fileID: 1456757826}
+  m_Layer: 0
+  m_Name: FoodSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1456757826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456757825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0e24aa060dad4f8fb7dc316a32410a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodSpawner
+  foodPrefab: {fileID: 1437059748394397184, guid: 79d025fec942e4def815a1e72b6cdb72, type: 3}
+  spawnCenter: {x: 0, y: 0, z: 0}
+  spawnHalfExtents: {x: 18, y: 0, z: 18}
+  groundY: 1
+  maxFoodCount: 3
+  spawnInterval: 2
+  minSpacing: 2
+  maxPlacementTries: 10
+--- !u!4 &1456757827
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1456757825}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1488140582
 GameObject:
   m_ObjectHideFlags: 0
@@ -20861,11 +20931,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 315
+      value: 276.4192
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 480
+      value: 421.2102
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_LocalPosition.x
@@ -20897,11 +20967,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 732.5
+      value: 713.2096
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -300
+      value: -250.80511
       objectReference: {fileID: 0}
     - target: {fileID: 2772609413742743121, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -20919,6 +20989,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.99998474
       objectReference: {fileID: 0}
+    - target: {fileID: 5283949369451525010, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+      propertyPath: m_fontSize
+      value: 23.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5728866328233870312, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 46.4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20926,6 +21004,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 68097213098200608, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1099666846}
+    - targetCorrespondingSourceObject: {fileID: 68097213098200608, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1099666848}
   m_SourcePrefab: {fileID: 100100000, guid: 716ce28fae0da4469a0efe5769052598, type: 3}
 --- !u!222 &8364890019426568603
 CanvasRenderer:
@@ -20964,6 +21045,7 @@ SceneRoots:
   - {fileID: 109019099}
   - {fileID: 681920522}
   - {fileID: 1449775144}
+  - {fileID: 1456757827}
   - {fileID: 1880359811}
   - {fileID: 1866246698}
   - {fileID: 355174380}

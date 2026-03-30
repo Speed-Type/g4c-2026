@@ -66,7 +66,7 @@ public class TooltipManager : MonoBehaviour
 
         tooltipParentRectTransform.gameObject.SetActive(true);
 
-        yield return FadeTooltip(start, 0.8f);
+        yield return FadeTooltip(start, 0.85f);
     }
 
     //Coroutine to fade in or out
@@ -112,7 +112,7 @@ public class TooltipManager : MonoBehaviour
             StopCoroutine(hideTooltipCoroutine);
             hideTooltipCoroutine = null;
 
-            tooltipCanvasGroup.alpha = 0.8f;
+            tooltipCanvasGroup.alpha = 0.85f;
         }
 
         //Set texts
@@ -166,7 +166,7 @@ public class TooltipManager : MonoBehaviour
     {
         yield return new WaitForSeconds(tooltipHideDelay);
 
-        yield return FadeTooltip(0.8f, 0f);
+        yield return FadeTooltip(0.85f, 0f);
 
         tooltipParentRectTransform.gameObject.SetActive(false);
     }

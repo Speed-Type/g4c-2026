@@ -68,7 +68,13 @@ public class SnakeGameplayController : MonoBehaviour
     public Card currentCard;
     public Image chargeFillIndicator;
     public CardUI cardUI;
+    public CardAnim cardAnim;
     public TMP_Text currentChargeText;
+
+    [Header("Food")]
+    public FoodSpawner foodSpawner;
+    [Tooltip("How much charge each food gives")]
+    public float foodValue = 5f;
 
     [Header("Input")]
     public InputActionAsset inputActions;
@@ -193,6 +199,9 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Initialize other references
         invincibilityFlash = GetComponent<InvincibilityFlash>();
+
+        //Set references inactive
+        foodSpawner.gameObject.SetActive(false);
     }
 
     void Update()
@@ -297,8 +306,10 @@ public class SnakeGameplayController : MonoBehaviour
         //Play card
         currentCard.ActivateCard();
         currentCard = Deck.instance.DrawCard();
-        cardUI.UpdateCardDisplay(currentCard);
         currentCharge = 0;
+
+        //Do animation
+        cardAnim.Spin(() => {cardUI.UpdateCardDisplay(currentCard);}, 0.5f, 2);
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -731,10 +742,9 @@ public class SnakeGameplayController : MonoBehaviour
 
     private void OnItemCollected(GameObject item)
     {
-        AddSegments(1);
-        Destroy(item);
+        currentCharge += foodValue;
 
-        //TODO: ADD STUFF FOR ITEM COLLECT
+        Destroy(item);
     }
 
     public void OnPlayerDamage(int damage, float stunApplied, bool removeSegments)
@@ -839,6 +849,10 @@ public class SnakeGameplayController : MonoBehaviour
         Deck.instance.ResetDeck();
         currentCard = Deck.instance.DrawCard();
         cardUI.UpdateCardDisplay(currentCard);
+
+        //Reset food
+        foodSpawner.ClearAll();
+        foodSpawner.gameObject.SetActive(true); //This should start the food spawning loop
     }
 
     //----------------------------------------------------------------------------------------------------------------
@@ -907,6 +921,9 @@ public class SnakeGameplayController : MonoBehaviour
 
         //Stop feet movement
         SetLegMovement(false);
+
+        //Stop food spawning
+        foodSpawner.gameObject.SetActive(true);
 
         if(playerWon) //Case 1: Player wins
         {
