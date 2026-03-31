@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,9 @@ public class SceneTransitionHandler : MonoBehaviour
     public CanvasRenderer sceneTransitionImage;
     public float screenTransitionLength;
     public float delayBeforeEnteringScene;
+    public TMP_Text label;
+    public float labelDelay;
+    public bool labelScene;
 
     [Header("Settings Menu")]
     public GameObject settingsMenu;
@@ -18,6 +22,8 @@ public class SceneTransitionHandler : MonoBehaviour
 
     public void SceneTransitionIn()
     {
+        label?.gameObject.SetActive(false);
+
         //Set the settings menu un-openable
         if(settingsMenu != null) settingsMenu?.SetActive(false);
 
@@ -25,16 +31,54 @@ public class SceneTransitionHandler : MonoBehaviour
         sceneTransitionImage.gameObject.SetActive(true);
         LeanTween.delayedCall(delayBeforeEnteringScene, () =>
         {
-            LeanTween.value(1, 0, screenTransitionLength)
-            .setOnUpdate((float val) =>
+            if(labelScene)
             {
-                sceneTransitionImage.SetAlpha(val);
-            })
-            .setOnComplete(() =>
+                label.gameObject.SetActive(true);
+                
+                switch(PlayerPrefs.GetInt("CurrentStage", 0))
+                {
+                    case 0:
+                        label.text = "Act I: The Bone Collector";
+                        break;
+                    case 1:
+                        label.text = "Act II: The Conservationist";
+                        break;
+                    case 2:
+                        label.text = "Act III: The Bone Collector";
+                        break;
+                    case 3:
+                        label.text = "Act IV: The Conservationist";
+                        break;
+                    case 4:
+                        label.text = "Act V: Metamorphosis";
+                        break;
+                }
+
+                LeanTween.delayedCall(labelDelay, () =>
+                {
+                    FinishTransitionIn();
+                });
+            }
+            else
             {
-                sceneTransitionImage.gameObject.SetActive(false);
-                if(settingsMenu != null) settingsMenu?.SetActive(true);
-            });
+                FinishTransitionIn();
+            }
+        });
+    }
+
+    private void FinishTransitionIn()
+    {
+        LeanTween.value(1, 0, screenTransitionLength)
+        .setOnUpdate((float val) =>
+        {
+            sceneTransitionImage.SetAlpha(val);
+        })
+        .setOnComplete(() =>
+        {
+            sceneTransitionImage.gameObject.SetActive(false);
+            if(settingsMenu != null) settingsMenu?.SetActive(true);
+
+            label?.gameObject.SetActive(false);
         });
     }
 
