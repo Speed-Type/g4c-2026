@@ -228,7 +228,7 @@ MonoBehaviour:
   isRevealed: 0
   nodeTypeImage: {fileID: 2475087763584208679}
   revealedSprite: {fileID: 21300000, guid: 7af181f69c9da433fb792e2ee8776ef0, type: 3}
-  bugLootOdds: 01000000
+  bugLootOdds: 0100000001000000
 --- !u!114 &8277718912705011392
 MonoBehaviour:
   m_ObjectHideFlags: 0

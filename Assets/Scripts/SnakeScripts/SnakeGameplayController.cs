@@ -70,6 +70,7 @@ public class SnakeGameplayController : MonoBehaviour
     public CardUI cardUI;
     public CardAnim cardAnim;
     public TMP_Text currentChargeText;
+    public float chargeRate = 1f;
 
     [Header("Food")]
     public FoodSpawner foodSpawner;
@@ -104,6 +105,7 @@ public class SnakeGameplayController : MonoBehaviour
     //PRIVATE VARIABLES
 
     //Input action references
+    public int bonusBattleTime = 0;
     private InputAction moveAction;
     private InputAction lookAction;
     private InputAction useCardAction;
@@ -256,7 +258,7 @@ public class SnakeGameplayController : MonoBehaviour
             UpdateSegmentPositions();
             CheckCollisions();
 
-            currentCharge += Time.deltaTime; //Only increase charge when not stunned
+            currentCharge += Time.deltaTime * chargeRate; //Only increase charge when not stunned
             chargeFillIndicator.fillAmount = Mathf.Clamp01((currentCard.cooldown - currentCharge) / currentCard.cooldown);
             currentChargeText.text = Math.Min(currentCharge, currentCard.cooldown).ToString("F2") + " / " + currentCard.cooldown.ToString("F2");
         }
@@ -827,7 +829,7 @@ public class SnakeGameplayController : MonoBehaviour
         snakeEnemy.ResetOpponent(new Vector3((float)Math.Cos(randomAngle) * enemySpawnRange, snakeStartTransform.position.y, (float)Math.Sin(randomAngle) * enemySpawnRange));
 
         //Pull data from bug
-        currentFightTime = snakeEnemy.battleLength;
+        currentFightTime = snakeEnemy.battleLength + bonusBattleTime;
         enemyNameText.text = snakeEnemy.enemyName;
 
         //Update health bar

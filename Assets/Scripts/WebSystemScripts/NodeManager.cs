@@ -457,7 +457,14 @@ public class NodeManager : MonoBehaviour
                             TutorialPopup.Show("", "Oh no.");
                         }
 
-                        Debug.Log("GAME OVER");
+                        PlayerPrefs.SetInt("HasStartedGame", 0);
+                        SaveSystem.DeleteSave();
+
+                        TutorialPopup.Show("Game Over", "Insert a sick animation of the Spider noshing on you here.\n\nFun fact: "
+                        + "In real life, researchers find that bone collectors aren't often preyed upon by spiders (To our current understanding " 
+                        + "at least). Maybe that just means you should try again?");
+
+                        RoguelikeGameplayController.instance.sceneTransitionHandler.SceneTransitionToScene("MainMenu");
                     }
                 });
             });

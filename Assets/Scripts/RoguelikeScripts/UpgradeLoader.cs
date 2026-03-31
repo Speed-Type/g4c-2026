@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class UpgradeLoader : MonoBehaviour
 {
@@ -38,20 +39,42 @@ public class UpgradeLoader : MonoBehaviour
         switch(PlayerPrefs.GetString(prefix + "VolunteerUpgrade", "null"))
         {
             case "kiawe":
+                //Decrease enemy encounters
+                NodeManager.instance.nodeWeights[3] = Math.Clamp(NodeManager.instance.nodeWeights[3] - 1, 0, 10000);
                 break;
             case "netpatrol":
+                //Increase bites
+                RoguelikeGameplayController.instance.maxBites += 2;
                 break;
             case "botanical":
+                //Decrease required flesh
+                RoguelikeGameplayController.instance.goalFlesh -= 15;
                 break;
             case "hilo":
+                //Increase spider alertness threshold
+                RoguelikeGameplayController.instance.maxSpiderAlertness += 20;
                 break;
             case "reef":
+                //Upgrade three nodes
+                for(int i = 0; i < 3; i++)
+                {
+                    if(NodeManager.instance.UpgradeRandomNode() == false)
+                    {
+                        i = 99999;
+                    }
+                }
                 break;
             case "diamond":
+                //Increase camo chance
+                RoguelikeGameplayController.instance.stealthChance += 0.1f;
                 break;
             case "her":
+                //Increase card charge rate
+                SnakeGameplayController.instance.chargeRate += 0.2f;
                 break;
             case "point":
+                //Increase battle length
+                SnakeGameplayController.instance.bonusBattleTime += 10;
                 break;
         }
 

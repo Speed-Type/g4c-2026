@@ -624,16 +624,11 @@ MonoBehaviour:
   objectives:
   - id: checkEmails
     description: Check your emails
-    isMandatory: 0
+    isMandatory: 1
     isComplete: 0
     completedByInteractions: []
   - id: volunteering
     description: Sign up for volunteering
-    isMandatory: 1
-    isComplete: 0
-    completedByInteractions: []
-  - id: raincheck
-    description: Check tomorrow's weather
     isMandatory: 1
     isComplete: 0
     completedByInteractions: []
@@ -674,7 +669,8 @@ MonoBehaviour:
   - id: kiawe
     label: Outplanting a Kiawe Forest
     detail: A brush fire tore through a forest of invasive Kiawe trees, leaving an
-      opportunity to replant native species.
+      opportunity to replant native species. Decrease the number of enemy encounters
+      for the rest of this run.
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -683,7 +679,8 @@ MonoBehaviour:
         m_Calls: []
   - id: netpatrol
     label: Net Patrol
-    detail: Coastal cleanup of large fishing gear and other hazardous plastic pollution.
+    detail: 'Coastal cleanup of large fishing gear and other hazardous plastic pollution.
+      Permanently increase the number of bites for the rest of this run. '
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -692,7 +689,8 @@ MonoBehaviour:
         m_Calls: []
   - id: botanical
     label: Maui Nui Botanical Gardens
-    detail: Pot plants in the nursery facility.
+    detail: Pot plants in the nursery facility. Decrease the required flesh for the
+      rest of this run.
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -701,8 +699,8 @@ MonoBehaviour:
         m_Calls: []
   - id: hilo
     label: Coastal Wetland & Estuary Restoration in Hilo
-    detail: Remove invasive vegetation, replant native species, and revive the natural
-      flow of freshwater.
+    detail: 'Remove invasive vegetation, replant native species, and revive the natural
+      flow of freshwater. Increase spider alertness critical  threshold. '
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -712,7 +710,8 @@ MonoBehaviour:
   - id: reef
     label: Reef Cleanup
     detail: Snorkel a reef to gather trash and debris that harm the coral reefs of
-      the Maui coast and threaten marine life.
+      the Maui coast and threaten marine life. Upgrade three Scavenge nodes each
+      round for the rest of this run.
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -722,6 +721,7 @@ MonoBehaviour:
   - id: diamond
     label: Diamond Head Crater Cleanup
     detail: Garden maintenance, invasive species removal, native species seed collecting.
+      Increases camouflage chance for the rest of this run.
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -731,7 +731,8 @@ MonoBehaviour:
   - id: her
     label: H.E.R. Crew
     detail: "Assist with weekly Hawai'i Environmental Restoration Crew efforts in
-      Keau\u02BBohana State Forest Reserve"
+      Keau\u02BBohana State Forest Reserve. Increase card charge rate for the rest
+      of this run."
     onSelect:
       m_PersistentCalls:
         m_Calls: []
@@ -741,7 +742,7 @@ MonoBehaviour:
   - id: point
     label: "Pu\u02BBuiki Point Coastal Restoration"
     detail: Replant native species that build sand dunes, prevent erosion, and protect
-      against sea level rise.
+      against sea level rise. Increase battle length for the rest of this run.
     onSelect:
       m_PersistentCalls:
         m_Calls: []
