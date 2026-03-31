@@ -6,13 +6,7 @@ public class Node_Start : Node
     //Start node is where the player starts
     private bool hasVisited = false; //note that this variable does not interfere/interact with the Node parent class's hasBeenVisited variable
 
-    private List<string> flavorText = new List<string>
-    {
-        "This is your start. There are plenty of places to go from here.",
-        "And so your journey begins.",
-        "New web, new food.",
-        "Life is dangerous for a little caterpillar. You should get going."
-    };
+    private List<string> outText = new List<string>();
 
     protected override void Awake()
     {
@@ -20,6 +14,30 @@ public class Node_Start : Node
 
         //MIGHT LEAD TO A BUG LATER??
         nodeType = NodeTypes.Start;
+
+        switch(PlayerPrefs.GetInt("CurrentStage", 0))
+        {
+            case 0:
+                outText.Add("You feel hungry.");
+                outText.Add("You always feel hungry.");
+                outText.Add("You should try and find something to eat.");
+                outText.Add("You get the feeling that that something might be another bug.");
+                break;
+            case 2:
+                outText.Add("Here you are again.");
+                outText.Add("You swear the web has grown bigger. Maybe your spider landlord has been busy.");
+                outText.Add("Oh well. It's time to feed anyway.");
+                outText.Add("Though you get the feeling that your feasting might get a little dangerous today...");
+                break;
+            case 4:
+                outText.Add("This is it.");
+                outText.Add("You can feel it.");
+                outText.Add("It's time to leave behind your cloak of death and fly free.");
+                outText.Add("You just need to eat a little bit more. It's the final stretch now.");
+                break;
+        }
+
+        outText.Add("...");
     }
 
     public override void VisitNode()
@@ -48,7 +66,7 @@ public class Node_Start : Node
             if(hasVisited == false)
             {
                 hasVisited = true;
-                RoguelikeGameplayController.instance.dialogueBoxController.SetText(new List<string> {flavorText[Random.Range(0, flavorText.Count)], "..."});
+                RoguelikeGameplayController.instance.dialogueBoxController.SetText(outText);
             }
             else
             {
