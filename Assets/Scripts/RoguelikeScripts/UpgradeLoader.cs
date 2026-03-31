@@ -55,7 +55,7 @@ public class UpgradeLoader : MonoBehaviour
                 break;
         }
 
-        //Load email bonus
+        //Load email bonus (day-based, so don't need to add prefix)
         for(int i = 0; i < PlayerPrefs.GetInt("EmailBonus", 0); i++)
         {
             if(NodeManager.instance.UpgradeRandomNode() == false)
@@ -64,6 +64,6 @@ public class UpgradeLoader : MonoBehaviour
             }
         }
 
-        
+
     }
 }

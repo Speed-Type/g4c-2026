@@ -449,6 +449,14 @@ public class NodeManager : MonoBehaviour
                     else
                     {
                         //GAME OVER
+
+                        //Tutorial for game over
+                        if(PlayerPrefs.GetInt("Tutorial_GameOver", 0) == 0)
+                        {
+                            PlayerPrefs.SetInt("Tutorial_GameOver", 1);
+                            TutorialPopup.Show("", "Oh no.");
+                        }
+
                         Debug.Log("GAME OVER");
                     }
                 });
@@ -457,6 +465,16 @@ public class NodeManager : MonoBehaviour
         else if(currentMoveNum == RoguelikeGameplayController.instance.spiderMovesPerTurn) //CASE 2: SPIDER HAS NO MORE MOVES
         {
             //Continue to next phase
+
+            //Tutorial for spider on end of spider turn
+            if(PlayerPrefs.GetInt("Tutorial_WebMap", 0) == 1 && PlayerPrefs.GetInt("Tutorial_SpiderTurn", 0) == 0)
+            {
+                PlayerPrefs.SetInt("Tutorial_SpiderTurn", 1);
+                TutorialPopup.Show("The Spider", "The Spider gets to move just like you. Sometimes faster, sometimes slower, if you're smart,"
+                + " you can avoid it. Even if it does catch you, with the right fragments equipped on your case, "
+                + "you should have better chances at camouflaging.");
+            }
+        
             AddNewBugs();
         }
         else //CASE 3: SPIDER JUST MOVES A NODE
@@ -537,6 +555,16 @@ public class NodeManager : MonoBehaviour
                     }
                     else //IN THIS CASE, SPIDER HAS JUST MOVED AWAY FROM PLAYER
                     {
+                        //Tutorial for spider leaving the player alone
+                        if(PlayerPrefs.GetInt("Tutorial_SpiderConfused", 0) == 0)
+                        {
+                            PlayerPrefs.SetInt("Tutorial_SpiderConfused", 1);
+                            TutorialPopup.Show("Camouflage", "The Spider isn't stupid, it just can't see very well. It helps "
+                            + "especially that you smell just like its long-stale meals.\nWhat the Spider lacks in vision, it "
+                            + "makes up for with its sensitivity to vibrations. The more actions you take, the more alert the Spider "
+                            + "will become. It may be best that you grab your food and go as soon as possible.");
+                        }
+
                         AddNewBugs();
                     }
                 });
@@ -574,6 +602,15 @@ public class NodeManager : MonoBehaviour
                 //Wait a bit again
                 LeanTween.delayedCall(RoguelikeCameraController.generalDelayBetweenTransitions * 2f, () =>
                 {
+                    //Tutorial for caught bugs
+                    if(PlayerPrefs.GetInt("Tutorial_NewBugs", 0) == 0)
+                    {
+                        PlayerPrefs.SetInt("Tutorial_NewBugs", 1);
+                        TutorialPopup.Show("Fresh-Caught Bugs", "The spiderweb isn't just for show. Occasionally, new "
+                        + "friends will find their way onto the web. If you need a sure source of flesh, you can go visit "
+                        + "these new neighbors.");
+                    }
+
                     TransferControlBackToPlayer();
                 });
             });

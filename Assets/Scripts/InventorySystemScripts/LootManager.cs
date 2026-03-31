@@ -40,6 +40,16 @@ public class LootManager : GeneralInventoryStructure
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Leg, 10);
                 bugLoot.SetChances(Fragments.AfricanBigHeadedAnt_Thorax, 4);
                 break;
+            case Bugs.Fly:
+                bugLoot.numRows = 4;
+                bugLoot.numCols = 4;
+                bugLoot.minLoot = 2;
+                bugLoot.maxLoot = 3;
+                bugLoot.scavengeFleshChance = .25f;
+                bugLoot.SetChances(Fragments.Fly_Thorax, 6);
+                bugLoot.SetChances(Fragments.Fly_Haltere, 0);
+                bugLoot.SetChances(Fragments.Fly_Wing, 1);
+                break;
             default:
                 break;
         }
@@ -170,6 +180,8 @@ public class LootManager : GeneralInventoryStructure
         {
             case Bugs.AfricanBigHeadedAnt:
                 return "African Big-Headed Ant";
+            case Bugs.Fly:
+                return "Fly";
         }
 
         return "ERROR: NOT FOUND";
@@ -253,9 +265,17 @@ public class LootManager : GeneralInventoryStructure
                     numCols++;
                     minLoot+=2;
                     maxLoot+=2;
-                    scavengeFleshChance = 1f;
+                    scavengeFleshChance = 0.9f;
                     AddChances(Fragments.AfricanBigHeadedAnt_HeadMajor, 3);
                     AddChances(Fragments.AfricanBigHeadedAnt_HeadMinor, 3);
+                    break;
+                case Bugs.Fly:
+                    numRows+=2;
+                    minLoot+=1;
+                    maxLoot+=1;
+                    scavengeFleshChance = 0.9f;
+                    AddChances(Fragments.Fly_Haltere, 1);
+                    AddChances(Fragments.Fly_Wing, 3);
                     break;
                 default:
                     break;
@@ -266,7 +286,8 @@ public class LootManager : GeneralInventoryStructure
 //Enumerator for loot tables
 public enum Bugs
 {
-    AfricanBigHeadedAnt
+    AfricanBigHeadedAnt,
+    Fly
 }
 
 //Enumerator for fragments
@@ -278,5 +299,8 @@ public enum Fragments
     AfricanBigHeadedAnt_HeadMajor,
     AfricanBigHeadedAnt_HeadMinor,
     AfricanBigHeadedAnt_Leg,
-    AfricanBigHeadedAnt_Thorax
+    AfricanBigHeadedAnt_Thorax,
+    Fly_Wing,
+    Fly_Haltere,
+    Fly_Thorax
 }

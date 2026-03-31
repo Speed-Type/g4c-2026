@@ -140,7 +140,7 @@ public class SnakeGameplayController : MonoBehaviour
     private float groundY; // Y of the ground plane (set at Start)
     private float coyoteTimer;
     private bool jumpConsumed;
-    private bool jumpQueued;
+    public bool jumpQueued;
 
     //Collision grace period: tracks how long the head has been in contact
     //Resets to 0 whenever contact clears

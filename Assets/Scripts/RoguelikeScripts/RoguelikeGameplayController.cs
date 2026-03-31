@@ -9,6 +9,7 @@ public class RoguelikeGameplayController : MonoBehaviour
     [Header("Important Controllers and Parents")]
     public DialogueBoxController dialogueBoxController;
     public SnakeGameplayController snakeGameplayController;
+    public SceneTransitionHandler sceneTransitionHandler;
 
     //Variables in Inspector
 
@@ -290,9 +291,6 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public void ShowInventory()
     {
-        //TEMP: Save with every inventory open/close
-        SaveSystem.Save(inventoryManager);
-
         //Make sure the player can actually make choices
         if(!playerCanMakeChoices) return;
         
@@ -313,6 +311,15 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update game state
         gameState = GameState.Inventory;
+
+        //Tutorial for inventory
+        if(PlayerPrefs.GetInt("Tutorial_Inventory", 0) == 0)
+        {
+            PlayerPrefs.SetInt("Tutorial_Inventory", 1);
+            TutorialPopup.Show("Inventory", "Your case is your best chance at survival. By weaving the fragments of enemies "
+            + "into your silk, you can gain various abilities and boosts that will be more than necessary to survive.\n\n"
+            + "Fact Check: The stat-boosting abilities are perhaps less true in real life, but it's still a sick way to camouflage.");
+        }
     }
 
     public void HideInventory()
@@ -343,6 +350,7 @@ public class RoguelikeGameplayController : MonoBehaviour
         TogglePlayerOptionButtons(false);
         SetGroup(lootSystemCanvasGroup, true);
         SetGroup(inventorySystemCanvasGroup, true);
+        dialogueSystemController.HideDialogueBox();
         hideInventorySystemButton.SetActive(false);
         StatDisplay.UpdateAllFleshFillBars_Static();
 
@@ -353,6 +361,16 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         //Update game state
         gameState = GameState.Loot;
+
+        if(PlayerPrefs.GetInt("Tutorial_Looting", 0) == 0)
+        {
+            PlayerPrefs.SetInt("Tutorial_Looting", 1);
+            TutorialPopup.Show("Looting", "Looting bodies is your whole thing. Most of the ones you find lying around will "
+            + "be half-eaten by the Spider, but you can still get the flesh you need from them. More importantly though, "
+            + "these bodies have valuable fragments.\n\nTo take things from a body, you need to carefully bite off what you want. "
+            + "To remove a fragment, you need to get rid of all the surrounding flesh. Flesh is soft and goes down in one bite though. "
+            + "Start by dragging and dropping your mandibles. Be strategic!");
+        }
     }
 
     public void HideLoot()
@@ -508,7 +526,20 @@ public class RoguelikeGameplayController : MonoBehaviour
 
     public static bool CanInstar()
     {
-        return instance.currentFlesh >= instance.goalFlesh;
+        if(instance.currentFlesh >= instance.goalFlesh)
+        {
+            //Tutorial for instar
+            if(PlayerPrefs.GetInt("Tutorial_Instar", 0) == 0)
+            {
+                PlayerPrefs.SetInt("Tutorial_Instar", 1);
+                TutorialPopup.Show("Instar", "It looks like you've got all the flesh you need! So long as this stays true, "
+                + "you can Instar and move on to the next phase of your life.\n\nOr... you could risk it for more fragments. "
+                + "You do get to keep them to the next stage.");
+            }
+
+            return true;
+        }
+        return false;
     }
 
     private bool doubleCheckInstar = false;
@@ -524,12 +555,47 @@ public class RoguelikeGameplayController : MonoBehaviour
 
         if(doubleCheckInstar)
         {
-            //TODO: INSTAR HERE
-            Debug.Log("Instar");
+            //Save
+            SaveSystem.Save(inventoryManager);
+
+            switch(PlayerPrefs.GetInt("CurrentStage", 0))
+            {
+                case 0:
+                    //Increment current stage
+                    PlayerPrefs.SetInt("CurrentStage", 1);
+                    
+                    TutorialPopup.Show("Act I Complete", "Congratulations! You've successfully made it through the first "
+                    + "stage of bone collector life. But before you continue, you'll need a few upgrades...");
+                    
+                    sceneTransitionHandler.SceneTransitionToScene("NextStage");
+                    break;
+                case 2:
+                    PlayerPrefs.SetInt("CurrentStage", 3);
+                    
+                    TutorialPopup.Show("Act III Complete", "Few bugs make it this far, and even fewer are carnivorous, "
+                    + "cannibalistic corpse-looters. Soon, you'll be on your way to blooming into a moth. Just one final "
+                    + "bit of human assistance remains.");
+                    
+                    sceneTransitionHandler.SceneTransitionToScene("NextStage");
+                    break;
+                case 4:
+                    //Delete player save and move them back to the main menu
+                    PlayerPrefs.SetInt("HasStartedGame", 0);
+                    SaveSystem.DeleteSave();
+
+                    TutorialPopup.Show("Act V Complete", "Truly, thank you. For carrying this little corpse-looter to "
+                    + "magnificence, and for taking the time to at least, if nothing else, simulate the efforts that are "
+                    + "required to protect the rainforests and reefs that creatures as strange and brutal as this call home."
+                    + "\n\nTo be fair, I did mean to add an animation for the actual metamorphosis, but I ran out of time."
+                    + "\nThank you for sharing in my labor of love. Let us give back tenfold to the world that gives so much to us.");
+
+                    sceneTransitionHandler.SceneTransitionToScene("MainMenu");
+                    break;
+            }
         }
         else
         {
-            dialogueBoxController.SetText(new List<string> {"Press again to confirm level end."});
+            dialogueBoxController.SetText(new List<string> {"Press again to confirm stage end."});
             doubleCheckInstar = true;
         }
     }
@@ -612,6 +678,16 @@ public class RoguelikeGameplayController : MonoBehaviour
         biteList[equippedBites[^1]].SetActive(true);
         Vector3 offset = biteList[equippedBites[^1]].GetComponent<Fragment_Bite>().GetBiteOffset();
         biteList[equippedBites[^1]].GetComponent<RectTransform>().position = biteHomePosition.position + offset; //Reset position
+    
+        //Tutorial for switching bites
+        if(PlayerPrefs.GetInt("Tutorial_SwitchBites", 0) == 0)
+        {
+            PlayerPrefs.SetInt("Tutorial_SwitchBites", 1);
+            TutorialPopup.Show("Switching Bites", "Certain fragments allow you to switch your bite's shape and damage "
+            + "to meet all your corpse-looting needs. Once you take your first bite into a body, you can't switch "
+            + "that bite until you find the next meal, so be strategic.\nThe \"Bite unlocked\" indicator should help you keep "
+            + "track of whether or not you can switch bites.");
+        }
     }
 
     public static void SetPlayerHasStartedLooting(bool val)

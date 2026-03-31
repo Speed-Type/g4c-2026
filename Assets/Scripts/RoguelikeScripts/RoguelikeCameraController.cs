@@ -148,7 +148,16 @@ public class RoguelikeCameraController : MonoBehaviour
             .setEase(LeanTweenType.easeOutExpo);
     
         //Also do fog transition
-        CloudTransitionOut();
+        CloudTransitionOut(onCompleteAction: () =>
+        {
+            if(PlayerPrefs.GetInt("Tutorial_WebMap", 0) == 0)
+            {
+                PlayerPrefs.SetInt("Tutorial_WebMap", 1);
+                TutorialPopup.Show("The Web Map", "The web map is the primary way of navigating the spiderweb. "
+                + "Each node might hold something tasty, or sometimes something as equally hungry as you. They can also be empty. "
+                + "You never know until you visit.");
+            }
+        });
     }
 
     public void ShiftFreecamFocusToIdle()

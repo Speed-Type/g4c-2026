@@ -18,14 +18,23 @@ public class Node_Start : Node
         switch(PlayerPrefs.GetInt("CurrentStage", 0))
         {
             case 0:
-                outText.Add("You feel hungry.");
+                outText.Add("This is a bone collector.");
+                outText.Add("They're called that because scientists don't know just what to call them yet.");
+                outText.Add("And I guess there's also the part where they collect the body parts of other bugs.");
+                outText.Add("Why?");
+                outText.Add("You'll see soon.");
+                outText.Add("For now though, you are the bone collector.");
+                outText.Add("The bone collector is you.");
+                outText.Add("And you feel hungry.");
                 outText.Add("You always feel hungry.");
                 outText.Add("You should try and find something to eat.");
                 outText.Add("You get the feeling that that something might be another bug.");
                 break;
             case 2:
                 outText.Add("Here you are again.");
-                outText.Add("You swear the web has grown bigger. Maybe your spider landlord has been busy.");
+                outText.Add("Caterpillars go through a number of instars before they reach metamorphosis.");
+                outText.Add("Think of it as level-ups (Check your case when you can).");
+                outText.Add("You're not the only thing that's grown bigger. You swear the web is a bit wider. Maybe your spider landlord has been busy.");
                 outText.Add("Oh well. It's time to feed anyway.");
                 outText.Add("Though you get the feeling that your feasting might get a little dangerous today...");
                 break;

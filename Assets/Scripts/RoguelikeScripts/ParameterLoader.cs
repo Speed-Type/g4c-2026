@@ -18,7 +18,17 @@ public class ParameterLoader : MonoBehaviour
         [Header("RG Controller")]
         public int goalFlesh;
         public int maxSpiderAlertness;
+        public int spiderMovesPerTurn;
+
+        [Header("Inventory")]
+        public int inventoryNumRows;
+        public int inventoryNumCols;
     }
+
+    [Header("Script References")]
+    public NodeManager nodeManager;
+    public RoguelikeGameplayController roguelikeGameplayController;
+    public InventoryManager playerInventory;
 
     public List<ParameterSet> parameterList;
 
@@ -41,15 +51,20 @@ public class ParameterLoader : MonoBehaviour
     private void ApplyParameters(ParameterSet parameterSet)
     {
         //Node manager
-        NodeManager.instance.webNumRadii = parameterSet.webNumRadii;
-        NodeManager.instance.webNumCircleWebs = parameterSet.webNumCircleWebs;
-        NodeManager.instance.webRadiusSize = parameterSet.webRadiusSize;
-        NodeManager.instance.nodeWeights = parameterSet.nodeWeights;
-        NodeManager.instance.nodePositionRandomization = parameterSet.nodePositionRandomization;
-        NodeManager.instance.chanceForNewBug = parameterSet.chanceForNewBug;
+        nodeManager.webNumRadii = parameterSet.webNumRadii;
+        nodeManager.webNumCircleWebs = parameterSet.webNumCircleWebs;
+        nodeManager.webRadiusSize = parameterSet.webRadiusSize;
+        nodeManager.nodeWeights = parameterSet.nodeWeights;
+        nodeManager.nodePositionRandomization = parameterSet.nodePositionRandomization;
+        nodeManager.chanceForNewBug = parameterSet.chanceForNewBug;
 
         //RG Controller
-        RoguelikeGameplayController.instance.goalFlesh = parameterSet.goalFlesh;
-        RoguelikeGameplayController.instance.maxSpiderAlertness = parameterSet.maxSpiderAlertness;
+        roguelikeGameplayController.goalFlesh = parameterSet.goalFlesh;
+        roguelikeGameplayController.maxSpiderAlertness = parameterSet.maxSpiderAlertness;
+        roguelikeGameplayController.spiderMovesPerTurn = parameterSet.spiderMovesPerTurn;
+
+        //Inventory
+        playerInventory.inventoryNumRows = parameterSet.inventoryNumRows;
+        playerInventory.inventoryNumCols = parameterSet.inventoryNumCols;
     }
 }

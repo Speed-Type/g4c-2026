@@ -78,7 +78,7 @@ public class SceneTransitionHandler : MonoBehaviour
             sceneTransitionImage.gameObject.SetActive(false);
             if(settingsMenu != null) settingsMenu?.SetActive(true);
 
-            label?.gameObject.SetActive(false);
+            LeanTween.delayedCall(1f, () => {label?.gameObject.SetActive(false);});
         });
     }
 
