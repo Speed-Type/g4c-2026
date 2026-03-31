@@ -270,7 +270,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 430, y: 198.04999}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &126816592
 MonoBehaviour:
@@ -562,6 +562,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConservationistUpgradeController
   door: {fileID: 924610908}
+  sceneTransitionHandler: {fileID: 1289999962}
   totalDailyVolunteerOptions: 3
   allVolunteerOptions:
   - id: kiawe
@@ -641,8 +642,96 @@ MonoBehaviour:
     onConfirm:
       m_PersistentCalls:
         m_Calls: []
+  totalDailyEmails: 5
+  allEmails:
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: jholt@reefs.org
+    humanName: Reef Monitoring Station 12
+    subject: Daily Check-In
+    body: "Greetings!\n\nCoral reef health today was looking a little rough. We almost
+      missed a couple damaged patches while we were out there cause they looked a
+      lot like rocks. \n\nSay, you remember what organisms coral reefs are mainly
+      built by, right?"
+    answerChoice1: Plants
+    answerChoice2: Polyps
+    answerChoice3: Algae Colonies
+    answerChoice4: Mineral Crystals
+    correctAnswer: 1
+    selectedAnswer: 0
+    isAnswered: 0
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: koolkai@moggle.com
+    humanName: Ranger Kai
+    subject: A Little Brain Teaser for You
+    body: "Aloha!\n\nWe\u2019re doing a little trivia break between monitoring native
+      bird populations. I bet you can't answer this one:\n\nHow do you pronounce
+      n\u0113n\u0113 (The state bird of Hawai'i by the way)?"
+    answerChoice1: Knee-Knee
+    answerChoice2: Neh-Neh
+    answerChoice3: Neen
+    answerChoice4: Nay-Nay
+    correctAnswer: 3
+    selectedAnswer: 0
+    isAnswered: 0
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: speedydude@yoohoo.com
+    humanName: SPEEDY DUDE
+    subject: THINK FAST
+    body: YOU QUICK WHATS THE FASTEST ANIMAL IN HAWAII
+    answerChoice1: CHEETAH
+    answerChoice2: SHORTFIN MAKO SHARK
+    answerChoice3: PEREGRINE FALCON
+    answerChoice4: ONO FISH
+    correctAnswer: 2
+    selectedAnswer: 0
+    isAnswered: 0
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: 'Error: Data not foun'
+    humanName: t h e   p u z z l e r
+    subject: something for you to puzzle...
+    body: hey... i'm thinking of a word that would fit for both a fish and its meat...
+    answerChoice1: Ono?
+    answerChoice2: Tuna fish?
+    answerChoice3: Yummy?
+    answerChoice4: Huh??
+    correctAnswer: 0
+    selectedAnswer: 0
+    isAnswered: 0
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: ij@moggle.com
+    humanName: Ian J
+    subject: Thank You
+    body: Thank you for playing my game! I hope you've been having a lot of fun and
+      hopefully learning a bit. This question's just a freebie for you. If you trust
+      me.
+    answerChoice1: The incorrect answer.
+    answerChoice2: The incorrect answer.
+    answerChoice3: The incorrect answer.
+    answerChoice4: The correct answer.
+    correctAnswer: 3
+    selectedAnswer: 0
+    isAnswered: 0
+  - profilePic: {fileID: 21300000, guid: 42ab0d7fc4f014b9b89f8d2c9bece544, type: 3}
+    from: k_goobs@yoohoo.com
+    humanName: King Goobs III
+    subject: I Require Your Assistance
+    body: 'Dearest subject,
+
+
+      I appear to be cornered by a bug of alarming
+      proportions. It looks almost like a monster, beastly in all ways. Imagine a
+      supersized mosquito, if you would.'
+    answerChoice1: That has to be an ant.
+    answerChoice2: That's a cranefly.
+    answerChoice3: It's from the family Diptera.
+    answerChoice4: No it is a monster.
+    correctAnswer: 1
+    selectedAnswer: 0
+    isAnswered: 0
   selectedVolunteeringUpgradeID: null
   dailyVolunteerOptions: []
+  totalCorrectEmails: 0
+  dailyEmails: []
 --- !u!1 &152286217
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,10 +765,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 126816591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -155.04}
-  m_SizeDelta: {x: 400, y: 28.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &152286219
 MonoBehaviour:
@@ -1665,7 +1754,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 20, y: -20}
-  m_SizeDelta: {x: 447.0256, y: 72.6}
+  m_SizeDelta: {x: 447.0256, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &446485052
 MonoBehaviour:
@@ -1921,9 +2010,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 446485051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 223.5128, y: -31.3}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 227, y: 42.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &499365379
@@ -3054,10 +3143,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 126816591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -91.02}
-  m_SizeDelta: {x: 108.01, y: 24.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &904621243
 MonoBehaviour:
@@ -5580,10 +5669,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 126816591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -59.01}
-  m_SizeDelta: {x: 108.01, y: 24.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1785916912
 MonoBehaviour:
@@ -5953,10 +6042,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 126816591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -123.03}
-  m_SizeDelta: {x: 108.01, y: 24.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1903233621
 MonoBehaviour:
@@ -6358,10 +6447,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 126816591}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 15, y: -15}
-  m_SizeDelta: {x: 179.64, y: 36.01}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2127937367
 MonoBehaviour:

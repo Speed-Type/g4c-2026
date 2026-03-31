@@ -1432,7 +1432,7 @@ MonoBehaviour:
   mouseSensitivity: 0.15
   keyboardTurnSensitivity: 120
   maxTurnRate: 220
-  jumpHeight: 3
+  jumpHeight: 3.5
   gravity: 18
   coyoteTime: 0.12
   obstacleLayerMask:
@@ -14880,7 +14880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FoodSpawner
   foodPrefab: {fileID: 1437059748394397184, guid: 79d025fec942e4def815a1e72b6cdb72, type: 3}
   spawnCenter: {x: 0, y: 0, z: 0}
-  spawnHalfExtents: {x: 18, y: 0, z: 18}
+  spawnRadius: 18
   groundY: 1
   maxFoodCount: 3
   spawnInterval: 2

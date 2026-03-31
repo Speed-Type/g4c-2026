@@ -39,6 +39,7 @@ public class SettingsMenuUI : MonoBehaviour
     [Header("Footer")]
     public Button resetButton;
     public Button closeButton;
+    public Button mainMenuButton;
 
     //------------------------------------------------------------------------------------------
 
@@ -173,6 +174,7 @@ public class SettingsMenuUI : MonoBehaviour
         //Buttons
         resetButton.onClick.AddListener(OnResetClicked);
         closeButton.onClick.AddListener(Close);
+        if(mainMenuButton != null) mainMenuButton.onClick.AddListener(ToMainMenu);
     }
 
     //------------------------------------------------------------------------------------------
@@ -217,6 +219,12 @@ public class SettingsMenuUI : MonoBehaviour
         SettingsManager.instance?.ResetToDefaults();
 
         //RefreshAllControls is called automatically via OnSettingsChanged so no need to call it
+    }
+
+    public void ToMainMenu()
+    {
+        Close();
+        FindFirstObjectByType<SceneTransitionHandler>().SceneTransitionToScene("MainMenuScene");
     }
 
     //------------------------------------------------------------------------------------------

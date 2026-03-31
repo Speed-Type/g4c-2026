@@ -107,8 +107,9 @@ public class Node : MonoBehaviour
         return null;
     }
 
-    public virtual void UpgradeLoot()
+    public virtual bool UpgradeLoot()
     {
+        return false;
         //TO be implemented in child class Node_Scavenge
     }
 }

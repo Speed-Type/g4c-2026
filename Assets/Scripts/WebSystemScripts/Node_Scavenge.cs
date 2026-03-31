@@ -98,8 +98,13 @@ public class Node_Scavenge : Node
         return LootManager.instance.BugEnumToScavengeModel(spawnedBug);
     }
 
-    public override void UpgradeLoot()
+    public override bool UpgradeLoot()
     {
+        //If already upgraded, skip
+        if(upgradeLoot == true) return false;
+
+        //Else, upgrade
         upgradeLoot = true;
+        return true;
     }
 }

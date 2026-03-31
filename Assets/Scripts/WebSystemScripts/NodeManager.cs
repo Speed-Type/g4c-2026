@@ -641,6 +641,23 @@ public class NodeManager : MonoBehaviour
             enemyBugGO.SetActive(true);
         }
     }
+
+    //Returns true if successful, false if not
+    public bool UpgradeRandomNode()
+    {
+        //Loop through all nodes to find and upgrade a scavenger node
+        int startIndex = UnityEngine.Random.Range(0, allNodes.Count - 1);
+
+        for(int i = 0; i < allNodes.Count; i++)
+        {
+            if(allNodes[(i + startIndex) % allNodes.Count].UpgradeLoot())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 //NOTE: The values in this enum must line up with the order of entries in nodeTypes array

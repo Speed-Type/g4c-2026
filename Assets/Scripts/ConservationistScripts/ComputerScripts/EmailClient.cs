@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class EmailClient : AppBase
 {
@@ -12,13 +13,18 @@ public class EmailClient : AppBase
     {
         public Sprite profilePic;
         public string from = "unknown@example.com";
+        public string humanName = "";
         public string subject = "(no subject)";
         [TextArea(3, 8)]
         public string body = "";
-        [Tooltip("Objective ID to complete when this email is opened; Leave blank to skip")]
-        public string completesObjective = "";
+        public string answerChoice1 = "";
+        public string answerChoice2 = "";
+        public string answerChoice3 = "";
+        public string answerChoice4 = "";
+        public AnswerChoice correctAnswer;
+        [HideInInspector] public AnswerChoice selectedAnswer;
         [HideInInspector]
-        public bool isRead = false;
+        public bool isAnswered = false;
     }
 
     //------------------------------------------------------------------------------------------
@@ -40,11 +46,28 @@ public class EmailClient : AppBase
     public TMP_Text bodyText;
     public Image profilePic;
 
+    [Header("Answer Choice Labels")]
+    public TMP_Text answerLabel1;
+    public TMP_Text answerLabel2;
+    public TMP_Text answerLabel3;
+    public TMP_Text answerLabel4;
+
+    [Header("Colors")]
+    public Color defaultColor;
+    public Color correctColor;
+    public Color incorrectColor;
+
+    private Email currentEmail;
+
     //------------------------------------------------------------------------------------------
 
     public override void OnAppOpen(ComputerOS os)
     {
         base.OnAppOpen(os);
+
+        //Load in today's volunteer opportunities from ConservationistUpgradeController
+        emails = ConservationistUpgradeController.instance.dailyEmails;
+
         BuildInbox();
 
         SetGroup(readerGroup, false);
@@ -61,6 +84,7 @@ public class EmailClient : AppBase
     //Inbox logic
     //Also pretty much ripped straight from The FACTory
 
+    //Builds the inbox list (of row objects)
     private void BuildInbox()
     {
         if(emailList == null) return;
@@ -82,8 +106,8 @@ public class EmailClient : AppBase
             emailRow.SetSender(mail.from);
             emailRow.SetSubject(mail.subject);
 
-            //Bold if unread
-            if(mail.isRead)
+            //Bold if unanswered
+            if(mail.isAnswered)
             {
                 emailRow.SetRead();
             }
@@ -104,19 +128,39 @@ public class EmailClient : AppBase
         SetGroup(readerGroup, true);
         hintText.SetActive(false);
 
-        Email mail = emails[index];
-        mail.isRead = true;
+        //Reset any previous selected answer choice's font
+        if(currentEmail != null && currentEmail.isAnswered)
+        {
+            AnswerChoiceEnumToTMP(currentEmail.selectedAnswer).fontStyle = FontStyles.Normal;
+            AnswerChoiceEnumToTMP(currentEmail.selectedAnswer).color = defaultColor;
+            AnswerChoiceEnumToTMP(currentEmail.correctAnswer).color = defaultColor;
+        }
 
-        subjectLabel.text = mail.subject;
-        fromLabel.text = mail.from;
-        bodyText.text = mail.body;
-        profilePic.sprite = mail.profilePic;
+        currentEmail = emails[index];
 
-        //Complete linked objective
-        if(!string.IsNullOrEmpty(mail.completesObjective))
-            ObjectiveManager.instance?.CompleteObjective(mail.completesObjective);
+        subjectLabel.text = currentEmail.subject;
+        fromLabel.text = currentEmail.humanName;
+        bodyText.text = currentEmail.body;
+        profilePic.sprite = currentEmail.profilePic;
 
-        BuildInbox(); //Refresh bold state
+        //Set question buttons' text
+        answerLabel1.text = currentEmail.answerChoice1;
+        answerLabel2.text = currentEmail.answerChoice2;
+        answerLabel3.text = currentEmail.answerChoice3;
+        answerLabel4.text = currentEmail.answerChoice4;
+
+        //See if this question was right or not
+        if(currentEmail.isAnswered)
+        {
+            //Bold the selected answer choice
+            AnswerChoiceEnumToTMP(currentEmail.selectedAnswer).fontStyle = FontStyles.Bold;
+            
+            //Mark correct answer green
+            AnswerChoiceEnumToTMP(currentEmail.correctAnswer).color = correctColor;
+
+            //If the player chose something different, mark it red
+            if(currentEmail.correctAnswer != currentEmail.selectedAnswer) AnswerChoiceEnumToTMP(currentEmail.selectedAnswer).color = incorrectColor;
+        }
     }
 
     private void SetGroup(CanvasGroup g, bool on)
@@ -126,4 +170,62 @@ public class EmailClient : AppBase
         g.interactable = on;
         g.blocksRaycasts = on;
     }
+
+    public void AnswerQuestion(string answer)
+    {
+        AnswerChoice answerChoice;
+        Enum.TryParse(answer, out answerChoice);
+
+        if(currentEmail.isAnswered) return; //Do nothing if already answered
+
+        currentEmail.isAnswered = true; //Set it answered
+        currentEmail.selectedAnswer = answerChoice;
+
+        //Check if correct
+        if(answerChoice == currentEmail.correctAnswer)
+        {
+            //Correct
+            ConservationistUpgradeController.instance.totalCorrectEmails++;
+        }
+        else
+        {
+            //Incorrect
+        }
+
+        BuildInbox(); //Refresh inbox
+        OpenEmail(emails.IndexOf(currentEmail)); //Refresh email reader
+
+        //Notify objective handler if all emails are answered
+        foreach(Email email in emails)
+        {
+            if(!email.isAnswered) return;
+        }
+
+        ObjectiveManager.instance.CompleteObjective("checkEmails");
+    }
+
+    private TMP_Text AnswerChoiceEnumToTMP(AnswerChoice answerChoice)
+    {
+        switch(answerChoice)
+        {
+            case AnswerChoice.Answer1:
+                return answerLabel1;
+            case AnswerChoice.Answer2:
+                return answerLabel2;
+            case AnswerChoice.Answer3:
+                return answerLabel3;
+            case AnswerChoice.Answer4:
+                return answerLabel4;
+        }
+
+        return null;
+    }
+}
+
+public enum AnswerChoice
+{
+    Answer1,
+    Answer2,
+    Answer3,
+    Answer4
 }
