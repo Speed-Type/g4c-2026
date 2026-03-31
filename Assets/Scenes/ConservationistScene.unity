@@ -632,6 +632,11 @@ MonoBehaviour:
     isMandatory: 1
     isComplete: 0
     completedByInteractions: []
+  - id: newspaper
+    description: More to be added!
+    isMandatory: 0
+    isComplete: 0
+    completedByInteractions: []
   onAllMandatoryComplete:
     m_PersistentCalls:
       m_Calls:
@@ -5610,11 +5615,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1491693079}
-  - {fileID: 109264321}
-  - {fileID: 1723538285}
   - {fileID: 446485051}
   - {fileID: 1768893347}
+  - {fileID: 1723538285}
   - {fileID: 1341923339}
+  - {fileID: 109264321}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

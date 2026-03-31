@@ -13,7 +13,7 @@ public class Fragment_Fly_Thorax : Fragment
 
         fragmentEnum = Fragments.Fly_Thorax;
 
-        maxHealth = 3;
+        maxHealth = 4;
 
         displayBugGroup = "Fly";
         displayBodyPart = "Thorax";

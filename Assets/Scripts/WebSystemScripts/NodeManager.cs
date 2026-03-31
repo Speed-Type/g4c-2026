@@ -450,13 +450,6 @@ public class NodeManager : MonoBehaviour
                     {
                         //GAME OVER
 
-                        //Tutorial for game over
-                        if(PlayerPrefs.GetInt("Tutorial_GameOver", 0) == 0)
-                        {
-                            PlayerPrefs.SetInt("Tutorial_GameOver", 1);
-                            TutorialPopup.Show("", "Oh no.");
-                        }
-
                         PlayerPrefs.SetInt("HasStartedGame", 0);
                         SaveSystem.DeleteSave();
 

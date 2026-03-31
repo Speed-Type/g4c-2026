@@ -78,7 +78,18 @@ public class SceneTransitionHandler : MonoBehaviour
             sceneTransitionImage.gameObject.SetActive(false);
             if(settingsMenu != null) settingsMenu?.SetActive(true);
 
-            LeanTween.delayedCall(1f, () => {label?.gameObject.SetActive(false);});
+            LeanTween.delayedCall(1f, () => {
+                label?.gameObject.SetActive(false);
+                if(SceneManager.GetActiveScene().name == "ConservationistScene")
+                {
+                    if(PlayerPrefs.GetInt("Tutorial_Conservation", 0) == 0)
+                    {
+                        PlayerPrefs.SetInt("Tutorial_Conservation", 1);
+                        TutorialPopup.Show("The Conservationist", "The small actions here have a big impact on the world of the " + 
+                        "little guys.\n\nUse WASD to rotate around the room. Once all mandatory tasks are complete, exit through the door to continue.");
+                    }
+                }
+            });
         });
     }
 

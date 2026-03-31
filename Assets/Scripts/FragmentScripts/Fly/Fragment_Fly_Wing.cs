@@ -14,7 +14,7 @@ public class Fragment_Fly_Wing : Fragment
 
         fragmentEnum = Fragments.Fly_Wing;
 
-        maxHealth = 2;
+        maxHealth = 3;
 
         displayBugGroup = "Fly";
         displayBodyPart = "Wing";

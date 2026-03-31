@@ -43,12 +43,12 @@ public class LootManager : GeneralInventoryStructure
             case Bugs.Fly:
                 bugLoot.numRows = 4;
                 bugLoot.numCols = 4;
-                bugLoot.minLoot = 2;
+                bugLoot.minLoot = 1;
                 bugLoot.maxLoot = 3;
-                bugLoot.scavengeFleshChance = .25f;
-                bugLoot.SetChances(Fragments.Fly_Thorax, 6);
-                bugLoot.SetChances(Fragments.Fly_Haltere, 0);
-                bugLoot.SetChances(Fragments.Fly_Wing, 1);
+                bugLoot.scavengeFleshChance = .4f;
+                bugLoot.SetChances(Fragments.Fly_Thorax, 7);
+                bugLoot.SetChances(Fragments.Fly_Haltere, 1);
+                bugLoot.SetChances(Fragments.Fly_Wing, 2);
                 break;
             default:
                 break;
@@ -274,7 +274,7 @@ public class LootManager : GeneralInventoryStructure
                     minLoot+=1;
                     maxLoot+=1;
                     scavengeFleshChance = 0.9f;
-                    AddChances(Fragments.Fly_Haltere, 1);
+                    AddChances(Fragments.Fly_Haltere, 2);
                     AddChances(Fragments.Fly_Wing, 3);
                     break;
                 default:

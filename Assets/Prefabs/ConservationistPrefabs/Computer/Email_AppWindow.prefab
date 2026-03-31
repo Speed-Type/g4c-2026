@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8284087, g: 0.9612552, b: 0.9811321, a: 1}
+  m_Color: {r: 0.8113208, g: 0.5907368, b: 0.49368104, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2500,6 +2500,7 @@ MonoBehaviour:
   emails:
   - profilePic: {fileID: 0}
     from: Test@test.com
+    humanName: 
     subject: Test email
     body: This is a test email. Have a nice day.
     answerChoice1: 
@@ -2511,6 +2512,7 @@ MonoBehaviour:
     isAnswered: 0
   - profilePic: {fileID: 0}
     from: Bigfish@fish.com
+    humanName: 
     subject: Big fihh
     body: fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh
       fihh fihh fihh fihh fihh fihh fihh fihh fihh fihh
@@ -2523,6 +2525,7 @@ MonoBehaviour:
     isAnswered: 0
   - profilePic: {fileID: 0}
     from: Mr Balls
+    humanName: 
     subject: Vote now
     body: team mr balls forever
     answerChoice1: 
@@ -2945,7 +2948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.70888215, g: 0.8339026, b: 0.8490566, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -405,6 +405,13 @@ public class RoguelikeGameplayController : MonoBehaviour
         //Make sure this option is actually one of the open ones
         if(!openButtons.Contains(PlayerOptionButtons.Combat)) return;
 
+        //Tutorial for combat
+        if(PlayerPrefs.GetInt("Tutorial_Combat", 0) == 0)
+        {
+            PlayerPrefs.SetInt("Tutorial_Combat", 1);
+            TutorialPopup.Show("Combat", "WASD to move, tab to change camera views, and space/enter/shift to use a card. Good luck!");
+        }
+
         if(doubleCheckCombat)
         {
             gameState = GameState.Combat;

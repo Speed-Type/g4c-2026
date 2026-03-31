@@ -1022,23 +1022,38 @@ MonoBehaviour:
     isFolder: 1
     content: 
     completesObjective: 
-    children:
-    - name: SomeDownload
-      isFolder: 0
-      content: HI there chud
-      completesObjective: 
-      children: []
-    - name: sussy download
-      isFolder: 0
-      content: sussy sus suus amogus sus
-      completesObjective: 
-      children: []
-  - name: Empty folder
+    children: []
+  - name: Documents
     isFolder: 1
     content: 
     completesObjective: 
-    children: []
-  - name: Blender
+    children:
+    - name: Research
+      isFolder: 0
+      content: "Bone collectors\n\nCarnivorous caterpillar\n\nScavenges insects caught
+        in spiderwebs (ants, beetles, flies, and other arthropods)\n\nOccasionally
+        hunts or scavenges spiders\u2019 leftovers and will chew through webbing
+        to reach a meal\n\nCannibalistic sometimes\n\nGenus Hyposmocoma\n\nOnly on
+        Oahu, Hawaii, on Waianae mountain range\n\nDecorates its silk case with the
+        body parts of prey"
+      completesObjective: 
+      children: []
+    - name: Pictures
+      isFolder: 1
+      content: 
+      completesObjective: 
+      children:
+      - name: Milo.jpg
+        isFolder: 0
+        content: Imagine a really cute dog here
+        completesObjective: 
+        children: []
+      - name: Mira.jpg
+        isFolder: 0
+        content: Imagine a really cute cat here
+        completesObjective: 
+        children: []
+  - name: Blender.exe
     isFolder: 0
     content: This is where dreams go to die
     completesObjective: 

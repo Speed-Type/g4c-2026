@@ -10200,14 +10200,14 @@ MonoBehaviour:
     - 0
     - 1
     - 4
-    - 2
+    - 3
     nodePositionRandomization:
     - 10
     - 15
     - 15
     - 25
     chanceForNewBug: 0.05
-    goalFlesh: 70
+    goalFlesh: 50
     maxSpiderAlertness: 70
     spiderMovesPerTurn: 2
     inventoryNumRows: 7
@@ -10220,9 +10220,9 @@ MonoBehaviour:
     - 150
     nodeWeights:
     - 0
-    - 3
-    - 4
-    - 0
+    - 1
+    - 2
+    - 5
     nodePositionRandomization:
     - 20
     - 30
@@ -21920,10 +21920,10 @@ RectTransform:
   - {fileID: 754933036}
   - {fileID: 25254660}
   - {fileID: 418963396}
-  - {fileID: 277614684}
   - {fileID: 1446056663}
   - {fileID: 983832746}
   - {fileID: 172563377}
+  - {fileID: 277614684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
